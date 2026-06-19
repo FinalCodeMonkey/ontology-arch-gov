@@ -1,0 +1,367 @@
+{
+  "boCode": "SCENE",
+  "boName": "场景",
+  "resourcePath": "/scenes",
+  "responseWrapper": "ApiResponse",
+  "batchResultType": "BatchResultDTO",
+  "aggregateApiPolicy": {
+    "listProjectionScope": "ROOT_SUMMARY",
+    "readScope": "FULL_AGGREGATE",
+    "createScope": "FULL_AGGREGATE",
+    "updateScope": "ROOT_ENTITY_ONLY",
+    "deleteScope": "CASCADE_AGGREGATE",
+    "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+    "detailEmbedEntities": [
+      "scene_product",
+      "scene_product_accessory",
+      "scene_annual_estimate",
+      "scene_rival_summary",
+      "scene_rival_detail",
+      "scene_team_member"
+    ],
+    "aggregateReplaceActionPath": "replace-aggregate",
+    "alternateAggregateApis": [
+      {
+        "code": "GET_SCENE_ROOT",
+        "method": "GET",
+        "path": "/scenes/{id}/root",
+        "requestScope": "NONE",
+        "responseScope": "ROOT_ENTITY_ONLY",
+        "resultType": "ApiResponse<SceneRootDTO>"
+      },
+      {
+        "code": "CREATE_SCENE_ROOT",
+        "method": "POST",
+        "path": "/scenes/root",
+        "requestScope": "ROOT_ENTITY_ONLY",
+        "responseScope": "ROOT_ENTITY_ONLY",
+        "resultType": "ApiResponse<SceneRootDTO>"
+      },
+      {
+        "code": "PATCH_SCENE_AGGREGATE",
+        "method": "PATCH",
+        "path": "/scenes/{id}/aggregate",
+        "requestScope": "FULL_AGGREGATE_PATCH",
+        "responseScope": "FULL_AGGREGATE",
+        "resultType": "ApiResponse<SceneDTO>"
+      },
+      {
+        "code": "REPLACE_SCENE_AGGREGATE",
+        "method": "POST",
+        "path": "/scenes/{id}/replace-aggregate",
+        "requestScope": "FULL_AGGREGATE_REPLACE",
+        "responseScope": "FULL_AGGREGATE",
+        "resultType": "ApiResponse<SceneDTO>"
+      }
+    ]
+  },
+  "entityApiPolicies": {
+    "scene_product": {
+      "listProjectionScope": "ENTITY_SUMMARY",
+      "readScope": "ENTITY_ONLY",
+      "createScope": "ENTITY_AGGREGATE",
+      "updateScope": "ENTITY_ONLY",
+      "deleteScope": "CASCADE_CHILDREN",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": ["scene_product_accessory", "scene_annual_estimate"],
+      "alternateEntityApis": [
+        {
+          "code": "GET_PRODUCT_AGGREGATE",
+          "method": "GET",
+          "path": "/scenes/{id}/products/{subId}/aggregate",
+          "requestScope": "NONE",
+          "responseScope": "ENTITY_AGGREGATE",
+          "resultType": "ApiResponse<SceneProductAggregateDTO>"
+        },
+        {
+          "code": "PATCH_PRODUCT_AGGREGATE",
+          "method": "PATCH",
+          "path": "/scenes/{id}/products/{subId}/aggregate",
+          "requestScope": "ENTITY_AGGREGATE_PATCH",
+          "responseScope": "ENTITY_AGGREGATE",
+          "resultType": "ApiResponse<SceneProductAggregateDTO>"
+        }
+      ]
+    }
+  },
+  "endpoints": [
+    {
+      "operationId": "createScene",
+      "method": "POST",
+      "path": "/scenes",
+      "scope": "BO",
+      "requestScope": "FULL_AGGREGATE",
+      "responseScope": "FULL_AGGREGATE",
+      "resultType": "ApiResponse<SceneDTO>",
+      "description": "创建场景。"
+    },
+    {
+      "operationId": "batchCreateScenes",
+      "method": "POST",
+      "path": "/scenes/batch",
+      "scope": "BO",
+      "requestScope": "FULL_AGGREGATE",
+      "responseScope": "BATCH_RESULT",
+      "resultType": "ApiResponse<BatchResultDTO>",
+      "description": "批量创建场景，调用方必须持有一组明确输入对象。"
+    },
+    {
+      "operationId": "listScenes",
+      "method": "GET",
+      "path": "/scenes",
+      "scope": "BO",
+      "responseScope": "ROOT_SUMMARY",
+      "resultType": "ApiResponse<PageResult<SceneDTO>>",
+      "description": "场景简单条件分页查询，行级权限谓词由权限引擎自动追加。"
+    },
+    {
+      "operationId": "searchScenes",
+      "method": "POST",
+      "path": "/scenes/search",
+      "scope": "BO",
+      "requestScope": "FILTER_DTO",
+      "responseScope": "ROOT_SUMMARY",
+      "resultType": "ApiResponse<PageResult<SceneDTO>>",
+      "description": "场景复杂条件分页查询，请求体携带结构化 FilterDTO。"
+    },
+    {
+      "operationId": "getScene",
+      "method": "GET",
+      "path": "/scenes/{id}",
+      "scope": "BO",
+      "responseScope": "FULL_AGGREGATE",
+      "resultType": "ApiResponse<SceneDTO>",
+      "description": "查询场景详情，响应内嵌产品清单、竞对、团队等聚合内子实体。"
+    },
+    {
+      "operationId": "getSceneRoot",
+      "method": "GET",
+      "path": "/scenes/{id}/root",
+      "scope": "BO",
+      "sourceAlternateApi": "GET_SCENE_ROOT",
+      "requestScope": "NONE",
+      "responseScope": "ROOT_ENTITY_ONLY",
+      "resultType": "ApiResponse<SceneRootDTO>",
+      "description": "只查询场景主实体，不内嵌产品清单、竞对和团队成员。"
+    },
+    {
+      "operationId": "createSceneRoot",
+      "method": "POST",
+      "path": "/scenes/root",
+      "scope": "BO",
+      "sourceAlternateApi": "CREATE_SCENE_ROOT",
+      "requestScope": "ROOT_ENTITY_ONLY",
+      "responseScope": "ROOT_ENTITY_ONLY",
+      "resultType": "ApiResponse<SceneRootDTO>",
+      "description": "只创建场景主实体，子实体通过嵌套接口后续维护。"
+    },
+    {
+      "operationId": "batchQueryScenes",
+      "method": "POST",
+      "path": "/scenes/batch/query",
+      "scope": "BO",
+      "requestScope": "KNOWN_IDS",
+      "responseScope": "FULL_AGGREGATE",
+      "resultType": "ApiResponse<List<SceneDTO>>",
+      "description": "按调用方已知 ID 列表批量查询场景。"
+    },
+    {
+      "operationId": "updateScene",
+      "method": "PATCH",
+      "path": "/scenes/{id}",
+      "scope": "BO",
+      "requestScope": "ROOT_ENTITY_ONLY",
+      "responseScope": "ROOT_ENTITY_ONLY",
+      "resultType": "ApiResponse<SceneDTO>",
+      "description": "更新场景主实体字段。"
+    },
+    {
+      "operationId": "patchSceneAggregate",
+      "method": "PATCH",
+      "path": "/scenes/{id}/aggregate",
+      "scope": "BO",
+      "sourceAlternateApi": "PATCH_SCENE_AGGREGATE",
+      "requestScope": "FULL_AGGREGATE_PATCH",
+      "responseScope": "FULL_AGGREGATE",
+      "resultType": "ApiResponse<SceneDTO>",
+      "description": "显式增量更新完整场景聚合，允许同时提交主实体和子实体变更。"
+    },
+    {
+      "operationId": "replaceSceneAggregate",
+      "method": "POST",
+      "path": "/scenes/{id}/replace-aggregate",
+      "scope": "BO",
+      "sourceAlternateApi": "REPLACE_SCENE_AGGREGATE",
+      "requestScope": "FULL_AGGREGATE_REPLACE",
+      "responseScope": "FULL_AGGREGATE",
+      "resultType": "ApiResponse<SceneDTO>",
+      "description": "显式替换完整场景聚合，整体替换主实体与子实体。"
+    },
+    {
+      "operationId": "batchUpdateScenes",
+      "method": "PATCH",
+      "path": "/scenes/batch",
+      "scope": "BO",
+      "requestScope": "ROOT_ENTITY_ONLY",
+      "responseScope": "BATCH_RESULT",
+      "resultType": "ApiResponse<BatchResultDTO>",
+      "description": "批量更新场景主实体字段。"
+    },
+    {
+      "operationId": "deleteScene",
+      "method": "DELETE",
+      "path": "/scenes/{id}",
+      "scope": "BO",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "resultType": "ApiResponse<Void>",
+      "description": "逻辑删除场景，并按聚合一致性处理子实体。"
+    },
+    {
+      "operationId": "batchDeleteScenes",
+      "method": "DELETE",
+      "path": "/scenes/batch",
+      "scope": "BO",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "responseScope": "BATCH_RESULT",
+      "resultType": "ApiResponse<BatchResultDTO>",
+      "description": "批量逻辑删除场景。"
+    },
+    {
+      "operationId": "adjustSceneRivals",
+      "method": "POST",
+      "path": "/scenes/{id}/rivals/adjust",
+      "scope": "ENTITY",
+      "entityCode": "scene_rival_detail",
+      "sourceOperation": "ADJUST_RIVAL",
+      "resultType": "ApiResponse<SceneRivalAdjustmentDTO>",
+      "description": "按年度调整竞对份额和销量，并更新场景竞对汇总。"
+    },
+    {
+      "operationId": "exportScenes",
+      "method": "POST",
+      "path": "/scenes/export",
+      "scope": "GLOBAL",
+      "sourceOperation": "EXPORT",
+      "resultType": "ApiResponse<ExportTaskDTO>",
+      "description": "导出场景列表数据。"
+    },
+    {
+      "operationId": "importScenes",
+      "method": "POST",
+      "path": "/scenes/import",
+      "scope": "GLOBAL",
+      "sourceOperation": "IMPORT",
+      "resultType": "ApiResponse<SceneImportResultDTO>",
+      "description": "导入场景基础信息和产品清单。"
+    },
+    {
+      "operationId": "createSceneProduct",
+      "method": "POST",
+      "path": "/scenes/{id}/products",
+      "scope": "ENTITY",
+      "entityCode": "scene_product",
+      "sourceOperation": "CREATE_PRODUCT_LIST",
+      "requestScope": "ENTITY_AGGREGATE",
+      "responseScope": "ENTITY_ONLY",
+      "resultType": "ApiResponse<SceneProductDTO>",
+      "description": "新增场景产品清单行。"
+    },
+    {
+      "operationId": "listSceneProducts",
+      "method": "GET",
+      "path": "/scenes/{id}/products",
+      "scope": "ENTITY",
+      "entityCode": "scene_product",
+      "responseScope": "ENTITY_SUMMARY",
+      "resultType": "ApiResponse<List<SceneProductDTO>>",
+      "description": "查询场景产品清单。"
+    },
+    {
+      "operationId": "getSceneProductAggregate",
+      "method": "GET",
+      "path": "/scenes/{id}/products/{subId}/aggregate",
+      "scope": "ENTITY",
+      "entityCode": "scene_product",
+      "sourceAlternateApi": "GET_PRODUCT_AGGREGATE",
+      "requestScope": "NONE",
+      "responseScope": "ENTITY_AGGREGATE",
+      "resultType": "ApiResponse<SceneProductAggregateDTO>",
+      "description": "查询产品清单局部聚合，返回产品行本体及其典配、年度测算。"
+    },
+    {
+      "operationId": "updateSceneProduct",
+      "method": "PATCH",
+      "path": "/scenes/{id}/products/{subId}",
+      "scope": "ENTITY",
+      "entityCode": "scene_product",
+      "sourceOperation": "EDIT_PRODUCT_LIST",
+      "requestScope": "ENTITY_ONLY",
+      "responseScope": "ENTITY_ONLY",
+      "resultType": "ApiResponse<SceneProductDTO>",
+      "description": "更新场景产品清单行。"
+    },
+    {
+      "operationId": "patchSceneProductAggregate",
+      "method": "PATCH",
+      "path": "/scenes/{id}/products/{subId}/aggregate",
+      "scope": "ENTITY",
+      "entityCode": "scene_product",
+      "sourceAlternateApi": "PATCH_PRODUCT_AGGREGATE",
+      "requestScope": "ENTITY_AGGREGATE_PATCH",
+      "responseScope": "ENTITY_AGGREGATE",
+      "resultType": "ApiResponse<SceneProductAggregateDTO>",
+      "description": "显式增量更新产品清单局部聚合，允许同时提交产品行、典配和年度测算变更。"
+    },
+    {
+      "operationId": "deleteSceneProduct",
+      "method": "DELETE",
+      "path": "/scenes/{id}/products/{subId}",
+      "scope": "ENTITY",
+      "entityCode": "scene_product",
+      "sourceOperation": "DELETE_PRODUCT_LIST",
+      "deleteScope": "CASCADE_CHILDREN",
+      "resultType": "ApiResponse<Void>",
+      "description": "删除场景产品清单行。"
+    },
+    {
+      "operationId": "createSceneTeamMember",
+      "method": "POST",
+      "path": "/scenes/{id}/team-members",
+      "scope": "ENTITY",
+      "entityCode": "scene_team_member",
+      "sourceOperation": "CREATE_TEAM_MEMBER",
+      "resultType": "ApiResponse<SceneTeamMemberDTO>",
+      "description": "新增场景团队成员。"
+    },
+    {
+      "operationId": "getSceneTeamMember",
+      "method": "GET",
+      "path": "/scenes/{id}/team-members/{subId}",
+      "scope": "ENTITY",
+      "entityCode": "scene_team_member",
+      "sourceOperation": "VIEW_TEAM_MEMBER",
+      "resultType": "ApiResponse<SceneTeamMemberDTO>",
+      "description": "查看场景团队成员详情。"
+    },
+    {
+      "operationId": "updateSceneTeamMember",
+      "method": "PATCH",
+      "path": "/scenes/{id}/team-members/{subId}",
+      "scope": "ENTITY",
+      "entityCode": "scene_team_member",
+      "sourceOperation": "EDIT_TEAM_MEMBER",
+      "resultType": "ApiResponse<SceneTeamMemberDTO>",
+      "description": "编辑场景团队成员角色、权限和关联模块团队。"
+    },
+    {
+      "operationId": "deleteSceneTeamMember",
+      "method": "DELETE",
+      "path": "/scenes/{id}/team-members/{subId}",
+      "scope": "ENTITY",
+      "entityCode": "scene_team_member",
+      "sourceOperation": "DELETE_TEAM_MEMBER",
+      "resultType": "ApiResponse<Void>",
+      "description": "删除场景团队成员。"
+    }
+  ]
+}

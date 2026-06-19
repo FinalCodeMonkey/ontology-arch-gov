@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "title": "Governed BO schema_view v2",
+  "description": "业务对象发布态完整元数据快照。用于运行时、API 生成、UI 生成和权限派生。",
+  "type": "object",
+  "required": ["boCode", "boName", "schemaVersion", "apiConfig", "boConfig", "entities"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "boCode": {
+      "type": "string",
+      "description": "BO code，租户应用内唯一，建议大写下划线。",
+      "pattern": "^[A-Z][A-Z0-9_]*$"
+    },
+    "boName": {
+      "type": "string",
+      "description": "BO 中文名称。",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "description": { "type": "string", "maxLength": 500 },
+    "schemaVersion": {
+      "type": "string",
+      "description": "schema 结构版本，不等同于业务发布版本。",
+      "pattern": "^v?[0-9]+(\\.[0-9]+){0,2}$"
+    },
+    "apiConfig": { "$ref": "#/$defs/ApiConfig" },
+    "boConfig": { "$ref": "#/$defs/BoConfig" },
+    "listViewConfig": { "$ref": "#/$defs/ListViewConfig" },
+    "entities": {
+      "type": "array",
+      "description": "实体树。应用层校验有且仅有一个 isPrimary=true 且 aggregateRole=ROOT。",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Entity" }
+    },
+    "operations": {
+      "type": "array",
+      "description": "BO 自定义业务操作。标准 CRUD 由引擎生成。",
+      "items": { "$ref": "#/$defs/Operation" },
+      "default": []
+    },
+    "governance": { "$ref": "#/$defs/Governance" }
+  },
+  "$defs": {
+    "ApiConfig": {
+      "type": "object",
+      "required": ["resourcePath", "idField", "idType", "responseWrapper", "batchResultType"],
+      "additionalProperties": false,
+      "properties": {
+        "resourcePath": {
+          "type": "string",
+          "description": "聚合根 API 资源路径，必须为复数 kebab-case。",
+          "pattern": "^/[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)*$"
+        },
+        "idField": {
+          "type": "string",
+          "description": "路径变量 {id} 对应主实体字段。",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "idType": { "type": "string", "enum": ["STRING", "LONG"] },
+        "businessKeyField": {
+          "type": "string",
+          "description": "业务逻辑唯一键字段，如 scene_no、customer_no、biz_no。",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "responseWrapper": { "type": "string", "enum": ["ApiResponse"], "default": "ApiResponse" },
+        "batchResultType": { "type": "string", "enum": ["BatchResultDTO"], "default": "BatchResultDTO" },
+        "aggregateApiPolicy": { "$ref": "#/$defs/AggregateApiPolicy" },
+        "searchEnabled": { "type": "boolean", "default": true },
+        "batchEnabled": { "type": "boolean", "default": true }
+      }
+    },
+    "AggregateApiPolicy": {
+      "type": "object",
+      "description": "聚合根标准 API 对聚合对象、主实体和子实体的处理范围声明。",
+      "required": ["readScope", "createScope", "updateScope", "deleteScope"],
+      "additionalProperties": false,
+      "properties": {
+        "listProjectionScope": {
+          "type": "string",
+          "description": "列表 API 返回范围。ROOT_SUMMARY 表示主实体字段加汇总/投影字段，不内嵌完整子实体。",
+          "enum": ["ROOT_SUMMARY", "ROOT_ENTITY_ONLY", "FULL_AGGREGATE"],
+          "default": "ROOT_SUMMARY"
+        },
+        "readScope": {
+          "type": "string",
+          "description": "详情 API GET /resources/{id} 的返回范围。",
+          "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"],
+          "default": "FULL_AGGREGATE"
+        },
+        "createScope": {
+          "type": "string",
+          "description": "创建 API POST /resources 的请求体处理范围。",
+          "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"],
+          "default": "FULL_AGGREGATE"
+        },
+        "updateScope": {
+          "type": "string",
+          "description": "普通更新 API PATCH /resources/{id} 的请求体处理范围。治理默认只更新主实体，避免误覆盖子实体。",
+          "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE_PATCH", "FULL_AGGREGATE_REPLACE"],
+          "default": "ROOT_ENTITY_ONLY"
+        },
+        "deleteScope": {
+          "type": "string",
+          "description": "删除聚合根时对子实体的处理范围。",
+          "enum": ["ROOT_ENTITY_ONLY", "CASCADE_AGGREGATE"],
+          "default": "CASCADE_AGGREGATE"
+        },
+        "orphanPolicy": {
+          "type": "string",
+          "description": "deleteScope=ROOT_ENTITY_ONLY 时对子实体孤儿数据的治理策略。CASCADE_AGGREGATE 时通常不需要。",
+          "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"],
+          "default": "DENY_DELETE_WHEN_CHILD_EXISTS"
+        },
+        "detailEmbedEntities": {
+          "type": "array",
+          "description": "详情响应中内嵌的子实体列表。为空时由实体树自动推导全部非 DERIVED_VIEW 子实体。",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "aggregateReplaceActionPath": {
+          "type": "string",
+          "description": "如需整棵聚合替换，必须使用显式操作路径，不复用普通 PATCH。",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "alternateAggregateApis": {
+          "type": "array",
+          "description": "当主实体接口和完整聚合接口需要并存时，声明额外端点，避免复用同一路径造成语义混淆。",
+          "items": { "$ref": "#/$defs/AlternateAggregateApi" },
+          "default": []
+        }
+      }
+    },
+    "AlternateAggregateApi": {
+      "type": "object",
+      "required": ["code", "method", "path", "requestScope", "responseScope"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "name": { "type": "string", "maxLength": 100 },
+        "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+        "path": { "type": "string", "pattern": "^/[a-z][a-z0-9{}_/-]*$" },
+        "requestScope": { "type": "string", "enum": ["NONE", "KNOWN_IDS", "FILTER_DTO", "ROOT_ENTITY_ONLY", "FULL_AGGREGATE", "FULL_AGGREGATE_PATCH", "FULL_AGGREGATE_REPLACE"] },
+        "responseScope": { "type": "string", "enum": ["VOID", "BATCH_RESULT", "ROOT_ENTITY_ONLY", "ROOT_SUMMARY", "FULL_AGGREGATE"] },
+        "resultType": { "type": "string" },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "BoConfig": {
+      "type": "object",
+      "required": ["objectType", "nameField"],
+      "additionalProperties": false,
+      "properties": {
+        "objectType": { "type": "string", "enum": ["SINGLE", "TREE", "MASTER_DETAIL"], "default": "SINGLE" },
+        "nameField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "statusField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "logicDeleteFlag": { "type": "boolean", "default": true },
+        "versionFlag": { "type": "boolean", "default": false },
+        "defaultSort": { "$ref": "#/$defs/Sort" }
+      }
+    },
+    "Sort": {
+      "type": "object",
+      "required": ["field"],
+      "additionalProperties": false,
+      "properties": {
+        "field": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "direction": { "type": "string", "enum": ["asc", "desc"], "default": "desc" }
+      }
+    },
+    "ListViewConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultPageSize": { "type": "integer", "enum": [10, 20, 50, 100], "default": 20 },
+        "formLayout": { "type": "string", "enum": ["GRID", "VERTICAL", "HORIZONTAL"], "default": "GRID" },
+        "formColumns": { "type": "integer", "enum": [1, 2, 3, 4], "default": 2 },
+        "formLabelWidth": { "type": "integer", "minimum": 60, "maximum": 300, "default": 120 },
+        "searchCollapsible": { "type": "boolean", "default": true }
+      }
+    },
+    "Entity": {
+      "type": "object",
+      "required": ["code", "name", "isPrimary", "aggregateRole", "attributes"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "isPrimary": { "type": "boolean" },
+        "aggregateRole": { "type": "string", "enum": ["ROOT", "SUB_ENTITY", "VALUE_OBJECT", "DERIVED_VIEW"] },
+        "tableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "parentEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "parentRefField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "routeSegment": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "cascadeDelete": { "type": "boolean", "default": true },
+        "readOnly": { "type": "boolean", "default": false },
+        "entityApiPolicy": { "$ref": "#/$defs/EntityApiPolicy" },
+        "attributes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Attribute" } },
+        "rowLevelRuleEntries": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }, "uniqueItems": true, "default": [] },
+        "rowFallbackScope": { "type": "string", "enum": ["ALL", "NONE"], "default": "NONE" }
+      },
+      "if": { "properties": { "aggregateRole": { "const": "ROOT" } } },
+      "then": { "required": ["tableName"] },
+      "else": { "required": ["parentEntityCode"] }
+    },
+    "EntityApiPolicy": {
+      "type": "object",
+      "description": "子实体 API 对实体本体、下级子实体和局部聚合的处理范围声明。仅多级子实体或存在局部聚合接口需求时需要显式配置。",
+      "required": ["readScope", "createScope", "updateScope", "deleteScope"],
+      "additionalProperties": false,
+      "properties": {
+        "listProjectionScope": {
+          "type": "string",
+          "enum": ["ENTITY_SUMMARY", "ENTITY_ONLY", "ENTITY_AGGREGATE"],
+          "default": "ENTITY_SUMMARY"
+        },
+        "readScope": {
+          "type": "string",
+          "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"],
+          "default": "ENTITY_ONLY"
+        },
+        "createScope": {
+          "type": "string",
+          "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"],
+          "default": "ENTITY_ONLY"
+        },
+        "updateScope": {
+          "type": "string",
+          "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE_PATCH", "ENTITY_AGGREGATE_REPLACE"],
+          "default": "ENTITY_ONLY"
+        },
+        "deleteScope": {
+          "type": "string",
+          "enum": ["ENTITY_ONLY", "CASCADE_CHILDREN"],
+          "default": "ENTITY_ONLY"
+        },
+        "orphanPolicy": {
+          "type": "string",
+          "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"],
+          "default": "DENY_DELETE_WHEN_CHILD_EXISTS"
+        },
+        "detailEmbedEntities": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "entityReplaceActionPath": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "alternateEntityApis": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/AlternateEntityApi" },
+          "default": []
+        }
+      }
+    },
+    "AlternateEntityApi": {
+      "type": "object",
+      "required": ["code", "method", "path", "requestScope", "responseScope"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "name": { "type": "string", "maxLength": 100 },
+        "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+        "path": { "type": "string", "pattern": "^/[a-z][a-z0-9{}_/-]*$" },
+        "requestScope": { "type": "string", "enum": ["NONE", "KNOWN_IDS", "FILTER_DTO", "ENTITY_ONLY", "ENTITY_AGGREGATE", "ENTITY_AGGREGATE_PATCH", "ENTITY_AGGREGATE_REPLACE"] },
+        "responseScope": { "type": "string", "enum": ["VOID", "BATCH_RESULT", "ENTITY_ONLY", "ENTITY_SUMMARY", "ENTITY_AGGREGATE"] },
+        "resultType": { "type": "string" },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "Attribute": {
+      "type": "object",
+      "required": ["code", "name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "type": { "type": "string", "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"] },
+        "isPk": { "type": "boolean", "default": false },
+        "fieldName": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$" },
+        "columnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "semanticRole": { "type": "string", "enum": ["TECHNICAL_ID", "BUSINESS_KEY", "NAME", "STATUS", "PARENT_REF", "NORMAL"], "default": "NORMAL" },
+        "defaultValue": { "type": "string" },
+        "filterable": { "type": "boolean", "default": false },
+        "validation": { "$ref": "#/$defs/ValidationRule" },
+        "fieldControl": { "type": "string", "enum": ["OPEN", "RESTRICTED", "MASKED", "HIDDEN"], "default": "OPEN" },
+        "privacyClass": { "type": "string", "enum": ["PUBLIC", "SENSITIVE", "PII", "CONFIDENTIAL"], "default": "PUBLIC" },
+        "i18nKey": { "type": "string", "pattern": "^[a-z][a-z0-9._-]*$" },
+        "translatable": { "type": "boolean", "default": false },
+        "translatableStrategy": { "type": "string", "enum": ["TL_TABLE", "JSON_COLUMN", "COLUMN_PER_LOCALE"] },
+        "view": { "$ref": "#/$defs/ViewConfig" }
+      }
+    },
+    "ValidationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": { "type": "boolean", "default": false },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "pattern": { "type": "string" },
+        "enum": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+        "message": { "type": "string" },
+        "unique": { "type": "boolean", "default": false }
+      }
+    },
+    "ViewConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "displayName": { "type": "string" },
+        "sortable": { "type": "boolean", "default": false },
+        "columnWidth": { "type": "integer", "minimum": 40, "maximum": 1000 },
+        "format": { "type": "string", "enum": ["currency", "date", "datetime", "percent", "text"] },
+        "hidden": { "type": "boolean", "default": false },
+        "order": { "type": "integer", "minimum": 1 },
+        "showInList": { "type": "boolean", "default": true },
+        "showInDetail": { "type": "boolean", "default": true },
+        "editableInForm": { "type": "boolean", "default": true },
+        "instantValidate": { "type": "boolean", "default": false },
+        "formType": { "type": "string", "enum": ["INPUT", "TEXTAREA", "NUMBER", "SELECT", "MULTI_SELECT", "DATE", "DATETIME", "SWITCH", "RADIO", "CHECKBOX", "USER_SELECT", "ORG_SELECT", "OBJECT_SELECT", "FILE_UPLOAD", "RICH_TEXT", "HIDDEN"] },
+        "placeholder": { "type": "string" },
+        "queryable": { "type": "boolean", "default": false },
+        "queryType": { "type": "string", "enum": ["EQ", "LIKE", "BETWEEN", "IN", "GTE", "LTE"], "default": "EQ" },
+        "exportable": { "type": "boolean", "default": true },
+        "importable": { "type": "boolean", "default": false },
+        "disabled": { "type": "boolean", "default": false },
+        "dictCode": { "type": "string" },
+        "refObject": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "refField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+      }
+    },
+    "Operation": {
+      "type": "object",
+      "required": ["code", "name", "scope", "operationKind"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "scope": { "type": "string", "enum": ["BO", "ENTITY", "GLOBAL"] },
+        "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "operationKind": { "type": "string", "enum": ["CREATE", "UPDATE", "DELETE", "STATE_CHANGE", "IMPORT", "EXPORT", "MERGE", "CUSTOM"] },
+        "authzAction": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "发布到 PSP authz_permission_item.act_code 的授权动作，也是多个 Operation 归并到同一权限项的聚合键。未显式配置时由 operationKind 推导：GET/VIEW -> READ，CREATE -> CREATE，UPDATE/EDIT/SAVE -> UPDATE，DELETE -> DELETE。同一 BO 下相同 authzAction 只生成一条权限项，发布态可反向形成 permissionItem -> operations 的派生关系；打开表单、保存表单等 UI 阶段不得单独生成 SAVE 权限项；提交审批、发布、归档、作废等独立业务命令应使用独立 authzAction。"
+        },
+        "httpMethod": { "type": "string", "enum": ["GET", "POST", "PATCH", "DELETE"], "default": "POST" },
+        "actionPath": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "supportsBatch": { "type": "boolean", "default": false },
+        "async": { "type": "boolean", "default": false },
+        "singleResultType": { "type": "string" },
+        "batchResultType": { "type": "string", "enum": ["BatchResultDTO"] },
+        "prototypeRefs": {
+          "type": "array",
+          "description": "操作来源的界面原型按钮或交互入口，用于保持设计态到发布态的来源追溯。",
+          "items": {
+            "type": "object",
+            "required": ["file", "label"],
+            "additionalProperties": false,
+            "properties": {
+              "file": { "type": "string" },
+              "label": { "type": "string" },
+              "event": { "type": "string" },
+              "positionHint": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          },
+          "default": []
+        },
+        "description": { "type": "string", "maxLength": 500 },
+        "position": { "type": "string", "enum": ["TOOLBAR", "ROW", "DETAIL", "FLOATING"], "default": "ROW" },
+        "triggerEvent": { "type": "string", "enum": ["OPEN_FORM", "API_CALL", "REDIRECT", "CONFIRM_THEN_API"], "default": "API_CALL" }
+      },
+      "if": { "properties": { "scope": { "const": "ENTITY" } } },
+      "then": { "required": ["entityCode"] }
+    },
+    "Governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sourceFragmentVersion": { "type": "integer" },
+        "releaseVersion": { "type": "integer" },
+        "checksum": { "type": "string" },
+        "generatedAt": { "type": "string" },
+        "generatedBy": { "type": "string" }
+      }
+    }
+  }
+}

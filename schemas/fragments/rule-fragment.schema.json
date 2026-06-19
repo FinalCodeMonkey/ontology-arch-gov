@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/rule-fragment.schema.json",
+  "title": "BO RULE fragment",
+  "description": "本体规则层。VALIDATION 与 SECURITY 是 RULE 的专用子集，RULE 承载状态、派生、权限、一致性和自动化等更完整的业务规则。",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "rules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Rule" },
+      "default": []
+    }
+  },
+  "$defs": {
+    "Rule": {
+      "type": "object",
+      "required": ["code", "name", "ruleType"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "ruleType": {
+          "type": "string",
+          "enum": ["VALIDATION", "STATE", "DERIVATION", "PERMISSION", "AUTOMATION", "CONSISTENCY"]
+        },
+        "scope": { "type": "string", "enum": ["BO", "ENTITY", "FIELD", "OPERATION"], "default": "BO" },
+        "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "operationCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "trigger": {
+          "type": "string",
+          "enum": ["BEFORE_VALIDATE", "BEFORE_OPERATION", "AFTER_OPERATION", "ON_STATE_CHANGE", "ON_PUBLISH", "ON_READ"],
+          "default": "BEFORE_OPERATION"
+        },
+        "expression": { "type": "string", "maxLength": 2000 },
+        "action": { "type": "string", "maxLength": 500 },
+        "severity": { "type": "string", "enum": ["INFO", "WARN", "ERROR"], "default": "ERROR" },
+        "message": { "type": "string", "maxLength": 300 },
+        "description": { "type": "string", "maxLength": 500 }
+      }
+    }
+  }
+}

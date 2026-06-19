@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/model-fragment.schema.json",
+  "title": "BO MODEL fragment",
+  "type": "object",
+  "required": ["boCode", "boName", "apiConfig", "boConfig", "entities"],
+  "additionalProperties": false,
+  "properties": {
+    "boCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+    "boName": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "description": { "type": "string", "maxLength": 500 },
+    "apiConfig": {
+      "type": "object",
+      "required": ["resourcePath", "idField", "idType"],
+      "additionalProperties": false,
+      "properties": {
+        "resourcePath": { "type": "string", "pattern": "^/[a-z][a-z0-9-]*(/[a-z][a-z0-9-]*)*$" },
+        "idField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "idType": { "type": "string", "enum": ["STRING", "LONG"] },
+        "businessKeyField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "aggregateApiPolicy": {
+          "type": "object",
+          "description": "聚合根标准 API 对聚合对象、主实体和子实体的处理范围声明。",
+          "required": ["readScope", "createScope", "updateScope", "deleteScope"],
+          "additionalProperties": false,
+          "properties": {
+            "listProjectionScope": { "type": "string", "enum": ["ROOT_SUMMARY", "ROOT_ENTITY_ONLY", "FULL_AGGREGATE"], "default": "ROOT_SUMMARY" },
+            "readScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"], "default": "FULL_AGGREGATE" },
+            "createScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"], "default": "FULL_AGGREGATE" },
+            "updateScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE_PATCH", "FULL_AGGREGATE_REPLACE"], "default": "ROOT_ENTITY_ONLY" },
+            "deleteScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "CASCADE_AGGREGATE"], "default": "CASCADE_AGGREGATE" },
+            "orphanPolicy": { "type": "string", "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"], "default": "DENY_DELETE_WHEN_CHILD_EXISTS" },
+            "detailEmbedEntities": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }, "uniqueItems": true, "default": [] },
+            "aggregateReplaceActionPath": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+            "alternateAggregateApis": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["code", "method", "path", "requestScope", "responseScope"],
+                "additionalProperties": false,
+                "properties": {
+                  "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+                  "name": { "type": "string", "maxLength": 100 },
+                  "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+                  "path": { "type": "string", "pattern": "^/[a-z][a-z0-9{}_/-]*$" },
+                  "requestScope": { "type": "string", "enum": ["NONE", "KNOWN_IDS", "FILTER_DTO", "ROOT_ENTITY_ONLY", "FULL_AGGREGATE", "FULL_AGGREGATE_PATCH", "FULL_AGGREGATE_REPLACE"] },
+                  "responseScope": { "type": "string", "enum": ["VOID", "BATCH_RESULT", "ROOT_ENTITY_ONLY", "ROOT_SUMMARY", "FULL_AGGREGATE"] },
+                  "resultType": { "type": "string" },
+                  "description": { "type": "string", "maxLength": 500 }
+                }
+              },
+              "default": []
+            }
+          }
+        },
+        "searchEnabled": { "type": "boolean", "default": true },
+        "batchEnabled": { "type": "boolean", "default": true }
+      }
+    },
+    "boConfig": {
+      "type": "object",
+      "required": ["objectType", "nameField"],
+      "additionalProperties": false,
+      "properties": {
+        "objectType": { "type": "string", "enum": ["SINGLE", "TREE", "MASTER_DETAIL"] },
+        "nameField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "statusField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "logicDeleteFlag": { "type": "boolean", "default": true },
+        "versionFlag": { "type": "boolean", "default": false },
+        "defaultSort": {
+          "type": "object",
+          "required": ["field"],
+          "additionalProperties": false,
+          "properties": {
+            "field": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+            "direction": { "type": "string", "enum": ["asc", "desc"], "default": "desc" }
+          }
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "isPrimary", "aggregateRole", "attributes"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "isPrimary": { "type": "boolean" },
+          "aggregateRole": { "type": "string", "enum": ["ROOT", "SUB_ENTITY", "VALUE_OBJECT", "DERIVED_VIEW"] },
+          "tableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "parentEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "parentRefField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "routeSegment": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "cascadeDelete": { "type": "boolean", "default": true },
+          "readOnly": { "type": "boolean", "default": false },
+          "entityApiPolicy": {
+            "type": "object",
+            "required": ["readScope", "createScope", "updateScope", "deleteScope"],
+            "additionalProperties": false,
+            "properties": {
+              "listProjectionScope": { "type": "string", "enum": ["ENTITY_SUMMARY", "ENTITY_ONLY", "ENTITY_AGGREGATE"], "default": "ENTITY_SUMMARY" },
+              "readScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"], "default": "ENTITY_ONLY" },
+              "createScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"], "default": "ENTITY_ONLY" },
+              "updateScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE_PATCH", "ENTITY_AGGREGATE_REPLACE"], "default": "ENTITY_ONLY" },
+              "deleteScope": { "type": "string", "enum": ["ENTITY_ONLY", "CASCADE_CHILDREN"], "default": "ENTITY_ONLY" },
+              "orphanPolicy": { "type": "string", "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"], "default": "DENY_DELETE_WHEN_CHILD_EXISTS" },
+              "detailEmbedEntities": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }, "uniqueItems": true, "default": [] },
+              "entityReplaceActionPath": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+              "alternateEntityApis": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["code", "method", "path", "requestScope", "responseScope"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+                    "name": { "type": "string", "maxLength": 100 },
+                    "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+                    "path": { "type": "string", "pattern": "^/[a-z][a-z0-9{}_/-]*$" },
+                    "requestScope": { "type": "string", "enum": ["NONE", "KNOWN_IDS", "FILTER_DTO", "ENTITY_ONLY", "ENTITY_AGGREGATE", "ENTITY_AGGREGATE_PATCH", "ENTITY_AGGREGATE_REPLACE"] },
+                    "responseScope": { "type": "string", "enum": ["VOID", "BATCH_RESULT", "ENTITY_ONLY", "ENTITY_SUMMARY", "ENTITY_AGGREGATE"] },
+                    "resultType": { "type": "string" },
+                    "description": { "type": "string", "maxLength": 500 }
+                  }
+                },
+                "default": []
+              }
+            }
+          },
+          "attributes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["code", "name", "type"],
+              "additionalProperties": false,
+              "properties": {
+                "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+                "type": { "type": "string", "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"] },
+                "isPk": { "type": "boolean", "default": false },
+                "fieldName": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$" },
+                "columnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                "semanticRole": { "type": "string", "enum": ["TECHNICAL_ID", "BUSINESS_KEY", "NAME", "STATUS", "PARENT_REF", "NORMAL"], "default": "NORMAL" },
+                "defaultValue": { "type": "string" },
+                "filterable": { "type": "boolean", "default": false },
+                "i18nKey": { "type": "string", "pattern": "^[a-z][a-z0-9._-]*$" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

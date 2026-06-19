@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "title": "BO meta fragment envelope",
+  "description": "设计态 BO 元数据 Fragment 外壳。content 应按 metaType 分别使用 fragments/*.schema.json 校验。",
+  "type": "object",
+  "required": ["tenantId", "appCode", "boCode", "metaType", "draftVersion", "schemaVersion", "content"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "tenantId": { "type": "string", "minLength": 1, "maxLength": 50 },
+    "appCode": { "type": "string", "minLength": 1, "maxLength": 50 },
+    "boCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+    "metaType": { "type": "string", "enum": ["MODEL", "VALIDATION", "SECURITY", "RULE", "VIEW", "OPERATION"] },
+    "draftVersion": { "type": "integer", "minimum": 1 },
+    "schemaVersion": { "type": "string", "pattern": "^v?[0-9]+(\\.[0-9]+){0,2}$" },
+    "content": { "type": "object" },
+    "changeNote": { "type": "string", "maxLength": 500 }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/operation-fragment.schema.json",
+  "title": "BO OPERATION fragment",
+  "type": "object",
+  "required": ["operations"],
+  "additionalProperties": false,
+  "properties": {
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "scope", "operationKind"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "scope": { "type": "string", "enum": ["BO", "ENTITY", "GLOBAL"] },
+          "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "operationKind": { "type": "string", "enum": ["CREATE", "UPDATE", "DELETE", "STATE_CHANGE", "IMPORT", "EXPORT", "MERGE", "CUSTOM"] },
+          "authzAction": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "description": "发布到 PSP authz_permission_item.act_code 的授权动作，也是多个 Operation 归并到同一权限项的聚合键。未显式配置时由 operationKind 推导：GET/VIEW -> READ，CREATE -> CREATE，UPDATE/EDIT/SAVE -> UPDATE，DELETE -> DELETE。同一 BO 下相同 authzAction 只生成一条权限项，发布态可反向形成 permissionItem -> operations 的派生关系；打开表单、保存表单等 UI 阶段不得单独生成 SAVE 权限项；提交审批、发布、归档、作废等独立业务命令应使用独立 authzAction。"
+          },
+          "httpMethod": { "type": "string", "enum": ["GET", "POST", "PATCH", "DELETE"], "default": "POST" },
+          "actionPath": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "supportsBatch": { "type": "boolean", "default": false },
+          "async": { "type": "boolean", "default": false },
+          "singleResultType": { "type": "string" },
+          "batchResultType": { "type": "string", "enum": ["BatchResultDTO"] },
+          "prototypeRefs": {
+            "type": "array",
+            "description": "操作来源的界面原型按钮或交互入口，用于从原型抽取 Operation 时保持可追溯。",
+            "items": {
+              "type": "object",
+              "required": ["file", "label"],
+              "additionalProperties": false,
+              "properties": {
+                "file": { "type": "string" },
+                "label": { "type": "string" },
+                "event": { "type": "string" },
+                "positionHint": { "type": "string" },
+                "note": { "type": "string" }
+              }
+            },
+            "default": []
+          },
+          "description": { "type": "string", "maxLength": 500 },
+          "position": { "type": "string", "enum": ["TOOLBAR", "ROW", "DETAIL", "FLOATING"], "default": "ROW" },
+          "triggerEvent": { "type": "string", "enum": ["OPEN_FORM", "API_CALL", "REDIRECT", "CONFIRM_THEN_API"], "default": "API_CALL" }
+        }
+      },
+      "default": []
+    }
+  }
+}

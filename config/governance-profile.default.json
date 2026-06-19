@@ -1,0 +1,333 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/governance-profile.schema.json",
+  "profileCode": "GOVERNMENT_CRM_DEFAULT",
+  "profileName": "Government CRM 默认 BO 治理参数",
+  "schemaVersion": "2.0",
+  "description": "公司/项目级 BO 元数据治理默认值。BO Fragment 只声明业务差异，发布服务先加载本 profile 再合成完整 schema_view。",
+  "usageGuide": {
+    "howToUse": "实施前先确认本文件中的默认值是否符合公司/项目规范。发布服务先加载本 Profile，再加载 BO 的设计态 Fragment；Fragment 中显式声明的值覆盖 Profile 默认值。",
+    "configurationPrinciple": "Profile 固化稳定的公司级规范，BO Fragment 只写业务对象的差异。不要为了单个 BO 修改 Profile；单个 BO 的特殊规则应写入对应 Fragment。",
+    "overrideRule": "优先级：BO Fragment 显式配置 > Governance Profile 默认配置 > schema 默认值。发布前校验器必须输出最终生效值，便于审计。",
+    "groups": [
+      {
+        "group": "apiDefaults",
+        "title": "API 默认规范",
+        "description": "控制所有 BO 默认生成的 HTTP API 风格、响应封装、批量结果类型和路径命名。",
+        "items": [
+          {
+            "path": "apiDefaults.responseWrapper",
+            "label": "统一响应封装",
+            "currentValue": "ApiResponse",
+            "description": "所有 HTTP 接口返回值外层统一封装类型。",
+            "options": [
+              { "value": "ApiResponse", "label": "ApiResponse", "description": "统一返回 code/message/data，符合平台规范。", "recommended": true }
+            ],
+            "recommendation": "固定使用 ApiResponse，不建议按 BO 覆盖。",
+            "impact": "影响 Controller 返回值、OpenAPI 文档和前端请求适配。"
+          },
+          {
+            "path": "apiDefaults.batchResultType",
+            "label": "批量结果类型",
+            "currentValue": "BatchResultDTO",
+            "description": "批量创建、更新、删除、自定义批量操作的统一结果对象。",
+            "options": [
+              { "value": "BatchResultDTO", "label": "BatchResultDTO", "description": "包含成功数、失败数、失败详情，支持部分成功。", "recommended": true }
+            ],
+            "recommendation": "固定使用 BatchResultDTO，方便前端统一展示部分成功。",
+            "impact": "影响批量接口返回结构和错误处理。"
+          },
+          {
+            "path": "apiDefaults.resourcePathStyle",
+            "label": "资源路径风格",
+            "currentValue": "plural-kebab-case",
+            "description": "聚合根资源路径命名风格。",
+            "options": [
+              { "value": "plural-kebab-case", "label": "复数 kebab-case", "description": "例如 /scenes、/team-members，符合 REST 资源集合命名。", "recommended": true }
+            ],
+            "recommendation": "统一使用复数 kebab-case。",
+            "impact": "影响 API 路径、权限项 res 标识和前端路由。"
+          },
+          {
+            "path": "apiDefaults.actionPathStyle",
+            "label": "动作路径风格",
+            "currentValue": "kebab-case",
+            "description": "自定义业务动作路径命名风格。",
+            "options": [
+              { "value": "kebab-case", "label": "kebab-case", "description": "例如 assign-owner、change-status、replace-aggregate。", "recommended": true }
+            ],
+            "recommendation": "统一使用 kebab-case。",
+            "impact": "影响自定义 Operation API 路径。"
+          }
+        ]
+      },
+      {
+        "group": "aggregateApiPolicy",
+        "title": "聚合根 API 范围策略",
+        "description": "控制 /resources、/resources/{id} 这类聚合根标准 API 默认处理主实体还是完整聚合。",
+        "items": [
+          {
+            "path": "apiDefaults.aggregateApiPolicy.listProjectionScope",
+            "label": "列表返回范围",
+            "currentValue": "ROOT_SUMMARY",
+            "description": "列表查询返回哪些字段。",
+            "options": [
+              { "value": "ROOT_SUMMARY", "label": "主实体摘要 + 汇总字段", "description": "返回主实体字段和必要汇总/投影字段，不内嵌完整子实体。", "recommended": true },
+              { "value": "ROOT_ENTITY_ONLY", "label": "仅主实体", "description": "只返回主表字段，不返回汇总字段。" },
+              { "value": "FULL_AGGREGATE", "label": "完整聚合", "description": "列表每行内嵌子实体，数据量大，不建议默认使用。" }
+            ],
+            "recommendation": "CRM 列表页推荐 ROOT_SUMMARY，兼顾性能和业务展示。",
+            "impact": "影响列表性能、字段权限处理和列表 DTO 结构。"
+          },
+          {
+            "path": "apiDefaults.aggregateApiPolicy.readScope",
+            "label": "详情返回范围",
+            "currentValue": "FULL_AGGREGATE",
+            "description": "GET /resources/{id} 返回主实体还是完整聚合。",
+            "options": [
+              { "value": "FULL_AGGREGATE", "label": "完整聚合", "description": "返回主实体并内嵌子实体，适合详情页。", "recommended": true },
+              { "value": "ROOT_ENTITY_ONLY", "label": "仅主实体", "description": "只返回主实体；如需要子实体，前端再调子实体接口。" }
+            ],
+            "recommendation": "详情页通常推荐 FULL_AGGREGATE；如性能压力大，可通过 BO Fragment 覆盖为 ROOT_ENTITY_ONLY。",
+            "impact": "影响详情接口 DTO、子实体加载方式和页面首屏性能。"
+          },
+          {
+            "path": "apiDefaults.aggregateApiPolicy.createScope",
+            "label": "创建请求范围",
+            "currentValue": "FULL_AGGREGATE",
+            "description": "POST /resources 是否允许一次提交主实体和子实体。",
+            "options": [
+              { "value": "FULL_AGGREGATE", "label": "完整聚合创建", "description": "一次提交主实体和子实体，同事务保存。", "recommended": true },
+              { "value": "ROOT_ENTITY_ONLY", "label": "仅主实体创建", "description": "只创建主实体，子实体后续通过嵌套接口维护。" }
+            ],
+            "recommendation": "原型新建页包含子实体时推荐 FULL_AGGREGATE。",
+            "impact": "影响创建 DTO、事务边界和校验顺序。"
+          },
+          {
+            "path": "apiDefaults.aggregateApiPolicy.updateScope",
+            "label": "普通更新范围",
+            "currentValue": "ROOT_ENTITY_ONLY",
+            "description": "PATCH /resources/{id} 默认更新范围。",
+            "options": [
+              { "value": "ROOT_ENTITY_ONLY", "label": "仅主实体", "description": "普通 PATCH 只更新主实体字段，避免误覆盖子实体。", "recommended": true },
+              { "value": "FULL_AGGREGATE_PATCH", "label": "完整聚合增量更新", "description": "允许同时提交主实体和子实体变更，需显式治理。" },
+              { "value": "FULL_AGGREGATE_REPLACE", "label": "完整聚合替换", "description": "整棵聚合替换，高风险，不建议作为普通 PATCH 默认值。" }
+            ],
+            "recommendation": "固定推荐 ROOT_ENTITY_ONLY；完整聚合更新使用 alternateAggregateApis 显式端点。",
+            "impact": "影响数据安全，配置错误可能造成子实体被误删或覆盖。"
+          },
+          {
+            "path": "apiDefaults.aggregateApiPolicy.deleteScope",
+            "label": "删除范围",
+            "currentValue": "CASCADE_AGGREGATE",
+            "description": "DELETE /resources/{id} 删除主实体时如何处理子实体。",
+            "options": [
+              { "value": "CASCADE_AGGREGATE", "label": "聚合级联删除", "description": "删除/归档主实体时同步处理子实体。", "recommended": true },
+              { "value": "ROOT_ENTITY_ONLY", "label": "仅主实体", "description": "只删除主实体，必须结合 orphanPolicy 控制孤儿数据。" }
+            ],
+            "recommendation": "聚合内子实体生命周期依赖主实体时推荐 CASCADE_AGGREGATE。",
+            "impact": "影响删除一致性和历史数据保留策略。"
+          },
+          {
+            "path": "apiDefaults.aggregateApiPolicy.orphanPolicy",
+            "label": "孤儿子实体策略",
+            "currentValue": "DENY_DELETE_WHEN_CHILD_EXISTS",
+            "description": "当只删除主实体时，如何处理已有子实体。",
+            "options": [
+              { "value": "DENY_DELETE_WHEN_CHILD_EXISTS", "label": "存在子实体则禁止删除", "description": "最安全，避免孤儿数据。", "recommended": true },
+              { "value": "KEEP_CHILDREN_AS_HISTORY", "label": "保留为历史", "description": "保留子实体用于审计或历史追溯。" },
+              { "value": "DETACH_CHILDREN", "label": "解除关联", "description": "将外键置空，不推荐用于强聚合。" },
+              { "value": "MANUAL_CLEANUP_REQUIRED", "label": "人工清理", "description": "允许删除但标记需要后续人工处理。" }
+            ],
+            "recommendation": "默认使用 DENY_DELETE_WHEN_CHILD_EXISTS。",
+            "impact": "影响数据完整性和审计风险。"
+          }
+        ]
+      },
+      {
+        "group": "entityApiPolicy",
+        "title": "子实体 API 范围策略",
+        "description": "控制 /resources/{id}/sub-entities 这类子实体接口默认处理实体本体还是局部聚合。",
+        "items": [
+          {
+            "path": "apiDefaults.entityApiPolicy.readScope",
+            "label": "子实体详情范围",
+            "currentValue": "ENTITY_ONLY",
+            "description": "GET 子实体详情默认返回实体本体还是局部聚合。",
+            "options": [
+              { "value": "ENTITY_ONLY", "label": "仅实体本体", "description": "只返回目标子实体字段。", "recommended": true },
+              { "value": "ENTITY_AGGREGATE", "label": "局部聚合", "description": "返回子实体及其下级子实体。" }
+            ],
+            "recommendation": "普通子实体默认 ENTITY_ONLY；多级子实体按 BO Fragment 显式启用 ENTITY_AGGREGATE。",
+            "impact": "影响多级子实体详情 DTO 和接口性能。"
+          },
+          {
+            "path": "apiDefaults.entityApiPolicy.updateScope",
+            "label": "子实体普通更新范围",
+            "currentValue": "ENTITY_ONLY",
+            "description": "PATCH 子实体默认更新实体本体还是局部聚合。",
+            "options": [
+              { "value": "ENTITY_ONLY", "label": "仅实体本体", "description": "只更新目标子实体字段。", "recommended": true },
+              { "value": "ENTITY_AGGREGATE_PATCH", "label": "局部聚合增量更新", "description": "同时更新子实体和下级子实体。" },
+              { "value": "ENTITY_AGGREGATE_REPLACE", "label": "局部聚合替换", "description": "整体替换子实体及下级子实体，高风险。" }
+            ],
+            "recommendation": "默认 ENTITY_ONLY；局部聚合更新使用 alternateEntityApis 显式端点。",
+            "impact": "影响下级子实体是否可能被误覆盖。"
+          }
+        ]
+      },
+      {
+        "group": "metadataDefaults",
+        "title": "元数据建模默认值",
+        "description": "控制 BO、实体、字段的命名和 DDD 建模默认约束。",
+        "items": [
+          {
+            "path": "metadataDefaults.primaryEntityMustBeAggregateRoot",
+            "label": "主实体必须是聚合根",
+            "currentValue": true,
+            "description": "是否强制 isPrimary=true 的实体同时为 aggregateRole=ROOT。",
+            "options": [
+              { "value": true, "label": "强制一致", "description": "标准 BO 必须保持技术主实体和领域聚合根一致。", "recommended": true },
+              { "value": false, "label": "允许例外", "description": "仅适合只读投影、历史兼容等特殊场景。" }
+            ],
+            "recommendation": "推荐 true。",
+            "impact": "影响发布校验和 API 入口实体推导。"
+          },
+          {
+            "path": "metadataDefaults.businessKeyNaming",
+            "label": "业务唯一键命名",
+            "currentValue": "{bo_snake}_no",
+            "description": "平台生成业务编号字段时的默认命名。",
+            "options": [
+              { "value": "{bo_snake}_no", "label": "按 BO 命名", "description": "例如 scene_no、customer_no，语义清晰。", "recommended": true },
+              { "value": "biz_no", "label": "统一 biz_no", "description": "所有 BO 使用同名业务编号字段。" },
+              { "value": "custom", "label": "自定义", "description": "每个 BO 单独声明 businessKeyField。" }
+            ],
+            "recommendation": "推荐 {bo_snake}_no，兼顾标准化和业务语义。",
+            "impact": "影响唯一性校验、导入匹配和对外展示编号。"
+          },
+          {
+            "path": "metadataDefaults.parentRefFieldDefault",
+            "label": "子实体父引用字段默认值",
+            "currentValue": "semantic-parent-id",
+            "description": "平台生成子表外键字段时的默认命名策略。",
+            "options": [
+              { "value": "semantic-parent-id", "label": "语义父 ID", "description": "例如 scene_id、line_id，SQL 可读性强。", "recommended": true },
+              { "value": "parent_id", "label": "统一 parent_id", "description": "物理结构统一，但语义较弱。" },
+              { "value": "custom", "label": "自定义", "description": "每个子实体单独声明 parentRefField。" }
+            ],
+            "recommendation": "推荐 semantic-parent-id。",
+            "impact": "影响表结构生成、SQL 可读性和旧系统接入成本。"
+          }
+        ]
+      },
+      {
+        "group": "securityDefaults",
+        "title": "安全默认值",
+        "description": "控制行级权限、字段级权限和资源模型派生的默认安全策略。",
+        "items": [
+          {
+            "path": "securityDefaults.rowFallbackScope",
+            "label": "无数据策略命中时的行级回退",
+            "currentValue": "NONE",
+            "description": "用户没有命中 DATA 策略时默认能看多少数据。",
+            "options": [
+              { "value": "NONE", "label": "默认无权", "description": "失败关闭，安全默认。", "recommended": true },
+              { "value": "ALL", "label": "默认全量", "description": "失败开放，风险高，仅适合低敏场景。" }
+            ],
+            "recommendation": "推荐 NONE。",
+            "impact": "影响数据泄露风险。"
+          },
+          {
+            "path": "securityDefaults.authzProjectionRequiredForResourceBo",
+            "label": "资源 BO 必须派生权限模型",
+            "currentValue": true,
+            "description": "是否要求可授权的 BO 必须提供 authzProjection。",
+            "options": [
+              { "value": true, "label": "必须派生", "description": "保证 ABAC/PIP 有明确资源属性。", "recommended": true },
+              { "value": false, "label": "可选", "description": "仅适合无需数据权限的纯展示对象。" }
+            ],
+            "recommendation": "推荐 true。",
+            "impact": "影响权限引擎资源属性可用性。"
+          }
+        ]
+      },
+      {
+        "group": "operationExtractionDefaults",
+        "title": "原型操作抽取默认值",
+        "description": "控制是否从界面原型按钮抽取 Operation，以及哪些按钮应视为纯 UI 交互。",
+        "items": [
+          {
+            "path": "operationExtractionDefaults.extractFromPrototypeButtons",
+            "label": "从原型按钮抽取操作",
+            "currentValue": true,
+            "description": "是否允许根据 HTML 原型按钮生成 Operation 候选项。",
+            "options": [
+              { "value": true, "label": "启用", "description": "提高原型到元数据的一致性。", "recommended": true },
+              { "value": false, "label": "关闭", "description": "Operation 完全手工维护。" }
+            ],
+            "recommendation": "推荐启用，但必须经过业务治理筛选。",
+            "impact": "影响 Operation 初稿生成效率和 prototypeRefs 追溯。"
+          },
+          {
+            "path": "operationExtractionDefaults.ignoreUiUtilityActions",
+            "label": "忽略的纯 UI 动作",
+            "currentValue": ["刷新", "列设置", "全屏", "分页", "Tab切换", "关闭", "取消", "收起配件", "年份切换"],
+            "description": "这些按钮不生成业务 Operation。",
+            "options": [
+              { "value": "可追加按钮文字", "label": "追加忽略项", "description": "例如 展开、收起、上一页、下一页。" }
+            ],
+            "recommendation": "根据项目 UI 组件库持续补充。",
+            "impact": "影响 Operation 抽取噪声。"
+          }
+        ]
+      }
+    ]
+  },
+  "apiDefaults": {
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "resourcePathStyle": "plural-kebab-case",
+    "actionPathStyle": "kebab-case",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "FULL_AGGREGATE",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "entityApiPolicy": {
+      "listProjectionScope": "ENTITY_SUMMARY",
+      "readScope": "ENTITY_ONLY",
+      "createScope": "ENTITY_ONLY",
+      "updateScope": "ENTITY_ONLY",
+      "deleteScope": "ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "alternateApiPolicy": {
+      "allowRootOnlyAlternateApis": true,
+      "allowFullAggregateAlternateApis": true,
+      "requireExplicitPathSuffix": true,
+      "reservedSuffixes": ["root", "aggregate", "replace-aggregate"]
+    }
+  },
+  "metadataDefaults": {
+    "primaryEntityMustBeAggregateRoot": true,
+    "businessKeyNaming": "{bo_snake}_no",
+    "technicalIdField": "id",
+    "defaultObjectType": "MASTER_DETAIL",
+    "routeSegmentDefault": "plural-entity-name",
+    "parentRefFieldDefault": "semantic-parent-id"
+  },
+  "securityDefaults": {
+    "rowFallbackScope": "NONE",
+    "fieldControl": "OPEN",
+    "privacyClass": "PUBLIC",
+    "authzProjectionRequiredForResourceBo": true
+  },
+  "operationExtractionDefaults": {
+    "extractFromPrototypeButtons": true,
+    "requirePrototypeRefs": true,
+    "ignoreUiUtilityActions": ["刷新", "列设置", "全屏", "分页", "Tab切换", "关闭", "取消", "收起配件", "年份切换"]
+  }
+}

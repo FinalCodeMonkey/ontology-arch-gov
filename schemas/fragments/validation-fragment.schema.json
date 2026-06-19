@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/validation-fragment.schema.json",
+  "title": "BO VALIDATION fragment",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entityCode", "fieldCode"],
+        "additionalProperties": false,
+        "properties": {
+          "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "required": { "type": "boolean", "default": false },
+          "min": { "type": "number" },
+          "max": { "type": "number" },
+          "pattern": { "type": "string" },
+          "enum": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+          "unique": { "type": "boolean", "default": false },
+          "message": { "type": "string", "maxLength": 300 }
+        }
+      },
+      "default": []
+    }
+  }
+}

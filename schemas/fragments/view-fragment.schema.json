@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/view-fragment.schema.json",
+  "title": "BO VIEW fragment",
+  "type": "object",
+  "required": ["listViewConfig", "fieldViews"],
+  "additionalProperties": false,
+  "properties": {
+    "listViewConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultPageSize": { "type": "integer", "enum": [10, 20, 50, 100], "default": 20 },
+        "formLayout": { "type": "string", "enum": ["GRID", "VERTICAL", "HORIZONTAL"], "default": "GRID" },
+        "formColumns": { "type": "integer", "enum": [1, 2, 3, 4], "default": 2 },
+        "formLabelWidth": { "type": "integer", "minimum": 60, "maximum": 300, "default": 120 },
+        "searchCollapsible": { "type": "boolean", "default": true }
+      }
+    },
+    "fieldViews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["entityCode", "fieldCode"],
+        "additionalProperties": false,
+        "properties": {
+          "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "displayName": { "type": "string" },
+          "sortable": { "type": "boolean", "default": false },
+          "columnWidth": { "type": "integer", "minimum": 40, "maximum": 1000 },
+          "format": { "type": "string", "enum": ["currency", "date", "datetime", "percent", "text"] },
+          "hidden": { "type": "boolean", "default": false },
+          "order": { "type": "integer", "minimum": 1 },
+          "showInList": { "type": "boolean", "default": true },
+          "showInDetail": { "type": "boolean", "default": true },
+          "editableInForm": { "type": "boolean", "default": true },
+          "instantValidate": { "type": "boolean", "default": false },
+          "formType": { "type": "string", "enum": ["INPUT", "TEXTAREA", "NUMBER", "SELECT", "MULTI_SELECT", "DATE", "DATETIME", "SWITCH", "RADIO", "CHECKBOX", "USER_SELECT", "ORG_SELECT", "OBJECT_SELECT", "FILE_UPLOAD", "RICH_TEXT", "HIDDEN"] },
+          "placeholder": { "type": "string" },
+          "queryable": { "type": "boolean", "default": false },
+          "queryType": { "type": "string", "enum": ["EQ", "LIKE", "BETWEEN", "IN", "GTE", "LTE"], "default": "EQ" },
+          "exportable": { "type": "boolean", "default": true },
+          "importable": { "type": "boolean", "default": false },
+          "disabled": { "type": "boolean", "default": false },
+          "dictCode": { "type": "string" },
+          "refObject": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "refField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+        }
+      },
+      "default": []
+    }
+  }
+}

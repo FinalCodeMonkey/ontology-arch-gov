@@ -1,0 +1,404 @@
+﻿{
+    "$schema":  "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+    "tenantId":  "default",
+    "appCode":  "government",
+    "boCode":  "SCENE",
+    "metaType":  "VALIDATION",
+    "draftVersion":  1,
+    "schemaVersion":  "2.0",
+    "content":  {
+                    "rules":  [
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "scene_no",
+                                      "required":  true,
+                                      "max":  50,
+                                      "unique":  true,
+                                      "message":  "场景编号不能为空且不超过50字"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "fop_customer_id",
+                                      "required":  true,
+                                      "message":  "必须选择FOP客户"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "fop_customer_name",
+                                      "required":  true,
+                                      "max":  200
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "scene_name_dept",
+                                      "required":  true,
+                                      "max":  200,
+                                      "message":  "场景名称-部门标准不能为空且不超过200字"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "scene_name_customer",
+                                      "required":  true,
+                                      "max":  200,
+                                      "message":  "场景名称-客户标准不能为空且不超过200字"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "business_name",
+                                      "required":  true,
+                                      "enum":  [
+                                                   "JDM业务",
+                                                   "DCN网络",
+                                                   "智算网络",
+                                                   "ESUN业务",
+                                                   "光",
+                                                   "园区网络"
+                                               ],
+                                      "message":  "业务名称必须是预定义值之一"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "scene_category",
+                                      "required":  true,
+                                      "enum":  [
+                                                   "H1",
+                                                   "H2",
+                                                   "H3"
+                                               ],
+                                      "message":  "场景分类必须为H1、H2或H3"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "sales_owner_id",
+                                      "required":  true,
+                                      "message":  "必须指定销售负责人"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "dept_id",
+                                      "required":  true,
+                                      "message":  "必须归属某个部门"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "future_procurement_amount",
+                                      "min":  0,
+                                      "message":  "未来客户采购规模必须为非负数"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "current_year_procurement_amount",
+                                      "min":  0,
+                                      "message":  "本年度客户采购规模必须为非负数"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "current_year_estimated_sales",
+                                      "min":  0,
+                                      "message":  "本年度预计销量必须为非负数"
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "our_stage",
+                                      "enum":  [
+                                                   "0-未开始",
+                                                   "1-建立连接",
+                                                   "2-技术交流",
+                                                   "3-产品开发",
+                                                   "4-获得入围机会",
+                                                   "5-完成入围测试",
+                                                   "6-进入产品清单"
+                                               ]
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "scene_description",
+                                      "max":  2000
+                                  },
+                                  {
+                                      "entityCode":  "scene_main",
+                                      "fieldCode":  "status",
+                                      "required":  true,
+                                      "enum":  [
+                                                   "DRAFT",
+                                                   "ACTIVE",
+                                                   "ARCHIVED"
+                                               ],
+                                      "message":  "场景状态值非法"
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "line_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "scene_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "product_id",
+                                      "required":  true,
+                                      "message":  "必须选择产品型号"
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "product_model",
+                                      "required":  true,
+                                      "max":  100
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "our_stage",
+                                      "required":  true,
+                                      "enum":  [
+                                                   "0-未开始",
+                                                   "1-建立连接",
+                                                   "2-技术交流",
+                                                   "3-产品开发",
+                                                   "4-获得入围机会",
+                                                   "5-完成入围测试",
+                                                   "6-进入产品清单"
+                                               ],
+                                      "message":  "我司阶段必须是预定义值之一"
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "lifecycle_start_date",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "lifecycle_end_date",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "next_bid_date",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "future_procurement_amount",
+                                      "min":  0
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "current_year_procurement_amount",
+                                      "min":  0
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "current_year_estimated_sales",
+                                      "min":  0
+                                  },
+                                  {
+                                      "entityCode":  "scene_product",
+                                      "fieldCode":  "current_progress",
+                                      "max":  500
+                                  },
+                                  {
+                                      "entityCode":  "scene_product_accessory",
+                                      "fieldCode":  "accessory_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_product_accessory",
+                                      "fieldCode":  "line_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_product_accessory",
+                                      "fieldCode":  "accessory_product_id",
+                                      "required":  true,
+                                      "message":  "必须选择配件型号"
+                                  },
+                                  {
+                                      "entityCode":  "scene_product_accessory",
+                                      "fieldCode":  "accessory_model",
+                                      "required":  true,
+                                      "max":  100
+                                  },
+                                  {
+                                      "entityCode":  "scene_product_accessory",
+                                      "fieldCode":  "ratio",
+                                      "required":  true,
+                                      "min":  1,
+                                      "message":  "配比必须填写正整数"
+                                  },
+                                  {
+                                      "entityCode":  "scene_annual_estimate",
+                                      "fieldCode":  "estimate_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_annual_estimate",
+                                      "fieldCode":  "line_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_annual_estimate",
+                                      "fieldCode":  "year",
+                                      "required":  true,
+                                      "min":  2000,
+                                      "max":  2100,
+                                      "message":  "请选择有效年份"
+                                  },
+                                  {
+                                      "entityCode":  "scene_annual_estimate",
+                                      "fieldCode":  "customer_procurement_amount",
+                                      "required":  true,
+                                      "min":  0,
+                                      "message":  "客户采购规模必须为非负金额"
+                                  },
+                                  {
+                                      "entityCode":  "scene_annual_estimate",
+                                      "fieldCode":  "estimated_share",
+                                      "required":  true,
+                                      "min":  0,
+                                      "max":  100,
+                                      "message":  "预计我司份额须在0到100之间"
+                                  },
+                                  {
+                                      "entityCode":  "scene_annual_estimate",
+                                      "fieldCode":  "estimated_sales_amount",
+                                      "required":  true,
+                                      "min":  0,
+                                      "message":  "预计我司销量必须为非负金额"
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_summary",
+                                      "fieldCode":  "summary_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_summary",
+                                      "fieldCode":  "scene_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_summary",
+                                      "fieldCode":  "year",
+                                      "required":  true,
+                                      "min":  2000,
+                                      "max":  2100
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_summary",
+                                      "fieldCode":  "yearly_procurement_scale",
+                                      "min":  0
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_summary",
+                                      "fieldCode":  "ruijie_estimated_sales",
+                                      "min":  0
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_summary",
+                                      "fieldCode":  "ruijie_estimated_share",
+                                      "min":  0,
+                                      "max":  100
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_summary",
+                                      "fieldCode":  "core_rival_count",
+                                      "min":  0
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_detail",
+                                      "fieldCode":  "rival_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_detail",
+                                      "fieldCode":  "summary_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_detail",
+                                      "fieldCode":  "rival_name",
+                                      "required":  true,
+                                      "max":  100,
+                                      "message":  "竞争对手不能为空"
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_detail",
+                                      "fieldCode":  "rival_tag",
+                                      "max":  50
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_detail",
+                                      "fieldCode":  "rival_description",
+                                      "max":  500
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_detail",
+                                      "fieldCode":  "rival_share",
+                                      "required":  true,
+                                      "min":  0,
+                                      "max":  100,
+                                      "message":  "竞对份额须在0到100之间"
+                                  },
+                                  {
+                                      "entityCode":  "scene_rival_detail",
+                                      "fieldCode":  "rival_sales_amount",
+                                      "min":  0
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "member_rel_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "scene_id",
+                                      "required":  true
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "user_id",
+                                      "required":  true,
+                                      "message":  "必须选择团队成员"
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "member_name",
+                                      "required":  true,
+                                      "max":  100
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "member_role",
+                                      "required":  true,
+                                      "max":  50
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "permission_type",
+                                      "required":  true,
+                                      "enum":  [
+                                                   "读写",
+                                                   "只读"
+                                               ],
+                                      "message":  "权限必须为读写或只读"
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "remark",
+                                      "max":  200
+                                  },
+                                  {
+                                      "entityCode":  "scene_team_member",
+                                      "fieldCode":  "related_teams",
+                                      "max":  500
+                                  }
+                              ]
+                },
+    "changeNote":  "SCENE 首版 VALIDATION 设计态 Fragment。"
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/security-fragment.schema.json",
+  "title": "BO SECURITY fragment",
+  "description": "BO 安全治理 Fragment。用于补充 PSP authz_bo_meta_model 中某一条业务对象元数据的安全投影，生成 DATA 行级策略候选字段、FIELD 字段控制候选字段和 res.* 资源属性契约；它不是角色授权记录本身。",
+  "type": "object",
+  "required": ["rowSecurity", "fieldSecurity"],
+  "additionalProperties": false,
+  "properties": {
+    "rowSecurity": {
+      "type": "object",
+      "description": "行级安全配置。entriesByEntity 声明哪些实体字段允许进入 PSP DATA 策略和 SQL 行过滤；fallbackScope 声明无数据策略命中时的默认范围建议。",
+      "required": ["entriesByEntity"],
+      "additionalProperties": false,
+      "properties": {
+        "fallbackScope": { "type": "string", "enum": ["ALL", "NONE"], "default": "NONE" },
+        "entriesByEntity": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "fieldSecurity": {
+      "type": "array",
+      "description": "字段级安全配置。发布到 PSP 时应转换为 BO schema 属性上的 fieldControl=true 和 fieldControlStrategy；治理值 MASKED/HIDDEN 需映射为 PSP FIELD action 的 MASK/HIDE。",
+      "items": {
+        "type": "object",
+        "required": ["entityCode", "fieldCode", "fieldControl", "privacyClass"],
+        "additionalProperties": false,
+        "properties": {
+          "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "fieldControl": { "type": "string", "enum": ["OPEN", "RESTRICTED", "MASKED", "HIDDEN"] },
+          "privacyClass": { "type": "string", "enum": ["PUBLIC", "SENSITIVE", "PII", "CONFIDENTIAL"] }
+        }
+      },
+      "default": []
+    },
+    "authzProjection": {
+      "type": "object",
+      "description": "从 BO 发布态派生并嵌入 authz_bo_meta_model.schema_json 的资源属性投影。modelCode 如 RES_SCENE 用于标识该 BO 的 res.* 属性视图，运行时仍通过 RES_DATA_BO + authz_bo_meta_model.id 定位这条 BO 元数据。",
+      "required": ["modelCode", "category", "attributes"],
+      "additionalProperties": false,
+      "properties": {
+        "modelCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "modelName": { "type": "string" },
+        "category": { "type": "string", "enum": ["RESOURCE"] },
+        "description": { "type": "string", "maxLength": 500 },
+        "usageNote": { "type": "string", "maxLength": 1000 },
+        "attributes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["code", "name", "type", "source"],
+            "additionalProperties": false,
+            "properties": {
+              "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "name": { "type": "string" },
+              "type": { "type": "string", "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"] },
+              "source": {
+                "type": "object",
+                "required": ["entityCode", "fieldCode"],
+                "additionalProperties": false,
+                "properties": {
+                  "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                  "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                  "computed": { "type": "boolean", "default": false },
+                  "derivationHint": { "type": "string" }
+                }
+              },
+              "isPk": { "type": "boolean", "default": false },
+              "filterable": { "type": "boolean", "default": false },
+              "nullable": { "type": "boolean", "default": true },
+              "onMissingValue": { "type": "string", "enum": ["DENY", "ALLOW", "SKIP"], "default": "DENY" },
+              "allowedValues": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+              "valueRef": { "type": "string" },
+              "referenceModel": { "type": "string" },
+              "displayOrder": { "type": "integer" },
+              "displayGroup": { "type": "string" },
+              "description": { "type": "string" },
+              "i18nKey": { "type": "string" },
+              "valueExamples": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  }
+}
