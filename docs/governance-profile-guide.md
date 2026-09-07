@@ -30,8 +30,7 @@ BO Fragment 显式配置
 | `apiDefaults` | API 响应、路径、聚合根和子实体 API 默认范围 | 是 |
 | `metadataDefaults` | 主实体/聚合根关系、业务键、父引用字段命名 | 是 |
 | `securityDefaults` | 行级回退、字段权限、资源模型派生要求 | 是 |
-| `ruleDefaults` | 本体规则分类、默认启用的规则类型、规则执行阶段 | 建议补充 |
-| `operationExtractionDefaults` | 是否从原型按钮抽取 Operation，过滤哪些 UI 动作 | 是 |
+| `operationExtractionDefaults` | 是否允许原型按钮作为离线 Operation 候选输入，过滤哪些 UI 动作 | 是 |
 
 ## 常用选项速查
 

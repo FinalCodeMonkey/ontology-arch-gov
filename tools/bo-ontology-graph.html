@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EAP | BO Ontology Governance</title>
+<script src="https://unpkg.com/vis-network@9.1.6/dist/vis-network.min.js"></script>
+<link rel="stylesheet" href="css/shared.css">
+<link rel="stylesheet" href="css/ontology-graph.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <span class="brand-badge">EA</span>
+    <span>EAP | Ontology Governance</span>
+  </div>
+  
+  <div class="search-container">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <input id="search-box" type="text" placeholder="搜索元数据 (业务对象 / 实体 / 属性) ..." autocomplete="off" />
+  </div>
+
+  <div class="global-actions">
+    <button class="btn-icon-text btn-primary" id="btn-new-bo" onclick="openNewBoEditor()" title="新建业务对象并在编辑器中打开">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> 新建业务对象
+    </button>
+    <button class="btn-icon-text btn-primary" id="btn-new-data" onclick="openNewDataForm()" title="为指定业务对象新建一条 demo 数据记录" style="display:none">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> 新建数据
+    </button>
+    <button class="btn-icon-text btn-outline" id="btn-reparse" onclick="reparseGraphData()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> 重构解析
+    </button>
+    <button class="btn-icon-text btn-outline" id="btn-validate" onclick="runValidation()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> 一致性检查
+    </button>
+    <div style="width:1px;height:22px;background:var(--border-strong);margin:0 2px;align-self:center"></div>
+    <button class="btn-icon-text btn-outline" onclick="generateAllPublishedStates()" title="为全部 BO 批量生成发布态 Schema">📦 全量发布元数据</button>
+    <div class="multi-select-dropdown" id="global-proj-dropdown">
+      <button class="btn-icon-text btn-outline multi-select-trigger" onclick="toggleProjDropdown('global-proj-dropdown')" title="选择投影类型（可多选），展开后点击执行">
+        <span id="global-proj-display">🎯 全量投影元数据</span>
+        <span class="dropdown-arrow">▾</span>
+      </button>
+      <div class="multi-select-options">
+        <label><input type="checkbox" value="authz_bo_meta_model" checked onchange="updateProjSelection('global')"> 🔐 支持权限引擎</label>
+        <label><input type="checkbox" value="api-contract" onchange="updateProjSelection('global')"> 📡 API契约</label>
+        <label><input type="checkbox" value="ui-model" onchange="updateProjSelection('global')"> 🖥️ UI模型</label>
+        <div class="dropdown-action-row">
+          <button class="btn-icon-text btn-primary" onclick="generateAllPspProjections(); toggleProjDropdown('global-proj-dropdown')" style="width:100%;justify-content:center;font-size:11px">🚀 执行全量投影</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-icon-text btn-outline" onclick="generateAllDdl()" title="为全部 BO 批量导出 DDL 建表 SQL">🗄️ 全量DDL</button>
+    <button class="btn-icon-text btn-outline" onclick="inspectAllDatabases()" title="为全部 BO 批量执行数据探查">🔬 全量探查</button>
+    <button class="btn-icon-text btn-outline" id="btn-db-config" onclick="openDbConfig()" title="配置探查所用的数据库连接">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+    </button>
+    <button class="btn-icon-text btn-outline" id="btn-llm-config" onclick="openLlmConfig()" title="配置 LLM API 用于推理链叙事化">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+    </button>
+    <div style="width:1px;height:22px;background:var(--border-strong);margin:0 2px;align-self:center"></div>
+    <button class="btn-icon-text btn-outline" id="btn-link-candidates" onclick="runLinkCandidates()" title="扫描 CROSS_BO_REF 生成 LINK 候选清单">🔗 LINK候选</button>
+    <button class="btn-icon-text btn-outline" id="btn-expr-ast" onclick="runExprAst()" title="转换规则表达式为 AST 并回写到 RULE Fragment">📐 exprAst回写</button>
+    <button class="btn-icon-text btn-outline" id="btn-ontology-publish" onclick="runOntologyPublish()" title="发布本体 Fragment 到运行时索引">📤 本体发布</button>
+    <div style="width:1px;height:22px;background:var(--border-strong);margin:0 2px;align-self:center"></div>
+    <button class="btn-icon-text btn-outline" id="btn-data-graph" onclick="openDataGraphInNewTab()" title="在新页签中打开数据知识图谱（实例视图）">📊 数据图谱</button>
+  </div>
+</header>
+
+<div class="app-workspace">
+  <main class="canvas-pane">
+    <div id="graph-canvas"></div>
+    <div id="tooltip" class="tooltip"></div>
+    
+    <div class="canvas-controls">
+      <button class="control-btn active" id="btn-physics" onclick="physicsFrozen?thawGraph():freezeGraph()" title="物理引擎开关">⚡</button>
+      <button class="control-btn" onclick="network.fit({animation:true})" title="适应视图"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg></button>
+      <button class="control-btn active" id="btn-labels" onclick="toggleEdgeLabels()" title="显示/隐藏连线标签"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"/></svg></button>
+    </div>
+
+    <div id="legend">
+      <div class="legend-row">
+        <span style="color:var(--text-tertiary);width:40px">节点</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#4f46e5"></span> 主从明细</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#0d9488"></span> 单表</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#d97706"></span> 树形</span>
+      </div>
+      <div class="legend-row">
+        <span style="color:var(--text-tertiary);width:40px">边</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span> 显式链路</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span> N:1 引用</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ec4899"></span> 1:1 引用</span>
+      </div>
+      <div class="legend-row">
+        <span style="color:var(--text-tertiary);width:40px"></span>
+        <span class="legend-item"><span class="legend-dot" style="background:#06b6d4"></span> 业务流</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span> 一致性</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#e879f9"></span> 展示依赖</span>
+      </div>
+      <div class="legend-row">
+        <span style="color:var(--text-tertiary);width:40px">本体</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f97316;border:1px dashed #f97316"></span> 派生对象</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#7c3aed"></span> 动作链</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#14b8a6"></span> 时序徽标</span>
+      </div>
+    </div>
+
+    <div id="layer-toggle" class="layer-toggle-panel">
+      <div class="layer-toggle-title">📊 图层</div>
+      <label class="layer-toggle-item"><input type="checkbox" checked onchange="toggleLayer('BO_REF')"> <span class="layer-dot" style="background:#f59e0b"></span> BO引用 (N:1/1:1/业务流)</label>
+      <label class="layer-toggle-item"><input type="checkbox" checked onchange="toggleLayer('LINK')"> <span class="layer-dot" style="background:#10b981"></span> 显式链路</label>
+      <label class="layer-toggle-item"><input type="checkbox" checked onchange="toggleLayer('CONSISTENCY')"> <span class="layer-dot" style="background:#ef4444"></span> 一致性规则</label>
+      <label class="layer-toggle-item"><input type="checkbox" checked onchange="toggleLayer('DISPLAY')"> <span class="layer-dot" style="background:#e879f9"></span> 展示依赖</label>
+      <label class="layer-toggle-item"><input type="checkbox" onchange="toggleLayer('DERIVATION')"> <span class="layer-dot" style="background:#f97316"></span> 派生对象</label>
+      <label class="layer-toggle-item"><input type="checkbox" onchange="toggleLayer('ACTION_CHAIN')"> <span class="layer-dot" style="background:#7c3aed"></span> 动作链</label>
+      <label class="layer-toggle-item"><input type="checkbox" checked onchange="toggleLayer('TEMPORAL_BADGE')"> <span class="layer-dot" style="background:#14b8a6"></span> 时序徽标</label>
+    </div>
+  </main>
+
+  <aside class="inspector-pane">
+    <!-- 顶层 Tab 导航（始终显示） -->
+    <div class="tabs-nav top-level-tabs" id="top-tabs-nav">
+      <button class="tab-btn" id="top-tab-bo" onclick="switchTopTab('bo')" style="display:none"></button>
+      <button class="tab-btn active" id="top-tab-reasoning" onclick="switchTopTab('reasoning')">🧠 本体推理</button>
+    </div>
+
+    <!-- 业务对象详情 Tab 内容 -->
+    <div class="tab-content" id="top-pane-bo">
+      <div class="inspector-header">
+        <div class="bo-title-bar">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div id="panel-bo-name">BO_NAME</div>
+            <a id="link-edit-meta" href="javascript:void(0)" onclick="openMetadataEditor(event)" style="font-size:11px;color:var(--accent);text-decoration:none;white-space:nowrap;opacity:0;transition:opacity .2s;cursor:pointer" title="在新标签页中编辑该 BO 的元数据 Fragment">📝 编辑元数据</a>
+          </div>
+          <div id="panel-bo-meta">MD / 0 Entities</div>
+        </div>
+        <div class="frag-chips" id="panel-frag-chips"></div>
+        <div class="inspector-actions">
+          <button class="btn-icon-text" onclick="generatePublishedStateForSelected()" title="为当前选定的 BO 生成发布态 Schema">📦 发布</button>
+          <div class="multi-select-dropdown" id="panel-proj-dropdown" style="display:inline-block">
+            <button class="btn-icon-text multi-select-trigger" onclick="toggleProjDropdown('panel-proj-dropdown')" title="选择投影类型（可多选），展开后点击执行" style="padding:6px 10px;font-size:12px">
+              <span id="panel-proj-display">🎯 投影</span>
+              <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="multi-select-options">
+              <label><input type="checkbox" value="authz_bo_meta_model" checked onchange="updateProjSelection('panel')"> 🔐 支持权限引擎</label>
+              <label><input type="checkbox" value="api-contract" onchange="updateProjSelection('panel')"> 📡 API契约</label>
+              <label><input type="checkbox" value="ui-model" onchange="updateProjSelection('panel')"> 🖥️ UI模型</label>
+              <div class="dropdown-action-row">
+                <button class="btn-icon-text btn-primary" onclick="generatePspProjectionForSelected(); toggleProjDropdown('panel-proj-dropdown')" style="width:100%;justify-content:center;font-size:11px">🚀 执行投影</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn-icon-text" onclick="generateDdlForSelected()" title="为当前选定的 BO 导出物理 DDL 建表 SQL">🗄️ DDL</button>
+          <button class="btn-icon-text" onclick="inspectDatabase()" title="探查当前选定 BO 对应的物理数据表">🔬 探查</button>
+        </div>
+      </div>
+
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab(0)">拓扑概览</button>
+        <button class="tab-btn" onclick="switchTab(1)">实体模型</button>
+        <button class="tab-btn" onclick="switchTab(2)">业务操作</button>
+        <button class="tab-btn" onclick="switchTab(3)">业务规则</button>
+        <button class="tab-btn" onclick="switchTab(4)">数据权限</button>
+      </div>
+      <div id="tab-pane-0" class="tab-content active"></div>
+      <div id="tab-pane-1" class="tab-content"></div>
+      <div id="tab-pane-2" class="tab-content"></div>
+      <div id="tab-pane-3" class="tab-content"></div>
+      <div id="tab-pane-4" class="tab-content"></div>
+    </div>
+
+    <!-- 本体推理 Tab 内容 -->
+    <div class="tab-content active" id="top-pane-reasoning">
+      <div id="tab-pane-5" class="tab-content active" style="padding:0"></div>
+    </div>
+  </aside>
+</div>
+
+<footer class="app-footer">
+  <div id="status-left">Spec-Kit Governance Engine | <span id="status-nodes">0</span> BOs Loaded</div>
+  <div id="status-right" style="display:flex;gap:16px;">
+    <span>UI Version: 3.0</span>
+    <span>Physics: <span id="status-physics">Running</span></span>
+  </div>
+</footer>
+
+<div id="json-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modal-title" style="font-size:14px;font-weight:600">Generated Artifact</h3>
+      <button class="modal-close" onclick="closeModal()"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <pre id="modal-json"></pre>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-icon-text btn-outline" onclick="copyModalJson()">📋 复制到剪贴板</button>
+      <button class="btn-icon-text btn-primary" onclick="downloadModalJson()">⬇ 导出文件</button>
+    </div>
+  </div>
+</div>
+
+<div id="db-config-modal" class="modal-overlay hidden">
+  <div class="modal-box" style="width:400px">
+    <div class="modal-header">
+      <h3 style="font-size:14px;font-weight:600">数据源配置 (Data Source)</h3>
+      <button class="modal-close" onclick="closeDbConfig()"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" style="padding:24px">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:11px;color:var(--text-tertiary)">Host : Port</label>
+          <div style="display:flex;gap:8px">
+            <input id="db-host" style="flex:1;background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;outline:none" type="text" placeholder="127.0.0.1" />
+            <input id="db-port" style="width:80px;background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;outline:none" type="number" placeholder="3306" />
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:11px;color:var(--text-tertiary)">Credentials</label>
+          <div style="display:flex;gap:8px">
+            <input id="db-user" style="flex:1;background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;outline:none" type="text" placeholder="root" />
+            <input id="db-password" style="flex:1;background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;outline:none" type="password" placeholder="***" />
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:11px;color:var(--text-tertiary)">Database</label>
+          <input id="db-database" style="background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;outline:none" type="text" placeholder="unify_engine" />
+        </div>
+      </div>
+      <div id="db-config-status" style="margin-top:16px;font-size:12px;text-align:center"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-icon-text btn-outline" onclick="closeDbConfig()">取消</button>
+      <button class="btn-icon-text btn-primary" onclick="saveDbConfig()">应用连接</button>
+    </div>
+  </div>
+</div>
+
+<div id="llm-config-modal" class="modal-overlay hidden">
+  <div class="modal-box" style="width:440px">
+    <div class="modal-header">
+      <h3 style="font-size:14px;font-weight:600">🤖 LLM 配置</h3>
+      <button class="modal-close" onclick="closeLlmConfig()"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" style="padding:24px">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg-base);border:1px solid var(--border-strong);border-radius:6px">
+          <input id="llm-enabled" type="checkbox" checked style="cursor:pointer" />
+          <label for="llm-enabled" style="font-size:12px;color:var(--text-secondary);cursor:pointer">启用 LLM（关闭后 AI 总结和叙事化报告均不执行）</label>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:11px;color:var(--text-tertiary)">API Key</label>
+          <input id="llm-api-key" style="background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;outline:none" type="password" placeholder="输入 LLM API Key" />
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:11px;color:var(--text-tertiary)">API Base URL</label>
+          <input id="llm-api-base" style="background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-family:monospace;font-size:12px;outline:none" type="text" placeholder="https://uniapi.kaijie.com.cn/v1" />
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:11px;color:var(--text-tertiary)">Model</label>
+          <select id="llm-model" style="background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-size:12px;outline:none">
+            <option value="glm-5.2">glm-5.2</option>
+            <option value="gemini-3.5-flash">gemini-3.5-flash</option>
+            <option value="origin-deepseek-v4-pro">origin-deepseek-v4-pro</option>
+            <option value="origin-deepseek-v4-flash">origin-deepseek-v4-flash</option>
+          </select>
+        </div>
+      </div>
+      <div id="llm-config-status" style="margin-top:16px;font-size:12px;text-align:center"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-icon-text btn-outline" onclick="closeLlmConfig()">取消</button>
+      <button class="btn-icon-text btn-primary" onclick="saveLlmConfig()">保存配置</button>
+    </div>
+  </div>
+</div>
+
+<div id="new-data-modal" class="modal-overlay hidden">
+  <div class="modal-box" style="width:540px">
+    <div class="modal-header">
+      <h3 style="font-size:14px;font-weight:600">➕ 新建数据记录</h3>
+      <button class="modal-close" onclick="closeNewDataForm()"><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body" style="padding:24px;max-height:60vh;overflow-y:auto">
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label style="font-size:11px;color:var(--text-tertiary)">业务对象</label>
+          <select id="new-data-bo" style="background:var(--bg-base);border:1px solid var(--border-strong);color:var(--text-primary);padding:8px 12px;border-radius:6px;font-size:12px;outline:none" onchange="onNewDataBoChange()">
+            <option value="">— 选择业务对象 —</option>
+          </select>
+        </div>
+        <div id="new-data-fields" style="display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:11px;color:var(--text-tertiary);text-align:center;padding:20px">请先选择业务对象</div>
+        </div>
+      </div>
+      <div id="new-data-status" style="margin-top:16px;font-size:12px;text-align:center"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-icon-text btn-outline" onclick="closeNewDataForm()">取消</button>
+      <button class="btn-icon-text btn-primary" id="btn-new-data-submit" onclick="submitNewData()" disabled>创建记录</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/shared-dicts.js"></script>
+<script src="js/ontology-graph-engine.js"></script>
+<script src="js/ontology-graph-detail.js"></script>
+<script src="js/ontology-graph-actions.js"></script>
+<script src="js/data-graph-engine.js"></script>
+<script src="js/ontology-graph-init.js"></script>
+</body>
+</html>

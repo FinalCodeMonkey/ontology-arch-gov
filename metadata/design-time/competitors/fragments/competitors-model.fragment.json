@@ -1,0 +1,226 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "competitors",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "competitors",
+    "boName": "竞争对手",
+    "description": "竞争对手主数据业务对象，单表建模，记录竞争对手基本画像、竞争分析、应对策略及分析文档。",
+    "apiConfig": {
+      "resourcePath": "/competitors",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "competitor_name",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "FULL_AGGREGATE",
+        "createScope": "FULL_AGGREGATE",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": []
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "competitor_name",
+      "statusField": "status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "competitor",
+        "name": "竞争对手主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_master_competitor",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "竞争对手ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "competitor_name",
+            "name": "竞争对手名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true,
+            "i18nKey": "bo.competitors.field.competitor_name"
+          },
+          {
+            "code": "company_scale",
+            "name": "规模(人)",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.competitors.field.company_scale"
+          },
+          {
+            "code": "competition_level",
+            "name": "竞争力",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.competitors.field.competition_level"
+          },
+          {
+            "code": "contact_info",
+            "name": "联系信息",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.contact_info"
+          },
+          {
+            "code": "advantage",
+            "name": "竞争优势",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.advantage"
+          },
+          {
+            "code": "disadvantage",
+            "name": "竞争劣势",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.disadvantage"
+          },
+          {
+            "code": "strategy",
+            "name": "应对策略",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.strategy"
+          },
+          {
+            "code": "sales_analysis",
+            "name": "销售情况分析",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.sales_analysis"
+          },
+          {
+            "code": "market_analysis",
+            "name": "市场情况分析",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.market_analysis"
+          },
+          {
+            "code": "analysis_doc",
+            "name": "竞争对手分析文档",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.analysis_doc"
+          },
+          {
+            "code": "remark",
+            "name": "备注说明",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.remark"
+          },
+          {
+            "code": "status",
+            "name": "状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true,
+            "defaultValue": "ACTIVE",
+            "i18nKey": "bo.competitors.field.status"
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.created_time"
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.updated_time"
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.created_by"
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.competitors.field.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "competitors 首版 MODEL 设计态 Fragment"
+  ]
+}

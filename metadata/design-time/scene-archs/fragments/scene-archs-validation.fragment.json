@@ -1,0 +1,154 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scene-archs",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "scene_id",
+        "required": true,
+        "message": "所属场景不能为空"
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "arch_role",
+        "required": true,
+        "enum": [
+          {
+            "value": "GPU_CARD",
+            "label": "GPU卡"
+          },
+          {
+            "value": "POD",
+            "label": "POD"
+          },
+          {
+            "value": "NIC",
+            "label": "网卡"
+          },
+          {
+            "value": "SERVER",
+            "label": "服务器"
+          },
+          {
+            "value": "TOR",
+            "label": "TOR"
+          },
+          {
+            "value": "LEAF",
+            "label": "LEAF"
+          },
+          {
+            "value": "SPAINE",
+            "label": "SPAINE"
+          },
+          {
+            "value": "MODULE",
+            "label": "模块"
+          },
+          {
+            "value": "OTHER",
+            "label": "其他"
+          }
+        ],
+        "message": "角色不能为空",
+        "max": 32
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "product_model",
+        "required": true,
+        "message": "型号不能为空",
+        "max": 128
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "pod_count",
+        "required": true,
+        "min": 1,
+        "message": "单POD数量必须填正整数"
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "arch_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "message": "成员用户不能为空",
+        "max": 64
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "member_role",
+        "max": 50,
+        "required": true,
+        "enum": [
+          {
+            "value": "SALES_OWNER",
+            "label": "销售负责人"
+          },
+          {
+            "value": "HARDWARE_SALES",
+            "label": "硬件销售"
+          },
+          {
+            "value": "SERVICE_SALES",
+            "label": "服务销售"
+          },
+          {
+            "value": "COLLABORATOR",
+            "label": "协同跟进人"
+          },
+          {
+            "value": "OTHER",
+            "label": "其他"
+          }
+        ],
+        "message": "成员角色必须是预定义值之一"
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "permission",
+        "required": true,
+        "enum": [
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          },
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          }
+        ],
+        "message": "权限设置不能为空",
+        "max": 16
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "remark",
+        "max": 256
+      }
+    ]
+  },
+  "changeNote": [
+    "scene-archs 首版 VALIDATION 设计态 Fragment"
+  ]
+}

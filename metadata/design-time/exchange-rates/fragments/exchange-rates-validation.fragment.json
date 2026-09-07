@@ -1,0 +1,141 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "exchange-rates",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate_no",
+        "required": true,
+        "max": 64,
+        "unique": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "base_currency",
+        "required": true,
+        "max": 16,
+        "enum": [
+          {
+            "value": "CNY",
+            "label": "人民币"
+          },
+          {
+            "value": "USD",
+            "label": "美元"
+          }
+        ],
+        "message": "基准币种必须为 人民币/美元 之一"
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "target_currency",
+        "required": true,
+        "max": 16,
+        "enum": [
+          {
+            "value": "CNY",
+            "label": "人民币"
+          },
+          {
+            "value": "USD",
+            "label": "美元"
+          },
+          {
+            "value": "EUR",
+            "label": "欧元"
+          },
+          {
+            "value": "JPY",
+            "label": "日元"
+          },
+          {
+            "value": "HKD",
+            "label": "港币"
+          }
+        ],
+        "message": "目标币种必须为预定义值之一"
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate_type",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {
+            "value": "SPOT",
+            "label": "即期汇率"
+          },
+          {
+            "value": "MONTHLY_AVG",
+            "label": "月均汇率"
+          },
+          {
+            "value": "QUARTERLY_AVG",
+            "label": "季均汇率"
+          },
+          {
+            "value": "YEARLY_AVG",
+            "label": "年均汇率"
+          }
+        ],
+        "message": "汇率类型必须为 即期/月均/季均/年均 之一"
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate",
+        "required": true,
+        "min": 0,
+        "message": "汇率值不能为空且必须为正数"
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "effective_date",
+        "required": true,
+        "message": "生效日期不能为空"
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "expiry_date",
+        "required": true,
+        "message": "失效日期不能为空"
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "status",
+        "required": true,
+        "enum": [
+          {
+            "value": "ACTIVE",
+            "label": "生效"
+          },
+          {
+            "value": "INACTIVE",
+            "label": "失效"
+          }
+        ],
+        "message": "状态必须为 生效/失效 之一"
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "source",
+        "max": 128
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "remark",
+        "max": 500
+      }
+    ]
+  }
+}

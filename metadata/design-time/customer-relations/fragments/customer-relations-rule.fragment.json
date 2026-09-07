@@ -1,0 +1,436 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customer-relations",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "RELATION_CUSTOMER_EXISTS",
+        "name": "关系治理关联客户必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "关联的客户主数据不存在，请先在 MDM 中创建客户",
+        "description": "创建/更新关系治理时，customer_id 引用的客户必须在 customers BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "id",
+          "localEntityCode": "customer-relation",
+          "localFieldCode": "customer_id"
+        }
+      },
+      {
+        "code": "RELATION_CUSTOMER_UNIQUE",
+        "name": "一个客户仅允许一条关系治理记录",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "该客户已存在关系治理记录，不可重复创建",
+        "description": "crm_customer-relation.customer_id 必须唯一（DDL uk_customer_id 约束）。"
+      },
+      {
+        "code": "RELATION_DELETE_NO_ORPHAN_CHILDREN",
+        "name": "有子实体时不可删除关系治理",
+        "ruleType": "CONSISTENCY",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "当前关系治理下存在团队成员/竞争信息/业务战略子实体，请先清理",
+        "description": "删除关系治理时，若存在子实体则拒绝（与 aggregateApiPolicy.deleteScope=CASCADE_AGGREGATE 联动）。"
+      },
+      {
+        "code": "RELATION_STATUS_SUBMIT",
+        "name": "仅草稿状态可提交审批",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "SUBMIT",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "status == 'DRAFT'",
+        "severity": "ERROR",
+        "message": "仅草稿状态的客户关系治理记录可提交审批",
+        "description": "SUBMIT 操作前置校验：status 必须为 DRAFT，提交后转为 PENDING_APPROVAL。",
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DRAFT"
+          }
+        }
+      },
+      {
+        "code": "RELATION_STATUS_CHANGE",
+        "name": "仅已审批状态可提交变更",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "CHANGE",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "status == 'APPROVED'",
+        "severity": "ERROR",
+        "message": "仅已审批通过的客户关系治理记录可提交变更",
+        "description": "CHANGE 操作前置校验：status 必须为 APPROVED，提交变更后转为 CHANGED。",
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "APPROVED"
+          }
+        }
+      },
+      {
+        "code": "RELATION_TRANSFER_KEEP_OLD_OWNER_AS_MEMBER",
+        "name": "客户转移时保留原所有人为团队成员",
+        "ruleType": "AUTOMATION",
+        "scope": "OPERATION",
+        "operationCode": "TRANSFER_CUSTOMER",
+        "trigger": "AFTER_OPERATION",
+        "severity": "INFO",
+        "message": "客户转移成功，原所有人已保留为团队成员",
+        "description": "TRANSFER_CUSTOMER 操作执行后，若请求参数 keepOldOwnerAsMember=true，则自动将原 owner_user_id 对应的用户加入 customer-team-member 子实体（调用 ADD_TEAM_MEMBER 语义），角色默认为普通成员。若原所有人已在团队中则跳过。"
+      },
+      {
+        "code": "INFRA_ARCH_DATE_ORDER",
+        "name": "基础设施架构各阶段时间必须依次递增",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "customer-infra-architecture",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "shortlist_date <= gray_date && gray_date <= mass_production_date && mass_production_date <= eol_date",
+        "severity": "ERROR",
+        "message": "架构阶段时间顺序必须为：完成入围 → 灰度 → 量产 → EOL",
+        "description": "创建或编辑基础设施架构时校验，四个阶段时间必须依次递增，拒绝乱序输入。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "field",
+                "path": "shortlist_date"
+              },
+              "right": {
+                "type": "field",
+                "path": "gray_date"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "field",
+                "path": "gray_date"
+              },
+              "right": {
+                "type": "field",
+                "path": "mass_production_date"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "field",
+                "path": "mass_production_date"
+              },
+              "right": {
+                "type": "field",
+                "path": "eol_date"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "COMPETITION_UNIQUE_PER_RELATION",
+        "name": "同一关系治理下竞争对手不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "customer-competition",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "count(parent.competitions[competitor_id == this.competitor_id]) <= 1",
+        "severity": "ERROR",
+        "message": "该客户关系治理下已存在此竞争对手信息，不可重复添加",
+        "description": "新增或编辑竞争信息时，同一 parent_id 下 competitor_id 不可重复。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "competitions",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "competitor_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "competitor_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "STRATEGY_CURRENT_VERSION_UNIQUE",
+        "name": "同一关系治理仅允许一条当前版本战略",
+        "ruleType": "CONSISTENCY",
+        "scope": "ENTITY",
+        "entityCode": "customer-industry-strategy",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "is_current != 1 || count(parent.industry-strategies[is_current == 1]) <= 1",
+        "severity": "ERROR",
+        "message": "同一客户关系治理下只能有一条当前版本的业务和战略记录",
+        "description": "新增或编辑业务和战略时，若 is_current=1，则同一 parent_id 下不允许其他记录也标记为当前版本。",
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "is_current"
+              },
+              "right": {
+                "type": "literal",
+                "value": 1
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "aggregate",
+                "fn": "count",
+                "source": "industry-strategies",
+                "where": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "is_current"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 1
+                  }
+                }
+              },
+              "right": {
+                "type": "literal",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "TEAM_MEMBER_UNIQUE_PER_RELATION",
+        "name": "同一关系治理下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "customer-team-member",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "count(parent.team-members[user_id == this.user_id]) <= 1",
+        "severity": "ERROR",
+        "message": "该客户关系治理下已存在此团队成员，不可重复添加",
+        "description": "新增或编辑团队成员时，同一 parent_id 下 user_id 不可重复。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "team-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "COMPETITION_MEMBER_UNIQUE_PER_COMPETITION",
+        "name": "同一竞争信息下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "customer-competition-member",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "count(parent.competition-members[user_id == this.user_id]) <= 1",
+        "severity": "ERROR",
+        "message": "该竞争信息下已存在此团队成员，不可重复添加",
+        "description": "新增或编辑竞争信息团队成员时，同一 parent_id 下 user_id 不可重复。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "competition-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "STRATEGY_MEMBER_UNIQUE_PER_STRATEGY",
+        "name": "同一业务战略下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "customer-industry-strategy-member",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "count(parent.strategy-members[user_id == this.user_id]) <= 1",
+        "severity": "ERROR",
+        "message": "该业务和战略下已存在此团队成员，不可重复添加",
+        "description": "新增或编辑业务和战略团队成员时，同一 parent_id 下 user_id 不可重复。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "strategy-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "INFRA_ARCH_MEMBER_UNIQUE_PER_ARCH",
+        "name": "同一基础设施架构下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "customer-infra-architecture-member",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "count(parent.infra-architecture-members[user_id == this.user_id]) <= 1",
+        "severity": "ERROR",
+        "message": "该基础设施架构下已存在此团队成员，不可重复添加",
+        "description": "新增或编辑基础设施架构团队成员时，同一 parent_id 下 user_id 不可重复。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "infra-architecture-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "RELATION_EDIT_LOCK_WHEN_PENDING",
+        "name": "待审批状态不可编辑",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "EDIT",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "status != 'PENDING_APPROVAL'",
+        "severity": "ERROR",
+        "message": "待审批状态的客户关系治理记录不可编辑，请先撤回审批",
+        "description": "EDIT 操作前置校验：status 不能为 PENDING_APPROVAL，避免审批中数据被篡改。",
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "PENDING_APPROVAL"
+          }
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "MCR BO 首版 RULE Fragment，含跨 BO 客户存在性校验、1:1 唯一性校验和子实体孤儿数据保护",
+    "新增 TRANSFER_CUSTOMER 操作的 AUTOMATION 规则：转移后可选保留原所有人为团队成员",
+    "新增 SUBMIT/CHANGE 操作的 STATE 前置校验规则（参照 opportunities STATUS 规则模式）",
+    "新增 INFRA_ARCH_DATE_ORDER：基础设施架构四阶段时间顺序校验（入围→灰度→量产→EOL），参照 scenes PRODUCT_LIFECYCLE_DATE_ORDER 模式",
+    "新增 COMPETITION_UNIQUE_PER_RELATION：同一关系治理下竞争对手不可重复",
+    "新增 STRATEGY_CURRENT_VERSION_UNIQUE：同一关系治理仅允许一条 is_current=1 的战略记录",
+    "新增 TEAM_MEMBER_UNIQUE_PER_RELATION / COMPETITION_MEMBER_UNIQUE_PER_COMPETITION / STRATEGY_MEMBER_UNIQUE_PER_STRATEGY / INFRA_ARCH_MEMBER_UNIQUE_PER_ARCH：各层级团队成员唯一性校验",
+    "新增 RELATION_EDIT_LOCK_WHEN_PENDING：待审批状态不可编辑，避免审批中数据被篡改"
+  ]
+}

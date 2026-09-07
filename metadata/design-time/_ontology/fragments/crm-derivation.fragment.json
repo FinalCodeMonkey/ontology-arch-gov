@@ -1,0 +1,349 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "crm-ontology",
+  "metaType": "DERIVATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "derivedObjects": [
+      {
+        "code": "customer-360",
+        "name": "客户360视图",
+        "objectKind": "DERIVED_VIEW",
+        "description": "以客户为中心的360度经营视图，聚合客户基础信息、关系治理、商机管道、销售活动、场景和竞争态势，输出客户健康度、流失风险和下一步最佳行动建议。",
+        "root": { "boCode": "customers", "entityCode": "customer", "idField": "id" },
+        "dependencies": [
+          { "boCode": "customer-relations", "viaLink": "CUSTOMER_HAS_RELATION_PROFILE", "required": true },
+          { "boCode": "opportunities", "viaLink": "CUSTOMER_HAS_OPPORTUNITY", "required": false },
+          { "boCode": "sales-activities", "viaLink": "CUSTOMER_HAS_ACTIVITY", "required": false },
+          { "boCode": "scenes", "viaLink": "CUSTOMER_HAS_SCENE", "required": false },
+          { "boCode": "competitors", "viaLink": "OPPORTUNITY_COMPETES_WITH", "required": false }
+        ],
+        "fields": [
+          { "code": "active_opportunity_count", "name": "活跃商机数", "type": "INTEGER", "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_QUARTER",
+            "timeField": "created_time",
+            "where": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "status" }, "right": { "type": "literal", "value": "ACTIVE" } }
+          }, "cacheable": true },
+          { "code": "active_pipeline_amount", "name": "活跃管道金额", "type": "DECIMAL",
+            "aggregationScope": "CUSTOMER",
+            "description": "客户级聚合：仅沿 FOP 递归子客户，不含同销售负责人的其他客户。",
+            "expression": {
+            "type": "temporalAggregate",
+            "fn": "sum",
+            "field": "expected_order_amount",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_YEAR",
+            "timeField": "updated_time",
+            "where": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "status" }, "right": { "type": "literal", "value": "ACTIVE" } }
+          }, "cacheable": true },
+          { "code": "last_activity_time", "name": "最近活动时间", "type": "DATETIME", "expression": {
+            "type": "temporalAggregate",
+            "fn": "max",
+            "field": "visit_time",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "LAST_YEAR",
+            "timeField": "visit_time"
+          }, "cacheable": true },
+          { "code": "activity_count_90d", "name": "近90天活动数", "type": "INTEGER", "expression": {
+            "type": "metric",
+            "code": "activity_count_90d"
+          }, "cacheable": true },
+          { "code": "competitor_count", "name": "关联竞争对手数", "type": "INTEGER", "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "competitors",
+            "viaLink": "OPPORTUNITY_COMPETES_WITH",
+            "window": "CURRENT_YEAR",
+            "timeField": "created_time"
+          }, "cacheable": true },
+          { "code": "won_opportunity_count", "name": "已赢单商机数", "type": "INTEGER", "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_YEAR",
+            "timeField": "updated_time",
+            "where": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "status" }, "right": { "type": "literal", "value": "CLOSED_WON" } }
+          }, "cacheable": true },
+          { "code": "customer_health_score", "name": "客户健康度", "type": "DECIMAL", "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary", "op": "GT", "left": { "type": "metric", "code": "won_opportunity_count" }, "right": { "type": "literal", "value": 0 }
+                },
+                "result": {
+                  "type": "weightedScore",
+                  "itemsForWeight": [
+                    { "weight": 0.65, "scoreRef": "won_opportunity_score" },
+                    { "weight": 0.15, "scoreRef": "sales_activity_score" },
+                    { "weight": 0.08, "scoreRef": "relation_governance_score" },
+                    { "weight": 0.07, "scoreRef": "competitor_risk_reverse_score" },
+                    { "weight": 0.05, "scoreRef": "customer_level_score" }
+                  ]
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "activity_count_90d" }, "right": { "type": "literal", "value": 0 } },
+                    { "type": "binary", "op": "LTE", "left": { "type": "metric", "code": "active_opportunity_count" }, "right": { "type": "literal", "value": 1 } }
+                  ]
+                },
+                "result": {
+                  "type": "weightedScore",
+                  "itemsForWeight": [
+                    { "weight": 0.30, "scoreRef": "sales_activity_score" },
+                    { "weight": 0.25, "scoreRef": "opportunity_activity_score" },
+                    { "weight": 0.20, "scoreRef": "relation_governance_score" },
+                    { "weight": 0.15, "scoreRef": "customer_level_score" },
+                    { "weight": 0.10, "scoreRef": "competitor_risk_reverse_score" }
+                  ]
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "weightedScore",
+              "itemsForWeight": [
+                { "weight": 0.30, "scoreRef": "opportunity_activity_score" },
+                { "weight": 0.25, "scoreRef": "sales_activity_score" },
+                { "weight": 0.20, "scoreRef": "relation_governance_score" },
+                { "weight": 0.15, "scoreRef": "competitor_risk_reverse_score" },
+                { "weight": 0.10, "scoreRef": "customer_level_score" }
+              ]
+            }
+          }, "cacheable": true, "requiredForScoring": true },
+          { "code": "churn_risk_level", "name": "流失风险等级", "type": "STRING", "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary", "op": "GT", "left": { "type": "metric", "code": "won_opportunity_count" }, "right": { "type": "literal", "value": 0 }
+                },
+                "result": { "type": "literal", "value": "LOW" }
+              },
+              {
+                "condition": {
+                  "type": "logical", "op": "AND", "items": [
+                    { "type": "binary", "op": "GTE", "left": { "type": "metric", "code": "customer_health_score" }, "right": { "type": "literal", "value": 70 } },
+                    { "type": "binary", "op": "GTE", "left": { "type": "metric", "code": "activity_count_90d" }, "right": { "type": "literal", "value": 2 } }
+                  ]
+                },
+                "result": { "type": "literal", "value": "LOW" }
+              },
+              {
+                "condition": {
+                  "type": "binary", "op": "GTE", "left": { "type": "metric", "code": "customer_health_score" }, "right": { "type": "literal", "value": 50 } },
+                "result": { "type": "literal", "value": "MEDIUM" }
+              }
+            ],
+            "defaultResult": { "type": "literal", "value": "HIGH" }
+          }, "cacheable": false },
+          { "code": "next_best_action", "name": "下一步最佳行动", "type": "STRING", "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary", "op": "GT", "left": { "type": "metric", "code": "won_opportunity_count" }, "right": { "type": "literal", "value": 0 }
+                },
+                "result": { "type": "literal", "value": "推进续保报价与交叉销售，深耕存量客户扩容机会" }
+              },
+              {
+                "condition": {
+                  "type": "logical", "op": "AND", "items": [
+                    { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "churn_risk_level" }, "right": { "type": "literal", "value": "LOW" } },
+                    { "type": "binary", "op": "GT", "left": { "type": "metric", "code": "active_opportunity_count" }, "right": { "type": "literal", "value": 1 } }
+                  ]
+                },
+                "result": { "type": "literal", "value": "推进多个商机阶段，重点关注集采框架和DCN升级等核心项目，准备POC测试和投标方案" }
+              },
+              {
+                "condition": {
+                  "type": "logical", "op": "AND", "items": [
+                    { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "churn_risk_level" }, "right": { "type": "literal", "value": "LOW" } },
+                    { "type": "binary", "op": "GT", "left": { "type": "metric", "code": "active_opportunity_count" }, "right": { "type": "literal", "value": 0 } }
+                  ]
+                },
+                "result": { "type": "literal", "value": "推进商机阶段，准备投标方案" }
+              },
+              {
+                "condition": {
+                  "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "churn_risk_level" }, "right": { "type": "literal", "value": "MEDIUM" } },
+                "result": { "type": "literal", "value": "安排客户拜访，加强关系维护，关注停滞商机风险" }
+              }
+            ],
+            "defaultResult": { "type": "literal", "value": "紧急介入，制定客户挽留计划，复盘停滞商机" }
+          }, "cacheable": false }
+        ],
+        "materialization": { "mode": "ON_READ_CACHE", "ttlSeconds": 3600 },
+        "apiExposure": { "enabled": true, "resourcePath": "/ontology/customer-360" }
+      },
+      {
+        "code": "opportunity-intelligence",
+        "name": "商机智能视图",
+        "objectKind": "DERIVED_VIEW",
+        "description": "商机经营洞察视图，综合阶段进度、客户活跃度、竞争态势和产品匹配度，输出赢单概率、阶段流速、竞争风险和推荐动作。",
+        "root": { "boCode": "opportunities", "entityCode": "opportunity", "idField": "id" },
+        "dependencies": [
+          { "boCode": "customers", "viaLink": "CUSTOMER_HAS_OPPORTUNITY", "required": false },
+          { "boCode": "sales-activities", "viaLink": "CUSTOMER_HAS_ACTIVITY", "required": false },
+          { "boCode": "competitors", "viaLink": "OPPORTUNITY_COMPETES_WITH", "required": false }
+        ],
+        "fields": [
+          { "code": "opportunity_status", "name": "商机状态", "type": "STRING", "expression": {
+            "type": "metric", "code": "opportunity_status"
+          }, "cacheable": true },
+          { "code": "win_probability", "name": "赢单概率", "type": "DECIMAL", "expression": {
+            "type": "caseWhen",
+            "cases": [
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "opportunity_status" }, "right": { "type": "literal", "value": "CLOSED_WON" } }, "result": { "type": "literal", "value": 1.0 } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_01" } }, "result": { "type": "literal", "value": 0.25 } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_02" } }, "result": { "type": "literal", "value": 0.55 } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_03" } }, "result": { "type": "literal", "value": 0.75 } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_04" } }, "result": { "type": "literal", "value": 0.80 } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_05" } }, "result": { "type": "literal", "value": 0.90 } }
+            ],
+            "defaultResult": { "type": "literal", "value": 0.30 }
+          }, "cacheable": true },
+          { "code": "stage_age_days", "name": "当前阶段停留天数", "type": "INTEGER", "expression": {
+            "type": "metric", "code": "stage_age_days"
+          }, "cacheable": true },
+          { "code": "stage_velocity_level", "name": "阶段流速", "type": "STRING", "expression": {
+            "type": "metric", "code": "stage_velocity_level"
+          }, "cacheable": true },
+          { "code": "activity_support_score", "name": "活动支撑评分", "type": "DECIMAL", "expression": {
+            "type": "metric", "code": "sales_activity_score"
+          }, "cacheable": true },
+          { "code": "competitor_count", "name": "关联竞争对手数", "type": "INTEGER", "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "competitors",
+            "viaLink": "OPPORTUNITY_COMPETES_WITH",
+            "window": "CURRENT_YEAR",
+            "timeField": "created_time"
+          }, "cacheable": true },
+          { "code": "competitor_risk_level", "name": "竞争风险等级", "type": "STRING", "expression": {
+            "type": "metric",
+            "code": "competitor_risk_level"
+          }, "cacheable": false },
+          { "code": "product_fit_score", "name": "产品匹配度", "type": "DECIMAL", "expression": {
+            "type": "literal", "value": 0.75
+          }, "cacheable": true },
+          { "code": "forecast_amount_weighted", "name": "加权预测金额", "type": "DECIMAL", "expression": {
+            "type": "scalarOp", "op": "MUL",
+            "left": { "type": "field", "path": "expected_order_amount" },
+            "right": { "type": "metric", "code": "win_probability" }
+          }, "cacheable": true },
+          { "code": "recommended_action", "name": "推荐推进动作", "type": "STRING", "expression": {
+            "type": "caseWhen",
+            "cases": [
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "opportunity_status" }, "right": { "type": "literal", "value": "CLOSED_WON" } }, "result": { "type": "literal", "value": "推进售后交付，挖掘交叉销售与扩容机会" } },
+              {
+                "condition": {
+                  "type": "logical", "op": "AND", "items": [
+                    { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_01" } },
+                    { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "stage_velocity_level" }, "right": { "type": "literal", "value": "STAGNANT" } }
+                  ]
+                },
+                "result": { "type": "literal", "value": "商机长期停滞在初始阶段，建议评估是否继续跟进或关闭商机" }
+              },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_01" } }, "result": { "type": "literal", "value": "加强客户拜访和技术交流，推动商机进入需求确认阶段" } },
+              {
+                "condition": {
+                  "type": "logical", "op": "AND", "items": [
+                    { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_02" } },
+                    { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "stage_velocity_level" }, "right": { "type": "literal", "value": "STAGNANT" } }
+                  ]
+                },
+                "result": { "type": "literal", "value": "商机在需求确认阶段停滞，建议安排技术交流会，及时推进评审" }
+              },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_02" } }, "result": { "type": "literal", "value": "深化需求确认，组织技术方案交流会，推动客户进入方案评审阶段" } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_03" } }, "result": { "type": "literal", "value": "加速投标准备，完善技术方案，预计2周内提交投标文件" } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_04" } }, "result": { "type": "literal", "value": "跟进商务谈判，推进合同评审，关注竞对动态" } },
+              { "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "project_stage" }, "right": { "type": "literal", "value": "DC_05" } }, "result": { "type": "literal", "value": "确认合同细节，推动签约落地，做好交付衔接准备" } }
+            ],
+            "defaultResult": { "type": "literal", "value": "评估商机当前状态，制定推进计划" }
+          }, "cacheable": false }
+        ],
+        "materialization": { "mode": "ON_READ_CACHE", "ttlSeconds": 3600 },
+        "apiExposure": { "enabled": true, "resourcePath": "/ontology/opportunity-intelligence" }
+      },
+      {
+        "code": "pipeline-coverage",
+        "name": "销售管道覆盖视图",
+        "objectKind": "AGGREGATE_METRIC",
+        "description": "销售目标与管道覆盖对比视图，按目标维度计算加权管道金额、覆盖率和缺口，输出覆盖风险等级。",
+        "root": { "boCode": "sales-targets", "entityCode": "target", "idField": "id" },
+        "dependencies": [
+          { "boCode": "customers", "viaLink": "TARGET_OWNS_CUSTOMER", "required": true },
+          { "boCode": "opportunities", "viaLink": "CUSTOMER_HAS_OPPORTUNITY", "required": false },
+          { "boCode": "exchange-rates", "viaLink": null, "required": false, "joinType": "FIELD_MATCH", "joinCondition": "opportunities.currency = exchange-rates.base_currency AND exchange-rates.target_currency = 'CNY' AND exchange-rates.status = 'ACTIVE'" }
+        ],
+        "fields": [
+          { "code": "target_amount", "name": "目标金额", "type": "DECIMAL", "expression": {
+            "type": "field", "path": "goal_value"
+          }, "cacheable": true },
+          { "code": "active_pipeline_amount", "name": "活跃管道金额", "type": "DECIMAL", "expression": {
+            "type": "metric", "code": "active_pipeline_amount"
+          }, "cacheable": true },
+          { "code": "weighted_pipeline_amount", "name": "加权管道金额", "type": "DECIMAL", "description": "逐商机按阶段概率独立加权后汇总。", "expression": {
+            "type": "pipelineAggregate",
+            "source": "opportunities",
+            "amountField": "expected_order_amount",
+            "stageField": "project_stage",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "where": { "type": "binary", "op": "NEQ",
+              "left": { "type": "field", "path": "status" },
+              "right": { "type": "literal", "value": "CLOSED_WON" }
+            },
+            "stageProbabilityMap": {
+              "DC_01": 0.25, "DC_02": 0.50, "DC_03": 0.75,
+              "DC_04": 0.85, "DC_05": 0.95,
+              "CLOSED_WON": 1.0, "CLOSED_LOST": 0.0
+            }
+          }, "cacheable": true },
+          { "code": "coverage_ratio", "name": "覆盖率", "type": "DECIMAL", "expression": {
+            "type": "scalarOp", "op": "DIV",
+            "left": { "type": "metric", "code": "active_pipeline_amount" },
+            "right": { "type": "metric", "code": "target_amount" }
+          }, "cacheable": true },
+          { "code": "gap_amount", "name": "缺口金额", "type": "DECIMAL", "expression": {
+            "type": "scalarOp", "op": "SUB",
+            "left": { "type": "metric", "code": "target_amount" },
+            "right": { "type": "metric", "code": "active_pipeline_amount" }
+          }, "cacheable": true },
+          { "code": "risk_level", "name": "覆盖风险等级", "type": "STRING", "expression": {
+            "type": "caseWhen",
+            "cases": [
+              { "condition": { "type": "binary", "op": "GTE", "left": { "type": "metric", "code": "coverage_ratio" }, "right": { "type": "literal", "value": 1.0 } }, "result": { "type": "literal", "value": "LOW" } },
+              { "condition": { "type": "binary", "op": "GTE", "left": { "type": "metric", "code": "coverage_ratio" }, "right": { "type": "literal", "value": 0.7 } }, "result": { "type": "literal", "value": "MEDIUM" } }
+            ],
+            "defaultResult": { "type": "literal", "value": "HIGH" }
+          }, "cacheable": false }
+        ],
+        "materialization": { "mode": "SCHEDULED" },
+        "apiExposure": { "enabled": true, "resourcePath": "/ontology/pipeline-coverage" }
+      }
+    ]
+  },
+  "changeNote": [
+    "CRM 应用级 DERIVATION 设计态 Fragment。含 customer-360、opportunity-intelligence、pipeline-coverage 三个派生对象。",
+    "",
+    "v2.0 规则修复（面向规则，非面向数据）：",
+    "  - customer_health_score: 新增 dormant-penalty 分支（activity=0 AND active_opp≤1 → 加大 sales_activity 和 customer_level 权重，降低 opportunity_activity 权重）",
+    "  - win_probability: 改为 project_stage 主维度 + stage_velocity_level 修正，不再依赖 stage_age_days",
+    "  - recommended_action: 改为 project_stage 分阶段匹配推荐语境，DC_01 停滞单独处理",
+    "  依赖 entity-scoring 子分修复（relation_governance→50, customer_level 按 T1/T2/T3 梯度, competitor_risk_reverse→80 中性基线, opportunity_activity 无活动时折半）"
+  ]
+}

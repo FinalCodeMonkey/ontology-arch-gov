@@ -1,0 +1,84 @@
+{
+  "_scenario": "CBG互联网大厂场景架构明细",
+  "_scenarioDescription": "每个场景一条架构记录。6101:阿里园区DCN3.0 Spine-Leaf架构。6102:阿里DCN4.0 EVPN-VXLAN架构。6103:字节JDM 12.8T CLOS架构。6104:腾讯智算 RoCEv2架构。6105:京东ESUN Spine-Leaf架构。6106:小米多云 Spine-Leaf架构。",
+  "records": [
+    {
+      "id": 1,
+      "scene_id": 6101,
+      "customer_name": "阿里巴巴(中国)有限公司",
+      "scene_name_customer": "阿里巴巴园区DCN3.0项目",
+      "scene_name_dept": "园区",
+      "business_name": "PARK",
+      "primary_customer_name": "阿里巴巴(中国)有限公司",
+      "sales_owner_name": "成鹏",
+      "product_model": "S6510",
+      "arch_role": "SPAINE",
+      "pod_count": 4
+    },
+    {
+      "id": 2,
+      "scene_id": 6102,
+      "customer_name": "阿里巴巴(中国)有限公司(IDC)",
+      "scene_name_customer": "阿里巴巴DCN4.0项目",
+      "scene_name_dept": "DCN 4.0",
+      "business_name": "DCN",
+      "primary_customer_name": "阿里巴巴(中国)有限公司",
+      "sales_owner_name": "成鹏",
+      "product_model": "S6930-2C",
+      "arch_role": "SPAINE",
+      "pod_count": 8
+    },
+    {
+      "id": 3,
+      "scene_id": 6103,
+      "customer_name": "北京字节跳动科技有限公司",
+      "scene_name_customer": "字节DCN数据中心交换机",
+      "scene_name_dept": "JDM交换机 12.8T",
+      "business_name": "JDM",
+      "primary_customer_name": "北京字节跳动科技有限公司",
+      "sales_owner_name": "侯博伟",
+      "product_model": "S6510",
+      "arch_role": "SPAINE",
+      "pod_count": 4
+    },
+    {
+      "id": 4,
+      "scene_id": 6104,
+      "customer_name": "腾讯科技服务(深圳)有限公司",
+      "scene_name_customer": "腾讯智算核心网络项目",
+      "scene_name_dept": "智算核心网络",
+      "business_name": "AI_COMPUTE",
+      "primary_customer_name": "腾讯科技服务(深圳)有限公司",
+      "sales_owner_name": "谢军",
+      "product_model": "S9510",
+      "arch_role": "SPAINE",
+      "pod_count": 4
+    },
+    {
+      "id": 5,
+      "scene_id": 6105,
+      "customer_name": "京东科技信息技术有限公司",
+      "scene_name_customer": "京东ESUN交换产品项目",
+      "scene_name_dept": "ESUN交换产品",
+      "business_name": "ESUN",
+      "primary_customer_name": "京东科技信息技术有限公司",
+      "sales_owner_name": "杨成",
+      "product_model": "S6930-2C",
+      "arch_role": "SPAINE",
+      "pod_count": 6
+    },
+    {
+      "id": 6,
+      "scene_id": 6106,
+      "customer_name": "小米科技有限责任公司",
+      "scene_name_customer": "小米多云数据平台项目",
+      "scene_name_dept": "多云数据平台",
+      "business_name": "DCN",
+      "primary_customer_name": "小米科技有限责任公司",
+      "sales_owner_name": "成鹏",
+      "product_model": "S6580",
+      "arch_role": "SPAINE",
+      "pod_count": 4
+    }
+  ]
+}

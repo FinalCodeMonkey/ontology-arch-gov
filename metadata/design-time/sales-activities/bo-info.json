@@ -1,0 +1,8 @@
+{
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-activities",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "changeNote": "初始创建销售活动 BO 元数据，主从明细聚合建模（拜访记录主表 + 跟进记录子表），parent_id 引用 customers BO"
+}

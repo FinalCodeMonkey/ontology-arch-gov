@@ -1,0 +1,259 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "change-records",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "VERTICAL",
+      "formColumns": 1,
+      "formLabelWidth": 120,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "change-record",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "change_record_no",
+        "displayName": "变更编号",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "biz_type",
+        "displayName": "业务对象类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "change-record_biz_type",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "biz_id",
+        "displayName": "业务对象ID",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "action_type",
+        "displayName": "动作类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "status",
+        "displayName": "变更状态",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "change-record_status",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "operator_name",
+        "displayName": "操作人",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "approval_record_id",
+        "displayName": "关联审批记录",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refObject": "approval-records"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "original_snapshot_json",
+        "displayName": "原始快照",
+        "sortable": false,
+        "columnWidth": 300,
+        "order": 90,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "TEXTAREA",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "changes_json",
+        "displayName": "变更内容",
+        "sortable": false,
+        "columnWidth": 300,
+        "order": 100,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "TEXTAREA",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 110,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "format": "datetime",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      }
+    ]
+  },
+  "changeNote": [
+    "变更记录 BO 首版 VIEW Fragment",
+    "列表展示变更编号/业务类型/状态/操作人/时间",
+    "详情展示原始快照和变更内容 JSON"
+  ]
+}

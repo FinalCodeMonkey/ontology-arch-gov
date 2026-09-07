@@ -1,0 +1,146 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "x-territory-regs",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建报备",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "triggerEvent": "OPEN_FORM",
+        "position": "TOOLBAR",
+        "description": "创建跨地盘报备单，同时初始化团队成员。API：POST /x-territory-regs。"
+      },
+      {
+        "code": "EDIT",
+        "name": "编辑报备",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "update",
+        "triggerEvent": "OPEN_FORM",
+        "position": "ROW",
+        "description": "编辑草稿或被驳回的报备单基本信息。仅 DRAFT/REJECTED 状态可编辑。API：POST /x-territory-regs/{id}/update。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除报备",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "position": "ROW",
+        "description": "逻辑删除报备单（含级联删除团队成员）。仅 DRAFT 状态可删除。API：DELETE /x-territory-regs/{id}。"
+      },
+      {
+        "code": "SUBMIT",
+        "name": "提交审批",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "SUBMIT",
+        "httpMethod": "POST",
+        "actionPath": "submit",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "position": "ROW",
+        "description": "将草稿报备单提交至审批流程，状态变更为 PENDING，创建 Flowable 流程实例。API：POST /x-territory-regs/{id}/submit。"
+      },
+      {
+        "code": "REVOKE",
+        "name": "撤回申请",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "REVOKE",
+        "httpMethod": "POST",
+        "actionPath": "revoke",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "position": "ROW",
+        "description": "撤回已提交的审批申请，状态回退至 DRAFT，终止流程实例。API：POST /x-territory-regs/{id}/revoke。"
+      },
+      {
+        "code": "APPROVE",
+        "name": "审批通过",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "APPROVE",
+        "httpMethod": "POST",
+        "actionPath": "approve",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "position": "ROW",
+        "description": "审批人通过报备申请，状态变更为 APPROVED。通常由审批流回调触发，也支持直接调用。API：POST /x-territory-regs/{id}/approve。"
+      },
+      {
+        "code": "REJECT",
+        "name": "审批驳回",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "REJECT",
+        "httpMethod": "POST",
+        "actionPath": "reject",
+        "triggerEvent": "OPEN_FORM",
+        "position": "ROW",
+        "description": "审批人驳回报备申请，状态变更为 REJECTED。需填写驳回原因。API：POST /x-territory-regs/{id}/reject。"
+      },
+      {
+        "code": "ADD_TEAM_MEMBER",
+        "name": "添加团队成员",
+        "scope": "ENTITY",
+        "entityCode": "x-territory-reg-team-member",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "triggerEvent": "OPEN_FORM",
+        "position": "DETAIL",
+        "description": "向报备单添加团队成员。API：POST /x-territory-regs/{id}/team-members。"
+      },
+      {
+        "code": "REMOVE_TEAM_MEMBER",
+        "name": "移除团队成员",
+        "scope": "ENTITY",
+        "entityCode": "x-territory-reg-team-member",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "UPDATE",
+        "httpMethod": "DELETE",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "position": "DETAIL",
+        "description": "从报备单移除团队成员。API：DELETE /x-territory-regs/{id}/team-members/{memberId}。"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "EXPORT",
+        "httpMethod": "POST",
+        "actionPath": "export",
+        "async": true,
+        "position": "TOOLBAR",
+        "description": "导出跨地盘报备单列表。API：POST /x-territory-regs/export。"
+      }
+    ]
+  },
+  "changeNote": [
+    "跨地盘项目报备 BO 首版 OPERATION Fragment",
+    "SUBMIT/REVOKE/APPROVE/REJECT 对应审批状态机四个动作",
+    "ADD_TEAM_MEMBER/REMOVE_TEAM_MEMBER 归并到 UPDATE 权限项"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "bo-meta-models",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "tenant_id",
+        "required": true,
+        "max": 50,
+        "message": "租户标识不能为空且不超过50字"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "app_code",
+        "required": true,
+        "max": 50,
+        "message": "应用代码不能为空且不超过50字"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "bo_code",
+        "required": true,
+        "max": 50,
+        "pattern": "^[a-z][a-z0-9-]*$",
+        "unique": true,
+        "message": "BO标识不能为空、须为复数小写kebab-case格式且在租户+应用维度内唯一"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "bo_name",
+        "required": true,
+        "max": 100,
+        "message": "BO名称不能为空且不超过100字"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "schema_json",
+        "required": false,
+        "message": "投影元数据JSON为可选字段，发布时必填"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "adapter_type",
+        "required": true,
+        "max": 20,
+        "message": "适配器类型不能为空且不超过20字"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "resolver",
+        "required": true,
+        "max": 255,
+        "message": "解析器不能为空且不超过255字"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "created_by",
+        "max": 100
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "updated_by",
+        "max": 100
+      }
+    ]
+  },
+  "changeNote": [
+    "bo-meta-models 首版 VALIDATION Fragment",
+    "bo_code 标记 required + unique + pattern（kebab-case 格式校验）",
+    "tenant_id + app_code + bo_code 组合唯一性由 DDL uk_authz-bo-meta-model 约束"
+  ]
+}

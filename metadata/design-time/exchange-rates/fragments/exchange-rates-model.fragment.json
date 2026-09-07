@@ -1,0 +1,211 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "exchange-rates",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "exchange-rates",
+    "boName": "汇率",
+    "description": "汇率业务对象，作为全系统共享的汇率主数据。采用统一基准币种（CNY）模式，其他币种均相对基准维护汇率。当前固定使用月均汇率（MONTHLY_AVG），人工录入，按生效区间匹配最新有效汇率。商机、报价单、订单等模块均可引用。",
+    "apiConfig": {
+      "resourcePath": "/exchange-rates",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "rate_no",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "rate_no",
+      "statusField": "status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "APPLICATION",
+      "defaultSort": {
+        "field": "effective_date",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "exchange-rate",
+        "name": "汇率主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_master_exchange_rate",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "汇率ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "rate_no",
+            "name": "汇率编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true,
+            "i18nKey": "bo.exchange_rates.field.rate_no"
+          },
+          {
+            "code": "base_currency",
+            "name": "基准币种",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "CNY",
+            "i18nKey": "bo.exchange_rates.field.base_currency"
+          },
+          {
+            "code": "target_currency",
+            "name": "目标币种",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "USD",
+            "i18nKey": "bo.exchange_rates.field.target_currency"
+          },
+          {
+            "code": "rate_type",
+            "name": "汇率类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "MONTHLY_AVG",
+            "i18nKey": "bo.exchange_rates.field.rate_type"
+          },
+          {
+            "code": "rate",
+            "name": "汇率值",
+            "type": "DECIMAL",
+            "precision": 18,
+            "scale": 6,
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.exchange_rates.field.rate"
+          },
+          {
+            "code": "effective_date",
+            "name": "生效日期",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.exchange_rates.field.effective_date"
+          },
+          {
+            "code": "expiry_date",
+            "name": "失效日期",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.exchange_rates.field.expiry_date"
+          },
+          {
+            "code": "status",
+            "name": "状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true,
+            "defaultValue": "ACTIVE",
+            "i18nKey": "bo.exchange_rates.field.status"
+          },
+          {
+            "code": "source",
+            "name": "汇率来源",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.exchange_rates.field.source"
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.exchange_rates.field.remark"
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.exchange_rates.field.created_time"
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.exchange_rates.field.updated_time"
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.exchange_rates.field.created_by"
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.exchange_rates.field.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  }
+}

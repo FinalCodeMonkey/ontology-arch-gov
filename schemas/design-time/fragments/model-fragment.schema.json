@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/model-fragment.schema.json",
+  "title": "BO MODEL fragment",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [MODEL Fragment] 章节。", 
+  "type": "object",
+  "required": ["boCode", "boName", "apiConfig", "boConfig", "entities"],
+  "additionalProperties": false,
+  "properties": {
+    "boCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "BO 标识符，应为 REST 资源路径第一段值（复数小写 kebab-case），与 apiConfig.resourcePath 保持一致。" },
+    "boName": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "description": { "type": "string", "maxLength": 500 },
+    "apiConfig": {
+      "type": "object",
+      "required": ["resourcePath", "idField", "idType"],
+      "additionalProperties": false,
+      "properties": {
+        "resourcePath": { "type": "string", "pattern": "^/[a-z][a-z0-9-]*$", "description": "聚合根资源路径，固定为 /{boCode} 单段形式（如 /scenes）。子实体路由通过 entity.routeSegment 表达。" },
+        "idField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "idType": { "type": "string", "enum": ["STRING", "LONG"] },
+        "businessKeyField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "aggregateApiPolicy": {
+          "type": "object",
+          "description": "聚合根标准 API 对聚合对象、主实体和子实体的处理范围声明。",
+          "required": ["readScope", "createScope", "updateScope", "deleteScope"],
+          "additionalProperties": false,
+          "properties": {
+            "listProjectionScope": { "type": "string", "enum": ["ROOT_SUMMARY", "ROOT_ENTITY_ONLY", "FULL_AGGREGATE"], "default": "ROOT_SUMMARY" },
+            "readScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"], "default": "FULL_AGGREGATE" },
+            "createScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"], "default": "FULL_AGGREGATE" },
+            "updateScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE_PATCH", "FULL_AGGREGATE_REPLACE"], "default": "ROOT_ENTITY_ONLY" },
+            "deleteScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "CASCADE_AGGREGATE"], "default": "CASCADE_AGGREGATE" },
+            "orphanPolicy": { "type": "string", "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"], "default": "DENY_DELETE_WHEN_CHILD_EXISTS" },
+            "detailEmbedEntities": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }, "uniqueItems": true, "default": [] },
+            "aggregateReplaceActionPath": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "仅在 updateScope=FULL_AGGREGATE_REPLACE 时有意义，声明聚合替换操作的自定义 action 路径。若 updateScope 非 FULL_AGGREGATE_REPLACE，发布服务应忽略本字段。" },
+            "alternateAggregateApis": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "object",
+                "required": ["code", "method", "path", "requestScope", "responseScope"],
+                "additionalProperties": false,
+                "properties": {
+                  "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+                  "name": { "type": "string", "maxLength": 100 },
+                  "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+                  "path": { "type": "string", "pattern": "^/[a-z]([a-z0-9_/-]*|\\{[a-zA-Z0-9_]+\\}[a-z0-9_/-]*)*$" },
+                  "requestScope": { "type": "string", "enum": ["NONE", "KNOWN_IDS", "FILTER_DTO", "ROOT_ENTITY_ONLY", "FULL_AGGREGATE", "FULL_AGGREGATE_PATCH", "FULL_AGGREGATE_REPLACE"] },
+                  "responseScope": { "type": "string", "enum": ["VOID", "BATCH_RESULT", "ROOT_ENTITY_ONLY", "ROOT_SUMMARY", "FULL_AGGREGATE"] },
+                  "resultType": { "type": "string" },
+                  "description": { "type": "string", "maxLength": 500 }
+                }
+              },
+              "default": []
+            }
+          }
+        },
+        "searchEnabled": { "type": "boolean", "default": true },
+        "batchEnabled": { "type": "boolean", "default": true },
+        "responseWrapper": { "const": "ApiResponse", "description": "统一响应封装类型，由 governance-profile 提供默认值，BO 级可覆盖。" },
+        "batchResultType": { "const": "BatchResultDTO", "description": "批量操作返回类型，由 governance-profile 提供默认值，BO 级可覆盖。" }
+      }
+    },
+    "boConfig": {
+      "type": "object",
+      "required": ["objectType", "nameField"],
+      "additionalProperties": false,
+      "properties": {
+        "objectType": { "type": "string", "enum": ["SINGLE", "TREE", "MASTER_DETAIL"], "default": "SINGLE" },
+        "nameField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "statusField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "logicDeleteFlag": { "type": "boolean", "default": true },
+        "versionFlag": { "type": "boolean", "default": false },
+        "idStrategy": { "type": "string", "enum": ["AUTO_INCREMENT", "SNOWFLAKE"], "default": "SNOWFLAKE", "description": "ID 生成策略。SNOWFLAKE=应用层雪花算法（默认），AUTO_INCREMENT=DB 自增。" },
+        "auditStrategy": { "type": "string", "enum": ["DATABASE", "APPLICATION"], "default": "DATABASE", "description": "审计时间戳维护方。DATABASE=DB DEFAULT CURRENT_TIMESTAMP，APPLICATION=应用层 MyBatis-Plus MetaObjectHandler（输出 DEFAULT NULL）。" },
+        "defaultSort": {
+          "type": "object",
+          "required": ["field"],
+          "additionalProperties": false,
+          "properties": {
+            "field": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+            "direction": { "type": "string", "enum": ["asc", "desc"], "default": "desc" }
+          }
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重（精确相同对象）；entity.code 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "isPrimary", "aggregateRole", "attributes"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "isPrimary": { "type": "boolean" },
+          "aggregateRole": { "type": "string", "enum": ["ROOT", "SUB_ENTITY", "VALUE_OBJECT", "DERIVED_VIEW"] },
+          "tableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "parentEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "parentRefField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "routeSegment": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "REST 路由中的子路径片段（kebab-case）。主实体（isPrimary=true）无需配置，直接使用 BO 的 resourcePath；子实体默认使用 entity.code 作为路由段。" },
+          "cascadeDelete": { "type": "boolean", "default": true },
+          "readOnly": { "type": "boolean", "default": false },
+          "entityNature": { "type": "string", "enum": ["BUSINESS", "ASSOCIATION", "EXTERNAL_REF"], "default": "BUSINESS", "description": "子实体性质：BUSINESS=承载独立业务数据（默认）；ASSOCIATION=纯关联联结表，仅含 PK+外键+CROSS_BO_DISPLAY 展示字段，无 NORMAL 业务属性；EXTERNAL_REF=外部系统引用，数据通过外部系统回调同步写入（如 ECP 报价单），CRM 侧仅只读展示。仅 aggregateRole=SUB_ENTITY 时有效。" },
+          "entityApiPolicy": {
+            "type": "object",
+            "required": ["readScope", "createScope", "updateScope", "deleteScope"],
+            "additionalProperties": false,
+            "properties": {
+              "listProjectionScope": { "type": "string", "enum": ["ENTITY_SUMMARY", "ENTITY_ONLY", "ENTITY_AGGREGATE"], "default": "ENTITY_SUMMARY" },
+              "readScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"], "default": "ENTITY_ONLY" },
+              "createScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"], "default": "ENTITY_ONLY" },
+              "updateScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE_PATCH", "ENTITY_AGGREGATE_REPLACE"], "default": "ENTITY_ONLY" },
+              "deleteScope": { "type": "string", "enum": ["ENTITY_ONLY", "CASCADE_CHILDREN"], "default": "ENTITY_ONLY" },
+              "orphanPolicy": { "type": "string", "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"], "default": "DENY_DELETE_WHEN_CHILD_EXISTS" },
+              "detailEmbedEntities": { "type": "array", "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }, "uniqueItems": true, "default": [] },
+              "entityReplaceActionPath": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "仅在实体 updateScope=ENTITY_AGGREGATE_REPLACE 时有意义。若 updateScope 非 ENTITY_AGGREGATE_REPLACE，发布服务应忽略本字段。" },
+              "alternateEntityApis": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "object",
+                  "required": ["code", "method", "path", "requestScope", "responseScope"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+                    "name": { "type": "string", "maxLength": 100 },
+                    "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+                    "path": { "type": "string", "pattern": "^/[a-z]([a-z0-9_/-]*|\\{[a-zA-Z0-9_]+\\}[a-z0-9_/-]*)*$" },
+                    "requestScope": { "type": "string", "enum": ["NONE", "KNOWN_IDS", "FILTER_DTO", "ENTITY_ONLY", "ENTITY_AGGREGATE", "ENTITY_AGGREGATE_PATCH", "ENTITY_AGGREGATE_REPLACE"] },
+                    "responseScope": { "type": "string", "enum": ["VOID", "BATCH_RESULT", "ENTITY_ONLY", "ENTITY_SUMMARY", "ENTITY_AGGREGATE"] },
+                    "resultType": { "type": "string" },
+                    "description": { "type": "string", "maxLength": 500 }
+                  }
+                },
+                "default": []
+              }
+            }
+          },
+          "policyDerivedFields": {
+            "type": "array",
+            "description": "声明仅用于权限/数据策略配置的虚拟派生字段。字段不进入物理表，不进入 Domain Entity，由投影生成器展开为运行态 displayFieldMappings。",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "required": ["code", "name", "type", "path", "target"],
+              "additionalProperties": false,
+              "properties": {
+                "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+                "type": { "type": "string", "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"] },
+                "fieldName": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$" },
+                "labelPath": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 100 }, "default": [] },
+                "path": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["hopKind", "fromEntityCode", "fromRefCode", "toEntityCode"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "hopKind": { "type": "string", "enum": ["PARENT_REF"] },
+                      "fromEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+                      "fromRefCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                      "toEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+                    }
+                  }
+                },
+                "target": {
+                  "type": "object",
+                  "required": ["entityCode", "fieldCode"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+                    "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+                  }
+                }
+              }
+            },
+            "default": []
+          },
+          "attributes": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "$comment": "uniqueItems 做浅层去重；attribute.code 级唯一性由 check_consistency.py 保障",
+            "items": {
+              "type": "object",
+              "required": ["code", "name", "type"],
+              "additionalProperties": false,
+              "properties": {
+                "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+                "type": { "type": "string", "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"] },
+                "isPk": { "type": "boolean", "default": false },
+                "fieldName": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*$", "description": "Java 字段名（camelCase）。未显式配置时由 code 自动推导：snake_case → camelCase（如 fop_customer_id → fopCustomerId）。" },
+                "columnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                "semanticRole": { "type": "string", "enum": ["TECHNICAL_ID", "BUSINESS_KEY", "NAME", "STATUS", "PARENT_REF", "CROSS_BO_REF", "CROSS_BO_DISPLAY", "NORMAL"], "default": "NORMAL", "description": "CROSS_BO_REF 表示该字段是对另一个 BO 聚合根的 ID 引用，必须同时声明 crossBoRef。CROSS_BO_DISPLAY 表示该字段是从被引用 BO 冗余存储的展示字段（如名称、编码），须被某个 CROSS_BO_REF 属性的 crossBoRef.displayFields 引用。" },
+                "crossBoRef": {
+                  "type": "object",
+                  "description": "semanticRole=CROSS_BO_REF 时必填。声明该字段指向的外部 BO 及关联字段。",
+                  "required": ["refBoCode", "refFieldCode"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "refBoCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "被引用 BO 的 boCode。" },
+                    "refEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "目标 BO 中被引用的实体 code。留空则默认使用目标 BO 的主实体（isPrimary=true 且 aggregateRole=ROOT）。仅当需引用目标 BO 的非主实体（如子实体）时才需显式指定。" },
+                    "refFieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "目标 BO 主实体中被引用的字段 MUST 为 PK（id）或 businessKeyField。约束 (16) 强制执行此唯一性要求。" },
+                    "displayFields": {
+                      "type": "array",
+                      "description": "从被引用 BO 冗余展示的多字段配置。每项声明被引用 BO 的来源字段（refFieldCode）及本实体中已声明的伴生属性 code（localCode）。伴生属性须以 semanticRole=CROSS_BO_DISPLAY 声明。check_consistency.py 校验 localCode 必须在同一 entity 的 attributes 中存在且 semanticRole=CROSS_BO_DISPLAY。",
+                      "items": {
+                        "type": "object",
+                        "required": ["refFieldCode", "localCode"],
+                        "additionalProperties": false,
+                        "properties": {
+                          "refFieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "被引用 BO 主实体中的来源字段 code（如 name / code / description）。" },
+                          "localCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "本实体中对应的伴生属性 code，须已在同一 entity 的 attributes 中声明。" },
+                          "displayRole": { "type": "string", "enum": ["NAME", "BUSINESS_KEY", "DESCRIPTION", "EXTRA"], "default": "EXTRA", "description": "伴生展示字段的语义角色：NAME=名称（最常用）；BUSINESS_KEY=业务编码；DESCRIPTION=描述（低频）；EXTRA=其他扩展字段。" }
+                        }
+                      },
+                      "default": []
+                    },
+                    "relationType": { "type": "string", "enum": ["MANY_TO_ONE", "ONE_TO_ONE"], "default": "MANY_TO_ONE", "description": "引用关系类型。" },
+                    "referenceNature": { "type": "string", "enum": ["MASTER_DATA", "BUSINESS_FLOW"], "default": "MASTER_DATA", "description": "引用性质：MASTER_DATA=主数据查找（如商机查找客户、用户）；BUSINESS_FLOW=上下游业务流关联（如场景生成商机）。发布服务据此驱动级联策略、数据溯源和可视化差异化。" }
+                  }
+                },
+                "redundant": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "仅 semanticRole=CROSS_BO_DISPLAY 时有效。true=在 DB/Entity 层也生成冗余列（性能优化）；false（默认）=仅在 View/DTO 层生成，DB 不留列，名称从权威源 JOIN 解析。"
+                },
+                "defaultValue": { "type": "string" },
+                "filterable": { "type": "boolean", "default": false },
+                "i18nKey": { "type": "string", "pattern": "^[a-z][a-z0-9._-]*$" },
+                "precision": { "type": "integer", "minimum": 1, "maximum": 38, "description": "仅 type=DECIMAL 时有效。数值总位数。默认 18。DDL 生成 DECIMAL(precision, scale)。" },
+                "scale": { "type": "integer", "minimum": 0, "maximum": 30, "description": "仅 type=DECIMAL 时有效。小数位数。默认 2。DDL 生成 DECIMAL(precision, scale)。" },
+                "_derivationPath": { "type": "string", "description": "仅 semanticRole=CROSS_BO_DISPLAY 且数据来自非直接 CROSS_BO_REF 时使用。标注派生链路的箭头表达式，如 'business_customer_id → customers.parent_customer_id → customers.customer_name'。工具链仅做可读性校验，不驱动自动代码生成。" },
+                "_resolution": { "type": "string", "enum": ["APPLICATION_LAYER"], "description": "仅 _derivationPath 存在时使用。标记解析策略：APPLICATION_LAYER=应用层两阶段查询。" }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": { "semanticRole": { "const": "CROSS_BO_REF" } },
+                    "required": ["semanticRole"]
+                  },
+                  "then": { "required": ["crossBoRef"] }
+                },
+                {
+                  "if": {
+                    "properties": { "type": { "enum": ["STRING", "INTEGER", "LONG", "BOOLEAN", "DATE", "DATETIME"] } }
+                  },
+                  "then": {
+                    "properties": {
+                      "precision": false,
+                      "scale": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "aggregateRole": { "const": "SUB_ENTITY" } },
+              "required": ["aggregateRole"]
+            },
+            "then": { "required": ["parentEntityCode", "parentRefField"] }
+          }
+        ]
+      }
+    }
+  }
+}

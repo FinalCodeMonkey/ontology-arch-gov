@@ -1,0 +1,631 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scene-archs",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2
+    },
+    "fieldViews": [
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "id",
+        "displayName": "架构明细ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "scene_id",
+        "displayName": "所属场景ID",
+        "sortable": false,
+        "columnWidth": 220,
+        "order": 15,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "scenes",
+        "refField": "scene_name_customer",
+        "queryable": true,
+        "dataType": "string",
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "primary_customer_name",
+        "displayName": "一级客户",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 10,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "importable": false
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "customer_name",
+        "displayName": "业务主体客户",
+        "sortable": true,
+        "columnWidth": 220,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "business_name",
+        "displayName": "业务名称",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "scene_name_dept",
+        "displayName": "场景名称-部门标准",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "scene_name_customer",
+        "displayName": "场景名称-客户标准",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "arch_role",
+        "displayName": "角色",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "arch_role",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "product_model",
+        "displayName": "型号",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string",
+        "importable": true
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "pod_count",
+        "displayName": "单POD数量",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "dataType": "integer",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "sales_owner_name",
+        "displayName": "所有人",
+        "sortable": false,
+        "columnWidth": 90,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 100,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "format": "datetime",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "updated_time",
+        "displayName": "修改时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "format": "datetime",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-arch",
+        "fieldCode": "updated_by",
+        "displayName": "修改人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 130,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "id",
+        "displayName": "成员关联ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 300,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "user_id",
+        "displayName": "成员用户",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 310,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "refField": "staff_name",
+        "placeholder": "请选择成员",
+        "dataType": "string",
+        "queryable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "member_name",
+        "displayName": "成员姓名",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 315,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "member_role",
+        "displayName": "成员角色",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 320,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "permission",
+        "displayName": "权限",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 330,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "team_permission",
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "remark",
+        "displayName": "备注",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 340,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "dataType": "string"
+      }
+    ]
+  },
+  "changeNote": [
+    "scene-archs 首版 VIEW 设计态 Fragment，与编辑场景架构弹窗 UI 对齐"
+  ]
+}

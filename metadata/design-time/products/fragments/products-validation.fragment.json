@@ -1,0 +1,208 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "products",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "product",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_model",
+        "required": true,
+        "max": 200,
+        "unique": true,
+        "message": "产品型号不能为空且不超过200字"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_category",
+        "required": true,
+        "max": 100,
+        "enum": [
+          {
+            "value": "SWITCH",
+            "label": "交换机"
+          },
+          {
+            "value": "ROUTER",
+            "label": "路由器"
+          },
+          {
+            "value": "WIRELESS",
+            "label": "无线"
+          },
+          {
+            "value": "SECURITY",
+            "label": "安全"
+          },
+          {
+            "value": "SERVER",
+            "label": "服务器"
+          },
+          {
+            "value": "STORAGE",
+            "label": "存储"
+          },
+          {
+            "value": "CLOUD_COMPUTING",
+            "label": "云计算"
+          },
+          {
+            "value": "SOFTWARE",
+            "label": "软件"
+          },
+          {
+            "value": "SERVICE",
+            "label": "服务"
+          },
+          {
+            "value": "ACCESSORY",
+            "label": "配件"
+          }
+        ],
+        "message": "产品类别必须为预定义值之一"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_series",
+        "max": 200
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_department",
+        "max": 100
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_line",
+        "max": 100
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "sales_code",
+        "max": 100
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_retail_price",
+        "min": 0,
+        "message": "国内市场零售报价必须为非负数"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "oversea_retail_price",
+        "min": 0,
+        "message": "海外市场零售报价必须为非负数"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "has_domestic",
+        "enum": [
+          {
+            "value": "0",
+            "label": "否"
+          },
+          {
+            "value": "1",
+            "label": "是"
+          }
+        ],
+        "message": "是否有国内数据必须为 0(否) 或 1(是)"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "has_oversea",
+        "enum": [
+          {
+            "value": "0",
+            "label": "否"
+          },
+          {
+            "value": "1",
+            "label": "是"
+          }
+        ],
+        "message": "是否上海外报价必须为 0(否) 或 1(是)"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_enabled",
+        "enum": [
+          {
+            "value": "0",
+            "label": "启用"
+          },
+          {
+            "value": "1",
+            "label": "停用"
+          }
+        ],
+        "message": "是否启用必须为 0(启用) 或 1(停用)"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_take_off_shelf_flag",
+        "enum": [
+          {
+            "value": "0",
+            "label": "否"
+          },
+          {
+            "value": "1",
+            "label": "是"
+          }
+        ],
+        "message": "是否下架必须为 0(否) 或 1(是)"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_product_status",
+        "enum": [
+          {
+            "value": "0",
+            "label": "量产"
+          },
+          {
+            "value": "1",
+            "label": "停止推广"
+          },
+          {
+            "value": "2",
+            "label": "停止下单"
+          }
+        ],
+        "message": "国内产品状态必须为 0(量产)、1(停止推广) 或 2(停止下单)"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "status",
+        "required": true,
+        "max": 20,
+        "enum": [
+          {
+            "value": "ACTIVE",
+            "label": "启用"
+          },
+          {
+            "value": "INACTIVE",
+            "label": "停用"
+          }
+        ],
+        "message": "状态值非法，必须为 ACTIVE 或 INACTIVE"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "remark",
+        "max": 500
+      }
+    ]
+  }
+}

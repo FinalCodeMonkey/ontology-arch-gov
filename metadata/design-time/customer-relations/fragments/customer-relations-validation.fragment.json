@@ -1,0 +1,644 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customer-relations",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "customer_id",
+        "required": true,
+        "message": "必须指定关联客户"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "owner_user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须指定客户所有人"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "owner_user_name",
+        "required": true,
+        "max": 100
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "department_code",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "department_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "region",
+        "max": 50
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "latest_visitor_id",
+        "max": 64
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "latest_visitor_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "responsible_pre_sales_id",
+        "max": 64
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "responsible_pre_sales_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "service_sales_id",
+        "max": 64
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "service_sales_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "status",
+        "required": true,
+        "enum": [
+          {
+            "value": "DRAFT",
+            "label": "草稿"
+          },
+          {
+            "value": "PENDING_APPROVAL",
+            "label": "待审批"
+          },
+          {
+            "value": "APPROVED",
+            "label": "已审批"
+          },
+          {
+            "value": "REJECTED",
+            "label": "已驳回"
+          },
+          {
+            "value": "CHANGED",
+            "label": "已变更"
+          },
+          {
+            "value": "INACTIVE",
+            "label": "停用"
+          }
+        ],
+        "message": "客户状态值非法"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "remarks",
+        "max": 2000
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "billing_province",
+        "max": 64
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "billing_city",
+        "max": 64
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须选择团队成员"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "member_name",
+        "required": true,
+        "max": 100
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 50,
+        "enum": [
+          {
+            "value": "SALES_OWNER",
+            "label": "销售负责人"
+          },
+          {
+            "value": "PRE_SALES",
+            "label": "售前"
+          },
+          {
+            "value": "SERVICE_SALES",
+            "label": "服务销售"
+          },
+          {
+            "value": "COLLABORATOR",
+            "label": "协同跟进人"
+          },
+          {
+            "value": "OTHER",
+            "label": "其他"
+          }
+        ],
+        "message": "必须指定成员角色"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "permission",
+        "required": true,
+        "enum": [
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          },
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          }
+        ],
+        "message": "权限必须为读写或只读"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "related_teams",
+        "max": 500
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "remark",
+        "max": 200
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "competitor_id",
+        "required": true,
+        "message": "必须选择竞争对手"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "competitor_name",
+        "max": 200
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "strategic_intent",
+        "max": 1000
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_product_tech",
+        "max": 1000
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_business_supply",
+        "max": 1000
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_quality_service",
+        "max": 1000
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须选择团队成员"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "member_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 50,
+        "message": "必须指定成员角色"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "permission",
+        "required": true,
+        "enum": [
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          },
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          }
+        ],
+        "message": "权限必须为 READ_WRITE 或 READ_ONLY"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "remark",
+        "max": 200
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "sort_no",
+        "required": true,
+        "min": 1
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "sales_year",
+        "max": 10
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "product_category",
+        "max": 200
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "product_name",
+        "max": 200
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "annual_sales",
+        "max": 500
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "next_year_target",
+        "max": 500
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "is_current",
+        "required": true
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "main_product",
+        "max": 1000
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "revenue_data",
+        "max": 2000
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "gross_margin_data",
+        "max": 2000
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "corp_strategy",
+        "max": 2000
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "ai_strategy",
+        "max": 2000
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "infra_plan",
+        "max": 2000
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "version_no",
+        "max": 50
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "version_remark",
+        "max": 500
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须选择团队成员"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "member_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 50,
+        "message": "必须指定成员角色"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "permission",
+        "required": true,
+        "enum": [
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          },
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          }
+        ],
+        "message": "权限必须为 READ_WRITE 或 READ_ONLY"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "remark",
+        "max": 200
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "sort_no",
+        "required": true,
+        "min": 1
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "biz_name",
+        "required": true,
+        "max": 200,
+        "message": "必须输入核心业务名称"
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "biz_result",
+        "max": 2000
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "arch_name",
+        "required": true,
+        "max": 200,
+        "message": "必须输入架构名称"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "arch_category",
+        "required": true,
+        "enum": [
+          {
+            "value": "GENERAL_COMPUTE",
+            "label": "通算架构"
+          },
+          {
+            "value": "AI_COMPUTE",
+            "label": "智算架构"
+          }
+        ],
+        "message": "架构类型必须为通算架构或智算架构"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "server_info",
+        "required": true,
+        "message": "必须输入服务器信息"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "nic_info",
+        "required": true,
+        "message": "必须输入网卡信息"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "network_info",
+        "required": true,
+        "message": "必须输入网络信息"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "module_info",
+        "required": true,
+        "message": "必须输入模块信息"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "pod_usage",
+        "required": true,
+        "message": "必须输入单POD用量"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "pod_count",
+        "required": true,
+        "min": 1,
+        "message": "POD数量必须大于0"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "shortlist_date",
+        "required": true,
+        "message": "必须选择完成入围时间"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "gray_date",
+        "required": true,
+        "message": "必须选择灰度时间"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "mass_production_date",
+        "required": true,
+        "message": "必须选择量产时间"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "eol_date",
+        "required": true,
+        "message": "必须选择EOL时间"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "diagram_file_id",
+        "required": true,
+        "message": "必须上传架构图"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "diagram_file_name",
+        "required": true,
+        "max": 255,
+        "message": "架构图文件名不能为空"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须选择团队成员"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "member_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 50,
+        "message": "必须指定成员角色"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "permission",
+        "required": true,
+        "enum": [
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          },
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          }
+        ],
+        "message": "权限必须为 READ_WRITE 或 READ_ONLY"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "remark",
+        "max": 200
+      }
+    ]
+  },
+  "changeNote": [
+    "MCR BO 首版 VALIDATION Fragment，从 customers BO 迁移并调整 entityCode 为 crm_customer-relation",
+    "修正 customer-competition/customer-industry-strategy/customer-infra-architecture 的 fieldCode：customer_id → parent_id（与 MODEL Fragment 一致，子实体通过 parent_id 关联聚合根）",
+    "补全 customer-relation 根实体字段约束：owner_user_id/department_code/department_name/region/latest_visitor_id/latest_visitor_name/responsible_pre_sales_id/responsible_pre_sales_name/service_sales_id/service_sales_name max 长度",
+    "新增 customer-team-member member_role 枚举(SALES_OWNER/PRE_SALES/SERVICE_SALES/COLLABORATOR/OTHER) + permission 枚举(READ_WRITE/READ_ONLY) + related_teams/remark max",
+    "补全 customer-competition 字段约束：competitor_name/strategic_intent/recent_action_* max 长度",
+    "补全 customer-competition-member 字段约束：user_id max 64 + member_name/member_role/remark",
+    "补全 customer-competition-sale 字段约束：sort_no min 1 + sales_year/product_category/product_name/annual_sales/next_year_target max 长度",
+    "补全 customer-industry-strategy 字段约束：main_product/revenue_data/gross_margin_data/corp_strategy/ai_strategy/infra_plan/version_no/version_remark max 长度",
+    "补全 customer-industry-strategy-member 字段约束：user_id max 64 + member_name/member_role/remark",
+    "补全 customer-industry-biz 字段约束：sort_no min 1 + biz_name required/max 200 + biz_result max 2000",
+    "补全 customer-infra-architecture-member 字段约束：user_id max 64 + member_name/member_role/remark",
+    "新增 customer-infra-architecture 校验规则：arch_name/server_info/nic_info/network_info/module_info/pod_usage/pod_count/shortlist_date/gray_date/mass_production_date/eol_date/diagram_file_id/diagram_file_name required",
+    "新增 customer-infra-architecture arch_category 枚举：GENERAL_COMPUTE(通算架构)/AI_COMPUTE(智算架构)"
+  ]
+}

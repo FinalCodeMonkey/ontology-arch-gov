@@ -1,0 +1,81 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "renewal-quotes",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "inventory_id",
+        "required": true,
+        "message": "必须指定关联盘点单"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "quote_type_code",
+        "required": true,
+        "max": 32,
+        "message": "报价类型编码不能为空且不超过32字"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "sales_opportunity_type_code",
+        "required": true,
+        "max": 64,
+        "message": "销售机会类型编码不能为空且不超过64字"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "crm_opportunity_code",
+        "max": 64
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "crm_opportunity_name",
+        "max": 200
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "submit_time",
+        "required": true,
+        "message": "提交时间不能为空"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "submit_status",
+        "enum": [
+          {
+            "value": "0",
+            "label": "待提交"
+          },
+          {
+            "value": "1",
+            "label": "提交成功"
+          },
+          {
+            "value": "2",
+            "label": "提交失败"
+          }
+        ],
+        "message": "提交状态必须为预定义值"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "fail_reason",
+        "max": 500
+      }
+    ]
+  },
+  "changeNote": [
+    "续保报价提交记录 BO 首版 VALIDATION Fragment，含盘点单必填、报价类型必填、提交状态枚举约束"
+  ]
+}

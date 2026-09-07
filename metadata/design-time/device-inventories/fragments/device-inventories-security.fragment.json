@@ -1,0 +1,170 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "device-inventories",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "device-inventory": [
+          "tenant_code",
+          "inventory_status",
+          "inventory_type",
+          "created_by"
+        ],
+        "device-inventory-detail": [
+          "tenant_code",
+          "customer_name",
+          "fop_customer_name",
+          "contract_no"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "service_list_price",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "服务 List 价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "customer_name",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户名称为业务敏感信息，需按行级数据策略控制可见范围"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "fop_customer_name",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "FOP客户名称为业务敏感信息，需按行级数据策略控制可见范围"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "contract_no",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "合同号为业务敏感信息，需按行级数据策略控制可见范围"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "quote_no",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "报价单号为关联商业数据，需按行级数据策略控制可见范围"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "opportunity_codes",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "商机编码为关联商业数据，需按行级数据策略控制可见范围"
+      }
+    ],
+    "authzProjection": {
+      "description": "设备盘点单业务对象在 PSP 中的资源属性投影。行级权限候选字段以盘点状态、盘点类型、创建人、客户维度为主。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。rowSecurity 声明 DATA 策略候选字段，fieldSecurity 声明 FIELD 策略候选字段（价格类字段 MASKED，客户/合同类字段 RESTRICTED）。策略表达式中典型引用方式包括 res.tenant_code、res.inventory_status、res.inventory_type、res.created_by 等。",
+      "attributes": [
+        {
+          "code": "inventory_id",
+          "name": "盘点单主键",
+          "type": "LONG",
+          "source": { "entityCode": "device-inventory", "fieldCode": "id" },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "盘点单资源唯一标识，供 PIP 按 ID 拉取完整属性集合。",
+          "i18nKey": "auth.resource.res_device-inventory.attr.inventory_id",
+          "valueExamples": ["1", "100"]
+        },
+        {
+          "code": "inventory_no",
+          "name": "盘点单号",
+          "type": "STRING",
+          "source": { "entityCode": "device-inventory", "fieldCode": "inventory_no" },
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "盘点单号，业务主键，主要用于展示和审计。",
+          "i18nKey": "auth.resource.res_device-inventory.attr.inventory_no",
+          "valueExamples": ["PD20260628001"]
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "source": { "entityCode": "device-inventory", "fieldCode": "tenant_code" },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "盘点单所属租户。典型表达式：sub.tenant_code == res.tenant_code。",
+          "i18nKey": "auth.resource.res_device-inventory.attr.tenant_code",
+          "valueExamples": ["gov-default", "ent-default"]
+        },
+        {
+          "code": "inventory_status",
+          "name": "盘点状态",
+          "type": "STRING",
+          "source": { "entityCode": "device-inventory", "fieldCode": "inventory_status" },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {"value": "DRAFT", "label": "草稿"}
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "盘点单状态。典型表达式：res.inventory_status == 'DRAFT'。",
+          "i18nKey": "auth.resource.res_device-inventory.attr.inventory_status",
+          "valueExamples": ["DRAFT"]
+        },
+        {
+          "code": "inventory_type",
+          "name": "盘点类型",
+          "type": "STRING",
+          "source": { "entityCode": "device-inventory", "fieldCode": "inventory_type" },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {"value": "MANUAL", "label": "手工盘点"},
+            {"value": "IMPORT", "label": "导入盘点"}
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "盘点类型。典型表达式：res.inventory_type == 'MANUAL'。",
+          "i18nKey": "auth.resource.res_device-inventory.attr.inventory_type",
+          "valueExamples": ["MANUAL", "IMPORT"]
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "source": { "entityCode": "device-inventory", "fieldCode": "created_by" },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 60,
+          "displayGroup": "资源属性",
+          "description": "盘点单创建人。典型表达式：sub.user_id == res.created_by。",
+          "i18nKey": "auth.resource.res_device-inventory.attr.created_by",
+          "valueExamples": ["user001"]
+        }
+      ]
+    }
+  }
+}

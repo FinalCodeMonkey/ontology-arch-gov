@@ -1,0 +1,744 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-activities",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "sales-activities",
+    "boName": "销售活动",
+    "description": "销售活动业务对象，采用主从明细聚合建模（主表 crm_customer_visit_record + 子表 crm_customer_visit_follow_up + 子表 customer_visit_team）。记录销售人员对客户的拜访活动，包含拜访客户、拜访时间、拜访场景(scenes BO)、联系人(contacts BO)、活动信息(富文本)、信息分享(存入visit-team-member)、记录人及下一步动作跟进。",
+    "apiConfig": {
+      "resourcePath": "/sales-activities",
+      "idField": "id",
+      "idType": "LONG",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "FULL_AGGREGATE",
+        "createScope": "FULL_AGGREGATE",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "CASCADE_AGGREGATE",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": [
+          "visit-follow-up",
+          "visit-team-member"
+        ]
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "MASTER_DETAIL",
+      "nameField": "visit_subject",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "visit_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "visit-record",
+        "name": "拜访记录主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_customer_visit_record",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "拜访客户",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "customers",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "customer_name",
+                  "localCode": "customer_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "BUSINESS_FLOW"
+            },
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.parent_id"
+          },
+          {
+            "code": "customer_name",
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "name": "客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.customer_name"
+          },
+          {
+            "code": "visit_subject",
+            "fieldName": "visitSubject",
+            "columnName": "visit_subject",
+            "name": "拜访主题",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.visit_subject"
+          },
+          {
+            "code": "visit_time",
+            "fieldName": "visitTime",
+            "columnName": "visit_time",
+            "name": "拜访时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.visit_time"
+          },
+          {
+            "code": "visit_method",
+            "fieldName": "visitMethod",
+            "columnName": "visit_method",
+            "name": "拜访方式",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "OFFLINE",
+            "i18nKey": "bo.sales-activities.field.visit_method"
+          },
+          {
+            "code": "activity_content",
+            "fieldName": "activityContent",
+            "columnName": "activity_content",
+            "name": "活动信息",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.activity_content"
+          },
+          {
+            "code": "activity_plain_text",
+            "fieldName": "activityPlainText",
+            "columnName": "activity_plain_text",
+            "name": "活动信息纯文本摘要",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.activity_plain_text"
+          },
+          {
+            "code": "contact_ids_snapshot",
+            "fieldName": "contactIdsSnapshot",
+            "columnName": "contact_ids_snapshot",
+            "name": "联系人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "contacts",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "name",
+                  "localCode": "contact_names_display",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "BUSINESS_FLOW"
+            },
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.contact_ids_snapshot"
+          },
+          {
+            "code": "contact_names_display",
+            "fieldName": "contactNamesDisplay",
+            "columnName": "contact_names_display",
+            "name": "联系人名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.contact_names_display"
+          },
+          {
+            "code": "scene_ids_snapshot",
+            "fieldName": "sceneIdsSnapshot",
+            "columnName": "scene_ids_snapshot",
+            "name": "拜访场景",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "scenes",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "scene_name_customer",
+                  "localCode": "scene_names_display",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "BUSINESS_FLOW"
+            },
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.scene_ids_snapshot"
+          },
+          {
+            "code": "scene_names_display",
+            "fieldName": "sceneNamesDisplay",
+            "columnName": "scene_names_display",
+            "name": "拜访场景名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.scene_names_display"
+          },
+          {
+            "code": "next_action",
+            "fieldName": "nextAction",
+            "columnName": "next_action",
+            "name": "下一步动作",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.next_action"
+          },
+          {
+            "code": "next_action_updated_time",
+            "fieldName": "nextActionUpdatedTime",
+            "columnName": "next_action_updated_time",
+            "name": "下一步动作更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.next_action_updated_time"
+          },
+          {
+            "code": "record_user_id",
+            "fieldName": "recordUserId",
+            "columnName": "record_user_id",
+            "name": "记录人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "record_user_name",
+                  "displayRole": "NAME"
+                },
+                {
+                  "refFieldCode": "department_code",
+                  "localCode": "record_user_department_code",
+                  "displayRole": "EXTRA"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.record_user_id"
+          },
+          {
+            "code": "record_user_name",
+            "fieldName": "recordUserName",
+            "columnName": "record_user_name",
+            "name": "记录人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.record_user_name"
+          },
+          {
+            "code": "record_user_department_code",
+            "fieldName": "recordUserDepartmentCode",
+            "columnName": "record_user_department_code",
+            "name": "记录人部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.record_user_department_code"
+          },
+          {
+            "code": "last_modified_user_id",
+            "fieldName": "lastModifiedUserId",
+            "columnName": "last_modified_user_id",
+            "name": "最近修改人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "last_modified_user_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.last_modified_user_id"
+          },
+          {
+            "code": "last_modified_user_name",
+            "fieldName": "lastModifiedUserName",
+            "columnName": "last_modified_user_name",
+            "name": "最近修改人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.last_modified_user_name"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.created_by"
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "visit-follow-up",
+        "name": "拜访跟进记录",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_visit_follow_up",
+        "parentEntityCode": "visit-record",
+        "parentRefField": "parent_id",
+        "routeSegment": "follow-ups",
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "跟进记录主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "拜访记录ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "previous_action",
+            "fieldName": "previousAction",
+            "columnName": "previous_action",
+            "name": "更新前下一步动作",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.follow_up.previous_action"
+          },
+          {
+            "code": "current_action",
+            "fieldName": "currentAction",
+            "columnName": "current_action",
+            "name": "更新后下一步动作",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.follow_up.current_action"
+          },
+          {
+            "code": "operator_user_id",
+            "fieldName": "operatorUserId",
+            "columnName": "operator_user_id",
+            "name": "跟进人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "operator_user_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.follow_up.operator_user_id"
+          },
+          {
+            "code": "operator_user_name",
+            "fieldName": "operatorUserName",
+            "columnName": "operator_user_name",
+            "name": "跟进人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.follow_up.operator_user_name"
+          },
+          {
+            "code": "follow_up_time",
+            "fieldName": "followUpTime",
+            "columnName": "follow_up_time",
+            "name": "跟进时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.follow_up.follow_up_time"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.follow_up.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.follow_up.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.follow_up.created_by"
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.follow_up.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      },
+      {
+        "code": "visit-team-member",
+        "name": "拜访团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "customer_visit_team",
+        "parentEntityCode": "visit-record",
+        "parentRefField": "visit_id",
+        "routeSegment": "team",
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "成员关联ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "visit_id",
+            "fieldName": "visitId",
+            "columnName": "visit_id",
+            "name": "拜访记录ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "customer_id",
+            "fieldName": "customerId",
+            "columnName": "customer_id",
+            "name": "客户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.team.customer_id"
+          },
+          {
+            "code": "user_id",
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.team.user_id"
+          },
+          {
+            "code": "member_name",
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.sales-activities.field.team.user_name"
+          },
+          {
+            "code": "member_role",
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "MEMBER",
+            "i18nKey": "bo.sales-activities.field.team.member_role"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.team.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.team.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.team.created_by"
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-activities.field.team.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "sales-activities MODEL Fragment — 主从明细聚合(visit-record/visit-follow-up/visit-team-member)，parent_id 引用 customers，联系人/场景/成员引用 contacts/scenes/users"
+  ]
+}

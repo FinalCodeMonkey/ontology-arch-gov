@@ -1,0 +1,534 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='users'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'users'",
+    "generated_from": "users.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:58.158970+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "dap-sys-user",
+        "name": "用户实体",
+        "isPrimary": true,
+        "tableName": "dap_sys_user",
+        "rowLevelRuleEntries": [
+          "department_code",
+          "staff_status",
+          "staff_status_code",
+          "staff_type_code",
+          "staff_company_name",
+          "organization_type_code",
+          "manage_user_id",
+          "country_and_area_code",
+          "work_place_code",
+          "office_place_code"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "用户ID",
+            "type": "STRING",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "code",
+            "name": "用户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "code",
+            "columnName": "code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "name",
+            "name": "用户名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "name",
+            "columnName": "name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_no",
+            "name": "工号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffNo",
+            "columnName": "staff_no",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "user_id",
+            "name": "用户账号ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_company_name",
+            "name": "所属公司",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffCompanyName",
+            "columnName": "staff_company_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_name",
+            "name": "员工姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffName",
+            "columnName": "staff_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_en_name",
+            "name": "英文名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffEnName",
+            "columnName": "staff_en_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "staff_status",
+            "name": "员工状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffStatus",
+            "columnName": "staff_status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_status_code",
+            "name": "员工状态编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffStatusCode",
+            "columnName": "staff_status_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_email",
+            "name": "公司邮箱",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffEmail",
+            "columnName": "staff_email",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "staff_type_code",
+            "name": "员工类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffTypeCode",
+            "columnName": "staff_type_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_type",
+            "name": "员工类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffType",
+            "columnName": "staff_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_photo",
+            "name": "员工照片",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffPhoto",
+            "columnName": "staff_photo",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "personal_email",
+            "name": "个人邮箱",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "personalEmail",
+            "columnName": "personal_email",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "personal_mobile",
+            "name": "个人手机",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "personalMobile",
+            "columnName": "personal_mobile",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "join_date",
+            "name": "入职日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "joinDate",
+            "columnName": "join_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "join_job_date",
+            "name": "参加工作日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "joinJobDate",
+            "columnName": "join_job_date",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "nation_code",
+            "name": "民族编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "nationCode",
+            "columnName": "nation_code",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "nation",
+            "name": "民族",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "nation",
+            "columnName": "nation",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "country_and_area_code",
+            "name": "国家地区编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "countryAndAreaCode",
+            "columnName": "country_and_area_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "country_and_area",
+            "name": "国家地区",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "countryAndArea",
+            "columnName": "country_and_area",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "work_place_code",
+            "name": "工作地编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "workPlaceCode",
+            "columnName": "work_place_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "work_place",
+            "name": "工作地",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "workPlace",
+            "columnName": "work_place",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "office_place_code",
+            "name": "办公地点编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "officePlaceCode",
+            "columnName": "office_place_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "office_place",
+            "name": "办公地点",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "officePlace",
+            "columnName": "office_place",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "birthday",
+            "name": "出生日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "birthday",
+            "columnName": "birthday",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "gender_code",
+            "name": "性别编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "genderCode",
+            "columnName": "gender_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "gender",
+            "name": "性别",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "gender",
+            "columnName": "gender",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "manage_user_id",
+            "name": "直属上级用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "manageUserId",
+            "columnName": "manage_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "manage_staff_no",
+            "name": "直属上级工号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "manageStaffNo",
+            "columnName": "manage_staff_no",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "manage_staff_name",
+            "name": "直属上级姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "manageStaffName",
+            "columnName": "manage_staff_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "department_code",
+            "name": "所属部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentCode",
+            "columnName": "department_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "department_name",
+            "name": "所属部门名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentName",
+            "columnName": "department_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_dept_portion_manage",
+            "name": "是否部门分管负责人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "isDeptPortionManage",
+            "columnName": "is_dept_portion_manage",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "staff_management_jurisdiction",
+            "name": "人员管理权限",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffManagementJurisdiction",
+            "columnName": "staff_management_jurisdiction",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "post_code",
+            "name": "岗位编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "postCode",
+            "columnName": "post_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "post_name",
+            "name": "岗位名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "postName",
+            "columnName": "post_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "organization_type_code",
+            "name": "组织类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "organizationTypeCode",
+            "columnName": "organization_type_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "organization_type",
+            "name": "组织类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "organizationType",
+            "columnName": "organization_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "country_code",
+            "name": "国籍编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "countryCode",
+            "columnName": "country_code",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permanent_country_and_area_code",
+            "name": "常驻国家地区编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permanentCountryAndAreaCode",
+            "columnName": "permanent_country_and_area_code",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permanent_country_and_area",
+            "name": "常驻国家地区",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permanentCountryAndArea",
+            "columnName": "permanent_country_and_area",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建用户",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除用户",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'users' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'users' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + users_bo_meta_id + CREATE",
+      "RES_DATA_BO + users_bo_meta_id + UPDATE",
+      "RES_DATA_BO + users_bo_meta_id + DELETE",
+      "RES_DATA_BO + users_bo_meta_id + EXPORT",
+      "RES_DATA_BO + users_bo_meta_id + IMPORT",
+      "RES_DATA_BO + users_bo_meta_id + LIST",
+      "RES_DATA_BO + users_bo_meta_id + READ"
+    ]
+  }
+}

@@ -1,0 +1,1686 @@
+{
+  "generatedAt": "2026-09-07T21:15:12.215049",
+  "candidateCount": 60,
+  "candidates": [
+    {
+      "code": "APPROVAL_RECORDS_REFERENCES_USERS",
+      "name": "approval-records → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "approval-records",
+        "entityCode": "approval-record",
+        "fieldCode": "submitter_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "approval-records-model.fragment.json",
+        "entity": "approval-record",
+        "field": "submitter_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "APPROVAL_RECORDS_REFERENCES_USERS",
+      "name": "approval-records → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "approval-records",
+        "entityCode": "approval-record",
+        "fieldCode": "initiator_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "approval-records-model.fragment.json",
+        "entity": "approval-record",
+        "field": "initiator_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "APPROVAL_RECORDS_REFERENCES_USERS",
+      "name": "approval-records → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "approval-records",
+        "entityCode": "approval-record",
+        "fieldCode": "current_handler_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "approval-records-model.fragment.json",
+        "entity": "approval-record",
+        "field": "current_handler_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "APPROVAL_RECORDS_REFERENCES_USERS",
+      "name": "approval-records → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "approval-records",
+        "entityCode": "approval-record",
+        "fieldCode": "revoker_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "approval-records-model.fragment.json",
+        "entity": "approval-record",
+        "field": "revoker_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "BO_META_MODELS_REFERENCES_DATA_DOMAINS",
+      "name": "bo-meta-models → data-domains",
+      "source": {
+        "boCode": "data-domains",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "bo-meta-models",
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "data_domain_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "bo-meta-models-model.fragment.json",
+        "entity": "authz-bo-meta-model",
+        "field": "data_domain_id",
+        "refBoCode": "data-domains"
+      }
+    },
+    {
+      "code": "CHANGE_RECORDS_HAS_APPROVAL_RECORDS",
+      "name": "change-records → approval-records",
+      "source": {
+        "boCode": "approval-records",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "change-records",
+        "entityCode": "change-record",
+        "fieldCode": "approval_record_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "change-records-model.fragment.json",
+        "entity": "change-record",
+        "field": "approval_record_id",
+        "refBoCode": "approval-records"
+      }
+    },
+    {
+      "code": "CHANGE_RECORDS_REFERENCES_USERS",
+      "name": "change-records → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "change-records",
+        "entityCode": "change-record",
+        "fieldCode": "operator_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "change-records-model.fragment.json",
+        "entity": "change-record",
+        "field": "operator_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CONTACTS_REFERENCES_CUSTOMERS",
+      "name": "contacts → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "contacts",
+        "entityCode": "customer-contact",
+        "fieldCode": "customer_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "contacts-model.fragment.json",
+        "entity": "customer-contact",
+        "field": "customer_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "CONTACTS_REFERENCES_USERS",
+      "name": "contacts → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "contacts",
+        "entityCode": "customer-contact",
+        "fieldCode": "interaction_frequency_owner_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "contacts-model.fragment.json",
+        "entity": "customer-contact",
+        "field": "interaction_frequency_owner_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CONTACTS_REFERENCES_USERS",
+      "name": "contacts → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "contacts",
+        "entityCode": "customer-contact",
+        "fieldCode": "sales_owner_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "contacts-model.fragment.json",
+        "entity": "customer-contact",
+        "field": "sales_owner_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CONTACTS_REFERENCES_USERS",
+      "name": "contacts → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "contacts",
+        "entityCode": "contact-team-member",
+        "fieldCode": "user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "contacts-model.fragment.json",
+        "entity": "contact-team-member",
+        "field": "user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CUSTOMERS_REFERENCES_CUSTOMERS",
+      "name": "customers → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "customers",
+        "entityCode": "customer",
+        "fieldCode": "parent_customer_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customers-model.fragment.json",
+        "entity": "customer",
+        "field": "parent_customer_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "CUSTOMERS_REFERENCES_CUSTOMERS",
+      "name": "customers → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "customers",
+        "entityCode": "customer",
+        "fieldCode": "fop_customer_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customers-model.fragment.json",
+        "entity": "customer",
+        "field": "fop_customer_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_COMPETITORS",
+      "name": "customer-relations → competitors",
+      "source": {
+        "boCode": "competitors",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-competition",
+        "fieldCode": "competitor_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-competition",
+        "field": "competitor_id",
+        "refBoCode": "competitors"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_CUSTOMERS",
+      "name": "customer-relations → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-relation",
+        "fieldCode": "customer_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "ONE_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-relation",
+        "field": "customer_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_ORGS",
+      "name": "customer-relations → orgs",
+      "source": {
+        "boCode": "orgs",
+        "entityCode": "",
+        "fieldCode": "department_code"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-relation",
+        "fieldCode": "department_code"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-relation",
+        "field": "department_code",
+        "refBoCode": "orgs"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_USERS",
+      "name": "customer-relations → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-relation",
+        "fieldCode": "owner_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-relation",
+        "field": "owner_user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_USERS",
+      "name": "customer-relations → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-relation",
+        "fieldCode": "latest_visitor_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-relation",
+        "field": "latest_visitor_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_USERS",
+      "name": "customer-relations → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-relation",
+        "fieldCode": "responsible_pre_sales_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-relation",
+        "field": "responsible_pre_sales_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_USERS",
+      "name": "customer-relations → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-relation",
+        "fieldCode": "service_sales_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-relation",
+        "field": "service_sales_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "CUSTOMER_RELATIONS_REFERENCES_USERS",
+      "name": "customer-relations → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-team-member",
+        "fieldCode": "user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "customer-relations-model.fragment.json",
+        "entity": "customer-team-member",
+        "field": "user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "DEVICE_INVENTORIES_HAS_DEVICES",
+      "name": "device-inventories → devices",
+      "source": {
+        "boCode": "devices",
+        "entityCode": "",
+        "fieldCode": "device_serial_no"
+      },
+      "target": {
+        "boCode": "device-inventories",
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "device_serial_no"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "device-inventories-model.fragment.json",
+        "entity": "device-inventory-detail",
+        "field": "device_serial_no",
+        "refBoCode": "devices"
+      }
+    },
+    {
+      "code": "OPERATION_LOGS_REFERENCES_USERS",
+      "name": "operation-logs → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "operation-logs",
+        "entityCode": "operation-log",
+        "fieldCode": "operator_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "operation-logs-model.fragment.json",
+        "entity": "operation-log",
+        "field": "operator_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_CUSTOMERS",
+      "name": "opportunities → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "customers_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity",
+        "field": "customers_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_OPPORTUNITIES",
+      "name": "opportunities → opportunities",
+      "source": {
+        "boCode": "opportunities",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "parent_opportunity_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity",
+        "field": "parent_opportunity_id",
+        "refBoCode": "opportunities"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_PRODUCTS",
+      "name": "opportunities → products",
+      "source": {
+        "boCode": "products",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity-product",
+        "fieldCode": "product_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity-product",
+        "field": "product_id",
+        "refBoCode": "products"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_SCENES",
+      "name": "opportunities → scenes",
+      "source": {
+        "boCode": "scenes",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity-product",
+        "fieldCode": "scene_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity-product",
+        "field": "scene_id",
+        "refBoCode": "scenes"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_USERS",
+      "name": "opportunities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_owner"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity",
+        "field": "opportunity_owner",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_USERS",
+      "name": "opportunities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "presales_engineer"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity",
+        "field": "presales_engineer",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_USERS",
+      "name": "opportunities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "customer_owner"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity",
+        "field": "customer_owner",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_USERS",
+      "name": "opportunities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity-team-member",
+        "field": "user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_USERS",
+      "name": "opportunities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "promoter"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity-stage-history",
+        "field": "promoter",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "OPPORTUNITIES_REFERENCES_USERS",
+      "name": "opportunities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "uploaded_by"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "opportunities-model.fragment.json",
+        "entity": "opportunity-stage-attachment",
+        "field": "uploaded_by",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "ORGS_REFERENCES_USERS",
+      "name": "orgs → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "orgs",
+        "entityCode": "dap-sys-org",
+        "fieldCode": "manage_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "orgs-model.fragment.json",
+        "entity": "dap-sys-org",
+        "field": "manage_user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "ORGS_REFERENCES_USERS",
+      "name": "orgs → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "orgs",
+        "entityCode": "dap-sys-org",
+        "fieldCode": "portion_manage_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "orgs-model.fragment.json",
+        "entity": "dap-sys-org",
+        "field": "portion_manage_user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "PERSONNEL_REGIONS_REFERENCES_USERS",
+      "name": "personnel-regions → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "personnel-regions",
+        "entityCode": "personnel-region",
+        "fieldCode": "user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "personnel-regions-model.fragment.json",
+        "entity": "personnel-region",
+        "field": "user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "PRODUCTS_REFERENCES_ORGS",
+      "name": "products → orgs",
+      "source": {
+        "boCode": "orgs",
+        "entityCode": "",
+        "fieldCode": "department_code"
+      },
+      "target": {
+        "boCode": "products",
+        "entityCode": "product",
+        "fieldCode": "product_department"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "products-model.fragment.json",
+        "entity": "product",
+        "field": "product_department",
+        "refBoCode": "orgs"
+      }
+    },
+    {
+      "code": "RENEWAL_QUOTES_HAS_DEVICE_INVENTORIES",
+      "name": "renewal-quotes → device-inventories",
+      "source": {
+        "boCode": "device-inventories",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "renewal-quotes",
+        "entityCode": "renewal-quote",
+        "fieldCode": "inventory_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "renewal-quotes-model.fragment.json",
+        "entity": "renewal-quote",
+        "field": "inventory_id",
+        "refBoCode": "device-inventories"
+      }
+    },
+    {
+      "code": "SALES_ACTIVITIES_HAS_CONTACTS",
+      "name": "sales-activities → contacts",
+      "source": {
+        "boCode": "contacts",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-record",
+        "fieldCode": "contact_ids_snapshot"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-activities-model.fragment.json",
+        "entity": "visit-record",
+        "field": "contact_ids_snapshot",
+        "refBoCode": "contacts"
+      }
+    },
+    {
+      "code": "SALES_ACTIVITIES_HAS_CUSTOMERS",
+      "name": "sales-activities → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-record",
+        "fieldCode": "parent_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-activities-model.fragment.json",
+        "entity": "visit-record",
+        "field": "parent_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "SALES_ACTIVITIES_HAS_SCENES",
+      "name": "sales-activities → scenes",
+      "source": {
+        "boCode": "scenes",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-record",
+        "fieldCode": "scene_ids_snapshot"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-activities-model.fragment.json",
+        "entity": "visit-record",
+        "field": "scene_ids_snapshot",
+        "refBoCode": "scenes"
+      }
+    },
+    {
+      "code": "SALES_ACTIVITIES_REFERENCES_USERS",
+      "name": "sales-activities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-record",
+        "fieldCode": "record_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-activities-model.fragment.json",
+        "entity": "visit-record",
+        "field": "record_user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "SALES_ACTIVITIES_REFERENCES_USERS",
+      "name": "sales-activities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-record",
+        "fieldCode": "last_modified_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-activities-model.fragment.json",
+        "entity": "visit-record",
+        "field": "last_modified_user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "SALES_ACTIVITIES_REFERENCES_USERS",
+      "name": "sales-activities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-follow-up",
+        "fieldCode": "operator_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-activities-model.fragment.json",
+        "entity": "visit-follow-up",
+        "field": "operator_user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "SALES_ACTIVITIES_REFERENCES_USERS",
+      "name": "sales-activities → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-team-member",
+        "fieldCode": "user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-activities-model.fragment.json",
+        "entity": "visit-team-member",
+        "field": "user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "SALES_TARGETS_REFERENCES_USERS",
+      "name": "sales-targets → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "sales-targets",
+        "entityCode": "target",
+        "fieldCode": "owner_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "sales-targets-model.fragment.json",
+        "entity": "target",
+        "field": "owner_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "SCENES_REFERENCES_COMPETITORS",
+      "name": "scenes → competitors",
+      "source": {
+        "boCode": "competitors",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "scenes",
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "competitor_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "scenes-model.fragment.json",
+        "entity": "scene-rival-detail",
+        "field": "competitor_id",
+        "refBoCode": "competitors"
+      }
+    },
+    {
+      "code": "SCENES_REFERENCES_CUSTOMERS",
+      "name": "scenes → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "scenes",
+        "entityCode": "scene",
+        "fieldCode": "customers_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "scenes-model.fragment.json",
+        "entity": "scene",
+        "field": "customers_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "SCENES_REFERENCES_PRODUCTS",
+      "name": "scenes → products",
+      "source": {
+        "boCode": "products",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "scenes",
+        "entityCode": "scene-product",
+        "fieldCode": "products_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "scenes-model.fragment.json",
+        "entity": "scene-product",
+        "field": "products_id",
+        "refBoCode": "products"
+      }
+    },
+    {
+      "code": "SCENES_REFERENCES_USERS",
+      "name": "scenes → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "scenes",
+        "entityCode": "scene",
+        "fieldCode": "sales_owner_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "scenes-model.fragment.json",
+        "entity": "scene",
+        "field": "sales_owner_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "SCENES_REFERENCES_USERS",
+      "name": "scenes → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "scenes",
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "scenes-model.fragment.json",
+        "entity": "scene-product-team-member",
+        "field": "user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "SCENE_ARCHS_REFERENCES_SCENES",
+      "name": "scene-archs → scenes",
+      "source": {
+        "boCode": "scenes",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "scene-archs",
+        "entityCode": "scene-arch",
+        "fieldCode": "scene_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "scene-archs-model.fragment.json",
+        "entity": "scene-arch",
+        "field": "scene_id",
+        "refBoCode": "scenes"
+      }
+    },
+    {
+      "code": "SCENE_ARCHS_REFERENCES_USERS",
+      "name": "scene-archs → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "scene-archs",
+        "entityCode": "scene-arch-team-member",
+        "fieldCode": "user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "scene-archs-model.fragment.json",
+        "entity": "scene-arch-team-member",
+        "field": "user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "USERS_REFERENCES_ORGS",
+      "name": "users → orgs",
+      "source": {
+        "boCode": "orgs",
+        "entityCode": "",
+        "fieldCode": "department_code"
+      },
+      "target": {
+        "boCode": "users",
+        "entityCode": "dap-sys-user",
+        "fieldCode": "department_code"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "users-model.fragment.json",
+        "entity": "dap-sys-user",
+        "field": "department_code",
+        "refBoCode": "orgs"
+      }
+    },
+    {
+      "code": "USERS_REFERENCES_USERS",
+      "name": "users → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "users",
+        "entityCode": "dap-sys-user",
+        "fieldCode": "manage_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "users-model.fragment.json",
+        "entity": "dap-sys-user",
+        "field": "manage_user_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "X_TERRITORY_REGS_HAS_OPPORTUNITIES",
+      "name": "x-territory-regs → opportunities",
+      "source": {
+        "boCode": "opportunities",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "x-territory-regs",
+        "entityCode": "x-territory-reg",
+        "fieldCode": "linked_opportunity_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "ONE_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "x-territory-regs-model.fragment.json",
+        "entity": "x-territory-reg",
+        "field": "linked_opportunity_id",
+        "refBoCode": "opportunities"
+      }
+    },
+    {
+      "code": "X_TERRITORY_REGS_REFERENCES_CUSTOMERS",
+      "name": "x-territory-regs → customers",
+      "source": {
+        "boCode": "customers",
+        "entityCode": "",
+        "fieldCode": "id"
+      },
+      "target": {
+        "boCode": "x-territory-regs",
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "x-territory-regs-model.fragment.json",
+        "entity": "x-territory-reg",
+        "field": "customer_id",
+        "refBoCode": "customers"
+      }
+    },
+    {
+      "code": "X_TERRITORY_REGS_REFERENCES_USERS",
+      "name": "x-territory-regs → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "x-territory-regs",
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_owner_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "x-territory-regs-model.fragment.json",
+        "entity": "x-territory-reg",
+        "field": "customer_owner_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "X_TERRITORY_REGS_REFERENCES_USERS",
+      "name": "x-territory-regs → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "x-territory-regs",
+        "entityCode": "x-territory-reg",
+        "fieldCode": "filing_owner_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "x-territory-regs-model.fragment.json",
+        "entity": "x-territory-reg",
+        "field": "filing_owner_id",
+        "refBoCode": "users"
+      }
+    },
+    {
+      "code": "X_TERRITORY_REGS_REFERENCES_USERS",
+      "name": "x-territory-regs → users",
+      "source": {
+        "boCode": "users",
+        "entityCode": "",
+        "fieldCode": "user_id"
+      },
+      "target": {
+        "boCode": "x-territory-regs",
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "member_user_id"
+      },
+      "direction": "TARGET_TO_SOURCE",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "MASTER_DATA",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "sourceType": "INFERRED",
+      "derivedFrom": {
+        "modelFile": "x-territory-regs-model.fragment.json",
+        "entity": "x-territory-reg-team-member",
+        "field": "member_user_id",
+        "refBoCode": "users"
+      }
+    }
+  ]
+}

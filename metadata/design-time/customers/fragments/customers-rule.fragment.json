@@ -1,0 +1,177 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customers",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "CUSTOMER_CONTRACT_MUST_HAVE_FOP",
+        "name": "合同主体客户必须指定所属业务主体客户",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "customer_category != 'CONTRACT_ENTITY' || (fop_customer_id != null && ref.customer_category == 'FOP_CUSTOMER')",
+        "severity": "ERROR",
+        "message": "合同主体客户必须指定所属的业务主体客户，请选择有效的业务主体客户",
+        "description": "合同主体客户（customer_category=CONTRACT_ENTITY）创建/更新时 MUST 填写 fop_customer_id，且目标客户 MUST 存在且 customer_category=FOP_CUSTOMER。业务主体客户和一级客户不填此字段。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "id",
+          "localEntityCode": "customer",
+          "localFieldCode": "fop_customer_id"
+        },
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "customer_category"
+              },
+              "right": {
+                "type": "literal",
+                "value": "CONTRACT_ENTITY"
+              }
+            },
+            {
+              "type": "logical",
+              "op": "AND",
+              "items": [
+                {
+                  "type": "isNotNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "fop_customer_id"
+                  }
+                },
+                {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "fop_customer_id.customer_category"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "FOP_CUSTOMER"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "code": "CUSTOMER_PARENT_EXISTS",
+        "name": "客户父级客户必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "客户关联的父级客户不存在，请选择有效的一级客户",
+        "description": "parent_customer_id 自引用 customers BO，创建/更新时校验引用的父级客户必须存在。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "id",
+          "localEntityCode": "customer",
+          "localFieldCode": "parent_customer_id"
+        }
+      },
+      {
+        "code": "CUSTOMER_PARENT_NO_CIRCULAR",
+        "name": "客户父级引用不可形成环路",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "parent_customer_id == null || parent_customer_id != id",
+        "polarity": "safety",
+        "severity": "ERROR",
+        "message": "客户父级引用不能形成环路，请检查父级客户归属关系",
+        "description": "更新 parent_customer_id 时，不可将当前客户或其子孙节点设为父级，防止父子环路。自引用同一 ID 也被禁止。polarity=safety 表示 expression 描述的是安全条件（True=合规而非违规），推理引擎需反转判定逻辑。crossBoRef 声明正向关联，expression 阻止直接自引用；深层环路检测由引擎递归遍历 parent_customer_id 链完成。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "id",
+          "localEntityCode": "customer",
+          "localFieldCode": "parent_customer_id"
+        },
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "parent_customer_id"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "parent_customer_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "id"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "CUSTOMER_DELETE_NO_ORPHAN_CHILDREN",
+        "name": "有子客户时不可删除父客户",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "refCount('customers', 'parent_customer_id', id) == 0",
+        "severity": "ERROR",
+        "message": "当前客户下存在子客户，请先解除父子关系",
+        "description": "当有其他客户 parent_customer_id 指向本客户时，禁止删除本客户。crossBoRef 声明反向关联，expression 校验子节点数为零。与 aggregateApiPolicy.deleteScope 策略联动。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "parent_customer_id",
+          "localEntityCode": "customer",
+          "localFieldCode": "id"
+        },
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "customers",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "parent_customer_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 0
+          }
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "customers 首版 RULE 设计态 Fragment，含自引用跨 BO 一致性规则与字段校验"
+  ]
+}

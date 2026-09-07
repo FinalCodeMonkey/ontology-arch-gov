@@ -1,0 +1,4934 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='opportunities'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'opportunities'",
+    "generated_from": "opportunities.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.816961+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "opportunity",
+        "name": "商机主实体",
+        "isPrimary": true,
+        "tableName": "crm_opportunity",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "status",
+          "project_type",
+          "biz_attribution",
+          "domestic_overseas",
+          "predict_category",
+          "project_stage",
+          "opportunity_owner",
+          "customer_owner",
+          "customers_id",
+          "market_segment",
+          "parent_opportunity_id"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "商机ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "opportunity_code",
+            "name": "业务机会编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "opportunity_code",
+            "columnName": "opportunity_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "opportunity_name",
+            "name": "业务机会名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "opportunity_name",
+            "columnName": "opportunity_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "project_type",
+            "name": "项目类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "project_type",
+            "columnName": "project_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "opportunity_owner",
+            "name": "机会所有人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "opportunity_owner",
+            "columnName": "opportunity_owner",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customers_id",
+            "name": "业务主体客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "customers_id",
+            "columnName": "customers_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "primary_customer_name",
+            "name": "一级客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "primary_customer_name",
+            "columnName": "primary_customer_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "market_segment",
+            "name": "细分市场",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "market_segment",
+            "columnName": "market_segment",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "currency",
+            "name": "币种",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "currency",
+            "columnName": "currency",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "parent_opportunity_id",
+            "name": "关联框架主项目ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parent_opportunity_id",
+            "columnName": "parent_opportunity_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "expected_order_amount",
+            "name": "预计下单金额/集采框架总金额",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "expected_order_amount",
+            "columnName": "expected_order_amount",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "expected_bid_date",
+            "name": "预计开标日期",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "expected_bid_date",
+            "columnName": "expected_bid_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "expected_order_start_date",
+            "name": "预计下单开始日期",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "expected_order_start_date",
+            "columnName": "expected_order_start_date",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "expected_order_end_date",
+            "name": "预计下单截止日期",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "expected_order_end_date",
+            "columnName": "expected_order_end_date",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "expected_order_date",
+            "name": "预计下单日期",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "expected_order_date",
+            "columnName": "expected_order_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "project_stage",
+            "name": "客户采购阶段",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "project_stage",
+            "columnName": "project_stage",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "predict_category",
+            "name": "预测类别",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "predict_category",
+            "columnName": "predict_category",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "biz_attribution",
+            "name": "业务名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "biz_attribution",
+            "columnName": "biz_attribution",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "domestic_overseas",
+            "name": "国内/海外",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "domestic_overseas",
+            "columnName": "domestic_overseas",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "presales_engineer",
+            "name": "售前工程师",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "presales_engineer",
+            "columnName": "presales_engineer",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_owner",
+            "name": "客户所有人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customer_owner",
+            "columnName": "customer_owner",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_in_funnel",
+            "name": "是否进入漏斗",
+            "type": "BOOLEAN",
+            "isPk": false,
+            "fieldName": "is_in_funnel",
+            "columnName": "is_in_funnel",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "is_committed",
+            "name": "是否承诺",
+            "type": "BOOLEAN",
+            "isPk": false,
+            "fieldName": "is_committed",
+            "columnName": "is_committed",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "status",
+            "name": "状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "displayFieldMappings": {
+          "opportunity_owner_name": {
+            "code": "opportunity_owner_name",
+            "name": "机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "opportunity_owner_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "opportunity_owner",
+            "sourceRefColumnName": "opportunity_owner",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "opportunities"
+          },
+          "opportunity_owner_department_code": {
+            "code": "opportunity_owner_department_code",
+            "name": "机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "opportunity_owner_department_code",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "opportunity_owner",
+            "sourceRefColumnName": "opportunity_owner",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "department_code",
+            "refColumnName": "department_code",
+            "sourceBoCode": "opportunities"
+          },
+          "business_customer_name": {
+            "code": "business_customer_name",
+            "name": "业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "business_customer_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "customers_id",
+            "sourceRefColumnName": "customers_id",
+            "refBoCode": "customers",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "customer",
+            "refTableName": "crm_customer",
+            "refPkColumnName": "id",
+            "refFieldCode": "customer_name",
+            "refColumnName": "customer_name",
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_name": {
+            "code": "parent_opportunity_name",
+            "name": "关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "parent_opportunity_id",
+            "sourceRefColumnName": "parent_opportunity_id",
+            "refBoCode": "opportunities",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "opportunity",
+            "refTableName": "crm_opportunity",
+            "refPkColumnName": "id",
+            "refFieldCode": "opportunity_name",
+            "refColumnName": "opportunity_name",
+            "sourceBoCode": "opportunities"
+          },
+          "presales_engineer_name": {
+            "code": "presales_engineer_name",
+            "name": "售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "presales_engineer_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "presales_engineer",
+            "sourceRefColumnName": "presales_engineer",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "opportunities"
+          },
+          "customer_owner_name": {
+            "code": "customer_owner_name",
+            "name": "客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "customer_owner_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "customer_owner",
+            "sourceRefColumnName": "customer_owner",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "opportunities"
+          },
+          "customers_primary_customer_name": {
+            "code": "customers_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "customers_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "customers_fop_customer_name": {
+            "code": "customers_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "customers_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_opportunity_owner_name": {
+            "code": "parent_opportunity_opportunity_owner_name",
+            "name": "商机主实体 / 机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_opportunity_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_opportunity_owner_department_code": {
+            "code": "parent_opportunity_opportunity_owner_department_code",
+            "name": "商机主实体 / 机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_opportunity_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_business_customer_name": {
+            "code": "parent_opportunity_business_customer_name",
+            "name": "商机主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_business_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_parent_opportunity_name": {
+            "code": "parent_opportunity_parent_opportunity_name",
+            "name": "商机主实体 / 关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_parent_opportunity_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "关联框架主项目名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "opportunities",
+              "entityCode": "opportunity",
+              "tableName": "crm_opportunity",
+              "fieldCode": "opportunity_name",
+              "columnName": "opportunity_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_presales_engineer_name": {
+            "code": "parent_opportunity_presales_engineer_name",
+            "name": "商机主实体 / 售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_presales_engineer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "售前工程师姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "presales_engineer",
+                "fromRefColumnName": "presales_engineer",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_customer_owner_name": {
+            "code": "parent_opportunity_customer_owner_name",
+            "name": "商机主实体 / 客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_customer_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "客户所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customer_owner",
+                "fromRefColumnName": "customer_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          }
+        }
+      },
+      {
+        "code": "opportunity-product",
+        "name": "商机产品清单",
+        "isPrimary": false,
+        "tableName": "crm_opportunity_product",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "产品清单行ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "opportunity_id",
+            "name": "所属商机ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "opportunity_id",
+            "columnName": "opportunity_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "scene_id",
+            "columnName": "scene_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "product_id",
+            "name": "产品ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "product_id",
+            "columnName": "product_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_model",
+            "name": "产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_model",
+            "columnName": "product_model",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "unit_price",
+            "name": "出货单价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "unit_price",
+            "columnName": "unit_price",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "quantity",
+            "name": "数量",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "quantity",
+            "columnName": "quantity",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_product_id",
+            "name": "所属主产品行ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parent_product_id",
+            "columnName": "parent_product_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "ratio",
+            "name": "配比",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "ratio",
+            "columnName": "ratio",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "opportunity-product",
+        "parentEntityCode": "opportunity",
+        "displayFieldMappings": {
+          "scene_name": {
+            "code": "scene_name",
+            "name": "场景名称",
+            "type": "STRING",
+            "fieldName": "scene_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "scene_id",
+            "sourceRefColumnName": "scene_id",
+            "refBoCode": "scenes",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "scene",
+            "refTableName": "crm_scene",
+            "refPkColumnName": "id",
+            "refFieldCode": "scene_name_customer",
+            "refColumnName": "scene_name_customer",
+            "sourceBoCode": "opportunities"
+          },
+          "scene_customer_name": {
+            "code": "scene_customer_name",
+            "name": "场景主实体 / 业务主体客户",
+            "type": "STRING",
+            "fieldName": "scene_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "业务主体客户"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_name": {
+            "code": "scene_sales_owner_name",
+            "name": "场景主实体 / 销售负责人",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_department_code": {
+            "code": "scene_sales_owner_department_code",
+            "name": "场景主实体 / 销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_department_name": {
+            "code": "scene_sales_owner_department_name",
+            "name": "场景主实体 / 销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_name",
+              "columnName": "department_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_name": {
+            "code": "parent_opportunity_owner_name",
+            "name": "商机主实体 / 机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_department_code": {
+            "code": "parent_opportunity_owner_department_code",
+            "name": "商机主实体 / 机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_business_customer_name": {
+            "code": "parent_business_customer_name",
+            "name": "商机主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_business_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_parent_opportunity_name": {
+            "code": "parent_parent_opportunity_name",
+            "name": "商机主实体 / 关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "parent_parent_opportunity_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "关联框架主项目名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "opportunities",
+              "entityCode": "opportunity",
+              "tableName": "crm_opportunity",
+              "fieldCode": "opportunity_name",
+              "columnName": "opportunity_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_presales_engineer_name": {
+            "code": "parent_presales_engineer_name",
+            "name": "商机主实体 / 售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "parent_presales_engineer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "售前工程师姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "presales_engineer",
+                "fromRefColumnName": "presales_engineer",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_customer_owner_name": {
+            "code": "parent_customer_owner_name",
+            "name": "商机主实体 / 客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_customer_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "客户所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-product",
+                "fromTableName": "crm_opportunity_product",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customer_owner",
+                "fromRefColumnName": "customer_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          }
+        }
+      },
+      {
+        "code": "opportunity-team-member",
+        "name": "商机团队成员",
+        "isPrimary": false,
+        "tableName": "crm_opportunity_team_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "团队成员行ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "opportunity_id",
+            "name": "所属商机ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "opportunity_id",
+            "columnName": "opportunity_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "user_id",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "member_role",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限设置",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permission",
+            "columnName": "permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "related_teams",
+            "name": "关联模块团队",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "related_teams",
+            "columnName": "related_teams",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "opportunity-team-member",
+        "parentEntityCode": "opportunity",
+        "displayFieldMappings": {
+          "member_name": {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "fieldName": "member_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "user_id",
+            "sourceRefColumnName": "user_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_name": {
+            "code": "parent_opportunity_owner_name",
+            "name": "商机主实体 / 机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-team-member",
+                "fromTableName": "crm_opportunity_team_member",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_department_code": {
+            "code": "parent_opportunity_owner_department_code",
+            "name": "商机主实体 / 机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-team-member",
+                "fromTableName": "crm_opportunity_team_member",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_business_customer_name": {
+            "code": "parent_business_customer_name",
+            "name": "商机主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_business_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-team-member",
+                "fromTableName": "crm_opportunity_team_member",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_parent_opportunity_name": {
+            "code": "parent_parent_opportunity_name",
+            "name": "商机主实体 / 关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "parent_parent_opportunity_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "关联框架主项目名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-team-member",
+                "fromTableName": "crm_opportunity_team_member",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "opportunities",
+              "entityCode": "opportunity",
+              "tableName": "crm_opportunity",
+              "fieldCode": "opportunity_name",
+              "columnName": "opportunity_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_presales_engineer_name": {
+            "code": "parent_presales_engineer_name",
+            "name": "商机主实体 / 售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "parent_presales_engineer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "售前工程师姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-team-member",
+                "fromTableName": "crm_opportunity_team_member",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "presales_engineer",
+                "fromRefColumnName": "presales_engineer",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_customer_owner_name": {
+            "code": "parent_customer_owner_name",
+            "name": "商机主实体 / 客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_customer_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "客户所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-team-member",
+                "fromTableName": "crm_opportunity_team_member",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customer_owner",
+                "fromRefColumnName": "customer_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          }
+        }
+      },
+      {
+        "code": "opportunity-scene",
+        "name": "商机关联场景",
+        "isPrimary": false,
+        "tableName": "crm_opportunity_scene",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "关联行ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "opportunity_id",
+            "name": "所属商机ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "opportunity_id",
+            "columnName": "opportunity_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "scene_id",
+            "columnName": "scene_id",
+            "fieldControl": false,
+            "filterable": true
+          }
+        ],
+        "routeSegment": "scenes",
+        "parentEntityCode": "opportunity",
+        "displayFieldMappings": {
+          "scene_name": {
+            "code": "scene_name",
+            "name": "场景名称",
+            "type": "STRING",
+            "fieldName": "scene_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "scene_id",
+            "sourceRefColumnName": "scene_id",
+            "refBoCode": "scenes",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "scene",
+            "refTableName": "crm_scene",
+            "refPkColumnName": "id",
+            "refFieldCode": "scene_name_customer",
+            "refColumnName": "scene_name_customer",
+            "sourceBoCode": "opportunities"
+          },
+          "scene_category": {
+            "code": "scene_category",
+            "name": "场景分类",
+            "type": "STRING",
+            "fieldName": "scene_category",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "scene_id",
+            "sourceRefColumnName": "scene_id",
+            "refBoCode": "scenes",
+            "refPkFieldCode": "id",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "scene",
+            "refTableName": "crm_scene",
+            "refPkColumnName": "id",
+            "refFieldCode": "scene_category",
+            "refColumnName": "scene_category",
+            "sourceBoCode": "opportunities"
+          },
+          "scene_customer_name": {
+            "code": "scene_customer_name",
+            "name": "场景主实体 / 业务主体客户",
+            "type": "STRING",
+            "fieldName": "scene_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "业务主体客户"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_name": {
+            "code": "scene_sales_owner_name",
+            "name": "场景主实体 / 销售负责人",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_department_code": {
+            "code": "scene_sales_owner_department_code",
+            "name": "场景主实体 / 销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_department_name": {
+            "code": "scene_sales_owner_department_name",
+            "name": "场景主实体 / 销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_name",
+              "columnName": "department_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_name": {
+            "code": "parent_opportunity_owner_name",
+            "name": "商机主实体 / 机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_department_code": {
+            "code": "parent_opportunity_owner_department_code",
+            "name": "商机主实体 / 机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_business_customer_name": {
+            "code": "parent_business_customer_name",
+            "name": "商机主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_business_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_parent_opportunity_name": {
+            "code": "parent_parent_opportunity_name",
+            "name": "商机主实体 / 关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "parent_parent_opportunity_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "关联框架主项目名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "opportunities",
+              "entityCode": "opportunity",
+              "tableName": "crm_opportunity",
+              "fieldCode": "opportunity_name",
+              "columnName": "opportunity_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_presales_engineer_name": {
+            "code": "parent_presales_engineer_name",
+            "name": "商机主实体 / 售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "parent_presales_engineer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "售前工程师姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "presales_engineer",
+                "fromRefColumnName": "presales_engineer",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_customer_owner_name": {
+            "code": "parent_customer_owner_name",
+            "name": "商机主实体 / 客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_customer_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "客户所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-scene",
+                "fromTableName": "crm_opportunity_scene",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customer_owner",
+                "fromRefColumnName": "customer_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          }
+        }
+      },
+      {
+        "code": "opportunity-stage-history",
+        "name": "商机阶段推进历史",
+        "isPrimary": false,
+        "tableName": "crm_opportunity_sales_flow",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "阶段历史ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "opportunity_id",
+            "name": "所属商机ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "opportunity_id",
+            "columnName": "opportunity_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "sequence_no",
+            "name": "序号",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "sequence_no",
+            "columnName": "sequence_no",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "from_stage_code",
+            "name": "来源阶段编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "from_stage_code",
+            "columnName": "from_stage_code",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "from_stage_name",
+            "name": "来源阶段名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "from_stage_name",
+            "columnName": "from_stage_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "stage_code",
+            "name": "阶段编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "stage_code",
+            "columnName": "stage_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "stage_name",
+            "name": "阶段名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "stage_name",
+            "columnName": "stage_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "stage_status",
+            "name": "阶段状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "stage_status",
+            "columnName": "stage_status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "operation_type",
+            "name": "操作类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "operation_type",
+            "columnName": "action_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "promoter",
+            "name": "推进人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "promoter",
+            "columnName": "operator_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "promoter_name",
+            "name": "推进人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "promoter_name",
+            "columnName": "operator_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "promoted_time",
+            "name": "推进时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "promoted_time",
+            "columnName": "operate_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "description",
+            "name": "推进说明",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "description",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "attachment_count",
+            "name": "附件数量",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "attachment_count",
+            "columnName": "attachment_count",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "opportunity-stage-history",
+        "parentEntityCode": "opportunity",
+        "displayFieldMappings": {
+          "parent_opportunity_owner_name": {
+            "code": "parent_opportunity_owner_name",
+            "name": "商机主实体 / 机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-stage-history",
+                "fromTableName": "crm_opportunity_sales_flow",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_department_code": {
+            "code": "parent_opportunity_owner_department_code",
+            "name": "商机主实体 / 机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-stage-history",
+                "fromTableName": "crm_opportunity_sales_flow",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_business_customer_name": {
+            "code": "parent_business_customer_name",
+            "name": "商机主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_business_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-stage-history",
+                "fromTableName": "crm_opportunity_sales_flow",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_parent_opportunity_name": {
+            "code": "parent_parent_opportunity_name",
+            "name": "商机主实体 / 关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "parent_parent_opportunity_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "关联框架主项目名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-stage-history",
+                "fromTableName": "crm_opportunity_sales_flow",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "opportunities",
+              "entityCode": "opportunity",
+              "tableName": "crm_opportunity",
+              "fieldCode": "opportunity_name",
+              "columnName": "opportunity_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_presales_engineer_name": {
+            "code": "parent_presales_engineer_name",
+            "name": "商机主实体 / 售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "parent_presales_engineer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "售前工程师姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-stage-history",
+                "fromTableName": "crm_opportunity_sales_flow",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "presales_engineer",
+                "fromRefColumnName": "presales_engineer",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_customer_owner_name": {
+            "code": "parent_customer_owner_name",
+            "name": "商机主实体 / 客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_customer_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "客户所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-stage-history",
+                "fromTableName": "crm_opportunity_sales_flow",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customer_owner",
+                "fromRefColumnName": "customer_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          }
+        }
+      },
+      {
+        "code": "opportunity-stage-attachment",
+        "name": "商机阶段推进附件",
+        "isPrimary": false,
+        "tableName": "crm_opportunity_sales_flow_attachment",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "附件ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "stage_history_id",
+            "name": "所属阶段历史ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "stage_history_id",
+            "columnName": "flow_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "file_name",
+            "name": "文件名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "file_name",
+            "columnName": "file_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "file_size",
+            "name": "文件大小",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "file_size",
+            "columnName": "file_size",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "file_type",
+            "name": "文件类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "file_type",
+            "columnName": "file_ext",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "sort_order",
+            "name": "排序",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "sort_order",
+            "columnName": "sort_order",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "file_id",
+            "name": "文件服务器ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "file_id",
+            "columnName": "file_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "uploaded_by",
+            "name": "上传人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "uploaded_by",
+            "columnName": "uploaded_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "uploaded_time",
+            "name": "上传时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "uploaded_time",
+            "columnName": "uploaded_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "attachments",
+        "parentEntityCode": "opportunity-stage-history",
+        "displayFieldMappings": {
+          "uploaded_by_name": {
+            "code": "uploaded_by_name",
+            "name": "上传人姓名",
+            "type": "STRING",
+            "fieldName": "uploaded_by_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "uploaded_by",
+            "sourceRefColumnName": "uploaded_by",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "opportunities"
+          }
+        }
+      },
+      {
+        "code": "opportunity-quotation",
+        "name": "商机报价单",
+        "isPrimary": false,
+        "tableName": "crm_opportunity_quote",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "报价单行ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "opportunity_id",
+            "name": "所属商机ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "opportunity_id",
+            "columnName": "opportunity_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "quotation_no",
+            "name": "报价单号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "quotation_no",
+            "columnName": "ecp_doc_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "ecp_order_id",
+            "name": "新ECP报价单ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "ecp_order_id",
+            "columnName": "ecp_order_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "quotation_type",
+            "name": "报价单类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "quotation_type",
+            "columnName": "quote_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "quotation_status",
+            "name": "报价单状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "quotation_status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "total_amount",
+            "name": "出货价合计",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "total_amount",
+            "columnName": "total_amount",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "net_sales_amount",
+            "name": "净销售额",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "net_sales_amount",
+            "columnName": "net_sales_amount",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "source_system",
+            "name": "所属系统",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "source_system",
+            "columnName": "source_system",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "service_start_time",
+            "name": "服务开始时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "service_start_time",
+            "columnName": "service_start_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "service_end_time",
+            "name": "服务结束时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "service_end_time",
+            "columnName": "service_end_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "net_sales_discount",
+            "name": "净销售折扣(不含服务)",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "net_sales_discount",
+            "columnName": "net_sales_discount",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "industry_net_sales_discount",
+            "name": "行业净销售折扣(不含服务)",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "industry_net_sales_discount",
+            "columnName": "industry_net_sales_discount",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "ecp_edit_url",
+            "name": "报价单跳转链接",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "ecp_edit_url",
+            "columnName": "document_url",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "purchase_type",
+            "name": "采购类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "purchase_type",
+            "columnName": "purchase_type",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "quotations",
+        "parentEntityCode": "opportunity",
+        "displayFieldMappings": {
+          "parent_opportunity_owner_name": {
+            "code": "parent_opportunity_owner_name",
+            "name": "商机主实体 / 机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation",
+                "fromTableName": "crm_opportunity_quote",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_opportunity_owner_department_code": {
+            "code": "parent_opportunity_owner_department_code",
+            "name": "商机主实体 / 机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_opportunity_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation",
+                "fromTableName": "crm_opportunity_quote",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_business_customer_name": {
+            "code": "parent_business_customer_name",
+            "name": "商机主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_business_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation",
+                "fromTableName": "crm_opportunity_quote",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_parent_opportunity_name": {
+            "code": "parent_parent_opportunity_name",
+            "name": "商机主实体 / 关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "parent_parent_opportunity_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "关联框架主项目名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation",
+                "fromTableName": "crm_opportunity_quote",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "opportunities",
+              "entityCode": "opportunity",
+              "tableName": "crm_opportunity",
+              "fieldCode": "opportunity_name",
+              "columnName": "opportunity_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_presales_engineer_name": {
+            "code": "parent_presales_engineer_name",
+            "name": "商机主实体 / 售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "parent_presales_engineer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "售前工程师姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation",
+                "fromTableName": "crm_opportunity_quote",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "presales_engineer",
+                "fromRefColumnName": "presales_engineer",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "parent_customer_owner_name": {
+            "code": "parent_customer_owner_name",
+            "name": "商机主实体 / 客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "parent_customer_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "客户所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation",
+                "fromTableName": "crm_opportunity_quote",
+                "fromRefCode": "opportunity_id",
+                "fromRefColumnName": "opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customer_owner",
+                "fromRefColumnName": "customer_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          }
+        }
+      },
+      {
+        "code": "opportunity-quotation-product",
+        "name": "报价单产品清单",
+        "isPrimary": false,
+        "tableName": "crm_opportunity_quotation_product",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "报价单产品行ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "quotation_id",
+            "name": "所属报价单ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "quotation_id",
+            "columnName": "quotation_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "product_id",
+            "name": "产品ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "product_id",
+            "columnName": "product_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_model",
+            "name": "产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_model",
+            "columnName": "product_model",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_category",
+            "name": "产品类别",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_category",
+            "columnName": "product_category",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "product_series",
+            "name": "产品系列",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_series",
+            "columnName": "product_series",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "list_price",
+            "name": "列表价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "list_price",
+            "columnName": "list_price",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "unit_price",
+            "name": "出货单价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "unit_price",
+            "columnName": "unit_price",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "quantity",
+            "name": "数量",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "quantity",
+            "columnName": "quantity",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "scene_id",
+            "columnName": "scene_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_accessory",
+            "name": "是否配件",
+            "type": "BOOLEAN",
+            "isPk": false,
+            "fieldName": "is_accessory",
+            "columnName": "is_accessory",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_product_model",
+            "name": "主产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "parent_product_model",
+            "columnName": "parent_product_model",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "products",
+        "parentEntityCode": "opportunity-quotation",
+        "displayFieldMappings": {
+          "scene_name": {
+            "code": "scene_name",
+            "name": "场景名称",
+            "type": "STRING",
+            "fieldName": "scene_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "scene_id",
+            "sourceRefColumnName": "scene_id",
+            "refBoCode": "scenes",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "scene",
+            "refTableName": "crm_scene",
+            "refPkColumnName": "id",
+            "refFieldCode": "scene_name_customer",
+            "refColumnName": "scene_name_customer",
+            "sourceBoCode": "opportunities"
+          },
+          "scene_customer_name": {
+            "code": "scene_customer_name",
+            "name": "场景主实体 / 业务主体客户",
+            "type": "STRING",
+            "fieldName": "scene_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "业务主体客户"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation-product",
+                "fromTableName": "crm_opportunity_quotation_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_name": {
+            "code": "scene_sales_owner_name",
+            "name": "场景主实体 / 销售负责人",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation-product",
+                "fromTableName": "crm_opportunity_quotation_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_department_code": {
+            "code": "scene_sales_owner_department_code",
+            "name": "场景主实体 / 销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation-product",
+                "fromTableName": "crm_opportunity_quotation_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "opportunities"
+          },
+          "scene_sales_owner_department_name": {
+            "code": "scene_sales_owner_department_name",
+            "name": "场景主实体 / 销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "scene_sales_owner_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity-quotation-product",
+                "fromTableName": "crm_opportunity_quotation_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_name",
+              "columnName": "department_name"
+            },
+            "sourceBoCode": "opportunities"
+          }
+        }
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新增业务机会",
+        "scope": "BO",
+        "act_aliases": "copy",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除商机",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "CREATE_QUOTATION",
+        "name": "创建报价单",
+        "scope": "BO",
+        "act_aliases": "create-quotation",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "APPLY_PROJECT_MATERIALS",
+        "name": "项目资料申请",
+        "scope": "BO",
+        "act_aliases": "apply-materials",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "ADVANCE_STAGE",
+        "name": "推进销售阶段",
+        "scope": "BO",
+        "act_aliases": "advance-stage",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "ROLLBACK_STAGE",
+        "name": "退回上一阶段",
+        "scope": "BO",
+        "act_aliases": "rollback-stage",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "START_PROGRESS",
+        "name": "开始跟进",
+        "scope": "BO",
+        "act_aliases": "start-progress",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "WIN",
+        "name": "赢单",
+        "scope": "BO",
+        "act_aliases": "win",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "LOSE",
+        "name": "输单",
+        "scope": "BO",
+        "act_aliases": "lose",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "CANCEL",
+        "name": "取消商机",
+        "scope": "BO",
+        "act_aliases": "cancel",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "RESTART",
+        "name": "重启商机",
+        "scope": "BO",
+        "act_aliases": "restart",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "FINISH",
+        "name": "结束销售流程",
+        "scope": "BO",
+        "act_aliases": "finish",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "CREATE_PRODUCT",
+        "name": "新建产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "opportunity-product"
+      },
+      {
+        "code": "EDIT_PRODUCT",
+        "name": "编辑产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-product"
+      },
+      {
+        "code": "DELETE_PRODUCT",
+        "name": "删除产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "opportunity-product"
+      },
+      {
+        "code": "CREATE_TEAM_MEMBER",
+        "name": "新增团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "opportunity-team-member"
+      },
+      {
+        "code": "EDIT_TEAM_MEMBER",
+        "name": "编辑团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-team-member"
+      },
+      {
+        "code": "DELETE_TEAM_MEMBER",
+        "name": "删除团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "opportunity-team-member"
+      },
+      {
+        "code": "UPDATE_SALES_FORECAST",
+        "name": "编辑销售预测",
+        "scope": "BO",
+        "act_aliases": "sales-forecast",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "EDIT_STAGE_RECORD",
+        "name": "编辑阶段记录",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "READ_NODE_DETAIL",
+        "name": "按阶段编码查询节点详情",
+        "scope": "ENTITY",
+        "act_aliases": "node-detail",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "UPDATE_NODE_RECORD",
+        "name": "按阶段编码编辑节点记录",
+        "scope": "ENTITY",
+        "act_aliases": "node-update",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "SUPPLEMENT_STAGE_DESCRIPTION",
+        "name": "仅补充说明",
+        "scope": "ENTITY",
+        "act_aliases": "supplement-description",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "SUPPLEMENT_STAGE_ATTACHMENT",
+        "name": "仅补充附件",
+        "scope": "ENTITY",
+        "act_aliases": "supplement-attachment",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "DELETE_STAGE_ATTACHMENT",
+        "name": "删除阶段附件",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "opportunity-stage-attachment"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "summary,read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "TRANSFER",
+        "name": "商机转移",
+        "scope": "BO",
+        "act_aliases": "transfer",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "SYNC",
+        "name": "同步商机至ECP",
+        "scope": "BO",
+        "act_aliases": "sync-cbg-to-ecp,batch-sync-cbg-to-ecp",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST_OPPORTUNITY_PRODUCT",
+        "name": "查询商机产品清单列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-opportunity-product",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-product"
+      },
+      {
+        "code": "READ_OPPORTUNITY_PRODUCT",
+        "name": "查看商机产品清单详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-opportunity-product",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-product"
+      },
+      {
+        "code": "LIST_OPPORTUNITY_TEAM_MEMBER",
+        "name": "查询商机团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-opportunity-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-team-member"
+      },
+      {
+        "code": "READ_OPPORTUNITY_TEAM_MEMBER",
+        "name": "查看商机团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-opportunity-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-team-member"
+      },
+      {
+        "code": "LIST_OPPORTUNITY_SCENE",
+        "name": "查询商机关联场景列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-opportunity-scene",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-scene"
+      },
+      {
+        "code": "READ_OPPORTUNITY_SCENE",
+        "name": "查看商机关联场景详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-opportunity-scene",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-scene"
+      },
+      {
+        "code": "CREATE_OPPORTUNITY_SCENE",
+        "name": "新建商机关联场景",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "opportunity-scene"
+      },
+      {
+        "code": "UPDATE_OPPORTUNITY_SCENE",
+        "name": "更新商机关联场景",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-scene"
+      },
+      {
+        "code": "DELETE_OPPORTUNITY_SCENE",
+        "name": "删除商机关联场景",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "opportunity-scene"
+      },
+      {
+        "code": "LIST_OPPORTUNITY_STAGE_HISTORY",
+        "name": "查询商机阶段推进历史列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-opportunity-stage-history",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "READ_OPPORTUNITY_STAGE_HISTORY",
+        "name": "查看商机阶段推进历史详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-opportunity-stage-history",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "CREATE_OPPORTUNITY_STAGE_HISTORY",
+        "name": "新建商机阶段推进历史",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "DELETE_OPPORTUNITY_STAGE_HISTORY",
+        "name": "删除商机阶段推进历史",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "opportunity-stage-history"
+      },
+      {
+        "code": "LIST_OPPORTUNITY_STAGE_ATTACHMENT",
+        "name": "查询商机阶段推进附件列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-opportunity-stage-attachment",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-stage-attachment"
+      },
+      {
+        "code": "READ_OPPORTUNITY_STAGE_ATTACHMENT",
+        "name": "查看商机阶段推进附件详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-opportunity-stage-attachment",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-stage-attachment"
+      },
+      {
+        "code": "CREATE_OPPORTUNITY_STAGE_ATTACHMENT",
+        "name": "新建商机阶段推进附件",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "opportunity-stage-attachment"
+      },
+      {
+        "code": "UPDATE_OPPORTUNITY_STAGE_ATTACHMENT",
+        "name": "更新商机阶段推进附件",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-stage-attachment"
+      },
+      {
+        "code": "LIST_OPPORTUNITY_QUOTATION",
+        "name": "查询商机报价单列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-opportunity-quotation",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-quotation"
+      },
+      {
+        "code": "READ_OPPORTUNITY_QUOTATION",
+        "name": "查看商机报价单详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-opportunity-quotation",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-quotation"
+      },
+      {
+        "code": "CREATE_OPPORTUNITY_QUOTATION",
+        "name": "新建商机报价单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "opportunity-quotation"
+      },
+      {
+        "code": "UPDATE_OPPORTUNITY_QUOTATION",
+        "name": "更新商机报价单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-quotation"
+      },
+      {
+        "code": "DELETE_OPPORTUNITY_QUOTATION",
+        "name": "删除商机报价单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "opportunity-quotation"
+      },
+      {
+        "code": "LIST_OPPORTUNITY_QUOTATION_PRODUCT",
+        "name": "查询报价单产品清单列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-opportunity-quotation-product",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-quotation-product"
+      },
+      {
+        "code": "READ_OPPORTUNITY_QUOTATION_PRODUCT",
+        "name": "查看报价单产品清单详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-opportunity-quotation-product",
+        "primaryDataAction": "READ",
+        "entityCode": "opportunity-quotation-product"
+      },
+      {
+        "code": "CREATE_OPPORTUNITY_QUOTATION_PRODUCT",
+        "name": "新建报价单产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "opportunity-quotation-product"
+      },
+      {
+        "code": "UPDATE_OPPORTUNITY_QUOTATION_PRODUCT",
+        "name": "更新报价单产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "opportunity-quotation-product"
+      },
+      {
+        "code": "DELETE_OPPORTUNITY_QUOTATION_PRODUCT",
+        "name": "删除报价单产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "opportunity-quotation-product"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'opportunities' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'opportunities' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE",
+      "RES_DATA_BO + opportunities_bo_meta_id + IMPORT",
+      "RES_DATA_BO + opportunities_bo_meta_id + EXPORT",
+      "RES_DATA_BO + opportunities_bo_meta_id + UPDATE",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_QUOTATION",
+      "RES_DATA_BO + opportunities_bo_meta_id + APPLY_PROJECT_MATERIALS",
+      "RES_DATA_BO + opportunities_bo_meta_id + ADVANCE_STAGE",
+      "RES_DATA_BO + opportunities_bo_meta_id + ROLLBACK_STAGE",
+      "RES_DATA_BO + opportunities_bo_meta_id + START_PROGRESS",
+      "RES_DATA_BO + opportunities_bo_meta_id + WIN",
+      "RES_DATA_BO + opportunities_bo_meta_id + LOSE",
+      "RES_DATA_BO + opportunities_bo_meta_id + CANCEL",
+      "RES_DATA_BO + opportunities_bo_meta_id + RESTART",
+      "RES_DATA_BO + opportunities_bo_meta_id + FINISH",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + EDIT_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_TEAM_MEMBER",
+      "RES_DATA_BO + opportunities_bo_meta_id + EDIT_TEAM_MEMBER",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE_TEAM_MEMBER",
+      "RES_DATA_BO + opportunities_bo_meta_id + UPDATE_SALES_FORECAST",
+      "RES_DATA_BO + opportunities_bo_meta_id + EDIT_STAGE_RECORD",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_NODE_DETAIL",
+      "RES_DATA_BO + opportunities_bo_meta_id + UPDATE_NODE_RECORD",
+      "RES_DATA_BO + opportunities_bo_meta_id + SUPPLEMENT_STAGE_DESCRIPTION",
+      "RES_DATA_BO + opportunities_bo_meta_id + SUPPLEMENT_STAGE_ATTACHMENT",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE_STAGE_ATTACHMENT",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ",
+      "RES_DATA_BO + opportunities_bo_meta_id + TRANSFER",
+      "RES_DATA_BO + opportunities_bo_meta_id + SYNC",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST_OPPORTUNITY_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_OPPORTUNITY_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST_OPPORTUNITY_TEAM_MEMBER",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_OPPORTUNITY_TEAM_MEMBER",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST_OPPORTUNITY_SCENE",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_OPPORTUNITY_SCENE",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_OPPORTUNITY_SCENE",
+      "RES_DATA_BO + opportunities_bo_meta_id + UPDATE_OPPORTUNITY_SCENE",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE_OPPORTUNITY_SCENE",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST_OPPORTUNITY_STAGE_HISTORY",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_OPPORTUNITY_STAGE_HISTORY",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_OPPORTUNITY_STAGE_HISTORY",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE_OPPORTUNITY_STAGE_HISTORY",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST_OPPORTUNITY_STAGE_ATTACHMENT",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_OPPORTUNITY_STAGE_ATTACHMENT",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_OPPORTUNITY_STAGE_ATTACHMENT",
+      "RES_DATA_BO + opportunities_bo_meta_id + UPDATE_OPPORTUNITY_STAGE_ATTACHMENT",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST_OPPORTUNITY_QUOTATION",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_OPPORTUNITY_QUOTATION",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_OPPORTUNITY_QUOTATION",
+      "RES_DATA_BO + opportunities_bo_meta_id + UPDATE_OPPORTUNITY_QUOTATION",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE_OPPORTUNITY_QUOTATION",
+      "RES_DATA_BO + opportunities_bo_meta_id + LIST_OPPORTUNITY_QUOTATION_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + READ_OPPORTUNITY_QUOTATION_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + CREATE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + UPDATE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "RES_DATA_BO + opportunities_bo_meta_id + DELETE_OPPORTUNITY_QUOTATION_PRODUCT"
+    ]
+  }
+}

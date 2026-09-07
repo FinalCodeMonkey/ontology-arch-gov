@@ -1,0 +1,226 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "bo-meta-models",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "bo-meta-models",
+    "boName": "权限引擎业务对象元模型",
+    "description": "管理 PSP 权限引擎 authz-bo-meta-model 表的 BO 元模型注册记录。每条记录对应一个已发布业务对象的运行态投影，schema_json 字段存储该 BO 的 authz-bo-meta-model-projection 投影 JSON，PSP BoSchemaJsonValidator 据此校验并派生权限项。单实体建模（SINGLE），主实体 authz-bo-meta-model 对应 unify_engine 库物理表。",
+    "apiConfig": {
+      "resourcePath": "/bo-meta-models",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "bo_code",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "bo_name",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "updated_at",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "authz-bo-meta-model",
+        "name": "BO元模型实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "authz_bo_meta_model",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "tenant_id",
+            "fieldName": "tenantId",
+            "columnName": "tenant_id",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "app_code",
+            "fieldName": "appCode",
+            "columnName": "app_code",
+            "name": "应用代码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "bo_code",
+            "fieldName": "boCode",
+            "columnName": "bo_code",
+            "name": "BO标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true
+          },
+          {
+            "code": "bo_name",
+            "fieldName": "boName",
+            "columnName": "bo_name",
+            "name": "BO名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true
+          },
+          {
+            "code": "schema_json",
+            "fieldName": "schemaJson",
+            "columnName": "schema_json",
+            "name": "投影元数据JSON",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "adapter_type",
+            "fieldName": "adapterType",
+            "columnName": "adapter_type",
+            "name": "适配器类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "JAVA_BEAN"
+          },
+          {
+            "code": "resolver",
+            "fieldName": "resolver",
+            "columnName": "resolver",
+            "name": "解析器",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "noopHook"
+          },
+          {
+            "code": "data_domain_id",
+            "fieldName": "dataDomainId",
+            "columnName": "data_domain_id",
+            "name": "所属数据领域ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "filterable": true,
+            "crossBoRef": {
+              "refBoCode": "data-domains",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "domain_name",
+                  "localCode": "data_domain_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            }
+          },
+          {
+            "code": "data_domain_name",
+            "fieldName": "dataDomainName",
+            "columnName": "data_domain_name",
+            "name": "数据领域名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": true,
+            "redundant": true
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_at",
+            "fieldName": "createdAt",
+            "columnName": "created_at",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_at",
+            "fieldName": "updatedAt",
+            "columnName": "updated_at",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "0"
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "bo-meta-models 首版 MODEL Fragment",
+    "单实体 authz-bo-meta-model 对应 unify_engine 物理表",
+    "schema_json 字段存储其他 BO 的 authz-bo-meta-model-projection 运行态投影",
+    "data_domain_id 通过 CROSS_BO_REF 引用 data-domains BO，冗余存储 data_domain_name"
+  ]
+}

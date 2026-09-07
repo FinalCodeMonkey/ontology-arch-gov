@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/projection-run-time/authz-projection/authz-bo-meta-model-projection.schema.json",
+  "title": "Runtime Authz BO Meta Model Projection",
+  "description": "运行态权限元模型投影。由 bo-projection-gen.py --type authz_bo_meta_model 从发布态 schema-view.v2 生成，写入 PSP authz_bo_meta_model 表的 schema_json 字段。PSP BoSchemaJsonValidator 据此校验 BO 元数据并派生权限项。",
+  "$comment": "结构说明详见父目录下的 README.md 中 [authz-bo-meta-model-projection] 章节。",
+  "type": "object",
+  "required": ["_gov_meta", "schema_json", "_sql"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "_gov_meta": {
+      "type": "object",
+      "description": "投影治理元数据。",
+      "required": ["description", "target_table", "target_condition", "generated_from", "schema_version", "generated_at"],
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string", "description": "投影描述。" },
+        "target_table": { "const": "authz_bo_meta_model", "description": "目标 PSP 表名。" },
+        "target_condition": { "type": "string", "description": "目标行定位条件，如 bo_code = 'customers'。" },
+        "generated_from": { "type": "string", "description": "来源发布态文件名。" },
+        "schema_version": { "const": "2.0", "description": "schema_json 结构版本。" },
+        "generated_at": { "type": "string", "description": "投影生成时间（ISO 8601 UTC）。" }
+      }
+    },
+    "schema_json": {
+      "type": "object",
+      "description": "写入 authz_bo_meta_model.schema_json 字段的 JSON 内容。PSP BoSchemaJsonValidator 校验此结构。",
+      "required": ["entities", "operations"],
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/MetaModelEntity" }
+        },
+        "operations": {
+          "type": "array",
+          "uniqueItems": true,
+          "default": [],
+          "items": { "$ref": "#/$defs/MetaModelOperation" }
+        }
+      }
+    },
+    "_sql": {
+      "type": "object",
+      "description": "SQL 辅助信息，供发布脚本使用。",
+      "required": ["update_statement", "verify_statement", "expected_permission_items_after_publish"],
+      "additionalProperties": false,
+      "properties": {
+        "update_statement": { "type": "string", "description": "UPDATE authz_bo_meta_model SET schema_json = ... 语句模板。" },
+        "verify_statement": { "type": "string", "description": "验证查询语句。" },
+        "expected_permission_items_after_publish": {
+          "type": "array",
+          "description": "预期生成的权限项键列表。格式：RES_DATA_BO + {boCode}_bo_meta_id + {authzAction}。按 authzAction 去重。",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "MetaModelEntity": {
+      "type": "object",
+      "description": "权限元模型实体。保留物理表映射、行级过滤字段和字段级控制标记。",
+      "required": ["code", "name", "isPrimary", "tableName", "rowLevelRuleEntries", "attributes"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "isPrimary": { "type": "boolean" },
+        "tableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "routeSegment": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "parentEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "cascadeDelete": { "type": "boolean", "default": false },
+        "rowLevelRuleEntries": {
+          "type": "array",
+          "description": "行级过滤可用字段列表。PSP 引擎仅允许策略表达式引用此列表中的字段。",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "attributes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/MetaModelAttribute" }
+        },
+        "displayFieldMappings": {
+          "type": "object",
+          "description": "非冗余 CROSS_BO_DISPLAY 字段的运行时过滤映射。key 为虚拟显示字段 code，value 描述引用链和目标物理列。",
+          "propertyNames": { "pattern": "^[a-z][a-z0-9_]*$" },
+          "additionalProperties": { "$ref": "#/$defs/MetaModelDisplayFieldMapping" },
+          "default": {}
+        }
+      }
+    },
+    "MetaModelAttribute": {
+      "type": "object",
+      "description": "权限元模型属性。fieldControl 为 boolean，true 时额外输出 fieldControlStrategy。",
+      "required": ["code", "name", "type", "isPk", "fieldName", "columnName", "fieldControl", "filterable"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "type": { "type": "string", "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"] },
+        "isPk": { "type": "boolean", "default": false },
+        "fieldName": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]*$", "description": "Java 字段名或投影字段名。" },
+        "columnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "物理列名。" },
+        "fieldControl": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否有字段级控制。true=有控制策略（需查看 fieldControlStrategy）；false=开放（OPEN）。"
+        },
+        "fieldControlStrategy": {
+          "type": "string",
+          "enum": ["RESTRICTED", "MASK", "HIDE"],
+          "description": "字段控制策略。仅 fieldControl=true 时必须存在。设计态 MASKED→MASK, HIDDEN→HIDE, RESTRICTED 保持不变。PSP BoSchemaJsonValidator.SUPPORTED_FIELD_CONTROL_STRATEGIES: OPEN/RESTRICTED/MASK/HIDE。"
+        },
+        "filterable": { "type": "boolean", "default": false }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "fieldControl": { "const": true } }, "required": ["fieldControl"] },
+          "then": { "required": ["fieldControlStrategy"] }
+        }
+      ]
+    },
+    "MetaModelDisplayFieldMapping": {
+      "type": "object",
+      "description": "虚拟显示字段过滤映射。DIRECT_DISPLAY_REF 表示当前实体一跳引用；CHAINED_DISPLAY_REF 通过 path[] 描述多跳引用或 PARENT_REF 上溯。",
+      "required": ["code", "name", "type", "fieldName", "mappingKind", "operators"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "type": { "type": "string", "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"] },
+        "fieldName": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]*$" },
+        "mappingKind": { "type": "string", "enum": ["DIRECT_DISPLAY_REF", "CHAINED_DISPLAY_REF"] },
+        "labelPath": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "default": []
+        },
+        "operators": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/MetaModelDisplayOperator" },
+          "uniqueItems": true
+        },
+        "sourceRefCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "sourceRefColumnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "refBoCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "refEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "refTableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "refPkFieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "refPkColumnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "refFieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "refColumnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "displayRole": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "path": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/MetaModelDisplayRefHop" }
+        },
+        "target": { "$ref": "#/$defs/MetaModelDisplayRefTarget" },
+        "sourceBoCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "mappingKind": { "const": "DIRECT_DISPLAY_REF" } }, "required": ["mappingKind"] },
+          "then": {
+            "required": [
+              "sourceRefCode", "sourceRefColumnName", "refBoCode", "refEntityCode", "refTableName",
+              "refPkFieldCode", "refPkColumnName", "refFieldCode", "refColumnName"
+            ]
+          }
+        },
+        {
+          "if": { "properties": { "mappingKind": { "const": "CHAINED_DISPLAY_REF" } }, "required": ["mappingKind"] },
+          "then": { "required": ["path", "target"] }
+        }
+      ]
+    },
+    "MetaModelDisplayRefHop": {
+      "type": "object",
+      "description": "CHAINED_DISPLAY_REF 的单跳引用。PARENT_REF 表示子实体上溯父实体；CROSS_BO_REF 表示跨 BO 引用。",
+      "required": [
+        "hopKind", "fromBoCode", "fromEntityCode", "fromTableName", "fromRefCode", "fromRefColumnName",
+        "toBoCode", "toEntityCode", "toTableName", "toPkFieldCode", "toPkColumnName"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "hopKind": { "type": "string", "enum": ["CROSS_BO_REF", "PARENT_REF"] },
+        "fromBoCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "fromEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "fromTableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "fromRefCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "fromRefColumnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "toBoCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "toEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "toTableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "toPkFieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "toPkColumnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+      }
+    },
+    "MetaModelDisplayRefTarget": {
+      "type": "object",
+      "description": "CHAINED_DISPLAY_REF 链末端实际参与过滤的物理字段。",
+      "required": ["boCode", "entityCode", "tableName", "fieldCode", "columnName"],
+      "additionalProperties": false,
+      "properties": {
+        "boCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+        "tableName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "columnName": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+      }
+    },
+    "MetaModelDisplayOperator": {
+      "type": "string",
+      "enum": ["EQ", "LIKE", "STARTS_WITH", "ENDS_WITH", "IN", "GT", "GTE", "LT", "LTE", "BETWEEN", "IS_NULL", "IS_NOT_NULL"]
+    },
+    "MetaModelOperation": {
+      "type": "object",
+      "description": "权限元模型操作。PSP validateOperations 仅支持 scope=BO 或 ENTITY。authzAction 为单一授权动作；act_aliases 为投影聚合后的动作别名列表。",
+      "required": ["code", "name", "scope"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]*$", "description": "操作编码。推荐使用下划线命名（如 EDIT_APPROVE）；兼容连字符（如 EDIT-APPROVE）以支持旧版数据。" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "scope": {
+          "type": "string",
+          "enum": ["BO", "ENTITY"],
+          "description": "操作范围。PSP 仅支持 BO 或 ENTITY（设计态 GLOBAL→BO）。"
+        },
+        "primaryDataAction": {
+          "type": "string",
+          "enum": ["CREATE", "READ", "UPDATE", "DELETE"],
+          "description": "该操作对业务数据层的主效应，从发布态透传。用于权限归类、审计、读写路由和数据策略匹配。"
+        },
+        "authzAction": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "授权动作编码。同一 BO 下相同 authzAction 归并为一条权限项。"
+        },
+        "act_aliases": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*(,[A-Z][A-Z0-9_]*)*$",
+          "description": "投影态动作别名列表，多个动作以英文逗号分隔，如 VIEW,READ。"
+        },
+        "entityCode": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "description": "目标实体编码（仅 scope=ENTITY 时存在）。"
+        }
+      },
+      "allOf": [
+        {
+          "anyOf": [
+            { "required": ["authzAction"] },
+            { "required": ["act_aliases"] }
+          ]
+        },
+        {
+          "if": { "properties": { "scope": { "const": "ENTITY" } } },
+          "then": { "required": ["entityCode"] }
+        }
+      ]
+    }
+  }
+}

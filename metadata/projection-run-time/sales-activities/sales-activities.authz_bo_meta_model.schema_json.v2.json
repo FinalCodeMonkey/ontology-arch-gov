@@ -1,0 +1,1493 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='sales-activities'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'sales-activities'",
+    "generated_from": "sales-activities.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.952616+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "visit-record",
+        "name": "拜访记录主实体",
+        "isPrimary": true,
+        "tableName": "crm_customer_visit_record",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "parent_id",
+          "visit_method",
+          "record_user_id",
+          "last_modified_user_id"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "拜访客户",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_name",
+            "name": "客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "visit_subject",
+            "name": "拜访主题",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "visitSubject",
+            "columnName": "visit_subject",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "visit_time",
+            "name": "拜访时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "visitTime",
+            "columnName": "visit_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "visit_method",
+            "name": "拜访方式",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "visitMethod",
+            "columnName": "visit_method",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "activity_content",
+            "name": "活动信息",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "activityContent",
+            "columnName": "activity_content",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "activity_plain_text",
+            "name": "活动信息纯文本摘要",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "activityPlainText",
+            "columnName": "activity_plain_text",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "contact_ids_snapshot",
+            "name": "联系人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "contactIdsSnapshot",
+            "columnName": "contact_ids_snapshot",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_ids_snapshot",
+            "name": "拜访场景",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "sceneIdsSnapshot",
+            "columnName": "scene_ids_snapshot",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "next_action",
+            "name": "下一步动作",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "nextAction",
+            "columnName": "next_action",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "next_action_updated_time",
+            "name": "下一步动作更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "nextActionUpdatedTime",
+            "columnName": "next_action_updated_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "record_user_id",
+            "name": "记录人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "recordUserId",
+            "columnName": "record_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "record_user_name",
+            "name": "记录人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "recordUserName",
+            "columnName": "record_user_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "last_modified_user_id",
+            "name": "最近修改人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "lastModifiedUserId",
+            "columnName": "last_modified_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "last_modified_user_name",
+            "name": "最近修改人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "lastModifiedUserName",
+            "columnName": "last_modified_user_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "displayFieldMappings": {
+          "contact_names_display": {
+            "code": "contact_names_display",
+            "name": "联系人名称",
+            "type": "STRING",
+            "fieldName": "contactNamesDisplay",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "contact_ids_snapshot",
+            "sourceRefColumnName": "contact_ids_snapshot",
+            "refBoCode": "contacts",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "customer-contact",
+            "refTableName": "crm_customer_contact",
+            "refPkColumnName": "id",
+            "refFieldCode": "name",
+            "refColumnName": "name",
+            "sourceBoCode": "sales-activities"
+          },
+          "scene_names_display": {
+            "code": "scene_names_display",
+            "name": "拜访场景名称",
+            "type": "STRING",
+            "fieldName": "sceneNamesDisplay",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "scene_ids_snapshot",
+            "sourceRefColumnName": "scene_ids_snapshot",
+            "refBoCode": "scenes",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "scene",
+            "refTableName": "crm_scene",
+            "refPkColumnName": "id",
+            "refFieldCode": "scene_name_customer",
+            "refColumnName": "scene_name_customer",
+            "sourceBoCode": "sales-activities"
+          },
+          "record_user_department_code": {
+            "code": "record_user_department_code",
+            "name": "记录人部门编码",
+            "type": "STRING",
+            "fieldName": "recordUserDepartmentCode",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "record_user_id",
+            "sourceRefColumnName": "record_user_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "department_code",
+            "refColumnName": "department_code",
+            "sourceBoCode": "sales-activities"
+          },
+          "parent_primary_customer_name": {
+            "code": "parent_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "parent_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "parent_fop_customer_name": {
+            "code": "parent_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "contact_ids_snapshot_sales_owner_department_code": {
+            "code": "contact_ids_snapshot_sales_owner_department_code",
+            "name": "客户联系人实体 / 销售负责人所属部门编码",
+            "type": "STRING",
+            "fieldName": "contact_ids_snapshot_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户联系人实体",
+              "销售负责人所属部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "contact_ids_snapshot",
+                "fromRefColumnName": "contact_ids_snapshot",
+                "toBoCode": "contacts",
+                "toEntityCode": "customer-contact",
+                "toTableName": "crm_customer_contact",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "contacts",
+                "fromEntityCode": "customer-contact",
+                "fromTableName": "crm_customer_contact",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "scene_ids_snapshot_customer_name": {
+            "code": "scene_ids_snapshot_customer_name",
+            "name": "场景主实体 / 业务主体客户",
+            "type": "STRING",
+            "fieldName": "scene_ids_snapshot_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "业务主体客户"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "scene_ids_snapshot",
+                "fromRefColumnName": "scene_ids_snapshot",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "scene_ids_snapshot_sales_owner_name": {
+            "code": "scene_ids_snapshot_sales_owner_name",
+            "name": "场景主实体 / 销售负责人",
+            "type": "STRING",
+            "fieldName": "scene_ids_snapshot_sales_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "scene_ids_snapshot",
+                "fromRefColumnName": "scene_ids_snapshot",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "scene_ids_snapshot_sales_owner_department_code": {
+            "code": "scene_ids_snapshot_sales_owner_department_code",
+            "name": "场景主实体 / 销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "scene_ids_snapshot_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "scene_ids_snapshot",
+                "fromRefColumnName": "scene_ids_snapshot",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "scene_ids_snapshot_sales_owner_department_name": {
+            "code": "scene_ids_snapshot_sales_owner_department_name",
+            "name": "场景主实体 / 销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "scene_ids_snapshot_sales_owner_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "scene_ids_snapshot",
+                "fromRefColumnName": "scene_ids_snapshot",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_name",
+              "columnName": "department_name"
+            },
+            "sourceBoCode": "sales-activities"
+          }
+        }
+      },
+      {
+        "code": "visit-follow-up",
+        "name": "拜访跟进记录",
+        "isPrimary": false,
+        "tableName": "crm_customer_visit_follow_up",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "operator_user_id"
+        ],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "跟进记录主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "拜访记录ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "previous_action",
+            "name": "更新前下一步动作",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "previousAction",
+            "columnName": "previous_action",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "current_action",
+            "name": "更新后下一步动作",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "currentAction",
+            "columnName": "current_action",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "operator_user_id",
+            "name": "跟进人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "operatorUserId",
+            "columnName": "operator_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "operator_user_name",
+            "name": "跟进人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "operatorUserName",
+            "columnName": "operator_user_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "follow_up_time",
+            "name": "跟进时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "followUpTime",
+            "columnName": "follow_up_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "follow-ups",
+        "parentEntityCode": "visit-record",
+        "displayFieldMappings": {
+          "parent_contact_names_display": {
+            "code": "parent_contact_names_display",
+            "name": "拜访记录主实体 / 联系人名称",
+            "type": "STRING",
+            "fieldName": "parent_contact_names_display",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "拜访记录主实体",
+              "联系人名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-follow-up",
+                "fromTableName": "crm_customer_visit_follow_up",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "sales-activities",
+                "toEntityCode": "visit-record",
+                "toTableName": "crm_customer_visit_record",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "contact_ids_snapshot",
+                "fromRefColumnName": "contact_ids_snapshot",
+                "toBoCode": "contacts",
+                "toEntityCode": "customer-contact",
+                "toTableName": "crm_customer_contact",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "contacts",
+              "entityCode": "customer-contact",
+              "tableName": "crm_customer_contact",
+              "fieldCode": "name",
+              "columnName": "name"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "parent_scene_names_display": {
+            "code": "parent_scene_names_display",
+            "name": "拜访记录主实体 / 拜访场景名称",
+            "type": "STRING",
+            "fieldName": "parent_scene_names_display",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "拜访记录主实体",
+              "拜访场景名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-follow-up",
+                "fromTableName": "crm_customer_visit_follow_up",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "sales-activities",
+                "toEntityCode": "visit-record",
+                "toTableName": "crm_customer_visit_record",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "scene_ids_snapshot",
+                "fromRefColumnName": "scene_ids_snapshot",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "scenes",
+              "entityCode": "scene",
+              "tableName": "crm_scene",
+              "fieldCode": "scene_name_customer",
+              "columnName": "scene_name_customer"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "parent_record_user_department_code": {
+            "code": "parent_record_user_department_code",
+            "name": "拜访记录主实体 / 记录人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_record_user_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "拜访记录主实体",
+              "记录人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-follow-up",
+                "fromTableName": "crm_customer_visit_follow_up",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "sales-activities",
+                "toEntityCode": "visit-record",
+                "toTableName": "crm_customer_visit_record",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "record_user_id",
+                "fromRefColumnName": "record_user_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "sales-activities"
+          }
+        }
+      },
+      {
+        "code": "visit-team-member",
+        "name": "拜访团队成员",
+        "isPrimary": false,
+        "tableName": "customer_visit_team",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "user_id"
+        ],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "成员关联ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "visit_id",
+            "name": "拜访记录ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "visitId",
+            "columnName": "visit_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "customer_id",
+            "name": "客户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerId",
+            "columnName": "customer_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "team",
+        "parentEntityCode": "visit-record",
+        "displayFieldMappings": {
+          "parent_contact_names_display": {
+            "code": "parent_contact_names_display",
+            "name": "拜访记录主实体 / 联系人名称",
+            "type": "STRING",
+            "fieldName": "parent_contact_names_display",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "拜访记录主实体",
+              "联系人名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-team-member",
+                "fromTableName": "customer_visit_team",
+                "fromRefCode": "visit_id",
+                "fromRefColumnName": "visit_id",
+                "toBoCode": "sales-activities",
+                "toEntityCode": "visit-record",
+                "toTableName": "crm_customer_visit_record",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "contact_ids_snapshot",
+                "fromRefColumnName": "contact_ids_snapshot",
+                "toBoCode": "contacts",
+                "toEntityCode": "customer-contact",
+                "toTableName": "crm_customer_contact",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "contacts",
+              "entityCode": "customer-contact",
+              "tableName": "crm_customer_contact",
+              "fieldCode": "name",
+              "columnName": "name"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "parent_scene_names_display": {
+            "code": "parent_scene_names_display",
+            "name": "拜访记录主实体 / 拜访场景名称",
+            "type": "STRING",
+            "fieldName": "parent_scene_names_display",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "拜访记录主实体",
+              "拜访场景名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-team-member",
+                "fromTableName": "customer_visit_team",
+                "fromRefCode": "visit_id",
+                "fromRefColumnName": "visit_id",
+                "toBoCode": "sales-activities",
+                "toEntityCode": "visit-record",
+                "toTableName": "crm_customer_visit_record",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "scene_ids_snapshot",
+                "fromRefColumnName": "scene_ids_snapshot",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "scenes",
+              "entityCode": "scene",
+              "tableName": "crm_scene",
+              "fieldCode": "scene_name_customer",
+              "columnName": "scene_name_customer"
+            },
+            "sourceBoCode": "sales-activities"
+          },
+          "parent_record_user_department_code": {
+            "code": "parent_record_user_department_code",
+            "name": "拜访记录主实体 / 记录人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_record_user_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "拜访记录主实体",
+              "记录人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-team-member",
+                "fromTableName": "customer_visit_team",
+                "fromRefCode": "visit_id",
+                "fromRefColumnName": "visit_id",
+                "toBoCode": "sales-activities",
+                "toEntityCode": "visit-record",
+                "toTableName": "crm_customer_visit_record",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "sales-activities",
+                "fromEntityCode": "visit-record",
+                "fromTableName": "crm_customer_visit_record",
+                "fromRefCode": "record_user_id",
+                "fromRefColumnName": "record_user_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "sales-activities"
+          }
+        }
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "录入拜访",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "编辑拜访",
+        "scope": "BO",
+        "act_aliases": "update",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除拜访",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "FOLLOW_UP",
+        "name": "动作跟进",
+        "scope": "BO",
+        "act_aliases": "follow-up",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST_VISIT_FOLLOW_UP",
+        "name": "查询拜访跟进记录列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-visit-follow-up",
+        "primaryDataAction": "READ",
+        "entityCode": "visit-follow-up"
+      },
+      {
+        "code": "READ_VISIT_FOLLOW_UP",
+        "name": "查看拜访跟进记录详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-visit-follow-up",
+        "primaryDataAction": "READ",
+        "entityCode": "visit-follow-up"
+      },
+      {
+        "code": "CREATE_VISIT_FOLLOW_UP",
+        "name": "新建拜访跟进记录",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "visit-follow-up"
+      },
+      {
+        "code": "UPDATE_VISIT_FOLLOW_UP",
+        "name": "更新拜访跟进记录",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "visit-follow-up"
+      },
+      {
+        "code": "DELETE_VISIT_FOLLOW_UP",
+        "name": "删除拜访跟进记录",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "visit-follow-up"
+      },
+      {
+        "code": "LIST_VISIT_TEAM_MEMBER",
+        "name": "查询拜访团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-visit-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "visit-team-member"
+      },
+      {
+        "code": "READ_VISIT_TEAM_MEMBER",
+        "name": "查看拜访团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-visit-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "visit-team-member"
+      },
+      {
+        "code": "CREATE_VISIT_TEAM_MEMBER",
+        "name": "新建拜访团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "visit-team-member"
+      },
+      {
+        "code": "UPDATE_VISIT_TEAM_MEMBER",
+        "name": "更新拜访团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "visit-team-member"
+      },
+      {
+        "code": "DELETE_VISIT_TEAM_MEMBER",
+        "name": "删除拜访团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "visit-team-member"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'sales-activities' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'sales-activities' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + sales-activities_bo_meta_id + CREATE",
+      "RES_DATA_BO + sales-activities_bo_meta_id + UPDATE",
+      "RES_DATA_BO + sales-activities_bo_meta_id + DELETE",
+      "RES_DATA_BO + sales-activities_bo_meta_id + FOLLOW_UP",
+      "RES_DATA_BO + sales-activities_bo_meta_id + LIST",
+      "RES_DATA_BO + sales-activities_bo_meta_id + READ",
+      "RES_DATA_BO + sales-activities_bo_meta_id + LIST_VISIT_FOLLOW_UP",
+      "RES_DATA_BO + sales-activities_bo_meta_id + READ_VISIT_FOLLOW_UP",
+      "RES_DATA_BO + sales-activities_bo_meta_id + CREATE_VISIT_FOLLOW_UP",
+      "RES_DATA_BO + sales-activities_bo_meta_id + UPDATE_VISIT_FOLLOW_UP",
+      "RES_DATA_BO + sales-activities_bo_meta_id + DELETE_VISIT_FOLLOW_UP",
+      "RES_DATA_BO + sales-activities_bo_meta_id + LIST_VISIT_TEAM_MEMBER",
+      "RES_DATA_BO + sales-activities_bo_meta_id + READ_VISIT_TEAM_MEMBER",
+      "RES_DATA_BO + sales-activities_bo_meta_id + CREATE_VISIT_TEAM_MEMBER",
+      "RES_DATA_BO + sales-activities_bo_meta_id + UPDATE_VISIT_TEAM_MEMBER",
+      "RES_DATA_BO + sales-activities_bo_meta_id + DELETE_VISIT_TEAM_MEMBER"
+    ]
+  }
+}

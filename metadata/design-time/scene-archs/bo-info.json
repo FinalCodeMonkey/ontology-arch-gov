@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "2.0",
+  "changeNote": "scene-archs 首版 MODEL 设计态 Fragment。",
+  "boCode": "scene-archs",
+  "appCode": "crm",
+  "draftVersion": "1.0",
+  "tenantId": "cbg"
+}

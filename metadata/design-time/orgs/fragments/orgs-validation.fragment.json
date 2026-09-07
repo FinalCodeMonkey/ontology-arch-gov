@@ -1,0 +1,118 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "orgs",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_code",
+        "required": true,
+        "max": 50,
+        "unique": true,
+        "message": "部门编码不能为空、不超过50字且不可重复"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_name",
+        "required": true,
+        "max": 100,
+        "message": "部门名称不能为空且不超过100字"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_level",
+        "required": true,
+        "max": 20
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_type_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_type",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "parent_org_id",
+        "message": "上级组织ID引用须有效"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "parent_department_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "parent_department_name",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "manage_user_id",
+        "message": "负责人ID引用须有效"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "manage_staff_no",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "manage_name",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "portion_manage_user_id",
+        "message": "分管负责人ID引用须有效"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "portion_manage_staff_no",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "portion_manage_name",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "is_enable",
+        "required": true,
+        "enum": [
+          {
+            "value": "Y",
+            "label": "启用"
+          },
+          {
+            "value": "N",
+            "label": "禁用"
+          }
+        ],
+        "message": "启用状态必须为 Y 或 N"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_hrbp_list",
+        "max": 1000
+      }
+    ]
+  },
+  "changeNote": [
+    "orgs 首版 VALIDATION Fragment，含部门编码/名称必填、启用状态枚举等字段约束"
+  ]
+}

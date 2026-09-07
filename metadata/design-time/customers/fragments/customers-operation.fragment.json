@@ -1,0 +1,117 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customers",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建客户",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "description": "新建客户记录，进入待审批状态。标准 API：POST /customers。"
+      },
+      {
+        "code": "EDIT",
+        "name": "编辑客户",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "update",
+        "description": "编辑客户基本信息。标准 API：POST /customers/{id}/update。权限项 act_code=UPDATE，与旧 schema 中误命名为「审批」的 UPDATE 操作分离；旧存量权限指派需迁移至 APPROVE。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除客户",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "description": "逻辑删除客户记录。标准 API：DELETE /customers/{id}。"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "EXPORT",
+        "httpMethod": "POST",
+        "actionPath": "export",
+        "async": true,
+        "description": "导出客户数据为文件。API：POST /customers/export。原 schema 中 scope=GLOBAL 已按治理规范更正为 BO。"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "operationKind": "IMPORT",
+        "primaryDataAction": "CREATE",
+        "authzAction": "IMPORT",
+        "httpMethod": "POST",
+        "actionPath": "import",
+        "description": "批量导入客户数据。API：POST /customers/import。原 schema 中 scope=GLOBAL 已按治理规范更正为 BO。"
+      },
+      {
+        "code": "DOWNLOAD_IMPORT_TEMPLATE",
+        "name": "下载导入模板",
+        "scope": "GLOBAL",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "IMPORT",
+        "httpMethod": "GET",
+        "actionPath": "import-template",
+        "async": true,
+        "singleResultType": "Void",
+        "position": "TOOLBAR",
+        "triggerEvent": "API_CALL",
+        "description": "下载客户信息导入模板 Excel 文件，直接写入 HttpServletResponse。API：GET /customers/import-template。"
+      },
+      {
+        "code": "QUICK_CREATE_TIER1",
+        "name": "快速创建 T1 客户",
+        "scope": "BO",
+        "operationKind": "CUSTOM",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "actionPath": "quick-create-tier1",
+        "supportsBatch": false,
+        "singleResultType": "ApiResponse<Map<String, Object>>",
+        "position": "TOOLBAR",
+        "triggerEvent": "API_CALL",
+        "description": "快速新建一级客户，仅需客户名称、客户等级等少量字段。API：POST /customers/quick-create-tier1。"
+      },
+      {
+        "code": "BPM_CALLBACK",
+        "name": "BPM 审批回调",
+        "scope": "GLOBAL",
+        "operationKind": "CUSTOM",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "bpm-callback",
+        "supportsBatch": false,
+        "singleResultType": "Void",
+        "position": "TOOLBAR",
+        "triggerEvent": "API_CALL",
+        "description": "接收 BPM 审批系统的回调通知，处理审批结果。API：POST /customers/bpm-callback。"
+      }
+    ]
+  },
+  "changeNote": [
+    "v1.1 — 新增 DOWNLOAD_IMPORT_TEMPLATE / QUICK_CREATE_TIER1 / BPM_CALLBACK 三个 OPERATION",
+    "MDM/MCR 分层拆分：审批类操作（APPROVE/REJECT/EDIT_APPROVE）和团队管理操作（ADD_TEAM_MEMBER/REMOVE_TEAM_MEMBER）迁移至 customer-relations BO",
+    "MDM 仅保留 CREATE/EDIT/DELETE/EXPORT/IMPORT"
+  ]
+}

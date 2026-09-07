@@ -1,0 +1,92 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "data-domains",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建数据领域",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "supportsBatch": false,
+        "singleResultType": "DataDomainDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "新建数据领域节点，可创建主题域分组、主题域或主题子域。标准 API：POST /data-domains。"
+      },
+      {
+        "code": "EDIT",
+        "name": "编辑数据领域",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "update",
+        "supportsBatch": false,
+        "singleResultType": "DataDomainDTO",
+        "position": "DETAIL",
+        "triggerEvent": "OPEN_FORM",
+        "description": "编辑数据领域节点的编码、名称、层级类型、排序序号。标准 API：POST /data-domains/{id}/update。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除数据领域",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "supportsBatch": false,
+        "position": "ROW",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "逻辑删除数据领域节点。若存在子节点则拒绝删除（orphanPolicy=DENY_DELETE_WHEN_CHILD_EXISTS）。标准 API：DELETE /data-domains/{id}。"
+      },
+      {
+        "code": "MOVE",
+        "name": "移动节点",
+        "scope": "BO",
+        "operationKind": "CUSTOM",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "MOVE",
+        "httpMethod": "POST",
+        "actionPath": "move",
+        "supportsBatch": false,
+        "singleResultType": "DataDomainDTO",
+        "position": "ROW",
+        "triggerEvent": "API_CALL",
+        "description": "移动数据领域节点到新的父节点下，或调整同层排序。API：POST /data-domains/{id}/move。"
+      },
+      {
+        "code": "TREE",
+        "name": "获取树结构",
+        "scope": "BO",
+        "operationKind": "CUSTOM",
+        "primaryDataAction": "READ",
+        "authzAction": "READ",
+        "httpMethod": "GET",
+        "actionPath": "tree",
+        "supportsBatch": false,
+        "singleResultType": "DataDomainTreeNodeDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "API_CALL",
+        "description": "获取完整数据领域树结构（含三级层级），用于前端树形组件渲染。API：GET /data-domains/tree。"
+      }
+    ]
+  },
+  "changeNote": [
+    "data-domains 首版 OPERATION Fragment",
+    "标准 CRUD（LIST/READ）由发布服务从 MODEL.apiConfig 自动生成",
+    "MOVE 操作支持节点移动和同层排序调整",
+    "TREE 操作返回完整树结构供前端渲染",
+    "EDIT 使用 POST + /{id}/update 路径（PATCH→POST 降级约定）"
+  ]
+}

@@ -1,0 +1,358 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='renewal-quotes'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'renewal-quotes'",
+    "generated_from": "renewal-quotes.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.891329+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "renewal-quote",
+        "name": "续保报价提交记录",
+        "isPrimary": true,
+        "tableName": "crm_renewal_quote",
+        "rowLevelRuleEntries": [
+          "inventory_id",
+          "quote_type_code",
+          "sales_opportunity_type_code",
+          "submit_status",
+          "crm_opportunity_code",
+          "submit_time"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "inventory_id",
+            "name": "关联盘点单ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "inventoryId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "quote_type_code",
+            "name": "报价类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "quoteTypeCode",
+            "columnName": "quote_type_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "sales_opportunity_type_code",
+            "name": "销售机会类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "salesOpportunityTypeCode",
+            "columnName": "sales_opportunity_type_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "crm_opportunity_code",
+            "name": "CRM业务机会编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "crmOpportunityCode",
+            "columnName": "crm_opportunity_code",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "crm_opportunity_name",
+            "name": "CRM业务机会名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "crmOpportunityName",
+            "columnName": "crm_opportunity_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "submit_time",
+            "name": "提交时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "submitTime",
+            "columnName": "submit_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "callback_time",
+            "name": "CRM回写时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "callbackTime",
+            "columnName": "callback_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "submit_status",
+            "name": "提交状态",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "submitStatus",
+            "columnName": "submit_status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "fail_reason",
+            "name": "失败原因",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "failReason",
+            "columnName": "fail_reason",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "displayFieldMappings": {
+          "inventory_no": {
+            "code": "inventory_no",
+            "name": "盘点单编号",
+            "type": "STRING",
+            "fieldName": "inventoryNo",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "inventory_id",
+            "sourceRefColumnName": "parent_id",
+            "refBoCode": "device-inventories",
+            "refPkFieldCode": "id",
+            "displayRole": "BUSINESS_KEY",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "device-inventory",
+            "refTableName": "crm_device_inventory",
+            "refPkColumnName": "id",
+            "refFieldCode": "inventory_no",
+            "refColumnName": "inventory_no",
+            "sourceBoCode": "renewal-quotes"
+          }
+        }
+      }
+    ],
+    "operations": [
+      {
+        "code": "READ",
+        "name": "查询续保报价详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "CREATE",
+        "name": "新建报价提交记录",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "update",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除报价提交记录",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "SUBMIT",
+        "name": "提交续保报价",
+        "scope": "BO",
+        "act_aliases": "submit",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "MARK_SUCCESS",
+        "name": "手工标记成功",
+        "scope": "BO",
+        "act_aliases": "mark-success",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "MARK_FAILED",
+        "name": "手工标记失败",
+        "scope": "BO",
+        "act_aliases": "mark-failed",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "RETRY_SUBMIT",
+        "name": "重新提交",
+        "scope": "BO",
+        "act_aliases": "retry-submit",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "QUERY_NEOCRM_OPPORTUNITIES",
+        "name": "查询可关联 CRM 商机",
+        "scope": "BO",
+        "act_aliases": "neocrm-opportunity-query",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "CHECK_NEOCRM_OPPORTUNITY_COMPLIANCE",
+        "name": "校验 CRM 商机合规性",
+        "scope": "BO",
+        "act_aliases": "neocrm-opportunity-compliance-check",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "QUERY_NEOCRM_OPPORTUNITY_OPTIONS",
+        "name": "查询 CRM 商机下拉选项",
+        "scope": "BO",
+        "act_aliases": "neocrm-opportunity-options",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "QUERY_NEOCRM_OPPORTUNITY_STAGES",
+        "name": "查询 CRM 商机阶段",
+        "scope": "BO",
+        "act_aliases": "neocrm-opportunity-stages",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "QUERY_SERVICE_PACKAGES",
+        "name": "查询维保服务包",
+        "scope": "BO",
+        "act_aliases": "service-packages-query",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "QUERY_ECP_DEVICES",
+        "name": "查询 ECP 续保设备",
+        "scope": "BO",
+        "act_aliases": "ecp-devices-query",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'renewal-quotes' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'renewal-quotes' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + READ",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + CREATE",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + UPDATE",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + DELETE",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + EXPORT",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + SUBMIT",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + MARK_SUCCESS",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + MARK_FAILED",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + RETRY_SUBMIT",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + QUERY_NEOCRM_OPPORTUNITIES",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + CHECK_NEOCRM_OPPORTUNITY_COMPLIANCE",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + QUERY_NEOCRM_OPPORTUNITY_OPTIONS",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + QUERY_NEOCRM_OPPORTUNITY_STAGES",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + QUERY_SERVICE_PACKAGES",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + QUERY_ECP_DEVICES",
+      "RES_DATA_BO + renewal-quotes_bo_meta_id + LIST"
+    ]
+  }
+}

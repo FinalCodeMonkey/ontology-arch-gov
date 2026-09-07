@@ -1,0 +1,410 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "products",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "product",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_model",
+        "displayName": "产品型号",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入产品型号",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_category",
+        "displayName": "产品类别",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "product_category",
+        "placeholder": "请选择产品类别",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_series",
+        "displayName": "产品系列",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入产品系列",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_department",
+        "displayName": "产品归属事业部",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "placeholder": "请输入归属事业部",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string",
+        "refObject": "orgs"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "product_line",
+        "displayName": "所属产品线",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入所属产品线",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "sales_code",
+        "displayName": "产品销售代码",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入销售代码",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_retail_price",
+        "displayName": "国内市场零售报价（元）",
+        "sortable": true,
+        "columnWidth": 180,
+        "format": "currency",
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "如 ¥16,800",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "oversea_retail_price",
+        "displayName": "海外市场零售报价（美元）",
+        "sortable": true,
+        "columnWidth": 180,
+        "format": "currency",
+        "order": 85,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "如 $3,260",
+        "queryable": false,
+        "exportable": true,
+        "importable": true,
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "has_oversea",
+        "displayName": "是否上海外报价",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 88,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "overseas_quoted_scope",
+        "placeholder": "请选择",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_enabled",
+        "displayName": "是否启用",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "product_enabled",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_take_off_shelf_flag",
+        "displayName": "是否下架",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 95,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "product_discontinued",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_product_status",
+        "displayName": "国内产品状态",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "product_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "status",
+        "displayName": "产品状态",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 105,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "status",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "remark",
+        "displayName": "备注",
+        "sortable": false,
+        "columnWidth": 150,
+        "hidden": true,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入备注说明",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 140,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 150,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "updated_time",
+        "displayName": "最后修改时间",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 160,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "updated_by",
+        "displayName": "最后修改人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 170,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      }
+    ]
+  }
+}

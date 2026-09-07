@@ -1,0 +1,1397 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "x-territory-regs",
+  "boName": "跨地盘项目报备",
+  "description": "跨地盘项目报备业务对象。用于记录跨销售区域协作的项目报备申请，含主表信息与团队成员明细，通过 Flowable 审批流驱动状态流转（DRAFT→PENDING→APPROVED/REJECTED）。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/x-territory-regs",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "filing_no",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "FULL_AGGREGATE",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": [
+        "x-territory-reg-team-member"
+      ]
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "MASTER_DETAIL",
+    "nameField": "project_name",
+    "statusField": "status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "x-territory-reg",
+      "name": "跨地盘报备主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_cross_territory_filing",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键（雪花ID）",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "ID",
+            "order": 10,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "filing_no",
+          "name": "报备单号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "filingNo",
+          "columnName": "filing_no",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "unique": true,
+            "message": "报备单号不能为空且不超过64字符，全局唯一"
+          },
+          "view": {
+            "displayName": "报备单号",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "STARTS_WITH",
+                "label": "开头是"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "project_name",
+          "name": "项目名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "projectName",
+          "columnName": "project_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 255,
+            "message": "项目名称不能为空且不超过255字符"
+          },
+          "view": {
+            "displayName": "项目名称",
+            "sortable": true,
+            "columnWidth": 240,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入项目名称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "customer_id",
+          "name": "客户ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "customerId",
+          "columnName": "customer_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "customers",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "customer_name",
+                "localCode": "customer_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "客户不能为空"
+          },
+          "view": {
+            "displayName": "客户",
+            "columnWidth": 200,
+            "order": 40,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择客户",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "customers",
+            "refField": "customer_name"
+          }
+        },
+        {
+          "code": "customer_name",
+          "name": "客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerName",
+          "columnName": "customer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "客户名称",
+            "sortable": true,
+            "columnWidth": 200,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "customer_owner_id",
+          "name": "客户所有人ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerOwnerId",
+          "columnName": "customer_owner_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "customer_owner_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "客户所有人不能为空"
+          },
+          "view": {
+            "displayName": "客户所有人",
+            "columnWidth": 120,
+            "order": 60,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择客户所有人",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "customer_owner_name",
+          "name": "客户所有人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerOwnerName",
+          "columnName": "customer_owner_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "客户所有人",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "filing_owner_id",
+          "name": "报备负责人ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "filingOwnerId",
+          "columnName": "filing_owner_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "filing_owner_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "报备负责人不能为空"
+          },
+          "view": {
+            "displayName": "报备负责人",
+            "columnWidth": 120,
+            "order": 80,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择报备负责人",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "filing_owner_name",
+          "name": "报备负责人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "filingOwnerName",
+          "columnName": "filing_owner_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "报备负责人",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "reason",
+          "name": "报备理由",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "reason",
+          "columnName": "reason",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "报备理由包含竞争敏感的商业判断，仅报备相关人员可见",
+          "validation": {
+            "required": true,
+            "message": "报备理由不能为空"
+          },
+          "view": {
+            "displayName": "报备理由",
+            "columnWidth": 300,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请详细说明跨地盘报备的理由",
+            "queryable": false,
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "ownership_note",
+          "name": "主导权及合作分量说明",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "ownershipNote",
+          "columnName": "ownership_note",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "主导权及合作分量说明涉及内部销售协作分配，属于敏感业务信息",
+          "validation": {
+            "required": true,
+            "message": "主导权及合作分量说明不能为空"
+          },
+          "view": {
+            "displayName": "主导权及合作分量说明",
+            "columnWidth": 300,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请说明主导权归属及各方合作分量",
+            "queryable": false,
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "status",
+          "name": "报备状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "status",
+          "columnName": "status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "enum": [
+              {
+                "value": "DRAFT",
+                "label": "草稿"
+              },
+              {
+                "value": "PENDING",
+                "label": "审批中"
+              },
+              {
+                "value": "APPROVED",
+                "label": "已通过"
+              },
+              {
+                "value": "REJECTED",
+                "label": "已驳回"
+              }
+            ],
+            "message": "报备状态必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "状态",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "IN",
+                "label": "属于"
+              }
+            ],
+            "dataType": "enum",
+            "exportable": true,
+            "importable": false,
+            "disabled": true,
+            "dictCode": "x_territory_reg_status"
+          }
+        },
+        {
+          "code": "flow_instance_id",
+          "name": "Flowable流程实例ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "flowInstanceId",
+          "columnName": "flow_instance_id",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "流程实例ID",
+            "order": 150,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": false,
+            "exportable": false,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "linked_opportunity_id",
+          "name": "关联商机ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "linkedOpportunityId",
+          "columnName": "linked_opportunity_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "opportunities",
+            "refFieldCode": "id",
+            "relationType": "ONE_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "opportunity_code",
+                "localCode": "linked_opportunity_code",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "unique": true,
+            "message": "一个商机只能关联一条报备单"
+          },
+          "view": {
+            "displayName": "关联商机",
+            "columnWidth": 160,
+            "order": 130,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择关联商机（可选）",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "opportunities",
+            "refField": "opportunity_code"
+          }
+        },
+        {
+          "code": "linked_opportunity_code",
+          "name": "关联商机编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "linkedOpportunityCode",
+          "columnName": "linked_opportunity_code",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "关联商机编码",
+            "sortable": false,
+            "columnWidth": 160,
+            "order": 140,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 160,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              },
+              {
+                "value": "GTE",
+                "label": "大于等于"
+              },
+              {
+                "value": "LTE",
+                "label": "小于等于"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "修改时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "修改时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 170,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "修改人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户标识",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "customer_id",
+        "customer_owner_id",
+        "filing_owner_id",
+        "status",
+        "linked_opportunity_id",
+        "tenant_code"
+      ],
+      "rowFallbackScope": "NONE"
+    },
+    {
+      "code": "x-territory-reg-team-member",
+      "name": "报备团队成员",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_cross_territory_filing_team_member",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "成员行ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "成员行ID",
+            "order": 10,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "filing_id",
+          "name": "所属报备单ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "filingId",
+          "columnName": "filing_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "message": "所属报备单不能为空"
+          }
+        },
+        {
+          "code": "member_user_id",
+          "name": "成员用户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "memberUserId",
+          "columnName": "member_user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "member_user_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "view": {
+            "displayName": "成员",
+            "columnWidth": 140,
+            "order": 20,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择团队成员",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "member_user_name",
+          "name": "成员姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "memberUserName",
+          "columnName": "member_user_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "成员姓名",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "member_role",
+          "name": "成员角色",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "memberRole",
+          "columnName": "member_role",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "LEAD",
+                "label": "主导方"
+              },
+              {
+                "value": "SUPPORT",
+                "label": "协作方"
+              },
+              {
+                "value": "OBSERVER",
+                "label": "观察者"
+              }
+            ],
+            "message": "成员角色不能为空"
+          },
+          "view": {
+            "displayName": "成员角色",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择成员角色",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "dictCode": "x_territory_reg_member_role"
+          }
+        },
+        {
+          "code": "permission_code",
+          "name": "权限码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "permissionCode",
+          "columnName": "permission_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "enum": [
+              {
+                "value": "READ",
+                "label": "只读"
+              },
+              {
+                "value": "WRITE",
+                "label": "读写"
+              }
+            ],
+            "message": "权限码不能为空"
+          },
+          "view": {
+            "displayName": "权限",
+            "sortable": false,
+            "columnWidth": 80,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "dictCode": "x_territory_reg_permission"
+          }
+        },
+        {
+          "code": "related_teams",
+          "name": "关联团队模块",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "relatedTeams",
+          "columnName": "related_teams",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 1000
+          },
+          "view": {
+            "displayName": "关联团队模块",
+            "columnWidth": 200,
+            "order": 60,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "多个团队编码用逗号分隔",
+            "queryable": false,
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "remark",
+          "name": "备注",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "remark",
+          "columnName": "remark",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "备注",
+            "columnWidth": 200,
+            "order": 70,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入备注",
+            "queryable": false,
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_time",
+          "name": "修改时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "修改人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户标识",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "x-territory-reg",
+      "parentRefField": "filing_id",
+      "routeSegment": "team-members",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建报备",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "triggerEvent": "OPEN_FORM",
+      "position": "TOOLBAR",
+      "description": "创建跨地盘报备单，同时初始化团队成员。API：POST /x-territory-regs。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑报备",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "update",
+      "triggerEvent": "OPEN_FORM",
+      "position": "ROW",
+      "description": "编辑草稿或被驳回的报备单基本信息。仅 DRAFT/REJECTED 状态可编辑。API：POST /x-territory-regs/{id}/update。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除报备",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "position": "ROW",
+      "description": "逻辑删除报备单（含级联删除团队成员）。仅 DRAFT 状态可删除。API：DELETE /x-territory-regs/{id}。"
+    },
+    {
+      "code": "SUBMIT",
+      "name": "提交审批",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "SUBMIT",
+      "httpMethod": "POST",
+      "actionPath": "submit",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "position": "ROW",
+      "description": "将草稿报备单提交至审批流程，状态变更为 PENDING，创建 Flowable 流程实例。API：POST /x-territory-regs/{id}/submit。"
+    },
+    {
+      "code": "REVOKE",
+      "name": "撤回申请",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "REVOKE",
+      "httpMethod": "POST",
+      "actionPath": "revoke",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "position": "ROW",
+      "description": "撤回已提交的审批申请，状态回退至 DRAFT，终止流程实例。API：POST /x-territory-regs/{id}/revoke。"
+    },
+    {
+      "code": "APPROVE",
+      "name": "审批通过",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "APPROVE",
+      "httpMethod": "POST",
+      "actionPath": "approve",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "position": "ROW",
+      "description": "审批人通过报备申请，状态变更为 APPROVED。通常由审批流回调触发，也支持直接调用。API：POST /x-territory-regs/{id}/approve。"
+    },
+    {
+      "code": "REJECT",
+      "name": "审批驳回",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "REJECT",
+      "httpMethod": "POST",
+      "actionPath": "reject",
+      "triggerEvent": "OPEN_FORM",
+      "position": "ROW",
+      "description": "审批人驳回报备申请，状态变更为 REJECTED。需填写驳回原因。API：POST /x-territory-regs/{id}/reject。"
+    },
+    {
+      "code": "ADD_TEAM_MEMBER",
+      "name": "添加团队成员",
+      "scope": "ENTITY",
+      "entityCode": "x-territory-reg-team-member",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "triggerEvent": "OPEN_FORM",
+      "position": "DETAIL",
+      "description": "向报备单添加团队成员。API：POST /x-territory-regs/{id}/team-members。"
+    },
+    {
+      "code": "REMOVE_TEAM_MEMBER",
+      "name": "移除团队成员",
+      "scope": "ENTITY",
+      "entityCode": "x-territory-reg-team-member",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "UPDATE",
+      "httpMethod": "DELETE",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "position": "DETAIL",
+      "description": "从报备单移除团队成员。API：DELETE /x-territory-regs/{id}/team-members/{memberId}。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "position": "TOOLBAR",
+      "description": "导出跨地盘报备单列表。API：POST /x-territory-regs/export。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    },
+    {
+      "code": "LIST_X_TERRITORY_REG_TEAM_MEMBER",
+      "name": "查询报备团队成员列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_X_TERRITORY_REG_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(x-territory-reg-team-member).listProjectionScope",
+      "entityCode": "x-territory-reg-team-member"
+    },
+    {
+      "code": "READ_X_TERRITORY_REG_TEAM_MEMBER",
+      "name": "查看报备团队成员详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_X_TERRITORY_REG_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(x-territory-reg-team-member).readScope",
+      "entityCode": "x-territory-reg-team-member"
+    },
+    {
+      "code": "UPDATE_X_TERRITORY_REG_TEAM_MEMBER",
+      "name": "更新报备团队成员",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_X_TERRITORY_REG_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(x-territory-reg-team-member).updateScope",
+      "entityCode": "x-territory-reg-team-member"
+    }
+  ],
+  "rules": [
+    {
+      "code": "FILING_STATUS_TRANSITION",
+      "name": "报备状态机约束",
+      "ruleType": "STATE",
+      "scope": "FIELD",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "当前状态不允许执行该操作",
+      "description": "合法状态流转：DRAFT→(SUBMIT)→PENDING→(APPROVE)→APPROVED；PENDING→(REJECT)→REJECTED；PENDING→(REVOKE)→DRAFT；REJECTED→(SUBMIT)→PENDING。",
+      "entityCode": "x-territory-reg",
+      "fieldCode": "status",
+      "expression": "!(status == 'DRAFT' && operationCode IN ['APPROVE','REJECT']) && !(status == 'APPROVED' && operationCode IN ['SUBMIT','APPROVE','REJECT','REVOKE']) && !(status == 'REJECTED' && operationCode IN ['APPROVE','REJECT','REVOKE'])",
+      "polarity": "safety"
+    },
+    {
+      "code": "EDIT_ONLY_IN_DRAFT_OR_REJECTED",
+      "name": "编辑仅允许在草稿/被驳回状态",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅草稿或被驳回的报备单可以编辑",
+      "description": "",
+      "operationCode": "EDIT",
+      "expression": "status NOT IN ('DRAFT', 'REJECTED')",
+      "polarity": "violation"
+    },
+    {
+      "code": "DELETE_ONLY_IN_DRAFT",
+      "name": "删除仅允许在草稿状态",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅草稿状态的报备单可以删除",
+      "description": "",
+      "operationCode": "DELETE",
+      "expression": "status != 'DRAFT'",
+      "exprAst": {
+        "type": "binary",
+        "op": "NEQ",
+        "left": {
+          "type": "field",
+          "path": "status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "DRAFT"
+        }
+      },
+      "polarity": "violation"
+    },
+    {
+      "code": "FLOW_INSTANCE_REQUIRED_ON_PENDING",
+      "name": "提交后必须存在流程实例",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "FIELD",
+      "trigger": "AFTER_OPERATION",
+      "severity": "ERROR",
+      "message": "提交审批后必须关联 Flowable 流程实例",
+      "description": "",
+      "entityCode": "x-territory-reg",
+      "fieldCode": "flow_instance_id",
+      "operationCode": "SUBMIT",
+      "expression": "status == 'PENDING' && (flow_instance_id == null || flow_instance_id == '')",
+      "exprAst": {
+        "type": "logical",
+        "op": "AND",
+        "items": [
+          {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "status"
+            },
+            "right": {
+              "type": "literal",
+              "value": "PENDING"
+            }
+          },
+          {
+            "type": "logical",
+            "op": "OR",
+            "items": [
+              {
+                "type": "isNull",
+                "expr": {
+                  "type": "field",
+                  "path": "flow_instance_id"
+                }
+              },
+              {
+                "type": "binary",
+                "op": "EQ",
+                "left": {
+                  "type": "field",
+                  "path": "flow_instance_id"
+                },
+                "right": {
+                  "type": "literal",
+                  "value": ""
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "polarity": "violation"
+    },
+    {
+      "code": "LINKED_OPPORTUNITY_UNIQUE_PER_FILING",
+      "name": "同一商机只能关联一条报备单",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "该商机已被其他报备单关联，一个商机只能对应一条报备",
+      "description": "",
+      "expression": "COUNT(x-territory-regs WHERE linked_opportunity_id == $value AND id != $self.id AND is_deleted == 0) > 0",
+      "polarity": "violation",
+      "crossBoRef": {
+        "refBoCode": "opportunities",
+        "refFieldCode": "id",
+        "localEntityCode": "x-territory-reg",
+        "localFieldCode": "linked_opportunity_id"
+      }
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:25.250995+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

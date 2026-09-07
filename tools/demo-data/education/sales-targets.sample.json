@@ -1,0 +1,78 @@
+{
+  "_scenario": "3个销售目标 — 超额/达标/不足",
+  "_scenarioDescription": "张三(10001)Q3目标500万,管道591万,覆盖率118%(低风险)。王五(10003)Q3目标300万,管道80万,覆盖率27%(高风险,缺口220万)。李四(10002)Q3目标200万,管道30万,覆盖率15%(极高风险)。",
+  "records": [
+    {
+      "id": 8001,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "10001",
+      "owner_name": "张三",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 5000000.0,
+      "remarks": "2026年Q3销售下单目标"
+    },
+    {
+      "id": 8002,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "10003",
+      "owner_name": "王五",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 3000000.0,
+      "remarks": "2026年Q3销售下单目标"
+    },
+    {
+      "id": 8003,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "10002",
+      "owner_name": "李四",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 2000000.0,
+      "remarks": "2026年Q3销售下单目标"
+    },
+    {
+      "id": 8004,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "10001",
+      "owner_name": "张三",
+      "goal_type": "INVOICE_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 4500000.0,
+      "remarks": "2026年度销售开票目标"
+    },
+    {
+      "id": 8005,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "10001",
+      "owner_name": "张三",
+      "goal_type": "VISIT_COUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 36.0,
+      "remarks": "2026年度客户拜访次数目标"
+    },
+    {
+      "id": 8006,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "10002",
+      "owner_name": "李四",
+      "goal_type": "GROSS_MARGIN_RATE",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 35.0,
+      "remarks": "2026年度毛利率目标"
+    }
+  ]
+}

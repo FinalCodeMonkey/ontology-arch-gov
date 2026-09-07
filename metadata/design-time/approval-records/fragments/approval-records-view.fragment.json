@@ -1,0 +1,366 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "approval-records",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "biz_type",
+        "displayName": "业务对象类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "approval_biz_type",
+        "placeholder": "请选择业务对象类型",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "biz_id",
+        "displayName": "业务对象ID",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入业务对象ID",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "process_name",
+        "displayName": "流程名称",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "process_instance_id",
+        "displayName": "BPM流程实例ID",
+        "sortable": false,
+        "columnWidth": 160,
+        "order": 50,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "action_type",
+        "displayName": "触发动作",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "status",
+        "displayName": "审批状态",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "approval_status",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "submitter_name",
+        "displayName": "提交人",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "initiator_name",
+        "displayName": "发起人",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "current_handler_name",
+        "displayName": "当前处理人",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "external_initiator",
+        "displayName": "外部发起人",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "reject_reason",
+        "displayName": "驳回原因",
+        "sortable": false,
+        "columnWidth": 300,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "TEXTAREA",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "revoke_reason",
+        "displayName": "撤回原因",
+        "sortable": false,
+        "columnWidth": 300,
+        "order": 130,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "TEXTAREA",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "revoker_name",
+        "displayName": "撤回人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 140,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "completed_time",
+        "displayName": "审批完成时间",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 150,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "format": "datetime",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 160,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "format": "datetime",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      }
+    ]
+  },
+  "changeNote": [
+    "审批记录 BO 首版 VIEW Fragment，含列表/详情/表单字段渲染配置",
+    "列表展示业务类型/流程名称/状态/提交人/处理人等核心字段"
+  ]
+}

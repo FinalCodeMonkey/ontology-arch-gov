@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/temporal-fragment.schema.json",
+  "title": "BO TEMPORAL fragment — 时态推理层",
+  "description": "声明实体时间线定义、事件源、快照字段和时态指标。运行态基于实体时间线和统一事件模型（gov_temporal_event）计算窗口指标和趋势。",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [TEMPORAL Fragment] 章节。",
+  "type": "object",
+  "required": ["timelines"],
+  "additionalProperties": false,
+  "properties": {
+    "timelines": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；timeline.code 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "boCode", "entityCode", "timeField", "eventSources"],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "description": "时间线编码，如 OPPORTUNITY_STAGE_TIMELINE、CUSTOMER_ACTIVITY_TIMELINE"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "时间线显示名，如 '商机阶段时间线'"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "boCode": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "所属 BO boCode"
+          },
+          "entityCode": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "所属实体 code"
+          },
+          "identityField": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "default": "id",
+            "description": "实体标识字段，用于区分不同对象。默认 id"
+          },
+          "timeField": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "时间字段，事件发生的时间戳，如 updated_time、visit_time"
+          },
+          "stateField": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "可选，状态字段。用于 DURATION_CURRENT_STATE 类指标计算，如 project_stage"
+          },
+          "statusField": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "可选，生命周期状态字段。用于过滤已归档/已删除对象，如 status"
+          },
+          "eventSources": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["sourceType", "eventType"],
+              "additionalProperties": false,
+              "properties": {
+                "sourceType": {
+                  "type": "string",
+                  "enum": ["OPERATION", "ENTITY", "EXTERNAL", "SCHEDULED"],
+                  "description": "事件来源类型"
+                },
+                "operationCode": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]*$",
+                  "description": "仅 sourceType=OPERATION 时有效。触发该事件的 OPERATION code"
+                },
+                "entityCode": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$",
+                  "description": "仅 sourceType=ENTITY 时有效。作为事件来源的子实体 code"
+                },
+                "eventType": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]*$",
+                  "description": "事件类型编码，如 STAGE_CHANGED、ACTIVITY_COMPLETED、STATUS_CHANGED"
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": { "sourceType": { "const": "OPERATION" } },
+                    "required": ["sourceType"]
+                  },
+                  "then": { "required": ["operationCode"] }
+                },
+                {
+                  "if": {
+                    "properties": { "sourceType": { "const": "ENTITY" } },
+                    "required": ["sourceType"]
+                  },
+                  "then": { "required": ["entityCode"] }
+                }
+              ]
+            }
+          },
+          "snapshots": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "default": [],
+            "description": "事件发生时应快照的字段 code 列表，写入 gov_temporal_event.snapshot_json"
+          },
+          "metrics": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "required": ["code", "name", "metricType"],
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "description": "指标编码，如 stage_age_days、activity_count_90d"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "指标显示名，如 '当前阶段停留天数'"
+                },
+                "metricType": {
+                  "type": "string",
+                  "enum": [
+                    "DURATION_CURRENT_STATE",
+                    "DURATION_STATE_TO_STATE",
+                    "COUNT_WINDOW",
+                    "SUM_WINDOW",
+                    "AVG_WINDOW",
+                    "LAST_VALUE",
+                    "CHANGE_COUNT",
+                    "VELOCITY_LEVEL"
+                  ],
+                  "description": "指标计算类型"
+                },
+                "unit": {
+                  "type": "string",
+                  "enum": ["SECOND", "MINUTE", "HOUR", "DAY", "WEEK", "MONTH", "YEAR", "COUNT", "AMOUNT", "RATIO"],
+                  "default": "DAY"
+                },
+                "window": {
+                  "type": "string",
+                  "pattern": "^(P\\d+[DHMWY]|CURRENT_QUARTER|LAST_QUARTER|CURRENT_MONTH|LAST_MONTH|CURRENT_YEAR|LAST_YEAR)$",
+                  "description": "时间窗口。ISO-8601 Duration 或语义窗口常量"
+                },
+                "sourceLink": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]*$",
+                  "description": "仅 metricType 带 WINDOW 后缀时有效。跨 BO 聚合用到的 LINK code"
+                },
+                "targetField": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "description": "仅 SUM_WINDOW/AVG_WINDOW 时有效。被聚合的目标字段 code"
+                },
+                "expression": {
+                  "$ref": "expression-ast.schema.json",
+                  "description": "可选，结构化表达式 AST。当 metricType 不足以表达复杂计算逻辑时使用。空对象 {} 表示使用 metricType 原生计算。"
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": { "metricType": { "enum": ["COUNT_WINDOW", "SUM_WINDOW", "AVG_WINDOW"] } },
+                    "required": ["metricType"]
+                  },
+                  "then": { "required": ["window", "sourceLink"] }
+                },
+                {
+                  "if": {
+                    "properties": { "metricType": { "enum": ["SUM_WINDOW", "AVG_WINDOW"] } },
+                    "required": ["metricType"]
+                  },
+                  "then": { "required": ["targetField"] }
+                }
+              ]
+            },
+            "default": []
+          }
+        }
+      },
+      "default": []
+    }
+  }
+}

@@ -1,0 +1,2014 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "customers",
+  "boName": "客户",
+  "description": "CRM 客户主数据业务对象（MDM），主从明细聚合建模（MASTER_DETAIL）。主实体 crm_customer 记录客户档案核心信息（身份/分类/法务/地址）；子实体 crm_customer-business-info 记录工商信息缓存。运营/审批/归属字段由 customer-relations BO（MCR）管理。PSP 中 bo_code 为 customers。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/customers",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "customer_no",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": [
+        "customer-business-info"
+      ]
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "MASTER_DETAIL",
+    "nameField": "customer_name",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "customer",
+      "name": "客户主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_customer",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键 Snowflake",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "customer_no",
+          "name": "客户编号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "bizNo",
+          "columnName": "biz_no",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "unique": true,
+            "message": "业务编号不能为空、不超过50字且不可重复"
+          },
+          "view": {
+            "displayName": "客户编号",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 15,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "customer_name",
+          "name": "客户全称（全局唯一）",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerName",
+          "columnName": "customer_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 200,
+            "unique": true,
+            "message": "客户全称不能为空、不超过200字且不可重复"
+          },
+          "view": {
+            "displayName": "客户全称",
+            "sortable": true,
+            "columnWidth": 200,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入客户全称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "customer_short_name",
+          "name": "客户简称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerShortName",
+          "columnName": "customer_short_name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "客户简称",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入客户简称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "data_source",
+          "name": "数据来源",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "dataSource",
+          "columnName": "data_source",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "数据来源",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 35,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "customer_data_source"
+          }
+        },
+        {
+          "code": "business_type",
+          "name": "业务分类",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "businessType",
+          "columnName": "business_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50,
+            "enum": [
+              {
+                "value": "ALL",
+                "label": "全部"
+              },
+              {
+                "value": "PUBLIC_CLOUD",
+                "label": "公有云"
+              },
+              {
+                "value": "HYBRID_CLOUD",
+                "label": "混合云"
+              },
+              {
+                "value": "OFFICE_NETWORK",
+                "label": "办公网"
+              },
+              {
+                "value": "PENDING",
+                "label": "待定"
+              },
+              {
+                "value": "LOGISTICS",
+                "label": "物流"
+              },
+              {
+                "value": "SERVICE_PRODUCT",
+                "label": "服务产品"
+              },
+              {
+                "value": "OTHER",
+                "label": "其他"
+              }
+            ],
+            "message": "业务分类必须为 全部/公有云/混合云/办公网/待定/物流/服务产品/其他 之一"
+          },
+          "view": {
+            "displayName": "业务分类",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "customer_business_type"
+          }
+        },
+        {
+          "code": "market_segment",
+          "name": "细分市场",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "marketSegment",
+          "columnName": "market_segment",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50,
+            "enum": [
+              {
+                "value": "INTERNET_T1",
+                "label": "互联网-T1客户"
+              },
+              {
+                "value": "INTERNET_T2",
+                "label": "互联网-T2客户"
+              },
+              {
+                "value": "INTERNET_T3",
+                "label": "互联网-T3客户"
+              },
+              {
+                "value": "INTERNET_ESUN",
+                "label": "互联网-ESUN客户"
+              },
+              {
+                "value": "INTERNET_OVERSEAS",
+                "label": "互联网-海外客户"
+              }
+            ],
+            "message": "细分市场必须为 互联网-T1客户/T2客户/T3客户/ESUN客户/海外客户 之一"
+          },
+          "view": {
+            "displayName": "细分市场",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "customer_market_segment"
+          }
+        },
+        {
+          "code": "customer_category",
+          "name": "客户分类",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerCategory",
+          "columnName": "customer_category",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "enum": [
+              {
+                "value": "CONTRACT_ENTITY",
+                "label": "合同主体客户"
+              },
+              {
+                "value": "FOP_CUSTOMER",
+                "label": "业务主体客户"
+              },
+              {
+                "value": "CUSTOMER",
+                "label": "一级客户"
+              }
+            ],
+            "message": "客户分类必须为 合同主体客户/业务主体客户/一级客户 之一"
+          },
+          "view": {
+            "displayName": "客户分类",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "customer_category"
+          }
+        },
+        {
+          "code": "parent_customer_id",
+          "name": "所属一级客户",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "parentCustomerId",
+          "columnName": "parent_customer_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "customers",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "customer_name",
+                "localCode": "primary_customer_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "view": {
+            "displayName": "一级客户",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择一级客户",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "customers",
+            "refField": "customer_name"
+          }
+        },
+        {
+          "code": "primary_customer_name",
+          "name": "一级客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "primaryCustomerName",
+          "columnName": "primary_customer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "一级客户名称",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 82,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "IS_NULL",
+                "label": "为空"
+              },
+              {
+                "value": "IS_NOT_NULL",
+                "label": "不为空"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "fop_customer_id",
+          "name": "业务主体客户",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "fopCustomerId",
+          "columnName": "fop_customer_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "customers",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "customer_name",
+                "localCode": "fop_customer_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "view": {
+            "displayName": "FOP客户",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 85,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择FOP客户",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "customers",
+            "refField": "customer_name"
+          }
+        },
+        {
+          "code": "fop_customer_name",
+          "name": "业务主体客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "fopCustomerName",
+          "columnName": "fop_customer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "FOP客户名称",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 87,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "IS_NULL",
+                "label": "为空"
+              },
+              {
+                "value": "IS_NOT_NULL",
+                "label": "不为空"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "country",
+          "name": "国家",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "country",
+          "columnName": "country",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "国家",
+            "sortable": true,
+            "columnWidth": 80,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "country"
+          }
+        },
+        {
+          "code": "province",
+          "name": "省份",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "province",
+          "columnName": "province",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "省份",
+            "sortable": true,
+            "columnWidth": 80,
+            "order": 130,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "province"
+          }
+        },
+        {
+          "code": "city",
+          "name": "市",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "city",
+          "columnName": "city",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "市",
+            "sortable": true,
+            "columnWidth": 80,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "city"
+          }
+        },
+        {
+          "code": "district",
+          "name": "区县",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "district",
+          "columnName": "district",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "区县",
+            "sortable": false,
+            "columnWidth": 80,
+            "order": 150,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "address_detail",
+          "name": "详细地址",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "addressDetail",
+          "columnName": "address_detail",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "详细地址",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 155,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入详细地址",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "neocrm_code",
+          "name": "销售易CRM客户编号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "neocrmCode",
+          "columnName": "neocrm_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "销售易编号",
+            "sortable": false,
+            "columnWidth": 130,
+            "order": 170,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "logo_url",
+          "name": "客户Logo URL",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "logoUrl",
+          "columnName": "logo_url",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "客户Logo",
+            "sortable": false,
+            "columnWidth": 200,
+            "hidden": true,
+            "order": 175,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "FILE_UPLOAD",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "逻辑删除",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "删除标记",
+            "sortable": false,
+            "columnWidth": 80,
+            "hidden": true,
+            "order": 200,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "format": "datetime",
+            "order": 210,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "GT",
+                "label": "大于"
+              },
+              {
+                "value": "GTE",
+                "label": "大于等于"
+              },
+              {
+                "value": "LT",
+                "label": "小于"
+              },
+              {
+                "value": "LTE",
+                "label": "小于等于"
+              },
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              },
+              {
+                "value": "IS_NULL",
+                "label": "为空"
+              },
+              {
+                "value": "IS_NOT_NULL",
+                "label": "不为空"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "修改时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "修改时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "format": "datetime",
+            "order": 220,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "GT",
+                "label": "大于"
+              },
+              {
+                "value": "GTE",
+                "label": "大于等于"
+              },
+              {
+                "value": "LT",
+                "label": "小于"
+              },
+              {
+                "value": "LTE",
+                "label": "小于等于"
+              },
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              },
+              {
+                "value": "IS_NULL",
+                "label": "为空"
+              },
+              {
+                "value": "IS_NOT_NULL",
+                "label": "不为空"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 230,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "修改人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "修改人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 240,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户标识",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "business_type",
+        "market_segment",
+        "customer_category",
+        "parent_customer_id",
+        "fop_customer_id",
+        "customer_no",
+        "customer_name",
+        "customer_short_name",
+        "data_source",
+        "country",
+        "province",
+        "city",
+        "district",
+        "neocrm_code"
+      ],
+      "rowFallbackScope": "NONE"
+    },
+    {
+      "code": "customer-business-info",
+      "name": "客户工商信息",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_customer_business_info",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键（雪花ID）",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "parent_id",
+          "name": "客户ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "parentId",
+          "columnName": "parent_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "客户ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 15,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "source",
+          "name": "数据来源",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "source",
+          "columnName": "source",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 30
+          },
+          "view": {
+            "displayName": "数据来源",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入数据来源",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "company_name",
+          "name": "企业名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "companyName",
+          "columnName": "company_name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "企业名称",
+            "sortable": true,
+            "columnWidth": 200,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入企业名称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "reg_number",
+          "name": "工商注册号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "regNumber",
+          "columnName": "reg_number",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "工商注册号",
+            "sortable": false,
+            "columnWidth": 150,
+            "order": 90,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入工商注册号",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "legal_person_name",
+          "name": "法定代表人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "legalPersonName",
+          "columnName": "legal_person_name",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "PII",
+          "reason": "法定代表人姓名涉及个人隐私，需授权查看",
+          "view": {
+            "displayName": "法定代表人",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入法定代表人",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "credit_code",
+          "name": "统一社会信用代码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "creditCode",
+          "columnName": "credit_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "统一社会信用代码",
+            "sortable": true,
+            "columnWidth": 180,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入统一社会信用代码",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "org_number",
+          "name": "组织机构代码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "orgNumber",
+          "columnName": "org_number",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "reg_status",
+          "name": "登记状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "regStatus",
+          "columnName": "reg_status",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "登记状态",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入登记状态",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "reg_capital",
+          "name": "注册资本",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "regCapital",
+          "columnName": "reg_capital",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "注册资本",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 100,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入注册资本",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "actual_capital",
+          "name": "实缴资本",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "actualCapital",
+          "columnName": "actual_capital",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tax_number",
+          "name": "纳税人识别号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "taxNumber",
+          "columnName": "tax_number",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "company_type",
+          "name": "公司类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "companyType",
+          "columnName": "company_type",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "taxpayer_qualification",
+          "name": "纳税人资质",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "taxpayerQualification",
+          "columnName": "taxpayer_qualification",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "establish_time",
+          "name": "成立日期",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "establishTime",
+          "columnName": "establish_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "成立日期",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入成立日期",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "social_staff_num",
+          "name": "参保人数",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "socialStaffNum",
+          "columnName": "social_staff_num",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "industry",
+          "name": "所属行业",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "industry",
+          "columnName": "industry",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "所属行业",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入所属行业",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "former_names",
+          "name": "曾用名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "formerNames",
+          "columnName": "former_names",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "business_term",
+          "name": "营业期限",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "businessTerm",
+          "columnName": "business_term",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "reg_institute",
+          "name": "登记机关",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "regInstitute",
+          "columnName": "reg_institute",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "reg_location",
+          "name": "注册地址",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "regLocation",
+          "columnName": "reg_location",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "approved_time",
+          "name": "核准日期",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "approvedTime",
+          "columnName": "approved_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "phone_number",
+          "name": "联系方式",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "phoneNumber",
+          "columnName": "phone_number",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "PII",
+          "reason": "企业联系方式涉及个人隐私，需授权查看",
+          "view": {
+            "displayName": "联系方式",
+            "sortable": false,
+            "columnWidth": 130,
+            "order": 55,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入联系方式",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "english_name",
+          "name": "英文名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "englishName",
+          "columnName": "english_name",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "英文名称",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入英文名称",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "listing_status",
+          "name": "上市状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "listingStatus",
+          "columnName": "listing_status",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "上市状态",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 130,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入上市状态",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "staff_scale",
+          "name": "人员规模",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffScale",
+          "columnName": "staff_scale",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "人员规模",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入人员规模",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "business_scope",
+          "name": "经营范围",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "businessScope",
+          "columnName": "business_scope",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "经营范围",
+            "sortable": false,
+            "columnWidth": 300,
+            "order": 80,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入经营范围",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "fetched_at",
+          "name": "抓取时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "fetchedAt",
+          "columnName": "fetched_at",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "valid_until",
+          "name": "有效期截止时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "validUntil",
+          "columnName": "valid_until",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "is_deleted",
+          "name": "逻辑删除",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_time",
+          "name": "修改时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "修改人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户标识",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "customer",
+      "parentRefField": "parent_id",
+      "routeSegment": "business-info",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建客户",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "description": "新建客户记录，进入待审批状态。标准 API：POST /customers。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑客户",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "update",
+      "description": "编辑客户基本信息。标准 API：POST /customers/{id}/update。权限项 act_code=UPDATE，与旧 schema 中误命名为「审批」的 UPDATE 操作分离；旧存量权限指派需迁移至 APPROVE。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除客户",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "description": "逻辑删除客户记录。标准 API：DELETE /customers/{id}。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "description": "导出客户数据为文件。API：POST /customers/export。原 schema 中 scope=GLOBAL 已按治理规范更正为 BO。"
+    },
+    {
+      "code": "IMPORT",
+      "name": "导入",
+      "scope": "BO",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import",
+      "description": "批量导入客户数据。API：POST /customers/import。原 schema 中 scope=GLOBAL 已按治理规范更正为 BO。"
+    },
+    {
+      "code": "DOWNLOAD_IMPORT_TEMPLATE",
+      "name": "下载导入模板",
+      "scope": "GLOBAL",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "IMPORT",
+      "httpMethod": "GET",
+      "actionPath": "import-template",
+      "async": true,
+      "singleResultType": "Void",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "下载客户信息导入模板 Excel 文件，直接写入 HttpServletResponse。API：GET /customers/import-template。"
+    },
+    {
+      "code": "QUICK_CREATE_TIER1",
+      "name": "快速创建 T1 客户",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "actionPath": "quick-create-tier1",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<Map<String, Object>>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "快速新建一级客户，仅需客户名称、客户等级等少量字段。API：POST /customers/quick-create-tier1。"
+    },
+    {
+      "code": "BPM_CALLBACK",
+      "name": "BPM 审批回调",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "bpm-callback",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "接收 BPM 审批系统的回调通知，处理审批结果。API：POST /customers/bpm-callback。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    },
+    {
+      "code": "LIST_CUSTOMER_BUSINESS_INFO",
+      "name": "查询客户工商信息列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_CUSTOMER_BUSINESS_INFO",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(customer-business-info).listProjectionScope",
+      "entityCode": "customer-business-info"
+    },
+    {
+      "code": "READ_CUSTOMER_BUSINESS_INFO",
+      "name": "查看客户工商信息详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_CUSTOMER_BUSINESS_INFO",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(customer-business-info).readScope",
+      "entityCode": "customer-business-info"
+    },
+    {
+      "code": "CREATE_CUSTOMER_BUSINESS_INFO",
+      "name": "新建客户工商信息",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_CUSTOMER_BUSINESS_INFO",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(customer-business-info).createScope",
+      "entityCode": "customer-business-info"
+    },
+    {
+      "code": "UPDATE_CUSTOMER_BUSINESS_INFO",
+      "name": "更新客户工商信息",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_CUSTOMER_BUSINESS_INFO",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(customer-business-info).updateScope",
+      "entityCode": "customer-business-info"
+    },
+    {
+      "code": "DELETE_CUSTOMER_BUSINESS_INFO",
+      "name": "删除客户工商信息",
+      "scope": "ENTITY",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_CUSTOMER_BUSINESS_INFO",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(customer-business-info).deleteScope",
+      "entityCode": "customer-business-info"
+    }
+  ],
+  "rules": [
+    {
+      "code": "CUSTOMER_CONTRACT_MUST_HAVE_FOP",
+      "name": "合同主体客户必须指定所属业务主体客户",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "合同主体客户必须指定所属的业务主体客户，请选择有效的业务主体客户",
+      "description": "合同主体客户（customer_category=CONTRACT_ENTITY）创建/更新时 MUST 填写 fop_customer_id，且目标客户 MUST 存在且 customer_category=FOP_CUSTOMER。业务主体客户和一级客户不填此字段。",
+      "expression": "customer_category != 'CONTRACT_ENTITY' || (fop_customer_id != null && ref.customer_category == 'FOP_CUSTOMER')",
+      "exprAst": {
+        "type": "logical",
+        "op": "OR",
+        "items": [
+          {
+            "type": "binary",
+            "op": "NEQ",
+            "left": {
+              "type": "field",
+              "path": "customer_category"
+            },
+            "right": {
+              "type": "literal",
+              "value": "CONTRACT_ENTITY"
+            }
+          },
+          {
+            "type": "logical",
+            "op": "AND",
+            "items": [
+              {
+                "type": "isNotNull",
+                "expr": {
+                  "type": "field",
+                  "path": "fop_customer_id"
+                }
+              },
+              {
+                "type": "binary",
+                "op": "EQ",
+                "left": {
+                  "type": "field",
+                  "path": "fop_customer_id.customer_category"
+                },
+                "right": {
+                  "type": "literal",
+                  "value": "FOP_CUSTOMER"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "crossBoRef": {
+        "refBoCode": "customers",
+        "refFieldCode": "id",
+        "localEntityCode": "customer",
+        "localFieldCode": "fop_customer_id"
+      }
+    },
+    {
+      "code": "CUSTOMER_PARENT_EXISTS",
+      "name": "客户父级客户必须存在",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "客户关联的父级客户不存在，请选择有效的一级客户",
+      "description": "parent_customer_id 自引用 customers BO，创建/更新时校验引用的父级客户必须存在。",
+      "crossBoRef": {
+        "refBoCode": "customers",
+        "refFieldCode": "id",
+        "localEntityCode": "customer",
+        "localFieldCode": "parent_customer_id"
+      }
+    },
+    {
+      "code": "CUSTOMER_PARENT_NO_CIRCULAR",
+      "name": "客户父级引用不可形成环路",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "客户父级引用不能形成环路，请检查父级客户归属关系",
+      "description": "更新 parent_customer_id 时，不可将当前客户或其子孙节点设为父级，防止父子环路。自引用同一 ID 也被禁止。polarity=safety 表示 expression 描述的是安全条件（True=合规而非违规），推理引擎需反转判定逻辑。crossBoRef 声明正向关联，expression 阻止直接自引用；深层环路检测由引擎递归遍历 parent_customer_id 链完成。",
+      "expression": "parent_customer_id == null || parent_customer_id != id",
+      "exprAst": {
+        "type": "logical",
+        "op": "OR",
+        "items": [
+          {
+            "type": "isNull",
+            "expr": {
+              "type": "field",
+              "path": "parent_customer_id"
+            }
+          },
+          {
+            "type": "binary",
+            "op": "NEQ",
+            "left": {
+              "type": "field",
+              "path": "parent_customer_id"
+            },
+            "right": {
+              "type": "field",
+              "path": "id"
+            }
+          }
+        ]
+      },
+      "polarity": "safety",
+      "crossBoRef": {
+        "refBoCode": "customers",
+        "refFieldCode": "id",
+        "localEntityCode": "customer",
+        "localFieldCode": "parent_customer_id"
+      }
+    },
+    {
+      "code": "CUSTOMER_DELETE_NO_ORPHAN_CHILDREN",
+      "name": "有子客户时不可删除父客户",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "当前客户下存在子客户，请先解除父子关系",
+      "description": "当有其他客户 parent_customer_id 指向本客户时，禁止删除本客户。crossBoRef 声明反向关联，expression 校验子节点数为零。与 aggregateApiPolicy.deleteScope 策略联动。",
+      "expression": "refCount('customers', 'parent_customer_id', id) == 0",
+      "exprAst": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "aggregate",
+          "fn": "count",
+          "source": "customers",
+          "where": {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "parent_customer_id"
+            },
+            "right": {
+              "type": "field",
+              "path": "id"
+            }
+          }
+        },
+        "right": {
+          "type": "literal",
+          "value": 0
+        }
+      },
+      "crossBoRef": {
+        "refBoCode": "customers",
+        "refFieldCode": "parent_customer_id",
+        "localEntityCode": "customer",
+        "localFieldCode": "id"
+      }
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.781302+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

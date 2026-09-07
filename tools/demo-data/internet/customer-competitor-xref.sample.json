@@ -1,0 +1,10 @@
+{
+  "_scenario": "CBG互联网大厂 — 客户-竞对交叉引用（从 demo 数据关联信息提取）",
+  "_scenarioDescription": "客户1101(阿里):竞对7101(华为)+7102(新华三)。客户1104(字节):竞对7101(华为)。客户1106(京东):竞对7104(思科)。其余客户无特定竞对。",
+  "records": [
+    { "id": 1, "customer_id": 1101, "competitor_id": 7101 },
+    { "id": 2, "customer_id": 1101, "competitor_id": 7102 },
+    { "id": 3, "customer_id": 1104, "competitor_id": 7101 },
+    { "id": 4, "customer_id": 1106, "competitor_id": 7104 }
+  ]
+}

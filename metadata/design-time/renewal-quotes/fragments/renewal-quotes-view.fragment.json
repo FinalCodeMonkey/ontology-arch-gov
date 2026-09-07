@@ -1,0 +1,253 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "renewal-quotes",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "inventory_id",
+        "displayName": "关联盘点单",
+        "sortable": false,
+        "columnWidth": 180,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "device-inventories",
+        "refField": "inventory_no",
+        "placeholder": "请选择盘点单",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "inventory_no",
+        "displayName": "盘点单编号",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 25,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "quote_type_code",
+        "displayName": "报价类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "renewal-quote_type",
+        "placeholder": "请选择报价类型",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "sales_opportunity_type_code",
+        "displayName": "销售机会类型",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "sales_opportunity_type",
+        "placeholder": "请选择销售机会类型",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "crm_opportunity_code",
+        "displayName": "CRM业务机会编码",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "crm_opportunity_name",
+        "displayName": "CRM业务机会名称",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "submit_time",
+        "displayName": "提交时间",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "format": "datetime",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "callback_time",
+        "displayName": "CRM回写时间",
+        "sortable": true,
+        "columnWidth": 150,
+        "order": 80,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "format": "datetime",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "submit_status",
+        "displayName": "提交状态",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "renewal-quote_submit_status",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "fail_reason",
+        "displayName": "失败原因",
+        "sortable": false,
+        "columnWidth": 300,
+        "order": 100,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "TEXTAREA",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      }
+    ]
+  },
+  "changeNote": [
+    "续保报价提交记录 BO 首版 VIEW Fragment，含列表/详情/表单字段渲染配置",
+    "inventory_id 使用 OBJECT_SELECT 关联 device-inventories BO"
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "products",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建产品",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "supportsBatch": true,
+        "singleResultType": "ApiResponse<ProductDTO>",
+        "batchResultType": "BatchResultDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "新建产品记录。点击新建按钮打开表单弹窗，填写产品型号、类别、系列、事业部、产品线、销售代码、国内外零售报价、是否上海外报价、启停用、下架和产品状态并保存。标准 API：POST /products，批量 API：POST /products/batch。"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "GLOBAL",
+        "operationKind": "IMPORT",
+        "primaryDataAction": "CREATE",
+        "authzAction": "IMPORT",
+        "httpMethod": "POST",
+        "actionPath": "import",
+        "async": false,
+        "singleResultType": "ApiResponse<ProductImportResultDTO>",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "批量导入产品数据，执行必填和枚举校验，支持国内/海外产品清单分类导入。API：POST /products/import。"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "GLOBAL",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "EXPORT",
+        "httpMethod": "POST",
+        "actionPath": "export",
+        "async": true,
+        "singleResultType": "ApiResponse<ExportTaskDTO>",
+        "position": "TOOLBAR",
+        "triggerEvent": "API_CALL",
+        "description": "导出产品列表数据，支持国内/海外产品清单分类导出，零售报价字段按权限脱敏处理。API：POST /products/export。"
+      },
+      {
+        "code": "EDIT",
+        "name": "编辑产品",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "PATCH",
+        "supportsBatch": true,
+        "singleResultType": "ApiResponse<ProductDTO>",
+        "batchResultType": "BatchResultDTO",
+        "position": "DETAIL",
+        "triggerEvent": "OPEN_FORM",
+        "description": "修改产品型号、类别、系列、事业部、产品线、销售代码、国内外零售报价、启停用、下架和产品状态。标准 API：PATCH /products/{id}，批量 API：PATCH /products/batch。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除产品",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "supportsBatch": true,
+        "singleResultType": "Void",
+        "batchResultType": "BatchResultDTO",
+        "position": "DETAIL",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "逻辑删除产品记录（is_deleted=1）。删除前校验未被场景产品清单引用。标准 API：DELETE /products/{id}，批量 API：DELETE /products/batch。"
+      },
+      {
+        "code": "ACTIVATE",
+        "name": "启用产品",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "ACTIVATE",
+        "httpMethod": "POST",
+        "actionPath": "activate",
+        "supportsBatch": false,
+        "singleResultType": "Void",
+        "position": "DETAIL",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "将已停用的产品重新启用，启用后可被场景产品清单引用。API：PUT /products/{id}/activate。"
+      },
+      {
+        "code": "DEACTIVATE",
+        "name": "停用产品",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "DEACTIVATE",
+        "httpMethod": "POST",
+        "actionPath": "deactivate",
+        "supportsBatch": false,
+        "singleResultType": "Void",
+        "position": "DETAIL",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "停用产品，停用后不可被场景产品清单引用。API：PUT /products/{id}/deactivate。"
+      }
+    ]
+  },
+  "changeNote": [
+    "products 首版 OPERATION 设计态 Fragment，基于原型界面新建产品/国内产品清单/海外产品清单"
+  ]
+}

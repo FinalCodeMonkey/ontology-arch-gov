@@ -1,0 +1,328 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "contacts",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "customer-contact": [
+          "customer_id",
+          "relation_status",
+          "dept_level1",
+          "dept_level2",
+          "sales_owner_id"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "name",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "联系人姓名涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "mobile",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "手机号涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "wechat",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "微信号涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "company_email",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "电子邮箱涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "id_card_no",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "身份证号为高度敏感个人信息，默认脱敏"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "birth_date",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "出生日期涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "family_background",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "家庭背景信息涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "political_status",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "政治面貌涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "religion",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "宗教信仰涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "ethnic_group",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "民族信息涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "health_status",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "身体健康情况涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "marital_status",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "婚姻状况涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "salary_level",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "薪资水平为高度敏感个人信息，默认脱敏"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "native_place",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "籍贯信息涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "live_city",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "居住地信息涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "hobby_preference",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "兴趣爱好涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "life_habit",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "生活理念与习惯涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "communication_preference",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "性格与沟通偏好涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "circle_and_political_status",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "圈层与政治系情况涉及敏感信息，需授权查看"
+      },
+      {
+        "entityCode": "customer-contact",
+        "fieldCode": "workplace_relationship",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "职场人际关系涉及个人隐私，需授权查看"
+      }
+    ],
+    "authzProjection": {
+      "description": "联系人业务对象在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 contacts BO。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。策略表达式中典型引用包括 res.customer_id、res.relation_status、res.sales_owner_id 等。",
+      "attributes": [
+        {
+          "code": "contact_id",
+          "name": "主键（雪花ID）",
+          "type": "LONG",
+          "source": {
+            "entityCode": "customer-contact",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "联系人资源唯一标识，供 PIP 按 ID 拉取完整属性集合。",
+          "i18nKey": "auth.resource.res_contact.attr.contact_id",
+          "valueExamples": [
+            "10001",
+            "10002"
+          ]
+        },
+        {
+          "code": "customer_id",
+          "name": "所属客户",
+          "type": "LONG",
+          "source": {
+            "entityCode": "customer-contact",
+            "fieldCode": "customer_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "customers.id",
+          "referenceModel": "customers",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "联系人归属的客户。典型表达式：contains(sub.customer_scope_ids, res.customer_id)。",
+          "i18nKey": "auth.resource.res_contact.attr.customer_id",
+          "valueExamples": [
+            "2068959871393136600",
+            "2068959871393136601"
+          ]
+        },
+        {
+          "code": "relation_status",
+          "name": "关系现状",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-contact",
+            "fieldCode": "relation_status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "EXCELLENT",
+              "label": "★ 极佳"
+            },
+            {
+              "value": "POSITIVE",
+              "label": "+ 积极"
+            },
+            {
+              "value": "NEUTRAL",
+              "label": "= 中立"
+            },
+            {
+              "value": "NEGATIVE",
+              "label": "- 消极"
+            },
+            {
+              "value": "NONE",
+              "label": "x 无"
+            }
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "与联系人的关系现状。典型表达式：res.relation_status == 'POSITIVE'。",
+          "i18nKey": "auth.resource.res_contact.attr.relation_status",
+          "valueExamples": [
+            "POSITIVE",
+            "NONE"
+          ]
+        },
+        {
+          "code": "dept_level1",
+          "name": "一级部门名称",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-contact",
+            "fieldCode": "dept_level1"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 60,
+          "displayGroup": "数据范围",
+          "description": "联系人所在一级部门。",
+          "i18nKey": "auth.resource.res_contact.attr.dept_level1",
+          "valueExamples": [
+            "研发部",
+            "采购部"
+          ]
+        },
+        {
+          "code": "dept_level2",
+          "name": "二级部门名称",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-contact",
+            "fieldCode": "dept_level2"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 70,
+          "displayGroup": "数据范围",
+          "description": "联系人所在二级部门。",
+          "i18nKey": "auth.resource.res_contact.attr.dept_level2",
+          "valueExamples": [
+            "网络架构组",
+            "基础设施组"
+          ]
+        },
+        {
+          "code": "sales_owner_id",
+          "name": "销售负责人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-contact",
+            "fieldCode": "sales_owner_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 80,
+          "displayGroup": "数据范围",
+          "description": "联系人销售负责人。典型表达式：sub.user_id == res.sales_owner_id。",
+          "i18nKey": "auth.resource.res_contact.attr.sales_owner_id",
+          "valueExamples": [
+            "U10001"
+          ]
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "对齐 MODEL：customers_id 改为 customer_id",
+    "authzProjection contact_id/customer_id 类型修正为 LONG",
+    "usageNote 修正 res.parent_id → res.customer_id",
+    "relation_status 添加 allowedValues",
+    "补充 dept_level2/sales_owner_id 到 authzProjection",
+    "rowSecurity 补充 sales_owner_id",
+    "补充 id_card_no/birth_date/family_background 敏感字段分级",
+    "补充 valueExamples",
+    "对齐界面原型：删除 in_decision_circle/decision_circle_role/annual_target/personal_info/report_to 相关安全配置"
+  ]
+}

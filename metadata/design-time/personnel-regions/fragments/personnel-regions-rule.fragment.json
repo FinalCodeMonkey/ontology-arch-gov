@@ -1,0 +1,42 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "personnel-regions",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "PERSONNEL_REGION_USER_EXISTS",
+        "name": "用户必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "所选用户不存在，请选择有效用户",
+        "description": "创建或更新人员区域配置时，user_id 引用的用户必须在 users BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "users",
+          "refFieldCode": "user_id",
+          "localEntityCode": "personnel-region",
+          "localFieldCode": "user_id"
+        }
+      },
+      {
+        "code": "PERSONNEL_REGION_UNIQUE",
+        "name": "人员区域唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "该用户已配置了相同的区域，请勿重复添加",
+        "description": "同一用户不可重复配置相同的区域编码（user_id + region_code 组合唯一）。创建时校验当前人员区域配置中不存在相同的 user_id 和 region_code 组合。"
+      }
+    ]
+  },
+  "changeNote": [
+    "personnel-regions 首版 RULE Fragment，含跨 BO 用户存在性校验与人员区域组合唯一性规则"
+  ]
+}

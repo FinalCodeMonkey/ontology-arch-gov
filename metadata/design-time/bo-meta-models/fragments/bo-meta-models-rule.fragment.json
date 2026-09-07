@@ -1,0 +1,89 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "bo-meta-models",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "BO_CODE_UNIQUE_PER_TENANT_APP",
+        "name": "BO编码租户应用维度唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "同一租户+应用下 BO 编码已存在，请使用其他编码",
+        "description": "创建或修改时，tenant_id + app_code + bo_code 组合必须唯一（含已逻辑删除记录），与 DDL uk_authz-bo-meta-model 约束对齐。"
+      },
+      {
+        "code": "SCHEMA_JSON_REQUIRED_ON_PUBLISH",
+        "name": "发布时投影JSON必填",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "OPERATION",
+        "operationCode": "PUBLISH",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "发布前必须填写投影元数据 JSON（schema_json）",
+        "description": "执行 PUBLISH 操作时，schema_json 不得为空，否则 PSP BoSchemaJsonValidator 无法校验。"
+      },
+      {
+        "code": "SCHEMA_JSON_FORMAT_VALID",
+        "name": "投影JSON格式校验",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "schema_json",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "投影元数据 JSON 格式无效，须符合 authz-bo-meta-model-projection.schema.json 定义",
+        "description": "schema_json 字段内容必须为合法 JSON，且结构符合 authz-bo-meta-model-projection.schema.json（含 _gov_meta、schema_json、_sql 三部分）。"
+      },
+      {
+        "code": "DATA_DOMAIN_EXISTS",
+        "name": "数据领域必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "所选数据领域不存在，请选择有效数据领域",
+        "description": "创建/更新时若填写了 data_domain_id，该 ID 必须在 data-domains BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "data-domains",
+          "refFieldCode": "id",
+          "localEntityCode": "authz-bo-meta-model",
+          "localFieldCode": "data_domain_id"
+        }
+      },
+      {
+        "code": "DELETED_BO_NOT_PUBLISHABLE",
+        "name": "已删除记录不可发布",
+        "ruleType": "STATE",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "is_deleted == 0",
+        "severity": "ERROR",
+        "message": "已逻辑删除的 BO 元模型记录不可发布",
+        "description": "is_deleted=1 的记录禁止执行 PUBLISH 操作。",
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "is_deleted"
+          },
+          "right": {
+            "type": "literal",
+            "value": 0
+          }
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "bo-meta-models 首版 RULE Fragment",
+    "含 BO 编码唯一性、发布时 JSON 必填、JSON 格式校验、数据领域存在性、删除状态保护 5 条规则"
+  ]
+}

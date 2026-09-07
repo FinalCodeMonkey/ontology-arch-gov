@@ -1,0 +1,302 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='competitors'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'competitors'",
+    "generated_from": "competitors.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.389709+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "competitor",
+        "name": "竞争对手主实体",
+        "isPrimary": true,
+        "tableName": "crm_master_competitor",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "status",
+          "competition_level"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "竞争对手ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "competitor_name",
+            "name": "竞争对手名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "competitor_name",
+            "columnName": "competitor_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "company_scale",
+            "name": "规模(人)",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "company_scale",
+            "columnName": "company_scale",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "competition_level",
+            "name": "竞争力",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "competition_level",
+            "columnName": "competition_level",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "contact_info",
+            "name": "联系信息",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "contact_info",
+            "columnName": "contact_info",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "advantage",
+            "name": "竞争优势",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "advantage",
+            "columnName": "advantage",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "disadvantage",
+            "name": "竞争劣势",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "disadvantage",
+            "columnName": "disadvantage",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "strategy",
+            "name": "应对策略",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "strategy",
+            "columnName": "strategy",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "sales_analysis",
+            "name": "销售情况分析",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "sales_analysis",
+            "columnName": "sales_analysis",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "market_analysis",
+            "name": "市场情况分析",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "market_analysis",
+            "columnName": "market_analysis",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "analysis_doc",
+            "name": "竞争对手分析文档",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "analysis_doc",
+            "columnName": "analysis_doc",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注说明",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "status",
+            "name": "状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建竞争对手",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "import-template,read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除竞争对手",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "ACTIVATE",
+        "name": "启用竞争对手",
+        "scope": "BO",
+        "act_aliases": "activate",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DEACTIVATE",
+        "name": "停用竞争对手",
+        "scope": "BO",
+        "act_aliases": "deactivate",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'competitors' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'competitors' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + competitors_bo_meta_id + CREATE",
+      "RES_DATA_BO + competitors_bo_meta_id + IMPORT",
+      "RES_DATA_BO + competitors_bo_meta_id + READ",
+      "RES_DATA_BO + competitors_bo_meta_id + EXPORT",
+      "RES_DATA_BO + competitors_bo_meta_id + UPDATE",
+      "RES_DATA_BO + competitors_bo_meta_id + DELETE",
+      "RES_DATA_BO + competitors_bo_meta_id + ACTIVATE",
+      "RES_DATA_BO + competitors_bo_meta_id + DEACTIVATE",
+      "RES_DATA_BO + competitors_bo_meta_id + LIST"
+    ]
+  }
+}

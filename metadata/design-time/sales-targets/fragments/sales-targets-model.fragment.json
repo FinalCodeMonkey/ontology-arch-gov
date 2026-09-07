@@ -1,0 +1,241 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-targets",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "sales-targets",
+    "boName": "销售目标",
+    "description": "销售目标管理业务对象，单表建模，管理按目标方（员工/客户）、目标类型、适配规则（年度/月度）维度的销售目标值。无单一业务编号字段，唯一性由复合键 (target_owner_type, target_id, target_type, apply_rule, target_year, target_month) 保证。注意：当前后端 API 路径为 /api/targets，元数据 resourcePath 为 /sales-targets，后续将重构后端路由对齐。",
+    "apiConfig": {
+      "resourcePath": "/sales-targets",
+      "idField": "id",
+      "idType": "LONG",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": []
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "owner_name",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "target",
+        "name": "销售目标主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_target",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "owner_type",
+            "fieldName": "ownerType",
+            "columnName": "target_owner_type",
+            "name": "目标方类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.owner_type"
+          },
+          {
+            "code": "owner_id",
+            "fieldName": "ownerId",
+            "columnName": "target_id",
+            "name": "目标对象ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "owner_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.owner_id"
+          },
+          {
+            "code": "owner_name",
+            "fieldName": "ownerName",
+            "columnName": "target_name",
+            "name": "目标对象名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.owner_name"
+          },
+          {
+            "code": "goal_type",
+            "fieldName": "goalType",
+            "columnName": "target_type",
+            "name": "目标类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.goal_type"
+          },
+          {
+            "code": "apply_rule",
+            "fieldName": "applyRule",
+            "columnName": "apply_rule",
+            "name": "适配规则",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.apply_rule"
+          },
+          {
+            "code": "target_year",
+            "fieldName": "targetYear",
+            "columnName": "target_year",
+            "name": "目标年份",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.target_year"
+          },
+          {
+            "code": "target_month",
+            "fieldName": "targetMonth",
+            "columnName": "target_month",
+            "name": "目标月份",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.target_month"
+          },
+          {
+            "code": "goal_value",
+            "fieldName": "goalValue",
+            "columnName": "target_value",
+            "name": "目标值",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.goal_value"
+          },
+          {
+            "code": "remarks",
+            "fieldName": "remarks",
+            "columnName": "remarks",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-targets.field.remarks"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.sales-targets.field.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-targets.field.created_by"
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.sales-targets.field.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  }
+}

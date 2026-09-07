@@ -1,0 +1,203 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "operation-logs",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "operation-logs",
+    "boName": "操作审计日志",
+    "description": "操作审计日志业务对象，通用设计，不限定特定业务域。记录任意业务对象的关键操作审计轨迹，通过 biz_type + biz_id 多态引用业务对象。操作人通过 CROSS_BO_REF 引用 users BO。PSP 中 bo_code 为 operation-logs。",
+    "apiConfig": {
+      "resourcePath": "/operation-logs",
+      "idField": "id",
+      "idType": "LONG",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": false
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "operation_type",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "operation-log",
+        "name": "操作审计日志",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_operation_log",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "biz_type",
+            "fieldName": "bizType",
+            "columnName": "biz_type",
+            "name": "业务对象类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "biz_id",
+            "fieldName": "bizId",
+            "columnName": "biz_id",
+            "name": "业务对象ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "operation_type",
+            "fieldName": "operationType",
+            "columnName": "operation_type",
+            "name": "操作类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true
+          },
+          {
+            "code": "operator_id",
+            "fieldName": "operatorId",
+            "columnName": "operator_id",
+            "name": "操作人ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "operator_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true
+          },
+          {
+            "code": "operator_name",
+            "fieldName": "operatorName",
+            "columnName": "operator_name",
+            "name": "操作人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true
+          },
+          {
+            "code": "description",
+            "fieldName": "description",
+            "columnName": "description",
+            "name": "操作描述",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "操作审计日志 BO 首版 MODEL Fragment",
+    "通用设计：biz_type+biz_id 多态引用（NORMAL）",
+    "operator_id 为 CROSS_BO_REF → users.id，operator_name 为 CROSS_BO_DISPLAY redundant=true（DDL 有冗余列）",
+    "审计日志为只读性质，batchEnabled=false"
+  ]
+}

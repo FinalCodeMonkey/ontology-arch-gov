@@ -1,0 +1,2586 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customer-relations",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "customer_id",
+        "displayName": "所属客户",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "customers",
+        "refField": "customer_name",
+        "placeholder": "请选择客户",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "customer_name",
+        "displayName": "客户全称",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 25,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "owner_user_id",
+        "displayName": "客户所有人",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择客户所有人",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "owner_user_name",
+        "displayName": "所有人姓名",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 35,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "department_code",
+        "displayName": "二级部门/大区/BG编码",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refObject": "orgs",
+        "refField": "department_name"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "department_name",
+        "displayName": "二级部门/大区/BG",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 45,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "primary_department_name",
+        "displayName": "所属部门",
+        "sortable": false,
+        "columnWidth": 130,
+        "order": 46,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "string",
+        "queryable": true
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "region",
+        "displayName": "区域",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "customer_region",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "status",
+        "displayName": "审批状态",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "customer_status",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "approved_time",
+        "displayName": "审批通过时间",
+        "computedField": {
+          "kind": "EXPRESSION",
+          "sources": [
+            {
+              "entityCode": "customer-relation",
+              "fieldCode": "id"
+            }
+          ],
+          "expression": "approval-records.completed_time WHERE biz_type='customer-relations' AND biz_id=id AND status='APPROVED'",
+          "description": "应用层通过 approval-records BO 获取，按 biz_type=customer-relations + biz_id=id + status=APPROVED 匹配后取 completed_time。"
+        },
+        "sortable": false,
+        "columnWidth": 140,
+        "format": "datetime",
+        "order": 61,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "latest_visitor_id",
+        "displayName": "最新跟进人",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "disabled": true,
+        "exportable": true,
+        "importable": true,
+        "refObject": "users",
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "latest_visit_time",
+        "displayName": "最近拜访时间",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 75,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "format": "datetime",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "responsible_pre_sales_id",
+        "displayName": "责任售前",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "responsible_pre_sales_name",
+        "displayName": "责任售前姓名",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 83,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "service_sales_id",
+        "displayName": "服务销售",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 85,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "service_sales_name",
+        "displayName": "服务销售姓名",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 88,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "remarks",
+        "displayName": "备注",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 90,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入备注",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "billing_province",
+        "displayName": "开单省份",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 95,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "province",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "billing_city",
+        "displayName": "开单城市",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 98,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "city",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "created_time",
+        "sortable": true,
+        "columnWidth": 140,
+        "format": "datetime",
+        "hidden": true,
+        "order": 200,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "customer-relation",
+        "fieldCode": "updated_time",
+        "sortable": true,
+        "columnWidth": 140,
+        "format": "datetime",
+        "hidden": true,
+        "order": 210,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "id",
+        "displayName": "成员ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 300,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "parent_id",
+        "displayName": "所属关系治理ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 305,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "user_id",
+        "displayName": "团队成员",
+        "sortable": false,
+        "columnWidth": 140,
+        "order": 310,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择团队成员",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "member_name",
+        "displayName": "成员姓名",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 320,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "member_role",
+        "displayName": "角色",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 330,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "customer-team-member_role",
+        "placeholder": "请选择角色",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "permission",
+        "displayName": "权限设置",
+        "columnWidth": 90,
+        "order": 340,
+        "formType": "SELECT",
+        "dictCode": "customer_team_permission",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "remark",
+        "displayName": "备注",
+        "columnWidth": 220,
+        "order": 350,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-team-member",
+        "fieldCode": "related_teams",
+        "displayName": "关联模块团队",
+        "columnWidth": 220,
+        "order": 360,
+        "formType": "MULTI_SELECT",
+        "dictCode": "customer_related_team",
+        "exportable": true,
+        "importable": true,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "id",
+        "displayName": "序号",
+        "order": 10,
+        "columnWidth": 70,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "competitor_id",
+        "displayName": "竞争对手",
+        "order": 30,
+        "columnWidth": 150,
+        "formType": "OBJECT_SELECT",
+        "refObject": "competitors",
+        "refField": "competitor_name",
+        "placeholder": "请选择竞争对手",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "competitor_name",
+        "displayName": "竞争对手名称",
+        "sortable": true,
+        "order": 40,
+        "columnWidth": 150,
+        "editableInForm": false,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "strategic_intent",
+        "displayName": "战略意图",
+        "order": 50,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_product_tech",
+        "displayName": "近期动作-产品技术",
+        "order": 60,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_business_supply",
+        "displayName": "近期动作-商务供应",
+        "order": 70,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_quality_service",
+        "displayName": "近期动作-质量服务",
+        "order": 80,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "user_id",
+        "displayName": "成员",
+        "order": 30,
+        "columnWidth": 120,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择成员",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "member_name",
+        "order": 40,
+        "columnWidth": 120,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "member_role",
+        "order": 50,
+        "columnWidth": 120,
+        "formType": "SELECT",
+        "exportable": true,
+        "dictCode": "customer-team-member_role",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "permission",
+        "order": 60,
+        "columnWidth": 90,
+        "formType": "SELECT",
+        "dictCode": "customer_team_permission",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-member",
+        "fieldCode": "remark",
+        "order": 70,
+        "columnWidth": 220,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "sort_no",
+        "sortable": true,
+        "order": 30,
+        "columnWidth": 80,
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "sales_year",
+        "displayName": "年份",
+        "sortable": true,
+        "order": 40,
+        "columnWidth": 90,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "product_category",
+        "displayName": "销售产品大类",
+        "order": 50,
+        "columnWidth": 140,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "product_name",
+        "displayName": "典型产品名称",
+        "order": 60,
+        "columnWidth": 150,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "annual_sales",
+        "displayName": "年度销量",
+        "order": 70,
+        "columnWidth": 140,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "next_year_target",
+        "displayName": "下一年度目标",
+        "order": 80,
+        "columnWidth": 140,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "is_current",
+        "displayName": "是否当前版本",
+        "sortable": true,
+        "order": 30,
+        "columnWidth": 100,
+        "formType": "SELECT",
+        "dictCode": "yes_no",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "main_product",
+        "displayName": "主要产品",
+        "order": 40,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "revenue_data",
+        "displayName": "营收数据",
+        "order": 50,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "gross_margin_data",
+        "displayName": "毛利率数据",
+        "order": 60,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "corp_strategy",
+        "displayName": "公司战略",
+        "order": 70,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "ai_strategy",
+        "displayName": "AI战略",
+        "order": 80,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "infra_plan",
+        "displayName": "基础设施投资计划",
+        "order": 90,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "version_no",
+        "displayName": "版本号",
+        "sortable": true,
+        "order": 100,
+        "columnWidth": 100,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "version_remark",
+        "displayName": "版本说明",
+        "order": 110,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "user_id",
+        "displayName": "成员",
+        "order": 30,
+        "columnWidth": 120,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择成员",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "member_name",
+        "order": 40,
+        "columnWidth": 120,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "member_role",
+        "order": 50,
+        "columnWidth": 120,
+        "formType": "SELECT",
+        "exportable": true,
+        "dictCode": "customer-team-member_role",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "permission",
+        "order": 60,
+        "columnWidth": 90,
+        "formType": "SELECT",
+        "dictCode": "customer_team_permission",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-strategy-member",
+        "fieldCode": "remark",
+        "order": 70,
+        "columnWidth": 220,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "sort_no",
+        "sortable": true,
+        "order": 30,
+        "columnWidth": 80,
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "biz_name",
+        "displayName": "核心业务名称",
+        "sortable": true,
+        "order": 40,
+        "columnWidth": 160,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-industry-biz",
+        "fieldCode": "biz_result",
+        "displayName": "经营成果",
+        "order": 50,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "arch_name",
+        "displayName": "架构名称",
+        "sortable": true,
+        "order": 30,
+        "columnWidth": 160,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "arch_category",
+        "displayName": "架构类型",
+        "sortable": true,
+        "order": 40,
+        "columnWidth": 100,
+        "formType": "SELECT",
+        "dictCode": "infra_arch_category",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "server_info",
+        "displayName": "服务器",
+        "order": 50,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "nic_info",
+        "displayName": "网卡",
+        "order": 60,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "network_info",
+        "displayName": "网络",
+        "order": 70,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "module_info",
+        "displayName": "模块",
+        "order": 80,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "diagram_file_id",
+        "displayName": "架构图",
+        "order": 90,
+        "columnWidth": 120,
+        "formType": "FILE_UPLOAD",
+        "exportable": false,
+        "importable": false,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "diagram_file_name",
+        "displayName": "架构图文件名",
+        "order": 95,
+        "columnWidth": 150,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "pod_usage",
+        "displayName": "单POD用量",
+        "order": 100,
+        "columnWidth": 120,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "pod_count",
+        "displayName": "POD数量",
+        "sortable": true,
+        "order": 110,
+        "columnWidth": 90,
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "shortlist_date",
+        "displayName": "完成入围时间",
+        "sortable": true,
+        "order": 120,
+        "columnWidth": 130,
+        "format": "date",
+        "formType": "DATE",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "gray_date",
+        "displayName": "灰度时间",
+        "sortable": true,
+        "order": 130,
+        "columnWidth": 130,
+        "format": "date",
+        "formType": "DATE",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "mass_production_date",
+        "displayName": "量产时间",
+        "sortable": true,
+        "order": 140,
+        "columnWidth": 130,
+        "format": "date",
+        "formType": "DATE",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "eol_date",
+        "displayName": "EOL时间",
+        "sortable": true,
+        "order": 150,
+        "columnWidth": 130,
+        "format": "date",
+        "formType": "DATE",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "parent_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "user_id",
+        "displayName": "成员",
+        "order": 30,
+        "columnWidth": 120,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择成员",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "member_name",
+        "order": 40,
+        "columnWidth": 120,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "member_role",
+        "order": 50,
+        "columnWidth": 120,
+        "formType": "SELECT",
+        "exportable": true,
+        "dictCode": "customer-team-member_role",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "permission",
+        "order": 60,
+        "columnWidth": 90,
+        "formType": "SELECT",
+        "dictCode": "customer_team_permission",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "customer-infra-architecture-member",
+        "fieldCode": "remark",
+        "order": 70,
+        "columnWidth": 220,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      }
+    ]
+  },
+  "changeNote": [
+    "MCR BO 首版 VIEW Fragment，含根实体运营字段和团队成员子实体的字段渲染配置",
+    "参照 scenes-view 模式，补全 7 个缺失子实体的视图配置：customer-competition/competition-member/competition-sale/industry-strategy/strategy-member/industry-biz/infra-architecture/infra-architecture-member",
+    "新增根实体 created_time/updated_time 审计字段视图配置（datetime 类型，支持 EQ/GT/GTE/LT/LTE/BETWEEN/IS_NULL/IS_NOT_NULL 查询操作符）",
+    "为 billing_city 查询操作符补充 IS_NULL/IS_NOT_NULL",
+    "customer-competition：competitor_id(OBJECT_SELECT→competitors) + competitor_name/strategic_intent/recent_action_*(TEXTAREA)",
+    "customer-competition-member：user_id(USER_SELECT) + member_name/member_role/permission/remark",
+    "customer-competition-sale：sort_no(NUMBER) + sales_year/product_category/product_name/annual_sales/next_year_target",
+    "customer-industry-strategy：is_current(SELECT) + main_product/revenue_data/gross_margin_data/corp_strategy/ai_strategy/infra_plan(TEXTAREA) + version_no/version_remark",
+    "customer-industry-strategy-member：user_id(USER_SELECT) + member_name/member_role/permission/remark",
+    "customer-industry-biz：sort_no(NUMBER) + biz_name(INPUT) + biz_result(TEXTAREA)",
+    "customer-infra-architecture：arch_name(INPUT) + arch_category(SELECT) + server_info/nic_info/network_info/module_info(TEXTAREA) + diagram_file_id(FILE_UPLOAD) + pod_usage/pod_count + shortlist_date/gray_date/mass_production_date/eol_date(DATE)",
+    "customer-infra-architecture-member：user_id(USER_SELECT) + member_name/member_role/permission/remark"
+  ]
+}

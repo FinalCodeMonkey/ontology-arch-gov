@@ -1,0 +1,127 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "competitors",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "competitor",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "competitor_name",
+        "required": true,
+        "max": 200,
+        "unique": true,
+        "message": "竞争对手名称不能为空且不超过200字"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "company_scale",
+        "min": 0,
+        "message": "规模必须为非负数"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "competition_level",
+        "required": true,
+        "max": 50,
+        "enum": [
+          {
+            "value": "STRONG",
+            "label": "强竞争力"
+          },
+          {
+            "value": "POTENTIAL",
+            "label": "潜在竞争力"
+          },
+          {
+            "value": "NORMAL",
+            "label": "一般竞争力"
+          },
+          {
+            "value": "WEAK",
+            "label": "弱竞争力"
+          }
+        ],
+        "semanticMapping": {
+          "targetOntology": "risk_level",
+          "description": "竞争力等级 → 风险等级的语义映射，供推理引擎/本体评估器在计算 competitor_risk_level 时使用",
+          "map": {
+            "STRONG": "HIGH",
+            "POTENTIAL": "MEDIUM",
+            "NORMAL": "MEDIUM",
+            "WEAK": "LOW"
+          }
+        },
+        "message": "竞争力必须为预定义值之一"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "contact_info",
+        "max": 500
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "advantage",
+        "max": 65535
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "disadvantage",
+        "max": 65535
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "strategy",
+        "max": 65535
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "sales_analysis",
+        "max": 65535
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "market_analysis",
+        "max": 65535
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "analysis_doc",
+        "max": 65535
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "remark",
+        "max": 1000
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "status",
+        "required": true,
+        "max": 50,
+        "enum": [
+          {
+            "value": "ACTIVE",
+            "label": "活跃"
+          },
+          {
+            "value": "INACTIVE",
+            "label": "停用"
+          }
+        ],
+        "message": "状态值非法，必须为 ACTIVE 或 INACTIVE"
+      }
+    ]
+  },
+  "changeNote": [
+    "competitors 首版 VALIDATION 设计态 Fragment"
+  ]
+}

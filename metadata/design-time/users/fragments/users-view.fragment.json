@@ -1,0 +1,808 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "users",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_no",
+        "displayName": "工号",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入工号",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "user_id",
+        "displayName": "用户账号ID",
+        "sortable": false,
+        "columnWidth": 130,
+        "order": 25,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入用户账号ID",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_name",
+        "displayName": "员工姓名",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入员工姓名",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_en_name",
+        "displayName": "英文名",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 35,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入英文名",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "name",
+        "displayName": "用户名",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 37,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "code",
+        "displayName": "用户编码",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 38,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_company_name",
+        "displayName": "所属公司",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "user_company_name",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "department_code",
+        "displayName": "所属部门",
+        "sortable": false,
+        "columnWidth": 160,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "orgs",
+        "placeholder": "请选择所属部门",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "department_name"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "department_name",
+        "displayName": "部门名称",
+        "sortable": true,
+        "columnWidth": 160,
+        "hidden": true,
+        "order": 55,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "post_name",
+        "displayName": "岗位名称",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "user_post_name",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "post_code",
+        "displayName": "岗位编码",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 63,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_status",
+        "displayName": "员工状态",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "user_staff_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_status_code",
+        "displayName": "状态编码",
+        "sortable": false,
+        "columnWidth": 80,
+        "hidden": true,
+        "order": 73,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_type",
+        "displayName": "员工类型",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "user_staff_type",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_type_code",
+        "displayName": "类型编码",
+        "sortable": false,
+        "columnWidth": 80,
+        "hidden": true,
+        "order": 83,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_email",
+        "displayName": "公司邮箱",
+        "sortable": false,
+        "columnWidth": 180,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入公司邮箱",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "personal_email",
+        "displayName": "个人邮箱",
+        "sortable": false,
+        "columnWidth": 180,
+        "hidden": true,
+        "order": 93,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入个人邮箱",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "personal_mobile",
+        "displayName": "个人手机",
+        "sortable": false,
+        "columnWidth": 130,
+        "hidden": true,
+        "order": 95,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入个人手机",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "manage_user_id",
+        "displayName": "直属上级",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择直属上级",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "manage_staff_name",
+        "displayName": "上级姓名",
+        "sortable": false,
+        "columnWidth": 110,
+        "hidden": true,
+        "order": 103,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "manage_staff_no",
+        "displayName": "上级工号",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 105,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "organization_type",
+        "displayName": "组织类型",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "user_organization_type",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "organization_type_code",
+        "displayName": "组织类型编码",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 113,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "gender",
+        "displayName": "性别",
+        "sortable": false,
+        "columnWidth": 60,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "gender",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "gender_code",
+        "displayName": "性别编码",
+        "sortable": false,
+        "columnWidth": 60,
+        "hidden": true,
+        "order": 123,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "join_date",
+        "displayName": "入职日期",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 130,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "format": "date",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "join_job_date",
+        "displayName": "参加工作日",
+        "sortable": false,
+        "columnWidth": 120,
+        "hidden": true,
+        "order": 133,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "format": "date",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "birthday",
+        "displayName": "出生日期",
+        "sortable": false,
+        "columnWidth": 120,
+        "hidden": true,
+        "order": 135,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "format": "date",
+        "queryable": false,
+        "exportable": false,
+        "importable": true
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "nation",
+        "displayName": "民族",
+        "sortable": false,
+        "columnWidth": 80,
+        "hidden": true,
+        "order": 137,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "nation",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "nation_code",
+        "displayName": "民族编码",
+        "sortable": false,
+        "columnWidth": 60,
+        "hidden": true,
+        "order": 138,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "country_and_area",
+        "displayName": "国家地区",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 140,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "country_and_area",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "country_and_area_code",
+        "displayName": "国家地区编码",
+        "sortable": false,
+        "columnWidth": 90,
+        "hidden": true,
+        "order": 143,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "work_place",
+        "displayName": "工作地",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 150,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "work_place",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "work_place_code",
+        "displayName": "工作地编码",
+        "sortable": false,
+        "columnWidth": 80,
+        "hidden": true,
+        "order": 153,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "office_place",
+        "displayName": "办公地点",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 160,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "office_place",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "office_place_code",
+        "displayName": "办公地编码",
+        "sortable": false,
+        "columnWidth": 80,
+        "hidden": true,
+        "order": 163,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_photo",
+        "displayName": "员工照片",
+        "sortable": false,
+        "columnWidth": 120,
+        "hidden": true,
+        "order": 170,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "FILE_UPLOAD",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "is_dept_portion_manage",
+        "displayName": "是否部门负责人",
+        "sortable": false,
+        "columnWidth": 140,
+        "order": 180,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SWITCH",
+        "dictCode": "boolean_yes_no",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_management_jurisdiction",
+        "displayName": "人员管理权限",
+        "sortable": false,
+        "columnWidth": 200,
+        "hidden": true,
+        "order": 190,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      }
+    ]
+  },
+  "changeNote": [
+    "users 首版 VIEW Fragment，含列表/详情/表单完整字段渲染配置",
+    "部门使用 ORG_SELECT 关联 orgs BO"
+  ]
+}

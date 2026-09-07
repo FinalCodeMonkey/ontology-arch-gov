@@ -1,0 +1,3153 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='scenes'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'scenes'",
+    "generated_from": "scenes.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:58.130466+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "scene",
+        "name": "场景主实体",
+        "isPrimary": true,
+        "tableName": "crm_scene",
+        "rowLevelRuleEntries": [
+          "customers_id",
+          "business_name",
+          "scene_category",
+          "sales_owner_id",
+          "status"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_no",
+            "name": "场景编号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "scene_no",
+            "columnName": "scene_no",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "customers_id",
+            "name": "客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "customers_id",
+            "columnName": "customers_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "scene_name_dept",
+            "name": "场景名称-部门标准",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "scene_name_dept",
+            "columnName": "scene_name_dept",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_name_customer",
+            "name": "场景名称-客户标准",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "scene_name_customer",
+            "columnName": "scene_name_customer",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "business_name",
+            "name": "业务名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "business_name",
+            "columnName": "business_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "scene_category",
+            "name": "场景分类",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "scene_category",
+            "columnName": "scene_category",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "sales_owner_id",
+            "name": "销售负责人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "sales_owner_id",
+            "columnName": "sales_owner_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "status",
+            "name": "场景状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "displayFieldMappings": {
+          "customer_name": {
+            "code": "customer_name",
+            "name": "业务主体客户",
+            "type": "STRING",
+            "fieldName": "customer_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "customers_id",
+            "sourceRefColumnName": "customers_id",
+            "refBoCode": "customers",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "customer",
+            "refTableName": "crm_customer",
+            "refPkColumnName": "id",
+            "refFieldCode": "customer_name",
+            "refColumnName": "customer_name",
+            "sourceBoCode": "scenes"
+          },
+          "sales_owner_name": {
+            "code": "sales_owner_name",
+            "name": "销售负责人",
+            "type": "STRING",
+            "fieldName": "sales_owner_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "sales_owner_id",
+            "sourceRefColumnName": "sales_owner_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "scenes"
+          },
+          "sales_owner_department_code": {
+            "code": "sales_owner_department_code",
+            "name": "销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "sales_owner_department_code",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "sales_owner_id",
+            "sourceRefColumnName": "sales_owner_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "department_code",
+            "refColumnName": "department_code",
+            "sourceBoCode": "scenes"
+          },
+          "sales_owner_department_name": {
+            "code": "sales_owner_department_name",
+            "name": "销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "sales_owner_department_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "sales_owner_id",
+            "sourceRefColumnName": "sales_owner_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "department_name",
+            "refColumnName": "department_name",
+            "sourceBoCode": "scenes"
+          },
+          "customers_primary_customer_name": {
+            "code": "customers_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "customers_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "customers_fop_customer_name": {
+            "code": "customers_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "customers_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "scenes"
+          }
+        }
+      },
+      {
+        "code": "scene-product",
+        "name": "场景产品清单",
+        "isPrimary": false,
+        "tableName": "crm_scene_product",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "scene_id",
+            "columnName": "scene_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "products_id",
+            "name": "产品ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "products_id",
+            "columnName": "products_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "our_stage",
+            "name": "我司阶段",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "our_stage",
+            "columnName": "our_stage",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "lifecycle_start_date",
+            "name": "生命周期开始时间(预计)",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "lifecycle_start_date",
+            "columnName": "lifecycle_start_date",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "lifecycle_end_date",
+            "name": "生命周期结束时间(预计)",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "lifecycle_end_date",
+            "columnName": "lifecycle_end_date",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "lifecycle_remaining_years",
+            "name": "生命周期剩余时间(预计)",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "lifecycle_remaining_years",
+            "columnName": "lifecycle_remaining_years",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "next_bid_date",
+            "name": "下次招标时间",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "next_bid_date",
+            "columnName": "next_bid_date",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "current_progress",
+            "name": "进展说明",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "current_progress",
+            "columnName": "current_progress",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "products",
+        "parentEntityCode": "scene",
+        "displayFieldMappings": {
+          "product_model": {
+            "code": "product_model",
+            "name": "产品型号",
+            "type": "STRING",
+            "fieldName": "product_model",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "products_id",
+            "sourceRefColumnName": "products_id",
+            "refBoCode": "products",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "product",
+            "refTableName": "crm_master_product",
+            "refPkColumnName": "id",
+            "refFieldCode": "product_model",
+            "refColumnName": "product_model",
+            "sourceBoCode": "scenes"
+          },
+          "product_category": {
+            "code": "product_category",
+            "name": "产品类别",
+            "type": "STRING",
+            "fieldName": "product_category",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "products_id",
+            "sourceRefColumnName": "products_id",
+            "refBoCode": "products",
+            "refPkFieldCode": "id",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "product",
+            "refTableName": "crm_master_product",
+            "refPkColumnName": "id",
+            "refFieldCode": "product_category",
+            "refColumnName": "product_category",
+            "sourceBoCode": "scenes"
+          },
+          "product_series": {
+            "code": "product_series",
+            "name": "产品系列",
+            "type": "STRING",
+            "fieldName": "product_series",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "products_id",
+            "sourceRefColumnName": "products_id",
+            "refBoCode": "products",
+            "refPkFieldCode": "id",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "product",
+            "refTableName": "crm_master_product",
+            "refPkColumnName": "id",
+            "refFieldCode": "product_series",
+            "refColumnName": "product_series",
+            "sourceBoCode": "scenes"
+          },
+          "parent_customer_name": {
+            "code": "parent_customer_name",
+            "name": "场景主实体 / 业务主体客户",
+            "type": "STRING",
+            "fieldName": "parent_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "业务主体客户"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_name": {
+            "code": "parent_sales_owner_name",
+            "name": "场景主实体 / 销售负责人",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_department_code": {
+            "code": "parent_sales_owner_department_code",
+            "name": "场景主实体 / 销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_department_name": {
+            "code": "parent_sales_owner_department_name",
+            "name": "场景主实体 / 销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_name",
+              "columnName": "department_name"
+            },
+            "sourceBoCode": "scenes"
+          }
+        }
+      },
+      {
+        "code": "scene-product-accessory",
+        "name": "场景产品典配",
+        "isPrimary": false,
+        "tableName": "crm_scene_product_accessory",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "典配ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "line_id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "line_id",
+            "columnName": "line_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "products_id",
+            "name": "配件产品ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "products_id",
+            "columnName": "products_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "ratio",
+            "name": "配比",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "ratio",
+            "columnName": "ratio",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "product-accessory",
+        "parentEntityCode": "scene-product",
+        "displayFieldMappings": {
+          "accessory_model": {
+            "code": "accessory_model",
+            "name": "配件型号",
+            "type": "STRING",
+            "fieldName": "accessory_model",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "products_id",
+            "sourceRefColumnName": "products_id",
+            "refBoCode": "products",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "product",
+            "refTableName": "crm_master_product",
+            "refPkColumnName": "id",
+            "refFieldCode": "product_model",
+            "refColumnName": "product_model",
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_model": {
+            "code": "parent_product_model",
+            "name": "场景产品清单 / 产品型号",
+            "type": "STRING",
+            "fieldName": "parent_product_model",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品型号"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product-accessory",
+                "fromTableName": "crm_scene_product_accessory",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_model",
+              "columnName": "product_model"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_category": {
+            "code": "parent_product_category",
+            "name": "场景产品清单 / 产品类别",
+            "type": "STRING",
+            "fieldName": "parent_product_category",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品类别"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product-accessory",
+                "fromTableName": "crm_scene_product_accessory",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_category",
+              "columnName": "product_category"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_series": {
+            "code": "parent_product_series",
+            "name": "场景产品清单 / 产品系列",
+            "type": "STRING",
+            "fieldName": "parent_product_series",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品系列"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product-accessory",
+                "fromTableName": "crm_scene_product_accessory",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_series",
+              "columnName": "product_series"
+            },
+            "sourceBoCode": "scenes"
+          }
+        }
+      },
+      {
+        "code": "scene-product-team-member",
+        "name": "场景产品团队成员",
+        "isPrimary": false,
+        "tableName": "crm_scene_product_team_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "成员关联ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "line_id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "line_id",
+            "columnName": "line_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "user_id",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "member_role",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限设置",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permission",
+            "columnName": "permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "related_teams",
+            "name": "关联模块团队",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "related_teams",
+            "columnName": "related_teams",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "team-members",
+        "parentEntityCode": "scene-product",
+        "displayFieldMappings": {
+          "member_name": {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "fieldName": "member_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "user_id",
+            "sourceRefColumnName": "user_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_model": {
+            "code": "parent_product_model",
+            "name": "场景产品清单 / 产品型号",
+            "type": "STRING",
+            "fieldName": "parent_product_model",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品型号"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product-team-member",
+                "fromTableName": "crm_scene_product_team_member",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_model",
+              "columnName": "product_model"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_category": {
+            "code": "parent_product_category",
+            "name": "场景产品清单 / 产品类别",
+            "type": "STRING",
+            "fieldName": "parent_product_category",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品类别"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product-team-member",
+                "fromTableName": "crm_scene_product_team_member",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_category",
+              "columnName": "product_category"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_series": {
+            "code": "parent_product_series",
+            "name": "场景产品清单 / 产品系列",
+            "type": "STRING",
+            "fieldName": "parent_product_series",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品系列"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product-team-member",
+                "fromTableName": "crm_scene_product_team_member",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_series",
+              "columnName": "product_series"
+            },
+            "sourceBoCode": "scenes"
+          }
+        }
+      },
+      {
+        "code": "scene-annual-estimate",
+        "name": "场景年度测算",
+        "isPrimary": false,
+        "tableName": "crm_scene_annual_estimate",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "测算ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "line_id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "line_id",
+            "columnName": "line_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "year",
+            "name": "年份",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "year",
+            "columnName": "year",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "customer_procurement_amount",
+            "name": "客户采购规模（万元）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "customer_procurement_amount",
+            "columnName": "customer_procurement_amount",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "estimated_share",
+            "name": "预计我司份额（%）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "estimated_share",
+            "columnName": "estimated_share",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "estimated_sales_amount",
+            "name": "预计我司销量（万元）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "estimated_sales_amount",
+            "columnName": "estimated_sales_amount",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "annual-estimate",
+        "parentEntityCode": "scene-product",
+        "displayFieldMappings": {
+          "parent_product_model": {
+            "code": "parent_product_model",
+            "name": "场景产品清单 / 产品型号",
+            "type": "STRING",
+            "fieldName": "parent_product_model",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品型号"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-annual-estimate",
+                "fromTableName": "crm_scene_annual_estimate",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_model",
+              "columnName": "product_model"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_category": {
+            "code": "parent_product_category",
+            "name": "场景产品清单 / 产品类别",
+            "type": "STRING",
+            "fieldName": "parent_product_category",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品类别"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-annual-estimate",
+                "fromTableName": "crm_scene_annual_estimate",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_category",
+              "columnName": "product_category"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_product_series": {
+            "code": "parent_product_series",
+            "name": "场景产品清单 / 产品系列",
+            "type": "STRING",
+            "fieldName": "parent_product_series",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景产品清单",
+              "产品系列"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-annual-estimate",
+                "fromTableName": "crm_scene_annual_estimate",
+                "fromRefCode": "line_id",
+                "fromRefColumnName": "line_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene-product",
+                "toTableName": "crm_scene_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-product",
+                "fromTableName": "crm_scene_product",
+                "fromRefCode": "products_id",
+                "fromRefColumnName": "products_id",
+                "toBoCode": "products",
+                "toEntityCode": "product",
+                "toTableName": "crm_master_product",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "products",
+              "entityCode": "product",
+              "tableName": "crm_master_product",
+              "fieldCode": "product_series",
+              "columnName": "product_series"
+            },
+            "sourceBoCode": "scenes"
+          }
+        }
+      },
+      {
+        "code": "scene-rival-summary",
+        "name": "场景竞对汇总",
+        "isPrimary": false,
+        "tableName": "crm_scene_rival_summary",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "竞对汇总ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "scene_id",
+            "columnName": "scene_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "year",
+            "name": "年份",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "year",
+            "columnName": "year",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "yearly_procurement_scale",
+            "name": "当年客户总采购金额",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "yearly_procurement_scale",
+            "columnName": "yearly_procurement_scale",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "kaijie_estimated_sales",
+            "name": "凯捷预计销量",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "kaijie_estimated_sales",
+            "columnName": "kaijie_estimated_sales",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "kaijie_estimated_share",
+            "name": "凯捷预计份额",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "kaijie_estimated_share",
+            "columnName": "kaijie_estimated_share",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "rival-summary",
+        "parentEntityCode": "scene",
+        "displayFieldMappings": {
+          "parent_customer_name": {
+            "code": "parent_customer_name",
+            "name": "场景主实体 / 业务主体客户",
+            "type": "STRING",
+            "fieldName": "parent_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "业务主体客户"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-rival-summary",
+                "fromTableName": "crm_scene_rival_summary",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_name": {
+            "code": "parent_sales_owner_name",
+            "name": "场景主实体 / 销售负责人",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-rival-summary",
+                "fromTableName": "crm_scene_rival_summary",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_department_code": {
+            "code": "parent_sales_owner_department_code",
+            "name": "场景主实体 / 销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-rival-summary",
+                "fromTableName": "crm_scene_rival_summary",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_department_name": {
+            "code": "parent_sales_owner_department_name",
+            "name": "场景主实体 / 销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-rival-summary",
+                "fromTableName": "crm_scene_rival_summary",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_name",
+              "columnName": "department_name"
+            },
+            "sourceBoCode": "scenes"
+          }
+        }
+      },
+      {
+        "code": "scene-rival-detail",
+        "name": "场景竞对明细",
+        "isPrimary": false,
+        "tableName": "crm_scene_rival_detail",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "竞对ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "summary_id",
+            "name": "竞对汇总ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "summary_id",
+            "columnName": "summary_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "competitor_id",
+            "name": "竞争对手ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "competitor_id",
+            "columnName": "competitor_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "rival_share",
+            "name": "竞对份额（%）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "rival_share",
+            "columnName": "rival_share",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "rival_sales_amount",
+            "name": "竞对销量（万元）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "rival_sales_amount",
+            "columnName": "rival_sales_amount",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "rival_tag",
+            "name": "竞对标签",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "rival_tag",
+            "columnName": "rival_tag",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "rival_description",
+            "name": "竞对说明",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "rival_description",
+            "columnName": "rival_description",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "rival-details",
+        "parentEntityCode": "scene-rival-summary",
+        "displayFieldMappings": {
+          "rival_name": {
+            "code": "rival_name",
+            "name": "竞争对手",
+            "type": "STRING",
+            "fieldName": "rival_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "competitor_id",
+            "sourceRefColumnName": "competitor_id",
+            "refBoCode": "competitors",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "competitor",
+            "refTableName": "crm_master_competitor",
+            "refPkColumnName": "id",
+            "refFieldCode": "competitor_name",
+            "refColumnName": "competitor_name",
+            "sourceBoCode": "scenes"
+          }
+        }
+      },
+      {
+        "code": "scene-team-member",
+        "name": "场景团队成员",
+        "isPrimary": false,
+        "tableName": "crm_scene_team_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "成员关联ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "scene_id",
+            "columnName": "scene_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "user_id",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "member_role",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限设置",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permission",
+            "columnName": "permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "related_teams",
+            "name": "关联模块团队",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "related_teams",
+            "columnName": "related_teams",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "team-members",
+        "parentEntityCode": "scene",
+        "displayFieldMappings": {
+          "member_name": {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "fieldName": "member_name",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "user_id",
+            "sourceRefColumnName": "user_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "scenes"
+          },
+          "parent_customer_name": {
+            "code": "parent_customer_name",
+            "name": "场景主实体 / 业务主体客户",
+            "type": "STRING",
+            "fieldName": "parent_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "业务主体客户"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-team-member",
+                "fromTableName": "crm_scene_team_member",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_name": {
+            "code": "parent_sales_owner_name",
+            "name": "场景主实体 / 销售负责人",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-team-member",
+                "fromTableName": "crm_scene_team_member",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_department_code": {
+            "code": "parent_sales_owner_department_code",
+            "name": "场景主实体 / 销售负责人部门编码",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-team-member",
+                "fromTableName": "crm_scene_team_member",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "scenes"
+          },
+          "parent_sales_owner_department_name": {
+            "code": "parent_sales_owner_department_name",
+            "name": "场景主实体 / 销售负责人部门名称",
+            "type": "STRING",
+            "fieldName": "parent_sales_owner_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "场景主实体",
+              "销售负责人部门名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene-team-member",
+                "fromTableName": "crm_scene_team_member",
+                "fromRefCode": "scene_id",
+                "fromRefColumnName": "scene_id",
+                "toBoCode": "scenes",
+                "toEntityCode": "scene",
+                "toTableName": "crm_scene",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "scenes",
+                "fromEntityCode": "scene",
+                "fromTableName": "crm_scene",
+                "fromRefCode": "sales_owner_id",
+                "fromRefColumnName": "sales_owner_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_name",
+              "columnName": "department_name"
+            },
+            "sourceBoCode": "scenes"
+          }
+        }
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建场景",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "TRANSFER",
+        "name": "场景转移",
+        "scope": "BO",
+        "act_aliases": "transfer",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "CREATE_PRODUCT",
+        "name": "新建产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "scene-product"
+      },
+      {
+        "code": "EDIT_PRODUCT",
+        "name": "编辑产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-product"
+      },
+      {
+        "code": "DELETE_PRODUCT",
+        "name": "删除产品清单",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "scene-product"
+      },
+      {
+        "code": "ADJUST_RIVAL",
+        "name": "竞对调整",
+        "scope": "ENTITY",
+        "act_aliases": "adjust-rival",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-rival-detail"
+      },
+      {
+        "code": "CREATE_TEAM_MEMBER",
+        "name": "新增团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "scene-team-member"
+      },
+      {
+        "code": "VIEW_TEAM_MEMBER",
+        "name": "查看团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "view-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-team-member"
+      },
+      {
+        "code": "EDIT_TEAM_MEMBER",
+        "name": "编辑团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-team-member"
+      },
+      {
+        "code": "DELETE_TEAM_MEMBER",
+        "name": "删除团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "scene-team-member"
+      },
+      {
+        "code": "CREATE_PRODUCT_TEAM_MEMBER",
+        "name": "新增产品团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "scene-product-team-member"
+      },
+      {
+        "code": "EDIT_PRODUCT_TEAM_MEMBER",
+        "name": "编辑产品团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-product-team-member"
+      },
+      {
+        "code": "DELETE_PRODUCT_TEAM_MEMBER",
+        "name": "删除产品团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "scene-product-team-member"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "multi-customer-heatmap,multi-customer-products,simple-list,import-template,heatmap-query,read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "LIST_SCENE_PRODUCT",
+        "name": "查询场景产品清单列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-scene-product",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-product"
+      },
+      {
+        "code": "READ_SCENE_PRODUCT",
+        "name": "查看场景产品清单详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-scene-product",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-product"
+      },
+      {
+        "code": "LIST_SCENE_PRODUCT_ACCESSORY",
+        "name": "查询场景产品典配列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-scene-product-accessory",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-product-accessory"
+      },
+      {
+        "code": "READ_SCENE_PRODUCT_ACCESSORY",
+        "name": "查看场景产品典配详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-scene-product-accessory",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-product-accessory"
+      },
+      {
+        "code": "CREATE_SCENE_PRODUCT_ACCESSORY",
+        "name": "新建场景产品典配",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "scene-product-accessory"
+      },
+      {
+        "code": "UPDATE_SCENE_PRODUCT_ACCESSORY",
+        "name": "更新场景产品典配",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-product-accessory"
+      },
+      {
+        "code": "DELETE_SCENE_PRODUCT_ACCESSORY",
+        "name": "删除场景产品典配",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "scene-product-accessory"
+      },
+      {
+        "code": "LIST_SCENE_PRODUCT_TEAM_MEMBER",
+        "name": "查询场景产品团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-scene-product-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-product-team-member"
+      },
+      {
+        "code": "READ_SCENE_PRODUCT_TEAM_MEMBER",
+        "name": "查看场景产品团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-scene-product-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-product-team-member"
+      },
+      {
+        "code": "LIST_SCENE_ANNUAL_ESTIMATE",
+        "name": "查询场景年度测算列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-scene-annual-estimate",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-annual-estimate"
+      },
+      {
+        "code": "READ_SCENE_ANNUAL_ESTIMATE",
+        "name": "查看场景年度测算详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-scene-annual-estimate",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-annual-estimate"
+      },
+      {
+        "code": "CREATE_SCENE_ANNUAL_ESTIMATE",
+        "name": "新建场景年度测算",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "scene-annual-estimate"
+      },
+      {
+        "code": "UPDATE_SCENE_ANNUAL_ESTIMATE",
+        "name": "更新场景年度测算",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-annual-estimate"
+      },
+      {
+        "code": "DELETE_SCENE_ANNUAL_ESTIMATE",
+        "name": "删除场景年度测算",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "scene-annual-estimate"
+      },
+      {
+        "code": "LIST_SCENE_RIVAL_SUMMARY",
+        "name": "查询场景竞对汇总列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-scene-rival-summary",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-rival-summary"
+      },
+      {
+        "code": "READ_SCENE_RIVAL_SUMMARY",
+        "name": "查看场景竞对汇总详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-scene-rival-summary",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-rival-summary"
+      },
+      {
+        "code": "CREATE_SCENE_RIVAL_SUMMARY",
+        "name": "新建场景竞对汇总",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "scene-rival-summary"
+      },
+      {
+        "code": "UPDATE_SCENE_RIVAL_SUMMARY",
+        "name": "更新场景竞对汇总",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-rival-summary"
+      },
+      {
+        "code": "DELETE_SCENE_RIVAL_SUMMARY",
+        "name": "删除场景竞对汇总",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "scene-rival-summary"
+      },
+      {
+        "code": "LIST_SCENE_RIVAL_DETAIL",
+        "name": "查询场景竞对明细列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-scene-rival-detail",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-rival-detail"
+      },
+      {
+        "code": "READ_SCENE_RIVAL_DETAIL",
+        "name": "查看场景竞对明细详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-scene-rival-detail",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-rival-detail"
+      },
+      {
+        "code": "CREATE_SCENE_RIVAL_DETAIL",
+        "name": "新建场景竞对明细",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "scene-rival-detail"
+      },
+      {
+        "code": "UPDATE_SCENE_RIVAL_DETAIL",
+        "name": "更新场景竞对明细",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "scene-rival-detail"
+      },
+      {
+        "code": "DELETE_SCENE_RIVAL_DETAIL",
+        "name": "删除场景竞对明细",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "scene-rival-detail"
+      },
+      {
+        "code": "LIST_SCENE_TEAM_MEMBER",
+        "name": "查询场景团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-scene-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-team-member"
+      },
+      {
+        "code": "READ_SCENE_TEAM_MEMBER",
+        "name": "查看场景团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-scene-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "scene-team-member"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'scenes' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'scenes' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE",
+      "RES_DATA_BO + scenes_bo_meta_id + IMPORT",
+      "RES_DATA_BO + scenes_bo_meta_id + EXPORT",
+      "RES_DATA_BO + scenes_bo_meta_id + UPDATE",
+      "RES_DATA_BO + scenes_bo_meta_id + TRANSFER",
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE_PRODUCT",
+      "RES_DATA_BO + scenes_bo_meta_id + EDIT_PRODUCT",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE_PRODUCT",
+      "RES_DATA_BO + scenes_bo_meta_id + ADJUST_RIVAL",
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + VIEW_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + EDIT_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE_PRODUCT_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + EDIT_PRODUCT_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE_PRODUCT_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + READ",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST_SCENE_PRODUCT",
+      "RES_DATA_BO + scenes_bo_meta_id + READ_SCENE_PRODUCT",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST_SCENE_PRODUCT_ACCESSORY",
+      "RES_DATA_BO + scenes_bo_meta_id + READ_SCENE_PRODUCT_ACCESSORY",
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE_SCENE_PRODUCT_ACCESSORY",
+      "RES_DATA_BO + scenes_bo_meta_id + UPDATE_SCENE_PRODUCT_ACCESSORY",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE_SCENE_PRODUCT_ACCESSORY",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST_SCENE_PRODUCT_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + READ_SCENE_PRODUCT_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST_SCENE_ANNUAL_ESTIMATE",
+      "RES_DATA_BO + scenes_bo_meta_id + READ_SCENE_ANNUAL_ESTIMATE",
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE_SCENE_ANNUAL_ESTIMATE",
+      "RES_DATA_BO + scenes_bo_meta_id + UPDATE_SCENE_ANNUAL_ESTIMATE",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE_SCENE_ANNUAL_ESTIMATE",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST_SCENE_RIVAL_SUMMARY",
+      "RES_DATA_BO + scenes_bo_meta_id + READ_SCENE_RIVAL_SUMMARY",
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE_SCENE_RIVAL_SUMMARY",
+      "RES_DATA_BO + scenes_bo_meta_id + UPDATE_SCENE_RIVAL_SUMMARY",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE_SCENE_RIVAL_SUMMARY",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST_SCENE_RIVAL_DETAIL",
+      "RES_DATA_BO + scenes_bo_meta_id + READ_SCENE_RIVAL_DETAIL",
+      "RES_DATA_BO + scenes_bo_meta_id + CREATE_SCENE_RIVAL_DETAIL",
+      "RES_DATA_BO + scenes_bo_meta_id + UPDATE_SCENE_RIVAL_DETAIL",
+      "RES_DATA_BO + scenes_bo_meta_id + DELETE_SCENE_RIVAL_DETAIL",
+      "RES_DATA_BO + scenes_bo_meta_id + LIST_SCENE_TEAM_MEMBER",
+      "RES_DATA_BO + scenes_bo_meta_id + READ_SCENE_TEAM_MEMBER"
+    ]
+  }
+}

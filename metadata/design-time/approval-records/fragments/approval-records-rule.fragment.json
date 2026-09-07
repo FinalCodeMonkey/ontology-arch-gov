@@ -1,0 +1,75 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "approval-records",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "APPROVAL_REVOKE_ONLY_PENDING",
+        "name": "撤回仅限待审批记录",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "status != 'PENDING'",
+        "severity": "ERROR",
+        "message": "仅待审批状态的记录可以撤回",
+        "description": "REVOKE 操作时，status 必须为 PENDING。",
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "PENDING"
+          }
+        }
+      },
+      {
+        "code": "APPROVAL_REVOKE_REASON_REQUIRED",
+        "name": "撤回必须填写原因",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "revoke_reason == null || revoke_reason == ''",
+        "severity": "ERROR",
+        "message": "撤回审批时必须填写撤回原因",
+        "description": "REVOKE 操作时，revoke_reason 不能为空。",
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "revoke_reason"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "revoke_reason"
+              },
+              "right": {
+                "type": "literal",
+                "value": ""
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "审批记录 BO 首版 RULE Fragment，含撤回状态约束和撤回原因必填校验"
+  ]
+}

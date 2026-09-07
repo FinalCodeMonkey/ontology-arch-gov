@@ -1,0 +1,445 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "operation-logs",
+  "boName": "操作审计日志",
+  "description": "操作审计日志业务对象，通用设计，不限定特定业务域。记录任意业务对象的关键操作审计轨迹，通过 biz_type + biz_id 多态引用业务对象。操作人通过 CROSS_BO_REF 引用 users BO。PSP 中 bo_code 为 operation-logs。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/operation-logs",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "searchEnabled": true,
+    "batchEnabled": false
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "operation_type",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 50,
+    "formLayout": "VERTICAL",
+    "formColumns": 1,
+    "formLabelWidth": 120,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "operation-log",
+      "name": "操作审计日志",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_operation_log",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键（雪花ID）",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "biz_type",
+          "name": "业务对象类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "bizType",
+          "columnName": "biz_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "message": "业务对象类型不能为空且不超过32字"
+          },
+          "view": {
+            "displayName": "业务对象类型",
+            "sortable": true,
+            "columnWidth": 150,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择业务对象类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "operation-log_biz_type"
+          }
+        },
+        {
+          "code": "biz_id",
+          "name": "业务对象ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "bizId",
+          "columnName": "biz_id",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "业务对象ID",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入业务对象ID",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "operation_type",
+          "name": "操作类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "operationType",
+          "columnName": "operation_type",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "message": "操作类型不能为空且不超过50字"
+          },
+          "view": {
+            "displayName": "操作类型",
+            "sortable": true,
+            "columnWidth": 200,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择操作类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "operation-log_type"
+          }
+        },
+        {
+          "code": "operator_id",
+          "name": "操作人ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "operatorId",
+          "columnName": "operator_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "operator_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "操作人不能为空"
+          }
+        },
+        {
+          "code": "operator_name",
+          "name": "操作人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "operatorName",
+          "columnName": "operator_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "操作人",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "description",
+          "name": "操作描述",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "description",
+          "columnName": "description",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "操作描述可能包含敏感业务信息，限制可见",
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "操作描述",
+            "sortable": false,
+            "columnWidth": 300,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "逻辑删除",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "操作时间",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "修改时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "修改人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户标识",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "biz_type",
+        "biz_id",
+        "operation_type",
+        "operator_id",
+        "created_time"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "记录操作日志",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "description": "记录操作审计日志，通常由业务操作触发自动写入。API：POST /operation-logs。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "description": "导出操作审计日志。API：POST /operation-logs/export。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.deleteScope"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.860914+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "approval-records",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "approval-record": [
+          "biz_type",
+          "biz_id",
+          "status",
+          "submitter_id",
+          "initiator_id",
+          "current_handler_id",
+          "action_type",
+          "process_instance_id"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "reject_reason",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "驳回原因可能包含敏感业务判断，限制可见"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "revoke_reason",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "撤回原因可能包含敏感信息，限制可见"
+      }
+    ],
+    "authzProjection": {
+      "description": "审批记录资源 ABAC 属性投影。通用设计，支持按业务对象类型、审批状态、提交人等维度进行数据权限控制。",
+      "usageNote": "用于数据权限和列表行级过滤。策略表达式中典型引用包括 res.biz_type、res.status、res.submitter_id、res.current_handler_id 等。",
+      "attributes": [
+        {
+          "code": "record_id",
+          "name": "审批记录ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "approval-record",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "审批记录唯一标识。",
+          "i18nKey": "auth.resource.res_approval-record.attr.record_id"
+        },
+        {
+          "code": "biz_type",
+          "name": "业务对象类型",
+          "type": "STRING",
+          "source": {
+            "entityCode": "approval-record",
+            "fieldCode": "biz_type"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "业务对象类型，用于按业务域过滤审批记录。典型表达式：res.biz_type == 'customers'。",
+          "i18nKey": "auth.resource.res_approval-record.attr.biz_type"
+        },
+        {
+          "code": "submitter_id",
+          "name": "提交人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "approval-record",
+            "fieldCode": "submitter_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "审批提交人。典型表达式：sub.user_id == res.submitter_id。",
+          "i18nKey": "auth.resource.res_approval-record.attr.submitter_id"
+        },
+        {
+          "code": "current_handler_id",
+          "name": "当前处理人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "approval-record",
+            "fieldCode": "current_handler_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 40,
+          "displayGroup": "数据范围",
+          "description": "当前处理人。典型表达式：sub.user_id == res.current_handler_id。",
+          "i18nKey": "auth.resource.res_approval-record.attr.current_handler_id"
+        },
+        {
+          "code": "status",
+          "name": "审批状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "approval-record",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "PENDING",
+              "label": "待审批"
+            },
+            {
+              "value": "APPROVED",
+              "label": "已通过"
+            },
+            {
+              "value": "REJECTED",
+              "label": "已驳回"
+            },
+            {
+              "value": "REVOKED",
+              "label": "已撤回"
+            },
+            {
+              "value": "TERMINATED",
+              "label": "已终止"
+            }
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "审批状态。典型表达式：res.status == 'PENDING'。",
+          "i18nKey": "auth.resource.res_approval-record.attr.status"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "审批记录 BO 首版 SECURITY Fragment，含行级过滤字段、PII/SENSITIVE 字段分级和 ABAC 资源属性投影"
+  ]
+}

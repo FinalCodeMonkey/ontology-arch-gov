@@ -1,0 +1,173 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scenes",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "PRODUCT_LIFECYCLE_DATE_ORDER",
+        "name": "产品生命周期开始时间必须早于结束时间",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_start_date",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "lifecycle_start_date < lifecycle_end_date",
+        "severity": "ERROR",
+        "message": "生命周期开始时间必须早于结束时间",
+        "description": "产品清单创建或编辑时校验，拒绝开始日期晚于结束日期的输入。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LT",
+          "left": {
+            "type": "field",
+            "path": "lifecycle_start_date"
+          },
+          "right": {
+            "type": "field",
+            "path": "lifecycle_end_date"
+          }
+        }
+      },
+      {
+        "code": "ANNUAL_ESTIMATE_AMOUNT_CONSISTENCY",
+        "name": "年度测算销量应与采购规模×份额一致",
+        "ruleType": "CONSISTENCY",
+        "scope": "ENTITY",
+        "entityCode": "scene-annual-estimate",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "abs(estimated_sales_amount - customer_procurement_amount * estimated_share / 100) <= 0.01",
+        "severity": "WARN",
+        "message": "预计销量与客户采购规模×预计份额不一致，请检查数值",
+        "description": "创建或编辑年度测算时提示，四舍五入误差在 0.01 以内视为正常。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "binary",
+            "op": "GT",
+            "left": {
+              "type": "field",
+              "path": "estimated_sales_amount"
+            },
+            "right": {
+              "type": "binary",
+              "op": "DIV",
+              "left": {
+                "type": "binary",
+                "op": "MUL",
+                "left": {
+                  "type": "field",
+                  "path": "customer_procurement_amount"
+                },
+                "right": {
+                  "type": "field",
+                  "path": "estimated_share"
+                }
+              },
+              "right": {
+                "type": "literal",
+                "value": 100
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 0.01
+          }
+        }
+      },
+      {
+        "code": "RIVAL_SHARE_SUM_CONSISTENCY",
+        "name": "竞对份额之和加凯捷份额应约等于100%",
+        "ruleType": "CONSISTENCY",
+        "scope": "ENTITY",
+        "entityCode": "scene-rival-summary",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "abs(sum(rival_detail.rival_share) + kaijie_estimated_share - 100) <= 1",
+        "severity": "WARN",
+        "message": "所有竞对份额加凯捷预期份额之和应约等于100%，当前偏差超过1%",
+        "description": "竞对调整保存时校验，竞对明细 share 之和加上凯捷预计份额应当接近 100%，允许 ±1% 偏差。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "binary",
+            "op": "GT",
+            "left": {
+              "type": "binary",
+              "op": "ADD",
+              "left": {
+                "type": "aggregate",
+                "fn": "sum",
+                "source": "scene-rival-detail",
+                "field": "rival_share"
+              },
+              "right": {
+                "type": "field",
+                "path": "kaijie_estimated_share"
+              }
+            },
+            "right": {
+              "type": "literal",
+              "value": 100
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "TEAM_MEMBER_SALES_OWNER_MUST_MATCH_SCENE",
+        "name": "团队成员的销售负责人必须与场景销售负责人一致",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "scene-team-member",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "member_role != 'SALES_OWNER' || user_id == scene.sales_owner_id",
+        "severity": "ERROR",
+        "message": "销售负责人角色只能由场景的指定销售负责人担任",
+        "description": "新增或编辑团队成员时，若 member_role=SALES_OWNER，则 user_id 必须与 scene.sales_owner_id 一致。",
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "member_role"
+              },
+              "right": {
+                "type": "literal",
+                "value": "SALES_OWNER"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "scene.sales_owner_id"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "scenes RULE Fragment — 4 条业务规则：生命周期日期顺序、年度测算一致性、竞对份额和校验"
+  ]
+}

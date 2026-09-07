@@ -1,0 +1,50 @@
+{
+  "_scenario": "CBG互联网大厂续保报价记录",
+  "_scenarioDescription": "腾讯网络升级(OPP-006赢单后)续保报价。阿里IDC扩容续保报价。字节JDM续保报价。小米扩容续保报价。",
+  "records": [
+    {
+      "id": 1,
+      "inventory_id": 99001,
+      "inventory_no": "INV-CBG-001",
+      "quote_type_code": "RENEWAL",
+      "sales_opportunity_type_code": "RENEWAL",
+      "crm_opportunity_code": "OPP-CBG-006",
+      "crm_opportunity_name": "腾讯科技网络升级商机",
+      "submit_time": "2026-06-20T10:30:00",
+      "submit_status": 1
+    },
+    {
+      "id": 2,
+      "inventory_id": 99002,
+      "inventory_no": "INV-CBG-002",
+      "quote_type_code": "RENEWAL",
+      "sales_opportunity_type_code": "RENEWAL",
+      "crm_opportunity_code": "OPP-CBG-003",
+      "crm_opportunity_name": "阿里IDC扩容子项目商机",
+      "submit_time": "2026-07-05T11:30:00",
+      "submit_status": 1
+    },
+    {
+      "id": 3,
+      "inventory_id": 99003,
+      "inventory_no": "INV-CBG-003",
+      "quote_type_code": "NEW_QUOTE",
+      "sales_opportunity_type_code": "NEW_BUSINESS",
+      "crm_opportunity_code": "OPP-CBG-004",
+      "crm_opportunity_name": "字节跳动JDM业务解决方案商机",
+      "submit_time": "2026-06-25T09:30:00",
+      "submit_status": 0
+    },
+    {
+      "id": 4,
+      "inventory_id": 99004,
+      "inventory_no": "INV-CBG-004",
+      "quote_type_code": "RENEWAL",
+      "sales_opportunity_type_code": "RENEWAL",
+      "crm_opportunity_code": "OPP-CBG-008",
+      "crm_opportunity_name": "小米批次扩容项目",
+      "submit_time": "2026-07-08T12:00:00",
+      "submit_status": 0
+    }
+  ]
+}

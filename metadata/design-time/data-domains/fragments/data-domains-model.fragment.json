@@ -1,0 +1,194 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "data-domains",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "data-domains",
+    "boName": "数据领域",
+    "description": "数据领域树形配置，用于从数据架构维度对业务对象进行领域划分。采用树形建模（TREE），主实体 authz-data-domain 对应 unify_engine 库物理表，支持三级层级：SUBJECT_GROUP（主题域分组）/ SUBJECT（主题域）/ SUB_SUBJECT（主题子域）。bo-meta-models BO 通过 data_domain_id 引用本 BO 进行领域归属。",
+    "apiConfig": {
+      "resourcePath": "/data-domains",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "domain_code",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "CASCADE_AGGREGATE",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": false
+    },
+    "boConfig": {
+      "objectType": "TREE",
+      "nameField": "domain_name",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "sort_order",
+        "direction": "asc"
+      }
+    },
+    "entities": [
+      {
+        "code": "authz-data-domain",
+        "name": "数据领域实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "authz_data_domain",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "父节点ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": true
+          },
+          {
+            "code": "level_type",
+            "fieldName": "levelType",
+            "columnName": "level_type",
+            "name": "层级类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true
+          },
+          {
+            "code": "domain_code",
+            "fieldName": "domainCode",
+            "columnName": "domain_code",
+            "name": "领域编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true
+          },
+          {
+            "code": "domain_name",
+            "fieldName": "domainName",
+            "columnName": "domain_name",
+            "name": "领域名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true
+          },
+          {
+            "code": "sort_order",
+            "fieldName": "sortOrder",
+            "columnName": "sort_order",
+            "name": "同层排序序号",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_at",
+            "fieldName": "createdAt",
+            "columnName": "created_at",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_at",
+            "fieldName": "updatedAt",
+            "columnName": "updated_at",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "0"
+          },
+          {
+            "code": "tenant_id",
+            "fieldName": "tenantId",
+            "columnName": "tenant_id",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "1"
+          },
+          {
+            "code": "app_code",
+            "fieldName": "appCode",
+            "columnName": "app_code",
+            "name": "应用代码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "crm"
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "data-domains 首版 MODEL Fragment",
+    "树形建模（TREE），主实体 authz-data-domain 对应 unify_engine 物理表",
+    "支持三级层级：SUBJECT_GROUP / SUBJECT / SUB_SUBJECT",
+    "parent_id 为 PARENT_REF 语义角色，NULL 表示根节点",
+    "domain_code 为 BUSINESS_KEY，全局唯一（DDL uk_authz-data-domain_code 约束）"
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='approval-records'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'approval-records'",
+    "generated_from": "approval-records.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.052186+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "approval-record",
+        "name": "审批记录",
+        "isPrimary": true,
+        "tableName": "crm_customer_approval_record",
+        "rowLevelRuleEntries": [
+          "biz_type",
+          "biz_id",
+          "status",
+          "submitter_id",
+          "initiator_id",
+          "current_handler_id",
+          "action_type",
+          "process_instance_id"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "biz_type",
+            "name": "业务对象类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "bizType",
+            "columnName": "biz_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "biz_id",
+            "name": "业务对象ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "bizId",
+            "columnName": "biz_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "process_instance_id",
+            "name": "BPM流程实例ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "processInstanceId",
+            "columnName": "process_instance_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "process_name",
+            "name": "流程名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "processName",
+            "columnName": "process_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "action_type",
+            "name": "触发动作",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "actionType",
+            "columnName": "action_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "status",
+            "name": "审批状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "submitter_id",
+            "name": "提交人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "submitterId",
+            "columnName": "submitter_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "submitter_name",
+            "name": "提交人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "submitterName",
+            "columnName": "submitter_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "initiator_id",
+            "name": "流程发起人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "initiatorId",
+            "columnName": "initiator_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "initiator_name",
+            "name": "流程发起人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "initiatorName",
+            "columnName": "initiator_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "external_initiator",
+            "name": "外部发起人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "externalInitiator",
+            "columnName": "external_initiator",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "current_handler_id",
+            "name": "当前处理人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "currentHandlerId",
+            "columnName": "current_handler_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "current_handler_name",
+            "name": "当前处理人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "currentHandlerName",
+            "columnName": "current_handler_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "reject_reason",
+            "name": "驳回原因",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "rejectReason",
+            "columnName": "reject_reason",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "revoke_reason",
+            "name": "撤回原因",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "revokeReason",
+            "columnName": "revoke_reason",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "revoker_id",
+            "name": "撤回人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "revokerId",
+            "columnName": "revoker_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "revoker_name",
+            "name": "撤回人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "revokerName",
+            "columnName": "revoker_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "completed_time",
+            "name": "审批完成时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "completedTime",
+            "columnName": "completed_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "创建审批记录",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "update",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除审批记录",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "REVOKE",
+        "name": "撤回审批",
+        "scope": "BO",
+        "act_aliases": "revoke",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'approval-records' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'approval-records' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + approval-records_bo_meta_id + CREATE",
+      "RES_DATA_BO + approval-records_bo_meta_id + UPDATE",
+      "RES_DATA_BO + approval-records_bo_meta_id + DELETE",
+      "RES_DATA_BO + approval-records_bo_meta_id + EXPORT",
+      "RES_DATA_BO + approval-records_bo_meta_id + REVOKE",
+      "RES_DATA_BO + approval-records_bo_meta_id + LIST",
+      "RES_DATA_BO + approval-records_bo_meta_id + READ"
+    ]
+  }
+}

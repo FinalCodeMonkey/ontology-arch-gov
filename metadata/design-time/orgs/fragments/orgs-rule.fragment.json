@@ -1,0 +1,87 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "orgs",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "ORG_DEPARTMENT_CODE_UNIQUE",
+        "name": "部门编码唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "部门编码已存在，请使用其他编码",
+        "description": "创建或修改组织时，department_code 必须唯一（含已逻辑删除记录）。"
+      },
+      {
+        "code": "ORG_PARENT_NO_CIRCULAR",
+        "name": "组织父级引用不可形成环路",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "上级组织引用不能形成环路，请检查组织归属关系",
+        "description": "更新 parent_org_id 时，不可将当前组织或其子孙组织设为父级，防止环路。",
+        "crossBoRef": {
+          "refBoCode": "orgs",
+          "refFieldCode": "id",
+          "localEntityCode": "dap-sys-org",
+          "localFieldCode": "parent_org_id"
+        }
+      },
+      {
+        "code": "ORG_DELETE_NO_CHILDREN",
+        "name": "有子组织时不可删除",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "当前组织下存在子组织，请先删除或迁移子组织",
+        "description": "当其他组织 parent_org_id 指向本组织时，禁止删除本组织。",
+        "crossBoRef": {
+          "refBoCode": "orgs",
+          "refFieldCode": "parent_org_id",
+          "localEntityCode": "dap-sys-org",
+          "localFieldCode": "id"
+        }
+      },
+      {
+        "code": "ORG_DISABLE_CHECK_CHILDREN",
+        "name": "停用前检查子组织",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "WARN",
+        "expression": "is_enable == 'N'",
+        "message": "当前组织下存在启用的子组织，停用将影响下级，确认继续？",
+        "description": "将组织从启用切换为停用前，检查是否存在启用的子组织。",
+        "crossBoRef": {
+          "refBoCode": "orgs",
+          "refFieldCode": "parent_org_id",
+          "localEntityCode": "dap-sys-org",
+          "localFieldCode": "id"
+        },
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "is_enable"
+          },
+          "right": {
+            "type": "literal",
+            "value": "N"
+          }
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "orgs 首版 RULE Fragment，含编码唯一性、树形环路保护、删除/停用子组织检查等自引用跨 BO 规则"
+  ]
+}

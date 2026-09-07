@@ -1,0 +1,66 @@
+{
+  "_scenario": "4个对比客户 — 健康/高风险/无活动/无商机",
+  "_scenarioDescription": "客户A(1001)凯捷网络：教育行业合同主体，3个活跃商机，90天3次活动，1个竞争对手，健康度85.2(低风险)。客户B(1002)华南理工：教育行业FOP客户，1个停滞商机(45天)，90天0次活动，2个竞争对手，健康度32.0(高风险)。客户C(1003)北京某大学：无商机无活动，健康度15.0(极高风险)。客户D(1004)深圳职业技术学院：1个已赢单商机，健康度90.0(优秀)。",
+  "records": [
+    {
+      "id": 1001,
+      "customer_no": "CUST-2026-001",
+      "customer_name": "深圳凯捷网络有限公司",
+      "customer_short_name": "凯捷网络",
+      "data_source": "MANUAL",
+      "business_type": "ALL",
+      "market_segment": "INTERNET_T3",
+      "customer_category": "CONTRACT_ENTITY",
+      "parent_customer_id": null,
+      "fop_customer_id": null,
+      "country": "CN",
+      "province": "广东省",
+      "city": "深圳市"
+    },
+    {
+      "id": 1002,
+      "customer_no": "CUST-2026-002",
+      "customer_name": "广州华南理工大学",
+      "customer_short_name": "华南理工",
+      "data_source": "MANUAL",
+      "business_type": "ALL",
+      "market_segment": "INTERNET_T3",
+      "customer_category": "FOP_CUSTOMER",
+      "parent_customer_id": 1001,
+      "fop_customer_id": null,
+      "country": "CN",
+      "province": "广东省",
+      "city": "广州市"
+    },
+    {
+      "id": 1003,
+      "customer_no": "CUST-2026-003",
+      "customer_name": "北京信息职业技术学院",
+      "customer_short_name": "北京信息职院",
+      "data_source": "MANUAL",
+      "business_type": "ALL",
+      "market_segment": "INTERNET_T3",
+      "customer_category": "FOP_CUSTOMER",
+      "parent_customer_id": null,
+      "fop_customer_id": null,
+      "country": "CN",
+      "province": "北京市",
+      "city": "北京市"
+    },
+    {
+      "id": 1004,
+      "customer_no": "CUST-2026-004",
+      "customer_name": "深圳职业技术学院",
+      "customer_short_name": "深圳职院",
+      "data_source": "MANUAL",
+      "business_type": "ALL",
+      "market_segment": "INTERNET_T3",
+      "customer_category": "FOP_CUSTOMER",
+      "parent_customer_id": null,
+      "fop_customer_id": null,
+      "country": "CN",
+      "province": "广东省",
+      "city": "深圳市"
+    }
+  ]
+}

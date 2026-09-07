@@ -1,0 +1,108 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "operation-logs",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "operation-log": [
+          "biz_type",
+          "biz_id",
+          "operation_type",
+          "operator_id",
+          "created_time"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "operation-log",
+        "fieldCode": "description",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "操作描述可能包含敏感业务信息，限制可见"
+      }
+    ],
+    "authzProjection": {
+      "description": "操作审计日志资源 ABAC 属性投影。通用设计，支持按业务对象类型、操作类型、操作人等维度进行数据权限控制。",
+      "usageNote": "用于数据权限和列表行级过滤。策略表达式中典型引用包括 res.biz_type、res.operation_type、res.operator_id 等。",
+      "attributes": [
+        {
+          "code": "log_id",
+          "name": "日志ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "operation-log",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "操作日志唯一标识。",
+          "i18nKey": "auth.resource.res_operation-log.attr.log_id"
+        },
+        {
+          "code": "biz_type",
+          "name": "业务对象类型",
+          "type": "STRING",
+          "source": {
+            "entityCode": "operation-log",
+            "fieldCode": "biz_type"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "业务对象类型，用于按业务域过滤审计日志。典型表达式：res.biz_type == 'CUSTOMER'。",
+          "i18nKey": "auth.resource.res_operation-log.attr.biz_type"
+        },
+        {
+          "code": "operator_id",
+          "name": "操作人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "operation-log",
+            "fieldCode": "operator_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "操作人。典型表达式：sub.user_id == res.operator_id。",
+          "i18nKey": "auth.resource.res_operation-log.attr.operator_id"
+        },
+        {
+          "code": "operation_type",
+          "name": "操作类型",
+          "type": "STRING",
+          "source": {
+            "entityCode": "operation-log",
+            "fieldCode": "operation_type"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "操作类型。典型表达式：res.operation_type == 'DISABLE'。",
+          "i18nKey": "auth.resource.res_operation-log.attr.operation_type"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "操作审计日志 BO 首版 SECURITY Fragment，含行级过滤字段、PII/SENSITIVE 字段分级和 ABAC 资源属性投影"
+  ]
+}

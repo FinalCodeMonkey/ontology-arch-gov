@@ -1,0 +1,187 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "exchange-rates",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "exchange-rate": [
+          "tenant_code",
+          "status",
+          "base_currency",
+          "target_currency",
+          "rate_type"
+        ]
+      }
+    },
+    "fieldSecurity": [],
+    "authzProjection": {
+      "description": "汇率业务对象在 PSP 中的资源属性投影。作为全局主数据，默认所有角色可读，仅汇率管理员可增删改。",
+      "usageNote": "用于数据权限控制。rowSecurity 声明 DATA 策略候选字段，典型表达式：sub.tenant_code == res.tenant_code。",
+      "attributes": [
+        {
+          "code": "exchange_rate_id",
+          "name": "汇率ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "exchange-rate",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "汇率资源唯一标识。",
+          "i18nKey": "auth.resource.res_exchange_rate.attr.exchange_rate_id"
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "exchange-rate",
+            "fieldCode": "tenant_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "汇率所属租户。典型表达式：sub.tenant_code == res.tenant_code。",
+          "i18nKey": "auth.resource.res_exchange_rate.attr.tenant_code"
+        },
+        {
+          "code": "status",
+          "name": "状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "exchange-rate",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "ACTIVE",
+              "label": "生效"
+            },
+            {
+              "value": "INACTIVE",
+              "label": "失效"
+            }
+          ],
+          "displayOrder": 30,
+          "displayGroup": "资源属性",
+          "description": "汇率状态。典型表达式：res.status == 'ACTIVE'。",
+          "i18nKey": "auth.resource.res_exchange_rate.attr.status"
+        },
+        {
+          "code": "base_currency",
+          "name": "基准币种",
+          "type": "STRING",
+          "source": {
+            "entityCode": "exchange-rate",
+            "fieldCode": "base_currency"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "CNY",
+              "label": "人民币"
+            },
+            {
+              "value": "USD",
+              "label": "美元"
+            }
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "基准币种。典型表达式：res.base_currency == 'CNY'。",
+          "i18nKey": "auth.resource.res_exchange_rate.attr.base_currency"
+        },
+        {
+          "code": "target_currency",
+          "name": "目标币种",
+          "type": "STRING",
+          "source": {
+            "entityCode": "exchange-rate",
+            "fieldCode": "target_currency"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "CNY",
+              "label": "人民币"
+            },
+            {
+              "value": "USD",
+              "label": "美元"
+            },
+            {
+              "value": "EUR",
+              "label": "欧元"
+            },
+            {
+              "value": "JPY",
+              "label": "日元"
+            },
+            {
+              "value": "HKD",
+              "label": "港币"
+            }
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "目标币种。典型表达式：res.target_currency == 'USD'。",
+          "i18nKey": "auth.resource.res_exchange_rate.attr.target_currency"
+        },
+        {
+          "code": "rate_type",
+          "name": "汇率类型",
+          "type": "STRING",
+          "source": {
+            "entityCode": "exchange-rate",
+            "fieldCode": "rate_type"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "SPOT",
+              "label": "即期汇率"
+            },
+            {
+              "value": "MONTHLY_AVG",
+              "label": "月均汇率"
+            },
+            {
+              "value": "QUARTERLY_AVG",
+              "label": "季均汇率"
+            },
+            {
+              "value": "YEARLY_AVG",
+              "label": "年均汇率"
+            }
+          ],
+          "displayOrder": 60,
+          "displayGroup": "资源属性",
+          "description": "汇率类型，默认月均汇率。典型表达式：res.rate_type == 'MONTHLY_AVG'。",
+          "i18nKey": "auth.resource.res_exchange_rate.attr.rate_type"
+        }
+      ]
+    }
+  }
+}

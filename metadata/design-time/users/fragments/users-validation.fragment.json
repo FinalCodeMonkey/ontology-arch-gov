@@ -1,0 +1,191 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "users",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_no",
+        "required": true,
+        "max": 50,
+        "unique": true,
+        "message": "工号不能为空、不超过50字且不可重复"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 50,
+        "message": "用户账号ID不能为空"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_name",
+        "required": true,
+        "max": 100,
+        "message": "员工姓名不能为空且不超过100字"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_en_name",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_company_name",
+        "max": 200
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "name",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_status",
+        "required": true,
+        "max": 20,
+        "message": "员工状态不能为空"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_status_code",
+        "max": 20
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_email",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_type_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_type",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "personal_email",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "personal_mobile",
+        "max": 20
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "department_code",
+        "required": true,
+        "message": "必须归属某个部门"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "department_name",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "post_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "post_name",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "organization_type_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "organization_type",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "gender_code",
+        "max": 10
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "gender",
+        "max": 10
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "country_and_area_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "country_and_area",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "work_place_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "work_place",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "office_place_code",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "office_place",
+        "max": 50
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "manage_user_id",
+        "message": "直属上级ID引用须有效"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "manage_staff_name",
+        "max": 100
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "nation_code",
+        "max": 20
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "nation",
+        "max": 20
+      }
+    ]
+  },
+  "changeNote": [
+    "users 首版 VALIDATION Fragment，含工号必填唯一、姓名部门必填等字段约束"
+  ]
+}

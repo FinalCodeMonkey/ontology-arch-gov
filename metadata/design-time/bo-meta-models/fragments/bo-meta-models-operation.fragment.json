@@ -1,0 +1,110 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "bo-meta-models",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建BO元模型",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "supportsBatch": true,
+        "singleResultType": "BoMetaModelDTO",
+        "batchResultType": "BatchResultDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "新建 BO 元模型注册记录，录入租户、应用、BO 编码、名称及投影 JSON。标准 API：POST /bo-meta-models，批量 API：POST /bo-meta-models/batch。"
+      },
+      {
+        "code": "EDIT",
+        "name": "编辑BO元模型",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "update",
+        "supportsBatch": true,
+        "singleResultType": "BoMetaModelDTO",
+        "batchResultType": "BatchResultDTO",
+        "position": "DETAIL",
+        "triggerEvent": "OPEN_FORM",
+        "description": "编辑 BO 元模型注册记录的名称、投影 JSON、适配器类型、解析器及数据领域。标准 API：POST /bo-meta-models/{id}/update。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除BO元模型",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "supportsBatch": true,
+        "batchResultType": "BatchResultDTO",
+        "position": "ROW",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "逻辑删除 BO 元模型注册记录。标准 API：DELETE /bo-meta-models/{id}，批量 API：DELETE /bo-meta-models/batch。"
+      },
+      {
+        "code": "PUBLISH",
+        "name": "发布投影",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "PUBLISH",
+        "httpMethod": "POST",
+        "actionPath": "publish",
+        "supportsBatch": false,
+        "singleResultType": "BoMetaModelDTO",
+        "position": "ROW",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "将 schema_json 投影内容发布到 PSP 引擎，触发 BoSchemaJsonValidator 校验并派生权限项。API：POST /bo-meta-models/{id}/publish。"
+      },
+      {
+        "code": "RELOAD",
+        "name": "重载缓存",
+        "scope": "BO",
+        "operationKind": "CUSTOM",
+        "primaryDataAction": "READ",
+        "authzAction": "RELOAD",
+        "httpMethod": "POST",
+        "actionPath": "reload",
+        "supportsBatch": true,
+        "batchResultType": "BatchResultDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "通知 PSP 引擎重新加载指定 BO 元模型缓存，使投影变更即时生效。API：POST /bo-meta-models/{id}/reload。"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "EXPORT",
+        "httpMethod": "POST",
+        "actionPath": "export",
+        "async": true,
+        "singleResultType": "ExportTaskDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "API_CALL",
+        "description": "导出 BO 元模型注册数据为文件，支持按租户、应用、BO 编码筛选。API：POST /bo-meta-models/export。"
+      }
+    ]
+  },
+  "changeNote": [
+    "bo-meta-models 首版 OPERATION Fragment",
+    "标准 CRUD（LIST/READ）由发布服务从 MODEL.apiConfig 自动生成",
+    "PUBLISH 操作触发 PSP BoSchemaJsonValidator 校验并派生权限项",
+    "RELOAD 操作通知 PSP 引擎重载缓存",
+    "EDIT 使用 POST + /{id}/update 路径（PATCH→POST 降级约定）"
+  ]
+}

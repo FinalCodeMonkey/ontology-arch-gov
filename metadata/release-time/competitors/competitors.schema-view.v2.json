@@ -1,0 +1,868 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "competitors",
+  "boName": "竞争对手",
+  "description": "竞争对手主数据业务对象，单表建模，记录竞争对手基本画像、竞争分析、应对策略及分析文档。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/competitors",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "competitor_name",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "FULL_AGGREGATE",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": []
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "competitor_name",
+    "statusField": "status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "competitor",
+      "name": "竞争对手主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_master_competitor",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "竞争对手ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "dataType": "integer",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "competitor_name",
+          "name": "竞争对手名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "competitor_name",
+          "columnName": "competitor_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 200,
+            "unique": true,
+            "message": "竞争对手名称不能为空且不超过200字"
+          },
+          "view": {
+            "displayName": "竞争对手名称",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入竞争对手名称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "company_scale",
+          "name": "规模(人)",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "company_scale",
+          "columnName": "company_scale",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "min": 0,
+            "message": "规模必须为非负数"
+          },
+          "view": {
+            "displayName": "规模(人)",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "请输入规模，例如5000",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "competition_level",
+          "name": "竞争力",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "competition_level",
+          "columnName": "competition_level",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "enum": [
+              {
+                "value": "STRONG",
+                "label": "强竞争力"
+              },
+              {
+                "value": "POTENTIAL",
+                "label": "潜在竞争力"
+              },
+              {
+                "value": "NORMAL",
+                "label": "一般竞争力"
+              },
+              {
+                "value": "WEAK",
+                "label": "弱竞争力"
+              }
+            ],
+            "message": "竞争力必须为预定义值之一"
+          },
+          "semanticMapping": {
+            "targetOntology": "risk_level",
+            "description": "竞争力等级 → 风险等级的语义映射，供推理引擎/本体评估器在计算 competitor_risk_level 时使用",
+            "map": {
+              "STRONG": "HIGH",
+              "POTENTIAL": "MEDIUM",
+              "NORMAL": "MEDIUM",
+              "WEAK": "LOW"
+            }
+          },
+          "view": {
+            "displayName": "竞争力",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择竞争力",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "competitor_competition_level"
+          }
+        },
+        {
+          "code": "contact_info",
+          "name": "联系信息",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "contact_info",
+          "columnName": "contact_info",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "PII",
+          "reason": "竞争对手联系人信息涉个人隐私，需授权查看",
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "联系信息",
+            "sortable": false,
+            "columnWidth": 210,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入联系方式",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "advantage",
+          "name": "竞争优势",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "advantage",
+          "columnName": "advantage",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "OPEN",
+          "privacyClass": "SENSITIVE",
+          "reason": "竞争优势分析为敏感商业数据但需全员可见以支撑竞争决策",
+          "validation": {
+            "max": 65535
+          },
+          "view": {
+            "displayName": "竞争优势",
+            "sortable": false,
+            "columnWidth": 210,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入竞争优势",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "disadvantage",
+          "name": "竞争劣势",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "disadvantage",
+          "columnName": "disadvantage",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "OPEN",
+          "privacyClass": "SENSITIVE",
+          "reason": "竞争劣势分析为敏感商业数据但需全员可见以支撑竞争决策",
+          "validation": {
+            "max": 65535
+          },
+          "view": {
+            "displayName": "竞争劣势",
+            "sortable": false,
+            "columnWidth": 210,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入竞争劣势",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "strategy",
+          "name": "应对策略",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "strategy",
+          "columnName": "strategy",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "应对策略为内部竞争情报，限制未授权访问",
+          "validation": {
+            "max": 65535
+          },
+          "view": {
+            "displayName": "应对策略",
+            "sortable": false,
+            "columnWidth": 210,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入应对策略",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "sales_analysis",
+          "name": "销售情况分析",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "sales_analysis",
+          "columnName": "sales_analysis",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "MASKED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "销售情况分析涉及我方竞争策略，默认脱敏显示",
+          "validation": {
+            "max": 65535
+          },
+          "view": {
+            "displayName": "销售情况分析",
+            "sortable": false,
+            "columnWidth": 210,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入销售情况分析",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "market_analysis",
+          "name": "市场情况分析",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "market_analysis",
+          "columnName": "market_analysis",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "MASKED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "市场情况分析涉及竞争情报，默认脱敏显示",
+          "validation": {
+            "max": 65535
+          },
+          "view": {
+            "displayName": "市场情况分析",
+            "sortable": false,
+            "columnWidth": 210,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入市场情况分析",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "analysis_doc",
+          "name": "竞争对手分析文档",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "analysis_doc",
+          "columnName": "analysis_doc",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 65535
+          },
+          "view": {
+            "displayName": "竞争对手分析文档",
+            "sortable": false,
+            "columnWidth": 250,
+            "order": 110,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "FILE_UPLOAD",
+            "placeholder": "支持多文件上传",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "remark",
+          "name": "备注说明",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "remark",
+          "columnName": "remark",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 1000
+          },
+          "view": {
+            "displayName": "备注说明",
+            "sortable": false,
+            "columnWidth": 210,
+            "order": 120,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入备注说明",
+            "queryable": false,
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "status",
+          "name": "状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "status",
+          "columnName": "status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "enum": [
+              {
+                "value": "ACTIVE",
+                "label": "活跃"
+              },
+              {
+                "value": "INACTIVE",
+                "label": "停用"
+              }
+            ],
+            "message": "状态值非法，必须为 ACTIVE 或 INACTIVE"
+          },
+          "view": {
+            "displayName": "状态",
+            "sortable": true,
+            "columnWidth": 80,
+            "hidden": true,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "competitor_status"
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "is_deleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "created_time",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 150,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updated_time",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 170,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "created_by",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 160,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updated_by",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 180,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "status",
+        "competition_level"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建竞争对手",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<CompetitorDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建竞争对手记录。点击新建按钮打开表单弹窗，填写并保存后创建记录。标准 API：POST /competitors，批量 API：POST /competitors/batch。"
+    },
+    {
+      "code": "IMPORT",
+      "name": "导入",
+      "scope": "GLOBAL",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import",
+      "async": false,
+      "singleResultType": "ApiResponse<CompetitorImportResultDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量导入竞争对手数据，执行必填和枚举校验。API：POST /competitors/import。"
+    },
+    {
+      "code": "DOWNLOAD_IMPORT_TEMPLATE",
+      "name": "下载导入模板",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "POST",
+      "actionPath": "import-template",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "下载竞争对手数据导入 Excel 模板文件。API：POST /competitors/import-template。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "GLOBAL",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "ApiResponse<ExportTaskDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "导出竞争对手列表数据，敏感字段按权限脱敏或隐藏。API：POST /competitors/export。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑竞争对手",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "PATCH",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<CompetitorDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "修改竞争对手信息、竞争力、分析文档和备注。标准 API：PATCH /competitors/{id}，批量 API：PATCH /competitors/batch。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除竞争对手",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "singleResultType": "Void",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除竞争对手记录（is_deleted=1）。标准 API：DELETE /competitors/{id}，批量 API：DELETE /competitors/batch。"
+    },
+    {
+      "code": "ACTIVATE",
+      "name": "启用竞争对手",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "ACTIVATE",
+      "httpMethod": "POST",
+      "actionPath": "activate",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "将已停用的竞争对手重新启用，启用后可被场景引用。API：PUT /competitors/{id}/activate。"
+    },
+    {
+      "code": "DEACTIVATE",
+      "name": "停用竞争对手",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "DEACTIVATE",
+      "httpMethod": "POST",
+      "actionPath": "deactivate",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "停用竞争对手，停用后不可被场景引用。API：PUT /competitors/{id}/deactivate。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "COMPETITOR_NAME_UNIQUE",
+      "name": "竞争对手名称唯一",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "竞争对手名称已存在，请使用其他名称",
+      "description": "创建或修改竞争对手时，competitor_name 在同一租户下必须唯一（含已逻辑删除记录）。"
+    },
+    {
+      "code": "COMPETITOR_STATUS_EDITABLE_ONLY_ACTIVE",
+      "name": "仅活跃状态可编辑",
+      "ruleType": "STATE",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "非活跃状态的竞争对手不可编辑，请先启用",
+      "description": "竞争对手处于 INACTIVE 状态时，禁止修改业务字段（状态字段本身除外）。",
+      "expression": "status == 'ACTIVE'",
+      "exprAst": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "ACTIVE"
+        }
+      },
+      "polarity": "safety"
+    },
+    {
+      "code": "COMPETITOR_DELETE_ARCHIVE_CHECK",
+      "name": "删除前检查关联场景",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "WARN",
+      "message": "该竞争对手在部分场景中被引用，确认删除？",
+      "description": "删除竞争对手前检查是否被场景竞对分析引用，提示操作影响。",
+      "crossBoRef": {
+        "refBoCode": "scenes",
+        "refFieldCode": "id",
+        "localEntityCode": "competitor",
+        "localFieldCode": "id"
+      }
+    },
+    {
+      "code": "COMPETITOR_ANALYSIS_DOC_JSON_VALID",
+      "name": "分析文档JSON格式校验",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "FIELD",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "分析文档数据格式无效，期望 JSON 数组",
+      "description": "analysis_doc 存储 JSON 格式文件列表，提交时校验是否为合法 JSON。",
+      "entityCode": "competitor",
+      "fieldCode": "analysis_doc"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.713284+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

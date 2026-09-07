@@ -1,0 +1,61 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "change-records",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "创建变更记录",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "description": "创建变更记录，通常由业务对象提交变更时自动触发。API：POST /change-records。"
+      },
+      {
+        "code": "EDIT",
+        "name": "编辑变更记录",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "update",
+        "description": "编辑变更记录（如审批回写状态）。API：POST /change-records/{id}/update。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除变更记录",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "description": "逻辑删除变更记录。API：DELETE /change-records/{id}。"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "EXPORT",
+        "httpMethod": "POST",
+        "actionPath": "export",
+        "async": true,
+        "description": "导出变更记录。API：POST /change-records/export。"
+      }
+    ]
+  },
+  "changeNote": [
+    "变更记录 BO 首版 OPERATION Fragment",
+    "标准 CRUD（LIST/READ 由发布服务自动补齐）",
+    "变更记录支持编辑（审批回写状态）和删除"
+  ]
+}

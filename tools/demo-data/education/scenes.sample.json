@@ -1,0 +1,123 @@
+{
+  "_scenario": "场景管理 — 客户需求的来源，场景孵化商机的起点",
+  "_scenarioDescription": "场景是客户需求的载体，是商机和活动的上游。场景6001:凯捷网络教育园区网改造(客户1001,DC_03阶段,采购2376万,份额34%,下次招标2026-09)。场景6002:华南理工校园网升级(客户1002,DC_02阶段,采购1782万,份额35%)。场景6003:深圳职院智慧校园(客户1004,已赢单,采购2244万,份额36%)。场景→商机推理:SCENE_GENERATES_OPPORTUNITY链路体现场景孵化商机的能力。",
+  "records": [
+    {
+      "id": 6001,
+      "scene_no": "SCENE-2026-001",
+      "customers_id": 1001,
+      "customer_name": "深圳凯捷网络有限公司",
+      "primary_customer_name": "深圳凯捷网络有限公司",
+      "scene_name_dept": "园区网",
+      "scene_name_customer": "教育园区网DCN改造项目",
+      "business_name": "PARK",
+      "scene_category": "H1",
+      "sales_owner_id": "10001",
+      "sales_owner_name": "张三",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6101,
+          "scene_id": 6001,
+          "products_id": 9001,
+          "product_model": "RG-N18000-X",
+          "product_category": "SWITCH",
+          "product_series": "RG-N18000",
+          "our_stage": "2",
+          "lifecycle_start_date": "2026-01-01",
+          "lifecycle_end_date": "2030-12-31",
+          "next_bid_date": "2026-09-15",
+          "current_progress": "已完成POC测试，客户对RG-N18000-X系列表示认可，进入方案深化阶段",
+          "annual_estimates": [
+            {
+              "id": 6111,
+              "line_id": 6101,
+              "year": 2026,
+              "customer_procurement_amount": 23760000,
+              "estimated_share": 34.0,
+              "estimated_sales_amount": 8078400
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6002,
+      "scene_no": "SCENE-2026-002",
+      "customers_id": 1002,
+      "customer_name": "广州华南理工大学",
+      "primary_customer_name": "广州华南理工大学",
+      "scene_name_dept": "校园网",
+      "scene_name_customer": "校园网升级改造项目",
+      "business_name": "PARK",
+      "scene_category": "H1",
+      "sales_owner_id": "10003",
+      "sales_owner_name": "王五",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6102,
+          "scene_id": 6002,
+          "products_id": 9002,
+          "product_model": "S6930-2C",
+          "product_category": "SWITCH",
+          "product_series": "S6930",
+          "our_stage": "1",
+          "lifecycle_start_date": "2026-01-01",
+          "lifecycle_end_date": "2030-12-31",
+          "next_bid_date": "2026-10-01",
+          "current_progress": "需求调研阶段，客户预算有限，竞争激烈，华为和新华三均在跟进",
+          "annual_estimates": [
+            {
+              "id": 6112,
+              "line_id": 6102,
+              "year": 2026,
+              "customer_procurement_amount": 17820000,
+              "estimated_share": 35.0,
+              "estimated_sales_amount": 6237000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6003,
+      "scene_no": "SCENE-2026-003",
+      "customers_id": 1004,
+      "customer_name": "深圳职业技术学院",
+      "primary_customer_name": "深圳职业技术学院",
+      "scene_name_dept": "智慧校园",
+      "scene_name_customer": "智慧校园网络建设项目",
+      "business_name": "AI_COMPUTE",
+      "scene_category": "H1",
+      "sales_owner_id": "10001",
+      "sales_owner_name": "张三",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6103,
+          "scene_id": 6003,
+          "products_id": 9001,
+          "product_model": "RG-N18000-X",
+          "product_category": "SWITCH",
+          "product_series": "RG-N18000",
+          "our_stage": "5",
+          "lifecycle_start_date": "2026-01-01",
+          "lifecycle_end_date": "2030-12-31",
+          "next_bid_date": null,
+          "current_progress": "已中标，合同签署中，预计7月启动交付",
+          "annual_estimates": [
+            {
+              "id": 6113,
+              "line_id": 6103,
+              "year": 2026,
+              "customer_procurement_amount": 22440000,
+              "estimated_share": 36.0,
+              "estimated_sales_amount": 8078400
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

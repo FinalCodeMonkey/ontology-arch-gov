@@ -1,0 +1,710 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "device-inventories",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 120,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "id",
+        "displayName": "主键",
+        "sortable": false,
+        "hidden": true,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_no",
+        "displayName": "盘点单号",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "placeholder": "请输入盘点单号",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_type",
+        "displayName": "盘点类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "inventory_type",
+        "placeholder": "请选择盘点类型",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "device_count",
+        "displayName": "设备数",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "NUMBER",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_status",
+        "displayName": "盘点状态",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "inventory_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "IN",
+            "label": "属于"
+          }
+        ],
+        "dataType": "enum"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "quote_no",
+        "displayName": "报价单号",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "opportunity_codes",
+        "displayName": "商机编码",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_time",
+        "displayName": "盘点时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "remarks",
+        "displayName": "备注",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入备注",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 110,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "updated_time",
+        "displayName": "更新时间",
+        "sortable": false,
+        "columnWidth": 160,
+        "format": "datetime",
+        "hidden": true,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "updated_by",
+        "displayName": "更新人",
+        "sortable": false,
+        "hidden": true,
+        "order": 130,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "tenant_code",
+        "displayName": "租户编码",
+        "sortable": false,
+        "hidden": true,
+        "order": 140,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "is_deleted",
+        "displayName": "删除标记",
+        "sortable": false,
+        "hidden": true,
+        "order": 150,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "id",
+        "displayName": "明细主键",
+        "sortable": false,
+        "hidden": true,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "parent_id",
+        "displayName": "所属盘点单ID",
+        "sortable": false,
+        "hidden": true,
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "device_serial_no",
+        "displayName": "设备序列号",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "placeholder": "请输入设备序列号",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string",
+        "refObject": "devices",
+        "refField": "customer_name"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "abnormal_desc",
+        "displayName": "异常说明",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入异常说明",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "product_model",
+        "displayName": "产品型号",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "product_line",
+        "displayName": "产品线",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "customer_name",
+        "displayName": "下级客户名称",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "fop_customer_name",
+        "displayName": "FOP客户名称",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "warranty_start_date",
+        "displayName": "保修开始日期",
+        "sortable": true,
+        "columnWidth": 150,
+        "format": "datetime",
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "warranty_end_date",
+        "displayName": "保修结束日期",
+        "sortable": true,
+        "columnWidth": 150,
+        "format": "datetime",
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "maintenance_service",
+        "displayName": "维保服务",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 110,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "renewal_days",
+        "displayName": "续保天数",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 120,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "service_list_price",
+        "displayName": "服务 List 价",
+        "sortable": true,
+        "columnWidth": 130,
+        "format": "currency",
+        "order": 130,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "contract_no",
+        "displayName": "合同号",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 140,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "ecp_product_permission",
+        "displayName": "ECP产品权限",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 150,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SWITCH",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "boolean"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "is_deleted",
+        "displayName": "删除标记",
+        "sortable": false,
+        "hidden": true,
+        "order": 160,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": false,
+        "hidden": true,
+        "order": 170,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "updated_time",
+        "displayName": "更新时间",
+        "sortable": false,
+        "hidden": true,
+        "order": 180,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "hidden": true,
+        "order": 190,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "updated_by",
+        "displayName": "更新人",
+        "sortable": false,
+        "hidden": true,
+        "order": 200,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "tenant_code",
+        "displayName": "租户编码",
+        "sortable": false,
+        "hidden": true,
+        "order": 210,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      }
+    ]
+  }
+}

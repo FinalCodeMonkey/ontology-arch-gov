@@ -1,0 +1,390 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "exchange-rates",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 120,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate_no",
+        "displayName": "汇率编号",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "dataType": "string",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "base_currency",
+        "displayName": "基准币种",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "currency",
+        "disabled": true,
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "target_currency",
+        "displayName": "目标币种",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "currency",
+        "placeholder": "请选择目标币种",
+        "dataType": "enum",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "IN",
+            "label": "属于"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate_type",
+        "displayName": "汇率类型",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "exchange_rate_type",
+        "placeholder": "请选择汇率类型",
+        "dataType": "enum",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "IN",
+            "label": "属于"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate",
+        "displayName": "汇率值",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "请输入汇率值",
+        "dataType": "decimal",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "effective_date",
+        "displayName": "生效日期",
+        "sortable": true,
+        "columnWidth": 130,
+        "format": "date",
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "placeholder": "请选择生效日期",
+        "dataType": "date",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "expiry_date",
+        "displayName": "失效日期",
+        "sortable": true,
+        "columnWidth": 130,
+        "format": "date",
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "placeholder": "请选择失效日期",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "status",
+        "displayName": "状态",
+        "sortable": true,
+        "columnWidth": 80,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "exchange_rate_status",
+        "dataType": "enum",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "IN",
+            "label": "属于"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "source",
+        "displayName": "汇率来源",
+        "sortable": false,
+        "columnWidth": 150,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入汇率来源",
+        "dataType": "string",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "remark",
+        "displayName": "备注",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入备注",
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 120,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "updated_time",
+        "displayName": "最后修改时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 130,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 140,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "updated_by",
+        "displayName": "最后修改人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 150,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate_change",
+        "displayName": "变动幅度",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 160,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "computedField": {
+          "kind": "EXPRESSION",
+          "sources": [
+            {
+              "entityCode": "exchange-rate",
+              "fieldCode": "rate"
+            }
+          ],
+          "expression": "current_rate - previous_rate",
+          "description": "当前生效汇率减去上一条历史汇率的差值。current_rate 为最新 status=ACTIVE 记录的 rate，previous_rate 为按 effective_date DESC 排序的第二条记录的 rate。"
+        },
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "exchange-rate",
+        "fieldCode": "rate_change_percent",
+        "displayName": "变动百分比",
+        "sortable": false,
+        "columnWidth": 100,
+        "format": "percent",
+        "order": 170,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "computedField": {
+          "kind": "EXPRESSION",
+          "sources": [
+            {
+              "entityCode": "exchange-rate",
+              "fieldCode": "rate"
+            }
+          ],
+          "expression": "(current_rate - previous_rate) / previous_rate * 100",
+          "description": "变动百分比 = (当前汇率 - 上一条汇率) / 上一条汇率 × 100。previous_rate 为按 effective_date DESC 排序的第二条记录的 rate。"
+        },
+        "exportable": true,
+        "importable": false
+      }
+    ]
+  }
+}

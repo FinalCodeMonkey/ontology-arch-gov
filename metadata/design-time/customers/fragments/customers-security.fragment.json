@@ -1,0 +1,131 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customers",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "customer": [
+          "business_type",
+          "market_segment",
+          "customer_category",
+          "parent_customer_id",
+          "fop_customer_id",
+          "customer_no",
+          "customer_name",
+          "customer_short_name",
+          "data_source",
+          "country",
+          "province",
+          "city",
+          "district",
+          "neocrm_code"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "customer-business-info",
+        "fieldCode": "phone_number",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "企业联系方式涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "customer-business-info",
+        "fieldCode": "legal_person_name",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "法定代表人姓名涉及个人隐私，需授权查看"
+      }
+    ],
+    "authzProjection": {
+      "description": "客户资源 ABAC 属性投影。发布后由 PSP 引擎在 PIP 中维护，策略表达式通过 res.xxx 引用这些属性。",
+      "attributes": [
+        {
+          "code": "customer_id",
+          "name": "客户ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "customer",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "客户资源唯一标识，供 PIP 按 ID 拉取完整属性集合；不暴露给 ABAC 表达式做条件判断。",
+          "i18nKey": "auth.resource.res_customer.attr.customer_id",
+          "valueExamples": [
+            "2068959871393136600"
+          ]
+        },
+        {
+          "code": "business_type",
+          "name": "业务分类",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer",
+            "fieldCode": "business_type"
+          },
+          "filterable": true,
+          "description": "用于按业务线划定数据范围"
+        },
+        {
+          "code": "market_segment",
+          "name": "细分市场",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer",
+            "fieldCode": "market_segment"
+          },
+          "filterable": true,
+          "description": "用于按细分市场划定数据范围"
+        },
+        {
+          "code": "customer_category",
+          "name": "客户分类",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer",
+            "fieldCode": "customer_category"
+          },
+          "filterable": true,
+          "description": "用于按客户分类划定数据范围"
+        },
+        {
+          "code": "parent_customer_id",
+          "name": "一级客户ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer",
+            "fieldCode": "parent_customer_id"
+          },
+          "filterable": true,
+          "description": "支持集团客户层级权限下穿"
+        },
+        {
+          "code": "fop_customer_id",
+          "name": "FOP客户ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer",
+            "fieldCode": "fop_customer_id"
+          },
+          "filterable": true,
+          "description": "关联 FOP 端数据范围映射"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "新增 business_info phone_number/legal_person_name（PII）字段安全分级"
+  ]
+}

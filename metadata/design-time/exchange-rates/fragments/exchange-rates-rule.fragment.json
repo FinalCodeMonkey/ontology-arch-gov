@@ -1,0 +1,128 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "exchange-rates",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "EXCHANGE_RATE_DATE_RANGE_VALID",
+        "name": "生效日期必须早于失效日期",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "effective_date >= expiry_date",
+        "severity": "ERROR",
+        "message": "生效日期必须早于失效日期",
+        "description": "汇率记录的 effective_date 必须严格早于 expiry_date。",
+        "exprAst": {
+          "type": "binary",
+          "op": "GTE",
+          "left": {
+            "type": "field",
+            "path": "effective_date"
+          },
+          "right": {
+            "type": "field",
+            "path": "expiry_date"
+          }
+        }
+      },
+      {
+        "code": "EXCHANGE_RATE_NO_OVERLAP",
+        "name": "同币种对同类型汇率区间不重叠",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "同币种对、同汇率类型的生效区间存在重叠，请调整生效/失效日期",
+        "description": "同一 base_currency + target_currency + rate_type 组合下，不允许存在生效区间重叠的记录。校验时须加 AND is_deleted = 0，已逻辑删除的记录不参与区间重叠判断。"
+      },
+      {
+        "code": "EXCHANGE_RATE_BASE_NOT_EQUAL_TARGET",
+        "name": "基准币种不能等于目标币种",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "base_currency == target_currency",
+        "severity": "ERROR",
+        "message": "基准币种不能与目标币种相同",
+        "description": "base_currency 和 target_currency 不能为同一个币种。",
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "base_currency"
+          },
+          "right": {
+            "type": "field",
+            "path": "target_currency"
+          }
+        }
+      },
+      {
+        "code": "EXCHANGE_RATE_DEACTIVATE_CHECK",
+        "name": "停用前校验无引用",
+        "ruleType": "CONSISTENCY",
+        "scope": "OPERATION",
+        "operationCode": "DEACTIVATE",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "WARN",
+        "message": "该汇率正在被商机或报价单引用，停用后相关金额换算将使用历史汇率快照",
+        "description": "停用汇率前检查是否被活跃商机或报价单引用，如被引用则给出警告提示（不阻断操作）。"
+      },
+      {
+        "code": "EXCHANGE_RATE_MONTHLY_AVG_DATE_RANGE",
+        "name": "月均汇率生效区间必须为自然月",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "月均汇率的生效日期必须为当月1日，失效日期必须为当月最后一天",
+        "description": "月均汇率代表上月的月均汇率值，生效区间覆盖当月整月。effective_date 必须为某月1日，expiry_date 必须为该月最后一天（如1月31日、2月28/29日等）。例如：2026-07-01 录入的6月月均汇率，effective_date=2026-07-01，expiry_date=2026-07-31。"
+      },
+      {
+        "code": "EXCHANGE_RATE_MONTHLY_AVG_LAG",
+        "name": "月均汇率录入时间不得早于次月",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "月均汇率只能在次月录入（如6月月均汇率只能在7月录入）",
+        "description": "月均汇率是事后统计值，必须等一个月结束后才能计算。effective_date 的前一个月即为该汇率值所代表的统计月份，录入时间（created_time）不得早于 effective_date。"
+      },
+      {
+        "code": "EXCHANGE_RATE_UNIQUE_BY_PERIOD",
+        "name": "同币种对同类型同生效区间唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "同币种对、同汇率类型、同生效区间已存在记录，请直接编辑已有记录而非新增",
+        "description": "base_currency + target_currency + rate_type + effective_date + expiry_date 组合在 is_deleted = 0 的记录中必须唯一。UPSERT 逻辑：应用层先以上述五字段 AND is_deleted = 0 查询，存在则 UPDATE，否则 INSERT。已逻辑删除的同周期记录不影响本次新建。"
+      },
+      {
+        "code": "EXCHANGE_RATE_NO_CODING_RULE",
+        "name": "汇率编号自动生成规则",
+        "ruleType": "AUTOMATION",
+        "scope": "FIELD",
+        "fieldCode": "rate_no",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "INFO",
+        "description": "rate_no 由系统在创建时根据 base_currency、target_currency、rate_type 和 effective_date 自动拼接，不允许人工填写。分隔符使用下划线 _ ，日期部分保留 ISO 8601 原始格式（含连字符），split('_') 可精确还原各业务字段，不存在歧义。",
+        "entityCode": "exchange-rate"
+      }
+    ]
+  },
+  "changeNote": [
+    "exchange-rates 首版 RULE 设计态 Fragment，含日期区间合法性、区间不重叠、币种对不重复、停用前引用检查（编号唯一性已收归 VALIDATION Fragment 的 unique+messages 定义，此处不再重复）",
+    "新增月均汇率生效区间必须为自然月规则（EXCHANGE_RATE_MONTHLY_AVG_DATE_RANGE）",
+    "新增月均汇率录入时间不得早于次月规则（EXCHANGE_RATE_MONTHLY_AVG_LAG）",
+    "新增同币种对同类型同生效区间唯一规则（EXCHANGE_RATE_UNIQUE_BY_PERIOD）",
+    "新增汇率编号自动生成编码规则（EXCHANGE_RATE_NO_CODING_RULE）"
+  ]
+}

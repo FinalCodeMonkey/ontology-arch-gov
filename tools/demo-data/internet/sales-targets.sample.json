@@ -1,0 +1,102 @@
+{
+  "_scenario": "CBG互联网大厂销售目标 — 超额/达标/不足",
+  "_scenarioDescription": "成鹏(20001)Q3目标500万,管道591万,覆盖率118%(低风险)。侯博伟(20002)Q3目标300万,管道105万USD折算758万,覆盖率253%(超额)。谢军(20003)Q3目标200万,管道58万,覆盖率29%(高风险,缺口142万)。杨成(20004)Q3目标150万,管道76万USD折算549万,覆盖率366%(超额)。",
+  "records": [
+    {
+      "id": 8101,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "20001",
+      "owner_name": "成鹏",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 5000000.0,
+      "remarks": "2026年Q3销售下单目标 — 负责阿里巴巴/小米"
+    },
+    {
+      "id": 8102,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "20002",
+      "owner_name": "侯博伟",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 3000000.0,
+      "remarks": "2026年Q3销售下单目标 — 负责字节跳动"
+    },
+    {
+      "id": 8103,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "20003",
+      "owner_name": "谢军",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 2000000.0,
+      "remarks": "2026年Q3销售下单目标 — 负责腾讯/美团"
+    },
+    {
+      "id": 8104,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "20004",
+      "owner_name": "杨成",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 1500000.0,
+      "remarks": "2026年Q3销售下单目标 — 负责百度/京东"
+    },
+    {
+      "id": 8105,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "20001",
+      "owner_name": "成鹏",
+      "goal_type": "INVOICE_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 4500000.0,
+      "remarks": "2026年度销售开票目标"
+    },
+    {
+      "id": 8106,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "20001",
+      "owner_name": "成鹏",
+      "goal_type": "VISIT_COUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 48.0,
+      "remarks": "2026年度客户拜访次数目标(月均4次)"
+    },
+    {
+      "id": 8107,
+      "owner_type": "EMPLOYEE",
+      "owner_id": "20002",
+      "owner_name": "侯博伟",
+      "goal_type": "SIGNED_CUSTOMER_COUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 2.0,
+      "remarks": "2026年度新签约客户数目标"
+    },
+    {
+      "id": 8108,
+      "owner_type": "CUSTOMER",
+      "owner_id": "1101",
+      "owner_name": "阿里巴巴(中国)有限公司",
+      "goal_type": "ORDER_AMOUNT",
+      "apply_rule": "YEARLY",
+      "target_year": 2026,
+      "target_month": null,
+      "goal_value": 15000000.0,
+      "remarks": "2026年度客户级下单目标"
+    }
+  ]
+}

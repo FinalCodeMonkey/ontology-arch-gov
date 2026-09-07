@@ -1,0 +1,8 @@
+{
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "devices",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "changeNote": "初始创建设备档案 BO 元数据，基于设备序列号作为业务主键管理已售设备"
+}

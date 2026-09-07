@@ -1,0 +1,176 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scene-archs",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "scene-arch": [
+          "scene_id",
+          "arch_role"
+        ]
+      }
+    },
+    "fieldSecurity": [],
+    "authzProjection": {
+      "description": "场景架构业务对象在 PSP 中的资源属性投影。scene-arch 是 scenes 的下级视图，通过 scene_id 关联到场景聚合根；跨 BO 属性（如所属客户、销售负责人）需 PIP 查询时追溯 scenes BO。",
+      "usageNote": "用于数据权限和列表行级过滤。res.scene_id 仅暴露场景标识，跨 BO 属性（customers_id 等）需 PIP 通过 scenes 侧解析。arch_role 可直接用于限制特定架构角色的操作范围。",
+      "attributes": [
+        {
+          "code": "arch_id",
+          "name": "架构明细ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "scene-arch",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "架构明细唯一标识，供 PIP 按 ID 拉取完整属性集合；不暴露给 ABAC 表达式做条件判断。"
+        },
+        {
+          "code": "scene_id",
+          "name": "所属场景ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "scene-arch",
+            "fieldCode": "scene_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "scenes.id",
+          "referenceModel": "scenes",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "架构所属的场景标识。典型用法：PIP 可追溯 scenes.scene_id 派生所属客户和销售负责人。含 scenes 资源属性的策略优先配置在 scenes BO 侧；若必须基于 scene-arch 做客户/业务线过滤，PIP 需先解析 scene_id 再获取 scenes 属性。"
+        },
+        {
+          "code": "business_name",
+          "name": "业务名称",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene-arch",
+            "fieldCode": "business_name",
+            "computed": true,
+            "derivationHint": "Cross-BO derived attribute via scene_id lookup"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "JDM",
+              "label": "JDM业务"
+            },
+            {
+              "value": "DCN",
+              "label": "DCN网络"
+            },
+            {
+              "value": "AI_COMPUTE",
+              "label": "智算网络"
+            },
+            {
+              "value": "ESUN",
+              "label": "ESUN业务"
+            },
+            {
+              "value": "OPTICAL",
+              "label": "光"
+            },
+            {
+              "value": "PARK",
+              "label": "园区网络"
+            }
+          ],
+          "displayOrder": 25,
+          "displayGroup": "跨BO资源属性",
+          "description": "架构所属场景的业务线，通过 scene_id 跨 BO 派生。典型表达式：contains(sub.business_scope, res.business_name)。"
+        },
+        {
+          "code": "scene_name_customer",
+          "name": "场景名称-客户标准",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene-arch",
+            "fieldCode": "scene_name_customer",
+            "computed": true,
+            "derivationHint": "Cross-BO derived attribute via scene_id lookup"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 27,
+          "displayGroup": "跨BO资源属性",
+          "description": "架构所属场景的客户标准名称，通过 scene_id 跨 BO 派生。可用于按场景名称维度过滤数据。"
+        },
+        {
+          "code": "arch_role",
+          "name": "架构角色",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene-arch",
+            "fieldCode": "arch_role"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "GPU_CARD",
+              "label": "GPU卡"
+            },
+            {
+              "value": "POD",
+              "label": "POD"
+            },
+            {
+              "value": "NIC",
+              "label": "网卡"
+            },
+            {
+              "value": "SERVER",
+              "label": "服务器"
+            },
+            {
+              "value": "TOR",
+              "label": "TOR"
+            },
+            {
+              "value": "LEAF",
+              "label": "LEAF"
+            },
+            {
+              "value": "SPAINE",
+              "label": "SPAINE"
+            },
+            {
+              "value": "MODULE",
+              "label": "模块"
+            },
+            {
+              "value": "OTHER",
+              "label": "其他"
+            }
+          ],
+          "displayOrder": 30,
+          "displayGroup": "资源属性",
+          "description": "架构组件的角色类型。典型表达式：res.arch_role == 'GPU_CARD'。"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "scene-archs 首版 SECURITY 设计态 Fragment，暂无字段权限和数据范围配置"
+  ]
+}

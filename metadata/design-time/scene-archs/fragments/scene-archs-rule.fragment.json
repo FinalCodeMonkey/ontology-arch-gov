@@ -1,0 +1,15 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scene-archs",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": []
+  },
+  "changeNote": [
+    "scene-archs 首版 RULE 设计态 Fragment，暂无状态机、派生或一致性规则"
+  ]
+}

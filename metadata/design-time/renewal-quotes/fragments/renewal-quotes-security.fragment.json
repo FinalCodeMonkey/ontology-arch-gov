@@ -1,0 +1,130 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "renewal-quotes",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "renewal-quote": [
+          "inventory_id",
+          "quote_type_code",
+          "sales_opportunity_type_code",
+          "submit_status",
+          "crm_opportunity_code",
+          "submit_time"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "crm_opportunity_code",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "CRM业务机会编码涉及外部系统数据，限制可见"
+      },
+      {
+        "entityCode": "renewal-quote",
+        "fieldCode": "fail_reason",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "失败原因可能包含系统内部错误信息，限制可见"
+      }
+    ],
+    "authzProjection": {
+      "description": "续保报价提交记录资源 ABAC 属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 renewal-quotes BO。",
+      "usageNote": "用于数据权限和列表行级过滤。策略表达式中典型引用包括 res.inventory_id、res.submit_status、res.quote_type_code 等。",
+      "attributes": [
+        {
+          "code": "quote_id",
+          "name": "报价提交记录ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "renewal-quote",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "报价提交记录唯一标识。",
+          "i18nKey": "auth.resource.res_renewal-quote.attr.quote_id"
+        },
+        {
+          "code": "inventory_id",
+          "name": "关联盘点单ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "renewal-quote",
+            "fieldCode": "inventory_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "device-inventories.id",
+          "referenceModel": "device-inventories",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "关联的设备盘点单。典型表达式：contains(sub.inventory_scope_ids, res.inventory_id)。",
+          "i18nKey": "auth.resource.res_renewal-quote.attr.inventory_id"
+        },
+        {
+          "code": "quote_type_code",
+          "name": "报价类型编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "renewal-quote",
+            "fieldCode": "quote_type_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "资源属性",
+          "description": "报价类型，用于按类型过滤。",
+          "i18nKey": "auth.resource.res_renewal-quote.attr.quote_type_code"
+        },
+        {
+          "code": "submit_status",
+          "name": "提交状态",
+          "type": "INTEGER",
+          "source": {
+            "entityCode": "renewal-quote",
+            "fieldCode": "submit_status"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "allowedValues": [
+            {
+              "value": "0",
+              "label": "待提交"
+            },
+            {
+              "value": "1",
+              "label": "提交成功"
+            },
+            {
+              "value": "2",
+              "label": "提交失败"
+            }
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "提交状态。典型表达式：res.submit_status == 1。",
+          "i18nKey": "auth.resource.res_renewal-quote.attr.submit_status"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "续保报价提交记录 BO 首版 SECURITY Fragment，含行级过滤字段、敏感字段分级和 ABAC 资源属性投影"
+  ]
+}

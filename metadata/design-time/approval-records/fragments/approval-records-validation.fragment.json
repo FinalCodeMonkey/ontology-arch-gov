@@ -1,0 +1,110 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "approval-records",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "biz_type",
+        "required": true,
+        "max": 32,
+        "message": "业务对象类型不能为空且不超过32字"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "biz_id",
+        "required": true,
+        "message": "业务对象ID不能为空"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "action_type",
+        "required": true,
+        "max": 50,
+        "message": "触发动作不能为空且不超过50字"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "status",
+        "required": true,
+        "enum": [
+          {
+            "value": "PENDING",
+            "label": "待审批"
+          },
+          {
+            "value": "APPROVED",
+            "label": "已通过"
+          },
+          {
+            "value": "REJECTED",
+            "label": "已驳回"
+          },
+          {
+            "value": "REVOKED",
+            "label": "已撤回"
+          },
+          {
+            "value": "TERMINATED",
+            "label": "已终止"
+          }
+        ],
+        "message": "审批状态必须为预定义值之一"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "submitter_id",
+        "required": true,
+        "message": "提交人不能为空"
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "submitter_name",
+        "max": 50
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "process_instance_id",
+        "max": 64
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "process_name",
+        "max": 200
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "external_initiator",
+        "max": 100
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "initiator_name",
+        "max": 100
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "current_handler_name",
+        "max": 50
+      },
+      {
+        "entityCode": "approval-record",
+        "fieldCode": "revoker_name",
+        "max": 50
+      }
+    ]
+  },
+  "changeNote": [
+    "审批记录 BO 首版 VALIDATION Fragment，含业务对象必填、提交人必填、审批状态枚举约束"
+  ]
+}

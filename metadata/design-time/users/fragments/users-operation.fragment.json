@@ -1,0 +1,92 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "users",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建用户",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "supportsBatch": true,
+        "singleResultType": "UserDTO",
+        "batchResultType": "BatchResultDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "新建用户记录，录入员工基本信息、联系方式、组织归属及岗位信息。标准 API：POST /users，批量 API：POST /users/batch。"
+      },
+      {
+        "code": "EDIT",
+        "name": "编辑用户",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "PATCH",
+        "supportsBatch": true,
+        "singleResultType": "UserDTO",
+        "batchResultType": "BatchResultDTO",
+        "position": "DETAIL",
+        "triggerEvent": "OPEN_FORM",
+        "description": "编辑用户基本信息、联系方式、组织归属、岗位及管理关系。标准 API：PATCH /users/{id}，批量 API：PATCH /users/batch。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除用户",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "supportsBatch": true,
+        "batchResultType": "BatchResultDTO",
+        "position": "ROW",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "逻辑删除用户记录。标准 API：DELETE /users/{id}，批量 API：DELETE /users/batch。"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "EXPORT",
+        "httpMethod": "POST",
+        "actionPath": "export",
+        "async": true,
+        "singleResultType": "ExportTaskDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "API_CALL",
+        "description": "导出用户数据为文件，支持按部门、员工状态、员工类型等条件筛选。API：POST /users/export。"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "operationKind": "IMPORT",
+        "primaryDataAction": "CREATE",
+        "authzAction": "IMPORT",
+        "httpMethod": "POST",
+        "actionPath": "import",
+        "async": false,
+        "singleResultType": "UserImportResultDTO",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "批量导入用户数据，执行必填、枚举及工号唯一性校验。API：POST /users/import。"
+      }
+    ]
+  },
+  "changeNote": [
+    "用户 BO 首版 OPERATION Fragment",
+    "标准 CRUD（LIST/READ）由发布服务从 MODEL.apiConfig 自动生成，无需显式声明",
+    "PSP 端现有 READ、CREATE 权限项保持兼容"
+  ]
+}

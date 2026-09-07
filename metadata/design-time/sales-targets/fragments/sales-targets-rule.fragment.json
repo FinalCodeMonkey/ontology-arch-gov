@@ -1,0 +1,128 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-targets",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "TARGET_COMPOSITE_UNIQUE",
+        "name": "目标复合唯一键",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "同一目标方、目标对象、目标类型、适配规则、年份/月份的目标记录已存在",
+        "description": "创建或修改目标记录时，复合键 (owner_type, owner_id, goal_type, apply_rule, target_year, target_month) 在同一租户下必须唯一（含已逻辑删除记录）。对应数据库唯一索引 uk_target_unique。"
+      },
+      {
+        "code": "MONTHLY_RULE_REQUIRES_MONTH",
+        "name": "月度规则必须填写月份",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "target",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "expression": "apply_rule == 'MONTHLY' && target_month == null",
+        "message": "适配规则为月度时，目标月份不能为空",
+        "description": "当 apply_rule=MONTHLY 时，target_month 必须填写（1-12）；当 apply_rule=YEARLY 时，target_month 应留空。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "apply_rule"
+              },
+              "right": {
+                "type": "literal",
+                "value": "MONTHLY"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "target_month"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "YEARLY_RULE_NO_MONTH",
+        "name": "年度规则不应填写月份",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "target",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "WARN",
+        "expression": "apply_rule == 'YEARLY' && target_month != null",
+        "message": "适配规则为年度时，目标月份应留空",
+        "description": "当 apply_rule=YEARLY 时，target_month 应留空。若填写了月份，给出警告提示但不阻断保存。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "apply_rule"
+              },
+              "right": {
+                "type": "literal",
+                "value": "YEARLY"
+              }
+            },
+            {
+              "type": "isNotNull",
+              "expr": {
+                "type": "field",
+                "path": "target_month"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "TARGET_OWNER_TYPE_REF_INTEGRITY",
+        "name": "目标对象引用完整性",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "目标对象ID在对应的目标方类型（员工/客户）中不存在",
+        "description": "owner_id 根据 owner_type 引用不同的 BO：EMPLOYEE 时引用 users BO 的 id，CUSTOMER 时引用 customers BO 的 id。保存时校验目标对象在对应 BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "users",
+          "refFieldCode": "user_id",
+          "localEntityCode": "target",
+          "localFieldCode": "owner_id"
+        }
+      },
+      {
+        "code": "TARGET_VALUE_FORMAT",
+        "name": "目标值格式校验",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "target",
+        "fieldCode": "goal_value",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "WARN",
+        "message": "目标值格式建议为数值或百分比，请确认输入正确",
+        "description": "goal_value 类型为 DECIMAL，根据 goal_type 不同语义不同：金额类（ORDER_AMOUNT/INVOICE_AMOUNT）为数值，比率类（GROSS_MARGIN_RATE）为百分比，次数类（VISIT_COUNT）为整数。保存时对格式做软校验提示。"
+      }
+    ]
+  },
+  "changeNote": [
+    "sales-targets 首版 RULE 设计态 Fragment，含复合唯一键、月度/年度规则约束、目标对象引用完整性和目标值格式校验"
+  ]
+}

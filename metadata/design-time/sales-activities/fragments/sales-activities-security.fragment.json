@@ -1,0 +1,193 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-activities",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "visit-record": [
+          "tenant_code",
+          "parent_id",
+          "visit_method",
+          "record_user_id",
+          "last_modified_user_id"
+        ],
+        "visit-follow-up": [
+          "tenant_code",
+          "operator_user_id"
+        ],
+        "visit-team-member": [
+          "tenant_code",
+          "user_id"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "activity_content",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "活动信息富文本含客户拜访详情，属业务机密，需按行级数据策略控制可见范围"
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "customer_name",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户名称为业务敏感信息，需按行级数据策略控制可见范围"
+      }
+    ],
+    "authzProjection": {
+      "description": "客户拜访业务对象在 PSP 中的资源属性投影。行级权限候选字段以客户ID、拜访方式、记录人维度为主，支持按客户隔离和按记录人隔离两种数据策略。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。rowSecurity 声明 DATA 策略候选字段，fieldSecurity 声明 FIELD 策略候选字段（活动信息 CONFIDENTIAL，客户/联系人信息 RESTRICTED）。策略表达式中典型引用方式包括 res.tenant_code、res.parent_id（客户ID）、res.record_user_id、res.visit_method 等。",
+      "attributes": [
+        {
+          "code": "visit_id",
+          "name": "拜访记录主键",
+          "type": "LONG",
+          "source": {
+            "entityCode": "visit-record",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "拜访记录资源唯一标识，供 PIP 按 ID 拉取完整属性集合。",
+          "i18nKey": "auth.resource.res_sales_activity.attr.visit_id",
+          "valueExamples": [
+            "1",
+            "100"
+          ]
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "visit-record",
+            "fieldCode": "tenant_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "拜访记录所属租户。典型表达式：sub.tenant_code == res.tenant_code。",
+          "i18nKey": "auth.resource.res_sales_activity.attr.tenant_code",
+          "valueExamples": [
+            "gov-default",
+            "ent-default"
+          ]
+        },
+        {
+          "code": "parent_id",
+          "name": "拜访客户",
+          "type": "LONG",
+          "source": {
+            "entityCode": "visit-record",
+            "fieldCode": "parent_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "资源属性",
+          "description": "关联客户ID。典型表达式：contains(sub.customer_scope, res.parent_id)。",
+          "i18nKey": "auth.resource.res_sales_activity.attr.parent_id",
+          "valueExamples": [
+            "1001",
+            "2001"
+          ]
+        },
+        {
+          "code": "visit_method",
+          "name": "拜访方式",
+          "type": "STRING",
+          "source": {
+            "entityCode": "visit-record",
+            "fieldCode": "visit_method"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "OFFLINE",
+              "label": "线下拜访"
+            },
+            {
+              "value": "VIDEO",
+              "label": "视频会议"
+            },
+            {
+              "value": "CALL",
+              "label": "电话拜访"
+            },
+            {
+              "value": "OTHER",
+              "label": "其他"
+            }
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "拜访方式。典型表达式：res.visit_method == 'OFFLINE'。",
+          "i18nKey": "auth.resource.res_sales_activity.attr.visit_method",
+          "valueExamples": [
+            "OFFLINE",
+            "VIDEO"
+          ]
+        },
+        {
+          "code": "record_user_id",
+          "name": "记录人",
+          "type": "STRING",
+          "source": {
+            "entityCode": "visit-record",
+            "fieldCode": "record_user_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "拜访记录人用户ID。典型表达式：sub.user_id == res.record_user_id。",
+          "i18nKey": "auth.resource.res_sales_activity.attr.record_user_id",
+          "valueExamples": [
+            "user001"
+          ]
+        },
+        {
+          "code": "last_modified_user_id",
+          "name": "最近修改人",
+          "type": "STRING",
+          "source": {
+            "entityCode": "visit-record",
+            "fieldCode": "last_modified_user_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 60,
+          "displayGroup": "资源属性",
+          "description": "最近修改人用户ID。典型表达式：sub.user_id == res.last_modified_user_id。",
+          "i18nKey": "auth.resource.res_sales_activity.attr.last_modified_user_id",
+          "valueExamples": [
+            "user001"
+          ]
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "sales-activities SECURITY Fragment — 行级安全(visit-record/visit-follow-up/visit-team-member)、字段安全(活动信息 CONFIDENTIAL，客户/联系人 RESTRICTED)、authzProjection 6 个资源属性"
+  ]
+}

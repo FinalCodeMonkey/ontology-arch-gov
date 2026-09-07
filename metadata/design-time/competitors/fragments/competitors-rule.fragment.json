@@ -1,0 +1,78 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "competitors",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "COMPETITOR_NAME_UNIQUE",
+        "name": "竞争对手名称唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "竞争对手名称已存在，请使用其他名称",
+        "description": "创建或修改竞争对手时，competitor_name 在同一租户下必须唯一（含已逻辑删除记录）。"
+      },
+      {
+        "code": "COMPETITOR_STATUS_EDITABLE_ONLY_ACTIVE",
+        "name": "仅活跃状态可编辑",
+        "ruleType": "STATE",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "polarity": "safety",
+        "expression": "status == 'ACTIVE'",
+        "severity": "ERROR",
+        "message": "非活跃状态的竞争对手不可编辑，请先启用",
+        "description": "竞争对手处于 INACTIVE 状态时，禁止修改业务字段（状态字段本身除外）。",
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "ACTIVE"
+          }
+        }
+      },
+      {
+        "code": "COMPETITOR_DELETE_ARCHIVE_CHECK",
+        "name": "删除前检查关联场景",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "WARN",
+        "message": "该竞争对手在部分场景中被引用，确认删除？",
+        "description": "删除竞争对手前检查是否被场景竞对分析引用，提示操作影响。",
+        "crossBoRef": {
+          "refBoCode": "scenes",
+          "refFieldCode": "id",
+          "localEntityCode": "competitor",
+          "localFieldCode": "id"
+        }
+      },
+      {
+        "code": "COMPETITOR_ANALYSIS_DOC_JSON_VALID",
+        "name": "分析文档JSON格式校验",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "competitor",
+        "fieldCode": "analysis_doc",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "分析文档数据格式无效，期望 JSON 数组",
+        "description": "analysis_doc 存储 JSON 格式文件列表，提交时校验是否为合法 JSON。"
+      }
+    ]
+  },
+  "changeNote": [
+    "competitors 首版 RULE 设计态 Fragment，含名称唯一性、状态编辑规则、跨 BO 引用检查与分析文档格式校验"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "2.0",
+  "changeNote": "bo-meta-models 首版 bo-info.json",
+  "boCode": "bo-meta-models",
+  "appCode": "crm",
+  "draftVersion": "1.0",
+  "tenantId": "cbg"
+}

@@ -1,0 +1,216 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='data-domains'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'data-domains'",
+    "generated_from": "data-domains.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.561189+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "authz-data-domain",
+        "name": "数据领域实体",
+        "isPrimary": true,
+        "tableName": "authz_data_domain",
+        "rowLevelRuleEntries": [
+          "tenant_id",
+          "app_code",
+          "level_type",
+          "domain_code",
+          "is_deleted"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "父节点ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "level_type",
+            "name": "层级类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "levelType",
+            "columnName": "level_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "domain_code",
+            "name": "领域编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "domainCode",
+            "columnName": "domain_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "domain_name",
+            "name": "领域名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "domainName",
+            "columnName": "domain_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "sort_order",
+            "name": "同层排序序号",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "sortOrder",
+            "columnName": "sort_order",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_at",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdAt",
+            "columnName": "created_at",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_at",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedAt",
+            "columnName": "updated_at",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "tenant_id",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantId",
+            "columnName": "tenant_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "app_code",
+            "name": "应用代码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "appCode",
+            "columnName": "app_code",
+            "fieldControl": false,
+            "filterable": true
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建数据领域",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "update",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除数据领域",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "MOVE",
+        "name": "移动节点",
+        "scope": "BO",
+        "act_aliases": "move",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "tree,read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'data-domains' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'data-domains' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + data-domains_bo_meta_id + CREATE",
+      "RES_DATA_BO + data-domains_bo_meta_id + UPDATE",
+      "RES_DATA_BO + data-domains_bo_meta_id + DELETE",
+      "RES_DATA_BO + data-domains_bo_meta_id + MOVE",
+      "RES_DATA_BO + data-domains_bo_meta_id + READ",
+      "RES_DATA_BO + data-domains_bo_meta_id + LIST"
+    ]
+  }
+}

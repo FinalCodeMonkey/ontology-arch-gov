@@ -1,0 +1,484 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "x-territory-regs",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "id",
+        "displayName": "ID",
+        "order": 10,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "filing_no",
+        "displayName": "报备单号",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          { "value": "LIKE",       "label": "包含" },
+          { "value": "EQ",         "label": "等于" },
+          { "value": "STARTS_WITH","label": "开头是" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "project_name",
+        "displayName": "项目名称",
+        "sortable": true,
+        "columnWidth": 240,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入项目名称",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          { "value": "LIKE", "label": "包含" },
+          { "value": "EQ",   "label": "等于" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_id",
+        "displayName": "客户",
+        "columnWidth": 200,
+        "order": 40,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "customers",
+        "refField": "customer_name",
+        "placeholder": "请选择客户",
+        "queryable": false,
+        "dataType": "string",
+        "exportable": false,
+        "importable": true
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_name",
+        "displayName": "客户名称",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          { "value": "LIKE", "label": "包含" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_owner_id",
+        "displayName": "客户所有人",
+        "columnWidth": 120,
+        "order": 60,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "refField": "staff_name",
+        "placeholder": "请选择客户所有人",
+        "queryable": false,
+        "dataType": "string",
+        "exportable": false,
+        "importable": true
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_owner_name",
+        "displayName": "客户所有人",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          { "value": "LIKE", "label": "包含" },
+          { "value": "EQ",   "label": "等于" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "filing_owner_id",
+        "displayName": "报备负责人",
+        "columnWidth": 120,
+        "order": 80,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "refField": "staff_name",
+        "placeholder": "请选择报备负责人",
+        "queryable": false,
+        "dataType": "string",
+        "exportable": false,
+        "importable": true
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "filing_owner_name",
+        "displayName": "报备负责人",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          { "value": "LIKE", "label": "包含" },
+          { "value": "EQ",   "label": "等于" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "status",
+        "displayName": "状态",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "SELECT",
+        "dictCode": "x_territory_reg_status",
+        "queryable": true,
+        "dataType": "enum",
+        "queryOperatorOptions": [
+          { "value": "EQ",  "label": "等于" },
+          { "value": "IN",  "label": "属于" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "reason",
+        "displayName": "报备理由",
+        "columnWidth": 300,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请详细说明跨地盘报备的理由",
+        "queryable": false,
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "ownership_note",
+        "displayName": "主导权及合作分量说明",
+        "columnWidth": 300,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请说明主导权归属及各方合作分量",
+        "queryable": false,
+        "exportable": false,
+        "importable": false
+      },
+
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "linked_opportunity_id",
+        "displayName": "关联商机",
+        "columnWidth": 160,
+        "order": 130,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "opportunities",
+        "refField": "opportunity_code",
+        "placeholder": "请选择关联商机（可选）",
+        "queryable": false,
+        "dataType": "string",
+        "exportable": false,
+        "importable": true
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "linked_opportunity_code",
+        "displayName": "关联商机编码",
+        "sortable": false,
+        "columnWidth": 160,
+        "order": 140,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          { "value": "EQ",   "label": "等于" },
+          { "value": "LIKE", "label": "包含" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "flow_instance_id",
+        "displayName": "流程实例ID",
+        "order": 150,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "INPUT",
+        "queryable": false,
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 160,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "DATETIME",
+        "queryable": true,
+        "dataType": "datetime",
+        "queryOperatorOptions": [
+          { "value": "BETWEEN", "label": "区间" },
+          { "value": "GTE",     "label": "大于等于" },
+          { "value": "LTE",     "label": "小于等于" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "updated_time",
+        "displayName": "修改时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 170,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "DATETIME",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "id",
+        "displayName": "成员行ID",
+        "order": 10,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "member_user_id",
+        "displayName": "成员",
+        "columnWidth": 140,
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "refField": "staff_name",
+        "placeholder": "请选择团队成员",
+        "queryable": false,
+        "dataType": "string",
+        "exportable": false,
+        "importable": true
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "member_user_name",
+        "displayName": "成员姓名",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "disabled": true,
+        "formType": "INPUT",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          { "value": "LIKE", "label": "包含" },
+          { "value": "EQ",   "label": "等于" }
+        ],
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "member_role",
+        "displayName": "成员角色",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "x_territory_reg_member_role",
+        "placeholder": "请选择成员角色",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "permission_code",
+        "displayName": "权限",
+        "sortable": false,
+        "columnWidth": 80,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "x_territory_reg_permission",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "related_teams",
+        "displayName": "关联团队模块",
+        "columnWidth": 200,
+        "order": 60,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "多个团队编码用逗号分隔",
+        "queryable": false,
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "remark",
+        "displayName": "备注",
+        "columnWidth": 200,
+        "order": 70,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入备注",
+        "queryable": false,
+        "exportable": false,
+        "importable": false
+      }
+    ],
+    "detailTabs": [
+      {
+        "code": "basic",
+        "label": "基本信息",
+        "sections": [
+          {
+            "code": "filing-info",
+            "label": "报备信息"
+          },
+          {
+            "code": "related-opportunity",
+            "label": "关联商机"
+          }
+        ]
+      },
+      {
+        "code": "team-members",
+        "label": "团队成员",
+        "dataSource": {
+          "type": "BO_QUERY",
+          "boCode": "x-territory-regs"
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "跨地盘项目报备 BO 首版 VIEW Fragment",
+    "主实体列表显示：报备单号、项目名称、客户名称、客户所有人、报备负责人、状态、关联商机编码、创建时间",
+    "reason/ownership_note 仅在详情展示（敏感字段）；团队成员在 detailTabs 独立 Tab"
+  ]
+}

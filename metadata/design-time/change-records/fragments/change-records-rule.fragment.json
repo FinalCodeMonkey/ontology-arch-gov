@@ -1,0 +1,88 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "change-records",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "CHANGE_APPROVAL_LINKED_WHEN_PENDING",
+        "name": "待审批变更必须关联审批记录",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "status == 'PENDING_APPROVAL' && approval_record_id == null",
+        "severity": "ERROR",
+        "message": "待审批状态的变更记录必须关联审批记录",
+        "description": "当 status 为 PENDING_APPROVAL 时，approval_record_id 不能为空。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "PENDING_APPROVAL"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "approval_record_id"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "CHANGE_SNAPSHOT_REQUIRED_FOR_DRAFT",
+        "name": "草稿状态必须有原始快照",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "status == 'DRAFT' && original_snapshot_json == null",
+        "severity": "WARN",
+        "message": "草稿状态的变更记录建议保留原始快照以便对比",
+        "description": "DRAFT 状态时建议有 original_snapshot_json，用于变更对比。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "DRAFT"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "original_snapshot_json"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "变更记录 BO 首版 RULE Fragment，含审批关联约束和快照建议规则"
+  ]
+}

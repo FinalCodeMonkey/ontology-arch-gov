@@ -1,0 +1,514 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "users",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "users",
+    "boName": "用户",
+    "description": "用户管理业务对象，单实体建模（SINGLE），主实体 dap-sys-user 对应 PSP 用户数据表，覆盖员工基本信息、联系方式、组织归属、岗位及管理关系。PSP 中 bo_code 为 users。",
+    "apiConfig": {
+      "resourcePath": "/users",
+      "idField": "id",
+      "idType": "STRING",
+      "businessKeyField": "user_id",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "staff_name",
+      "statusField": "staff_status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "defaultSort": {
+        "field": "join_date",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "dap-sys-user",
+        "name": "用户实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "dap_sys_user",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "用户ID",
+            "type": "STRING",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "code",
+            "fieldName": "code",
+            "columnName": "code",
+            "name": "用户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "name",
+            "fieldName": "name",
+            "columnName": "name",
+            "name": "用户名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "staff_no",
+            "fieldName": "staffNo",
+            "columnName": "staff_no",
+            "name": "工号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "user_id",
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "name": "用户账号ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true
+          },
+          {
+            "code": "staff_company_name",
+            "fieldName": "staffCompanyName",
+            "columnName": "staff_company_name",
+            "name": "所属公司",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "staff_name",
+            "fieldName": "staffName",
+            "columnName": "staff_name",
+            "name": "员工姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true
+          },
+          {
+            "code": "staff_en_name",
+            "fieldName": "staffEnName",
+            "columnName": "staff_en_name",
+            "name": "英文名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "staff_status",
+            "fieldName": "staffStatus",
+            "columnName": "staff_status",
+            "name": "员工状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true
+          },
+          {
+            "code": "staff_status_code",
+            "fieldName": "staffStatusCode",
+            "columnName": "staff_status_code",
+            "name": "员工状态编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "staff_email",
+            "fieldName": "staffEmail",
+            "columnName": "staff_email",
+            "name": "公司邮箱",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "staff_type_code",
+            "fieldName": "staffTypeCode",
+            "columnName": "staff_type_code",
+            "name": "员工类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "staff_type",
+            "fieldName": "staffType",
+            "columnName": "staff_type",
+            "name": "员工类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "staff_photo",
+            "fieldName": "staffPhoto",
+            "columnName": "staff_photo",
+            "name": "员工照片",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "personal_email",
+            "fieldName": "personalEmail",
+            "columnName": "personal_email",
+            "name": "个人邮箱",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "personal_mobile",
+            "fieldName": "personalMobile",
+            "columnName": "personal_mobile",
+            "name": "个人手机",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "join_date",
+            "fieldName": "joinDate",
+            "columnName": "join_date",
+            "name": "入职日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "join_job_date",
+            "fieldName": "joinJobDate",
+            "columnName": "join_job_date",
+            "name": "参加工作日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "nation_code",
+            "fieldName": "nationCode",
+            "columnName": "nation_code",
+            "name": "民族编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "nation",
+            "fieldName": "nation",
+            "columnName": "nation",
+            "name": "民族",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "country_and_area_code",
+            "fieldName": "countryAndAreaCode",
+            "columnName": "country_and_area_code",
+            "name": "国家地区编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "country_and_area",
+            "fieldName": "countryAndArea",
+            "columnName": "country_and_area",
+            "name": "国家地区",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "work_place_code",
+            "fieldName": "workPlaceCode",
+            "columnName": "work_place_code",
+            "name": "工作地编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "work_place",
+            "fieldName": "workPlace",
+            "columnName": "work_place",
+            "name": "工作地",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "office_place_code",
+            "fieldName": "officePlaceCode",
+            "columnName": "office_place_code",
+            "name": "办公地点编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "office_place",
+            "fieldName": "officePlace",
+            "columnName": "office_place",
+            "name": "办公地点",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "birthday",
+            "fieldName": "birthday",
+            "columnName": "birthday",
+            "name": "出生日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "gender_code",
+            "fieldName": "genderCode",
+            "columnName": "gender_code",
+            "name": "性别编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "gender",
+            "fieldName": "gender",
+            "columnName": "gender",
+            "name": "性别",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "manage_user_id",
+            "fieldName": "manageUserId",
+            "columnName": "manage_user_id",
+            "name": "直属上级用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_no",
+                  "localCode": "manage_staff_no",
+                  "displayRole": "BUSINESS_KEY"
+                },
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "manage_staff_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "manage_staff_no",
+            "fieldName": "manageStaffNo",
+            "columnName": "manage_staff_no",
+            "name": "直属上级工号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "redundant": true
+          },
+          {
+            "code": "manage_staff_name",
+            "fieldName": "manageStaffName",
+            "columnName": "manage_staff_name",
+            "name": "直属上级姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "redundant": true
+          },
+          {
+            "code": "department_code",
+            "fieldName": "departmentCode",
+            "columnName": "department_code",
+            "name": "所属部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "orgs",
+              "refFieldCode": "department_code",
+              "displayFields": [
+                {
+                  "refFieldCode": "department_name",
+                  "localCode": "department_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "department_name",
+            "fieldName": "departmentName",
+            "columnName": "department_name",
+            "name": "所属部门名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "redundant": true
+          },
+          {
+            "code": "is_dept_portion_manage",
+            "fieldName": "isDeptPortionManage",
+            "columnName": "is_dept_portion_manage",
+            "name": "是否部门分管负责人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "staff_management_jurisdiction",
+            "fieldName": "staffManagementJurisdiction",
+            "columnName": "staff_management_jurisdiction",
+            "name": "人员管理权限",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "post_code",
+            "fieldName": "postCode",
+            "columnName": "post_code",
+            "name": "岗位编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "post_name",
+            "fieldName": "postName",
+            "columnName": "post_name",
+            "name": "岗位名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "organization_type_code",
+            "fieldName": "organizationTypeCode",
+            "columnName": "organization_type_code",
+            "name": "组织类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "organization_type",
+            "fieldName": "organizationType",
+            "columnName": "organization_type",
+            "name": "组织类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "country_code",
+            "fieldName": "countryCode",
+            "columnName": "country_code",
+            "name": "国籍编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permanent_country_and_area_code",
+            "fieldName": "permanentCountryAndAreaCode",
+            "columnName": "permanent_country_and_area_code",
+            "name": "常驻国家地区编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permanent_country_and_area",
+            "fieldName": "permanentCountryAndArea",
+            "columnName": "permanent_country_and_area",
+            "name": "常驻国家地区",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  }
+}

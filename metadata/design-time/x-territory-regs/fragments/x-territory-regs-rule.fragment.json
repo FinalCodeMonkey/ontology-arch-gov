@@ -1,0 +1,141 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "x-territory-regs",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "FILING_STATUS_TRANSITION",
+        "name": "报备状态机约束",
+        "ruleType": "STATE",
+        "scope": "FIELD",
+        "entityCode": "x-territory-reg",
+        "fieldCode": "status",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "expression": "!(status == 'DRAFT' && operationCode IN ['APPROVE','REJECT']) && !(status == 'APPROVED' && operationCode IN ['SUBMIT','APPROVE','REJECT','REVOKE']) && !(status == 'REJECTED' && operationCode IN ['APPROVE','REJECT','REVOKE'])",
+        "polarity": "safety",
+        "description": "合法状态流转：DRAFT→(SUBMIT)→PENDING→(APPROVE)→APPROVED；PENDING→(REJECT)→REJECTED；PENDING→(REVOKE)→DRAFT；REJECTED→(SUBMIT)→PENDING。",
+        "message": "当前状态不允许执行该操作"
+      },
+      {
+        "code": "EDIT_ONLY_IN_DRAFT_OR_REJECTED",
+        "name": "编辑仅允许在草稿/被驳回状态",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "operationCode": "EDIT",
+        "severity": "ERROR",
+        "expression": "status NOT IN ('DRAFT', 'REJECTED')",
+        "polarity": "violation",
+        "message": "仅草稿或被驳回的报备单可以编辑"
+      },
+      {
+        "code": "DELETE_ONLY_IN_DRAFT",
+        "name": "删除仅允许在草稿状态",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "operationCode": "DELETE",
+        "severity": "ERROR",
+        "expression": "status != 'DRAFT'",
+        "polarity": "violation",
+        "message": "仅草稿状态的报备单可以删除",
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DRAFT"
+          }
+        }
+      },
+      {
+        "code": "FLOW_INSTANCE_REQUIRED_ON_PENDING",
+        "name": "提交后必须存在流程实例",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "x-territory-reg",
+        "fieldCode": "flow_instance_id",
+        "trigger": "AFTER_OPERATION",
+        "operationCode": "SUBMIT",
+        "severity": "ERROR",
+        "expression": "status == 'PENDING' && (flow_instance_id == null || flow_instance_id == '')",
+        "polarity": "violation",
+        "message": "提交审批后必须关联 Flowable 流程实例",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "PENDING"
+              }
+            },
+            {
+              "type": "logical",
+              "op": "OR",
+              "items": [
+                {
+                  "type": "isNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "flow_instance_id"
+                  }
+                },
+                {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "flow_instance_id"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": ""
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "code": "LINKED_OPPORTUNITY_UNIQUE_PER_FILING",
+        "name": "同一商机只能关联一条报备单",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "crossBoRef": {
+          "refBoCode": "opportunities",
+          "refFieldCode": "id",
+          "localEntityCode": "x-territory-reg",
+          "localFieldCode": "linked_opportunity_id"
+        },
+        "expression": "COUNT(x-territory-regs WHERE linked_opportunity_id == $value AND id != $self.id AND is_deleted == 0) > 0",
+        "polarity": "violation",
+        "message": "该商机已被其他报备单关联，一个商机只能对应一条报备"
+      }
+    ]
+  },
+  "changeNote": [
+    "跨地盘项目报备 BO 首版 RULE Fragment",
+    "状态机、编辑/删除前置校验、流程实例后置校验、关联商机唯一性约束"
+  ]
+}

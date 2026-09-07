@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/governance-profile.schema.json",
+  "title": "BO Governance Profile",
+  "description": "公司或项目级 BO 元数据治理默认参数。发布时先加载 profile，再用 BO Fragment 覆盖差异项。",
+  "type": "object",
+  "required": ["profileCode", "schemaVersion", "apiDefaults", "metadataDefaults", "securityDefaults"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "profileCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+    "profileName": { "type": "string", "maxLength": 100 },
+    "schemaVersion": { "type": "string", "pattern": "^v?[0-9]+(\\.[0-9]+){0,2}$" },
+    "description": { "type": "string", "maxLength": 500 },
+    "usageGuide": { "$ref": "#/$defs/UsageGuide" },
+    "apiDefaults": {
+      "type": "object",
+      "required": ["responseWrapper", "batchResultType", "aggregateApiPolicy", "entityApiPolicy"],
+      "additionalProperties": false,
+      "properties": {
+        "responseWrapper": { "const": "ApiResponse" },
+        "batchResultType": { "const": "BatchResultDTO" },
+        "resourcePathStyle": { "type": "string", "enum": ["plural-kebab-case"] },
+        "actionPathStyle": { "type": "string", "enum": ["kebab-case"] },
+        "aggregateApiPolicy": { "$ref": "#/$defs/AggregateApiPolicyDefault" },
+        "entityApiPolicy": { "$ref": "#/$defs/EntityApiPolicyDefault" },
+        "alternateApiPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allowRootOnlyAlternateApis": { "type": "boolean", "default": true },
+            "allowFullAggregateAlternateApis": { "type": "boolean", "default": true },
+            "requireExplicitPathSuffix": { "type": "boolean", "default": true },
+            "reservedSuffixes": { "type": "array", "items": { "type": "string" }, "default": ["root", "aggregate", "replace-aggregate"] }
+          }
+        }
+      }
+    },
+    "metadataDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primaryEntityMustBeAggregateRoot": { "type": "boolean", "default": true },
+        "businessKeyNaming": { "type": "string", "enum": ["{bo_snake}_no", "biz_no", "custom"] },
+        "technicalIdField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "defaultObjectType": { "type": "string", "enum": ["SINGLE", "TREE", "MASTER_DETAIL"] },
+        "routeSegmentDefault": { "type": "string", "enum": ["plural-entity-name", "entity-code-kebab", "custom"] },
+        "parentRefFieldDefault": { "type": "string", "enum": ["semantic-parent-id", "parent_id", "custom"] }
+      }
+    },
+    "securityDefaults": {
+      "type": "object",
+      "required": ["rowFallbackScope", "fieldControl", "privacyClass"],
+      "additionalProperties": false,
+      "properties": {
+        "rowFallbackScope": { "type": "string", "enum": ["ALL", "NONE"] },
+        "fieldControl": { "type": "string", "enum": ["OPEN", "RESTRICTED", "MASKED", "HIDDEN"] },
+        "privacyClass": { "type": "string", "enum": ["PUBLIC", "SENSITIVE", "PII", "CONFIDENTIAL"] },
+        "authzProjectionRequiredForResourceBo": { "type": "boolean", "default": true }
+      }
+    },
+    "operationExtractionDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "extractFromPrototypeButtons": { "type": "boolean", "default": false },
+        "ignoreUiUtilityActions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "entityNatureDefaults": { "$ref": "#/$defs/EntityNatureDefaults" }
+  },
+  "$defs": {
+    "UsageGuide": {
+      "type": "object",
+      "description": "给实施人员阅读的中文配置说明，不参与运行时治理计算。",
+      "additionalProperties": false,
+      "properties": {
+        "howToUse": { "type": "string" },
+        "configurationPrinciple": { "type": "string" },
+        "overrideRule": { "type": "string" },
+        "groups": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/GuideGroup" },
+          "default": []
+        }
+      }
+    },
+    "GuideGroup": {
+      "type": "object",
+      "required": ["group", "title", "description", "items"],
+      "additionalProperties": false,
+      "properties": {
+        "group": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/GuideItem" },
+          "default": []
+        }
+      }
+    },
+    "GuideItem": {
+      "type": "object",
+      "required": ["path", "label", "currentValue", "description", "recommendation"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" },
+        "label": { "type": "string" },
+        "currentValue": {},
+        "description": { "type": "string" },
+        "options": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/GuideOption" },
+          "default": []
+        },
+        "recommendation": { "type": "string" },
+        "impact": { "type": "string" }
+      }
+    },
+    "GuideOption": {
+      "type": "object",
+      "required": ["value", "label", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {},
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "recommended": { "type": "boolean", "default": false }
+      }
+    },
+    "AggregateApiPolicyDefault": {
+      "type": "object",
+      "required": ["listProjectionScope", "readScope", "createScope", "updateScope", "deleteScope", "orphanPolicy"],
+      "additionalProperties": false,
+      "properties": {
+        "listProjectionScope": { "type": "string", "enum": ["ROOT_SUMMARY", "ROOT_ENTITY_ONLY", "FULL_AGGREGATE"] },
+        "readScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"] },
+        "createScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE"] },
+        "updateScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "FULL_AGGREGATE_PATCH", "FULL_AGGREGATE_REPLACE"] },
+        "deleteScope": { "type": "string", "enum": ["ROOT_ENTITY_ONLY", "CASCADE_AGGREGATE"] },
+        "orphanPolicy": { "type": "string", "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"] }
+      }
+    },
+    "EntityNatureDefaults": {
+      "type": "object",
+      "description": "entityNature 对应的设计意图，技术无关。具体技术栈实现由编码宪章定义。",
+      "additionalProperties": false,
+      "properties": {
+        "BUSINESS": { "$ref": "#/$defs/EntityNatureIntent" },
+        "ASSOCIATION": { "$ref": "#/$defs/EntityNatureIntent" }
+      }
+    },
+    "EntityNatureIntent": {
+      "type": "object",
+      "description": "单个 entityNature 值的设计意图。字段名用中文以强调其技术无关性。",
+      "additionalProperties": false,
+      "properties": {
+        "独立持久化接口": { "type": "boolean" },
+        "独立API端点": { "type": "boolean" },
+        "DB唯一约束": { "type": "boolean" },
+        "由父聚合根统一管理": { "type": "boolean" },
+        "设计意图": {
+          "type": "object",
+          "description": "用中文自然语言描述各层的设计契约，不写具体框架术语。",
+          "additionalProperties": false,
+          "properties": {
+            "持久化": { "type": "string" },
+            "API": { "type": "string" },
+            "DTO": { "type": "string" },
+            "DB列": { "type": "string" },
+            "唯一键": { "type": "string" },
+            "替换策略": { "type": "string" }
+          }
+        }
+      }
+    },
+    "EntityApiPolicyDefault": {
+      "type": "object",
+      "required": ["listProjectionScope", "readScope", "createScope", "updateScope", "deleteScope", "orphanPolicy"],
+      "additionalProperties": false,
+      "properties": {
+        "listProjectionScope": { "type": "string", "enum": ["ENTITY_SUMMARY", "ENTITY_ONLY", "ENTITY_AGGREGATE"] },
+        "readScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"] },
+        "createScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE"] },
+        "updateScope": { "type": "string", "enum": ["ENTITY_ONLY", "ENTITY_AGGREGATE_PATCH", "ENTITY_AGGREGATE_REPLACE"] },
+        "deleteScope": { "type": "string", "enum": ["ENTITY_ONLY", "CASCADE_CHILDREN"] },
+        "orphanPolicy": { "type": "string", "enum": ["DENY_DELETE_WHEN_CHILD_EXISTS", "KEEP_CHILDREN_AS_HISTORY", "DETACH_CHILDREN", "MANUAL_CLEANUP_REQUIRED"] }
+      }
+    }
+  }
+}

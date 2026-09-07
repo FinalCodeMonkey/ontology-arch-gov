@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/view-fragment.schema.json",
+  "title": "BO VIEW fragment",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [VIEW Fragment] 章节。",
+  "type": "object",
+  "required": ["fieldViews"],
+  "additionalProperties": false,
+  "$defs": {
+    "queryOperatorItem": {
+      "type": "object",
+      "required": ["value", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string",
+          "enum": [
+            "EQ",          "NEQ",
+            "GT",          "GTE",
+            "LT",          "LTE",
+            "LIKE",        "NOT_LIKE",
+            "STARTS_WITH", "ENDS_WITH",
+            "IN",          "NOT_IN",
+            "BETWEEN",
+            "IS_NULL",     "IS_NOT_NULL"
+          ],
+          "description": "操作符标识符。各分组适用数据类型：string=EQ/NEQ/LIKE/NOT_LIKE/STARTS_WITH/ENDS_WITH/IS_NULL/IS_NOT_NULL；integer/decimal=EQ/NEQ/GT/GTE/LT/LTE/BETWEEN/IS_NULL/IS_NOT_NULL；date/datetime=EQ/NEQ/GT/GTE/LT/LTE/BETWEEN/IS_NULL/IS_NOT_NULL；boolean=EQ/IS_NULL/IS_NOT_NULL；enum=EQ/NEQ/IN/NOT_IN/IS_NULL/IS_NOT_NULL；reference=EQ/NEQ/IN/NOT_IN/IS_NULL/IS_NOT_NULL。"
+        },
+        "label": {
+          "type": "string",
+          "enum": [
+            "等于",   "不等于",
+            "大于",   "大于等于",
+            "小于",   "小于等于",
+            "包含",   "不包含",
+            "开头是",  "结尾是",
+            "属于",   "不属于",
+            "区间",
+            "为空",   "不为空"
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "_dataTypeConvention": {
+      "type": "object",
+      "description": "工具链注入的数据类型约定元信息（非人工手写），记录 VIEW.dataType 与 MODEL.type 的映射规则版本。",
+      "additionalProperties": true
+    },
+    "detailTabs": {
+      "type": "array",
+      "description": "详情页 Tab 配置。每个 Tab 可关联一个子实体或数据源。",
+      "items": {
+        "type": "object",
+        "required": ["code"],
+        "additionalProperties": true,
+        "properties": {
+          "code": { "type": "string" },
+          "label": { "type": "string" },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "code": { "type": "string" },
+                "entityCode": { "type": "string" },
+                "label": { "type": "string" }
+              }
+            }
+          },
+          "dataSource": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "type": { "type": "string", "enum": ["BO_QUERY", "STATIC"] },
+              "boCode": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "listViewConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultPageSize": { "type": "integer", "enum": [10, 20, 50, 100], "default": 20 },
+        "formLayout": { "type": "string", "enum": ["GRID", "VERTICAL", "HORIZONTAL"], "default": "GRID" },
+        "formColumns": { "type": "integer", "enum": [1, 2, 3, 4], "default": 2 },
+        "formLabelWidth": { "type": "integer", "minimum": 60, "maximum": 300, "default": 120 },
+        "searchCollapsible": { "type": "boolean", "default": true }
+      }
+    },
+    "fieldViews": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；(entityCode, fieldCode) 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["entityCode", "fieldCode"],
+        "additionalProperties": false,
+        "properties": {
+          "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "computedField": {
+            "type": "object",
+            "description": "纯 VIEW 计算字段定义。配置后 fieldCode 可不在 MODEL 中，但 sources 必须引用 MODEL 中存在的字段；计算结果只用于展示/导出/查询投影，不写入 Domain/DB。",
+            "required": ["kind", "sources"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["SUM", "RATIO", "EXPRESSION"] },
+              "sources": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["entityCode", "fieldCode"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+                    "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                    "role": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" }
+                  }
+                }
+              },
+              "expression": { "type": "string", "maxLength": 500 },
+              "description": { "type": "string", "maxLength": 500 }
+            }
+          },
+          "displayName": { "type": "string" },
+          "sortable": { "type": "boolean", "default": false },
+          "columnWidth": { "type": "integer", "minimum": 40, "maximum": 1000 },
+          "format": { "type": "string", "enum": ["currency", "date", "datetime", "fileSize", "percent", "text"] },
+          "hidden": { "type": "boolean", "default": false, "description": "为 true 时优先级高于 showInList 和 showInDetail，两者均被视为 false（字段在列表和详情中均不显示）。" },
+          "order": { "type": "integer", "minimum": 1 },
+          "showInList": { "type": "boolean", "default": true },
+          "showInDetail": { "type": "boolean", "default": true },
+          "editableInForm": { "type": "boolean", "default": true, "description": "设计时静态声明：false 表示字段在表单中始终只读（不渲染可编辑控件）。与 disabled 区别：disabled 为运行时动态禁用（字段仍渲染但根据条件不可输入）；editableInForm=false 为静态设计决策。若 editableInForm=false，disabled 无意义。" },
+          "instantValidate": { "type": "boolean", "default": false },
+          "formType": { "type": "string", "enum": ["INPUT", "TEXTAREA", "NUMBER", "SELECT", "MULTI_SELECT", "DATE", "DATETIME", "SWITCH", "RADIO", "CHECKBOX", "USER_SELECT", "ORG_SELECT", "OBJECT_SELECT", "FILE_UPLOAD", "RICH_TEXT", "HIDDEN", "LINK"], "description": "UI 控件类型。CROSS_BO_REF 字段应使用 OBJECT_SELECT（refBoCode 非 users）或 USER_SELECT（refBoCode 为 users）；CROSS_BO_DISPLAY 字段为只读展示，展示形态由 format 字段权威承载，formType 允许 INPUT（纯文本）或跟随 dataType（string→INPUT、datetime→DATETIME、date→DATE、integer/decimal→NUMBER、boolean→SWITCH）。check_consistency.py 会对此做跨 Fragment 校验。" },
+          "dataType": {
+            "type": "string",
+            "enum": ["string", "integer", "decimal", "date", "datetime", "boolean", "enum", "reference"],
+            "description": "字段存储的数据类型，独立于 formType（UI 控件类型）。用于精确约束 queryOperatorOptions 可选范围，并由 check_consistency.py 与 MODEL fragment 中的字段类型做一致性校验。各値：string=文本；integer=整数；decimal=小数/浮点；date=日期（不含时分秒）；datetime=日期时间；boolean=布尔；enum=枚举/字典値；reference=外键/关联引用 ID。queryable=true 时必填。"
+          },
+          "placeholder": { "type": "string" },
+          "queryable": { "type": "boolean", "default": false },
+          "queryOperatorOptions": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/queryOperatorItem" },
+            "minItems": 1,
+            "description": "仅在 queryable=true 时生效。数组首项为默认操作符，用户可在搜索区切换；单项表示固定操作符（不显示选择器）；缺省时框架根据 dataType 推断。可选范围由 dataType 决定，详见 $defs.queryOperatorItem.properties.value.description。"
+          },
+          "exportable": { "type": "boolean", "default": true },
+          "importable": { "type": "boolean", "default": false },
+          "disabled": { "type": "boolean", "default": false, "description": "运行时默认禁用：true 表示字段渲染为只读状态。与 editableInForm 区别：editableInForm=false 为设计时静态决策；disabled 为运行时条件禁用。若 editableInForm=false，disabled 无意义。" },
+          "dictCode": { "type": "string" },
+          "refObject": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "引用的目标 BO 的 boCode（kebab-case），用于 OBJECT_SELECT 类型字段的关联对象选择器。CROSS_BO_REF 字段必须设置，且应与 MODEL 中 crossBoRef.refBoCode 一致。" },
+          "refField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "OBJECT_SELECT 时引用目标 BO 的展示字段 code，应与 MODEL crossBoRef.displayFields 中 displayRole=NAME 的 refFieldCode 一致。" },
+          "visibleWhen": {
+            "type": "object",
+            "description": "条件显示规则。支持两种模式：(1) simple 模式 field+equals/equalsNot 单值匹配；(2) allOf 模式多个子条件都必须满足。",
+            "properties": {
+              "field": { "type": "string", "description": "[simple] 依赖的字段 code" },
+              "equals": { "description": "[simple] 等于某个值时显示（支持 boolean/string）" },
+              "equalsNot": { "description": "[simple] 不等于某个值时显示（支持 boolean/string）" },
+              "allOf": {
+                "type": "array",
+                "description": "[allOf] 多个子条件都必须满足才显示。每个子条件含 field 和 notNull/equals 等",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "field": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "displayGroup": { "type": "string", "description": "字段所属的显示分组 key，用于表单布局中分组渲染。" },
+          "inlineEditable": { "type": "boolean", "default": false, "description": "列表行内编辑：true 表示在表格行中可直接编辑该字段。" },
+          "displayRules": {
+            "type": "object",
+            "description": "显示规则配置，控制字段在不同视图模式下的渲染行为。key 为规则名/条件值（如 OC_MAIN），value 为覆盖配置。",
+            "additionalProperties": true
+          },
+          "conditionalDictCode": {
+            "type": "object",
+            "description": "条件字典：根据某字段的值动态切换字典数据源。如 conditionalDictCode.dependsOn='project_type' conditionalDictCode.dictCodeMap={DC: 'dc_dict', OC_MAIN: 'oc_main_dict'}。",
+            "additionalProperties": false,
+            "properties": {
+              "dependsOn": { "type": "string" },
+              "dictCodeMap": { "type": "object", "additionalProperties": { "type": "string" } }
+            }
+          },
+          "linkText": { "type": "string", "description": "LINK formType 时，链接显示的文本。支持模板变量 {fieldCode}。" },
+          "linkUrlField": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "LINK formType 时，链接 URL 来源字段（同 entity 内某属性值）。" }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "formType": { "enum": ["SELECT", "MULTI_SELECT"] } },
+              "required": ["formType"]
+            },
+            "then": { "required": ["dictCode"] }
+          },
+          {
+            "if": {
+              "properties": { "formType": { "const": "OBJECT_SELECT" } },
+              "required": ["formType"]
+            },
+            "then": { "required": ["refObject"] }
+          },
+          {
+            "$comment": "queryable=true 时必须声明 dataType",
+            "if": {
+              "required": ["queryable"],
+              "properties": { "queryable": { "const": true } }
+            },
+            "then": { "required": ["dataType"] }
+          },
+          {
+            "$comment": "字符串字段可用操作符限制",
+            "if": {
+              "required": ["dataType", "queryable"],
+              "properties": { "dataType": { "const": "string" }, "queryable": { "const": true } }
+            },
+            "then": {
+              "properties": { "queryOperatorOptions": { "items": { "properties": { "value": { "enum": ["EQ", "NEQ", "LIKE", "NOT_LIKE", "STARTS_WITH", "ENDS_WITH", "IS_NULL", "IS_NOT_NULL"] } } } } }
+            }
+          },
+          {
+            "$comment": "数値字段（integer/decimal）可用操作符限制",
+            "if": {
+              "required": ["dataType", "queryable"],
+              "properties": { "dataType": { "enum": ["integer", "decimal"] }, "queryable": { "const": true } }
+            },
+            "then": {
+              "properties": { "queryOperatorOptions": { "items": { "properties": { "value": { "enum": ["EQ", "NEQ", "GT", "GTE", "LT", "LTE", "BETWEEN", "IS_NULL", "IS_NOT_NULL"] } } } } }
+            }
+          },
+          {
+            "$comment": "日期/时间字段（date/datetime）可用操作符限制",
+            "if": {
+              "required": ["dataType", "queryable"],
+              "properties": { "dataType": { "enum": ["date", "datetime"] }, "queryable": { "const": true } }
+            },
+            "then": {
+              "properties": { "queryOperatorOptions": { "items": { "properties": { "value": { "enum": ["EQ", "NEQ", "GT", "GTE", "LT", "LTE", "BETWEEN", "IS_NULL", "IS_NOT_NULL"] } } } } }
+            }
+          },
+          {
+            "$comment": "布尔字段可用操作符限制",
+            "if": {
+              "required": ["dataType", "queryable"],
+              "properties": { "dataType": { "const": "boolean" }, "queryable": { "const": true } }
+            },
+            "then": {
+              "properties": { "queryOperatorOptions": { "items": { "properties": { "value": { "enum": ["EQ", "IS_NULL", "IS_NOT_NULL"] } } } } }
+            }
+          },
+          {
+            "$comment": "枚举字段可用操作符限制",
+            "if": {
+              "required": ["dataType", "queryable"],
+              "properties": { "dataType": { "const": "enum" }, "queryable": { "const": true } }
+            },
+            "then": {
+              "properties": { "queryOperatorOptions": { "items": { "properties": { "value": { "enum": ["EQ", "NEQ", "IN", "NOT_IN", "IS_NULL", "IS_NOT_NULL"] } } } } }
+            }
+          },
+          {
+            "$comment": "关联引用字段可用操作符限制",
+            "if": {
+              "required": ["dataType", "queryable"],
+              "properties": { "dataType": { "const": "reference" }, "queryable": { "const": true } }
+            },
+            "then": {
+              "properties": { "queryOperatorOptions": { "items": { "properties": { "value": { "enum": ["EQ", "NEQ", "IN", "NOT_IN", "IS_NULL", "IS_NOT_NULL"] } } } } }
+            }
+          }
+        ]
+      },
+      "default": []
+    }
+  }
+}

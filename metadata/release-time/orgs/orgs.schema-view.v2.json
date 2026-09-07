@@ -1,0 +1,892 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "orgs",
+  "boName": "组织",
+  "description": "组织架构业务对象，采用树形建模（TREE），主实体 dap-sys-org 通过 parent_org_id 自引用形成组织层级树。PSP 中 bo_code 为 orgs，对应数据表 dap-sys-org。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/orgs",
+    "idField": "id",
+    "idType": "STRING",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "department_code",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "TREE",
+    "nameField": "department_name",
+    "statusField": "is_enable",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "dap-sys-org",
+      "name": "组织实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "dap_sys_org",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "组织ID",
+          "type": "STRING",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "department_code",
+          "name": "部门编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentCode",
+          "columnName": "department_code",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "unique": true,
+            "message": "部门编码不能为空、不超过50字且不可重复"
+          },
+          "view": {
+            "displayName": "部门编码",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入部门编码",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "department_name",
+          "name": "部门名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentName",
+          "columnName": "department_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 100,
+            "message": "部门名称不能为空且不超过100字"
+          },
+          "view": {
+            "displayName": "部门名称",
+            "sortable": true,
+            "columnWidth": 180,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入部门名称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "department_level",
+          "name": "部门层级",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentLevel",
+          "columnName": "department_level",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 20
+          },
+          "view": {
+            "displayName": "部门层级",
+            "sortable": true,
+            "columnWidth": 90,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择部门层级",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "org_department_level"
+          }
+        },
+        {
+          "code": "department_type_code",
+          "name": "部门类型编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentTypeCode",
+          "columnName": "department_type_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "部门类型编码",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "org_department_type"
+          }
+        },
+        {
+          "code": "department_type",
+          "name": "部门类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentType",
+          "columnName": "department_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "部门类型",
+            "sortable": false,
+            "columnWidth": 120,
+            "hidden": true,
+            "order": 55,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "parent_org_id",
+          "name": "上级组织ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "parentOrgId",
+          "columnName": "parent_org_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": true,
+          "validation": {
+            "message": "上级组织ID引用须有效"
+          },
+          "view": {
+            "displayName": "上级组织",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "ORG_SELECT",
+            "placeholder": "请选择上级组织",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "orgs"
+          }
+        },
+        {
+          "code": "parent_department_code",
+          "name": "上级部门编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "parentDepartmentCode",
+          "columnName": "parent_department_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "上级部门编码",
+            "sortable": false,
+            "columnWidth": 130,
+            "hidden": true,
+            "order": 65,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "parent_department_name",
+          "name": "上级部门名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "parentDepartmentName",
+          "columnName": "parent_department_name",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "上级部门名称",
+            "sortable": false,
+            "columnWidth": 180,
+            "hidden": true,
+            "order": 68,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "manage_user_id",
+          "name": "负责人用户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "manageUserId",
+          "columnName": "manage_user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_no",
+                "localCode": "manage_staff_no",
+                "displayRole": "BUSINESS_KEY"
+              },
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "manage_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "message": "负责人ID引用须有效"
+          },
+          "view": {
+            "displayName": "负责人",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择负责人",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "manage_staff_no",
+          "name": "负责人工号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "manageStaffNo",
+          "columnName": "manage_staff_no",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "负责人工号",
+            "sortable": false,
+            "columnWidth": 100,
+            "hidden": true,
+            "order": 73,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "manage_name",
+          "name": "负责人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "manageName",
+          "columnName": "manage_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "负责人姓名",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 75,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "portion_manage_user_id",
+          "name": "分管负责人用户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "portionManageUserId",
+          "columnName": "portion_manage_user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_no",
+                "localCode": "portion_manage_staff_no",
+                "displayRole": "BUSINESS_KEY"
+              },
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "portion_manage_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "message": "分管负责人ID引用须有效"
+          },
+          "view": {
+            "displayName": "分管负责人",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择分管负责人",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "portion_manage_staff_no",
+          "name": "分管负责人工号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "portionManageStaffNo",
+          "columnName": "portion_manage_staff_no",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "分管负责人工号",
+            "sortable": false,
+            "columnWidth": 110,
+            "hidden": true,
+            "order": 83,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "portion_manage_name",
+          "name": "分管负责人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "portionManageName",
+          "columnName": "portion_manage_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "分管负责人姓名",
+            "sortable": false,
+            "columnWidth": 110,
+            "hidden": true,
+            "order": 85,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_enable",
+          "name": "启用状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "isEnable",
+          "columnName": "is_enable",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "enum": [
+              {
+                "value": "Y",
+                "label": "启用"
+              },
+              {
+                "value": "N",
+                "label": "禁用"
+              }
+            ],
+            "message": "启用状态必须为 Y 或 N"
+          },
+          "view": {
+            "displayName": "启用状态",
+            "sortable": true,
+            "columnWidth": 90,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SWITCH",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "org_enable_status"
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "format": "datetime",
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "department_hrbp_list",
+          "name": "HRBP列表",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentHrbpList",
+          "columnName": "department_hrbp_list",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "PII",
+          "reason": "HRBP列表涉个人数据，需授权查看",
+          "validation": {
+            "max": 1000
+          },
+          "view": {
+            "displayName": "HRBP列表",
+            "sortable": false,
+            "columnWidth": 200,
+            "hidden": true,
+            "order": 100,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入HRBP列表",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "department_code",
+        "department_level",
+        "department_type_code",
+        "is_enable",
+        "manage_user_id"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建组织",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": true,
+      "singleResultType": "OrgDTO",
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建组织节点，需指定上级组织 parent_org_id，支持批量创建。标准 API：POST /orgs，批量 API：POST /orgs/batch。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑组织",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "PATCH",
+      "supportsBatch": true,
+      "singleResultType": "OrgDTO",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑组织基本信息，包括部门编码、名称、层级、类型、负责人、分管负责人、HRBP 列表等。标准 API：PATCH /orgs/{id}，批量 API：PATCH /orgs/batch。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除组织",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除组织节点。存在子组织时受 orphanPolicy=DENY_DELETE_WHEN_CHILD_EXISTS 约束，需先清理下级组织。标准 API：DELETE /orgs/{id}，批量 API：DELETE /orgs/batch。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "ExportTaskDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "导出组织架构数据为文件，支持按部门层级、类型等条件筛选。API：POST /orgs/export。"
+    },
+    {
+      "code": "IMPORT",
+      "name": "导入",
+      "scope": "BO",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import",
+      "async": false,
+      "singleResultType": "OrgImportResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量导入组织架构数据，执行必填和枚举校验。API：POST /orgs/import。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "ORG_DEPARTMENT_CODE_UNIQUE",
+      "name": "部门编码唯一",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "部门编码已存在，请使用其他编码",
+      "description": "创建或修改组织时，department_code 必须唯一（含已逻辑删除记录）。"
+    },
+    {
+      "code": "ORG_PARENT_NO_CIRCULAR",
+      "name": "组织父级引用不可形成环路",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "上级组织引用不能形成环路，请检查组织归属关系",
+      "description": "更新 parent_org_id 时，不可将当前组织或其子孙组织设为父级，防止环路。",
+      "crossBoRef": {
+        "refBoCode": "orgs",
+        "refFieldCode": "id",
+        "localEntityCode": "dap-sys-org",
+        "localFieldCode": "parent_org_id"
+      }
+    },
+    {
+      "code": "ORG_DELETE_NO_CHILDREN",
+      "name": "有子组织时不可删除",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "当前组织下存在子组织，请先删除或迁移子组织",
+      "description": "当其他组织 parent_org_id 指向本组织时，禁止删除本组织。",
+      "crossBoRef": {
+        "refBoCode": "orgs",
+        "refFieldCode": "parent_org_id",
+        "localEntityCode": "dap-sys-org",
+        "localFieldCode": "id"
+      }
+    },
+    {
+      "code": "ORG_DISABLE_CHECK_CHILDREN",
+      "name": "停用前检查子组织",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "WARN",
+      "message": "当前组织下存在启用的子组织，停用将影响下级，确认继续？",
+      "description": "将组织从启用切换为停用前，检查是否存在启用的子组织。",
+      "expression": "is_enable == 'N'",
+      "exprAst": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "is_enable"
+        },
+        "right": {
+          "type": "literal",
+          "value": "N"
+        }
+      },
+      "crossBoRef": {
+        "refBoCode": "orgs",
+        "refFieldCode": "parent_org_id",
+        "localEntityCode": "dap-sys-org",
+        "localFieldCode": "id"
+      }
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.908934+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

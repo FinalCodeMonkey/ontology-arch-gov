@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/link-fragment.schema.json",
+  "title": "BO LINK fragment — 显式本体关系",
+  "description": "将 BO 间关系升级为本体图中的一等公民。显式 LINK 优先于 MODEL.CROSS_BO_REF 自动派生；当 LINK 缺失时发布服务从 CROSS_BO_REF 生成 INFERRED 候选。",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [LINK Fragment] 章节。",
+  "type": "object",
+  "required": ["links"],
+  "additionalProperties": false,
+  "properties": {
+    "links": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；link.code 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "source", "target", "direction", "cardinality", "linkKind"],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "description": "全局唯一关系编码，建议 {SOURCE}_{VERB}_{TARGET}，如 CUSTOMER_HAS_OPPORTUNITY"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "关系显示名，如 '客户拥有商机'"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "source": {
+            "type": "object",
+            "required": ["boCode", "entityCode", "fieldCode"],
+            "additionalProperties": false,
+            "properties": {
+              "boCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "源 BO boCode" },
+              "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "源实体 code" },
+              "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "源字段。通常为源对象主键 id" }
+            }
+          },
+          "target": {
+            "type": "object",
+            "required": ["boCode", "entityCode", "fieldCode"],
+            "additionalProperties": false,
+            "properties": {
+              "boCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "目标 BO boCode" },
+              "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "目标实体 code" },
+              "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "目标字段。materialization=FIELD_REF 时通常为该 BO 的 CROSS_BO_REF 字段" }
+            }
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["SOURCE_TO_TARGET", "TARGET_TO_SOURCE", "BIDIRECTIONAL"],
+            "description": "关系方向"
+          },
+          "inverseName": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "反向关系显示名，如 '商机归属客户'"
+          },
+          "cardinality": {
+            "type": "string",
+            "enum": ["ONE_TO_ONE", "ONE_TO_MANY", "MANY_TO_ONE", "MANY_TO_MANY"],
+            "description": "关系基数"
+          },
+          "linkKind": {
+            "type": "string",
+            "enum": ["MASTER_DATA", "BUSINESS_FLOW", "OWNERSHIP", "TEAM_MEMBERSHIP", "COMPETITION", "TEMPORAL", "ASSOCIATION", "HIERARCHY"],
+            "description": "关系种类"
+          },
+          "materialization": {
+            "type": "string",
+            "enum": ["FIELD_REF", "ASSOCIATION_ENTITY", "DERIVED", "EXTERNAL"],
+            "default": "FIELD_REF",
+            "description": "关系的物理实现方式"
+          },
+          "queryable": {
+            "type": "boolean",
+            "default": true,
+            "description": "是否允许作为关系过滤条件"
+          },
+          "traversable": {
+            "type": "boolean",
+            "default": true,
+            "description": "是否允许图遍历"
+          },
+          "authzMode": {
+            "type": "string",
+            "enum": ["SOURCE_ONLY", "TARGET_ONLY", "BOTH_ENDPOINTS", "CUSTOM_POLICY"],
+            "default": "BOTH_ENDPOINTS",
+            "description": "权限校验模式：BOTH_ENDPOINTS=源端和目标端行级权限都执行"
+          },
+          "validFromField": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "可选，关系生效时间字段 code（source 或 target entity 中的属性）"
+          },
+          "validToField": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "可选，关系失效时间字段 code"
+          },
+          "weightExpression": {
+            "type": "object",
+            "description": "可选，关系权重表达式，结构化规则 AST 格式（{type, op, left, right}）"
+          }
+        }
+      },
+      "default": []
+    }
+  }
+}

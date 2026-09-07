@@ -1,0 +1,275 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='orgs'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'orgs'",
+    "generated_from": "orgs.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.848139+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "dap-sys-org",
+        "name": "组织实体",
+        "isPrimary": true,
+        "tableName": "dap_sys_org",
+        "rowLevelRuleEntries": [
+          "department_code",
+          "department_level",
+          "department_type_code",
+          "is_enable",
+          "manage_user_id"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "组织ID",
+            "type": "STRING",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "department_code",
+            "name": "部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentCode",
+            "columnName": "department_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "department_name",
+            "name": "部门名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentName",
+            "columnName": "department_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "department_level",
+            "name": "部门层级",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentLevel",
+            "columnName": "department_level",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "department_type_code",
+            "name": "部门类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentTypeCode",
+            "columnName": "department_type_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "department_type",
+            "name": "部门类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentType",
+            "columnName": "department_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "parent_org_id",
+            "name": "上级组织ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "parentOrgId",
+            "columnName": "parent_org_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "parent_department_code",
+            "name": "上级部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "parentDepartmentCode",
+            "columnName": "parent_department_code",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_department_name",
+            "name": "上级部门名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "parentDepartmentName",
+            "columnName": "parent_department_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "manage_user_id",
+            "name": "负责人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "manageUserId",
+            "columnName": "manage_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "manage_staff_no",
+            "name": "负责人工号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "manageStaffNo",
+            "columnName": "manage_staff_no",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "manage_name",
+            "name": "负责人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "manageName",
+            "columnName": "manage_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "portion_manage_user_id",
+            "name": "分管负责人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "portionManageUserId",
+            "columnName": "portion_manage_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "portion_manage_staff_no",
+            "name": "分管负责人工号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "portionManageStaffNo",
+            "columnName": "portion_manage_staff_no",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "portion_manage_name",
+            "name": "分管负责人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "portionManageName",
+            "columnName": "portion_manage_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_enable",
+            "name": "启用状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "isEnable",
+            "columnName": "is_enable",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "department_hrbp_list",
+            "name": "HRBP列表",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentHrbpList",
+            "columnName": "department_hrbp_list",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建组织",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除组织",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'orgs' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'orgs' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + orgs_bo_meta_id + CREATE",
+      "RES_DATA_BO + orgs_bo_meta_id + UPDATE",
+      "RES_DATA_BO + orgs_bo_meta_id + DELETE",
+      "RES_DATA_BO + orgs_bo_meta_id + EXPORT",
+      "RES_DATA_BO + orgs_bo_meta_id + IMPORT",
+      "RES_DATA_BO + orgs_bo_meta_id + LIST",
+      "RES_DATA_BO + orgs_bo_meta_id + READ"
+    ]
+  }
+}

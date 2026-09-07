@@ -1,0 +1,40 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "operation-logs",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "记录操作日志",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "description": "记录操作审计日志，通常由业务操作触发自动写入。API：POST /operation-logs。"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "operationKind": "EXPORT",
+        "primaryDataAction": "READ",
+        "authzAction": "EXPORT",
+        "httpMethod": "POST",
+        "actionPath": "export",
+        "async": true,
+        "description": "导出操作审计日志。API：POST /operation-logs/export。"
+      }
+    ]
+  },
+  "changeNote": [
+    "操作审计日志 BO 首版 OPERATION Fragment",
+    "审计日志为只读+追加性质，仅保留 CREATE（记录日志）和 EXPORT（导出审计数据），不提供 EDIT/DELETE",
+    "LIST/READ 由发布服务自动补齐"
+  ]
+}

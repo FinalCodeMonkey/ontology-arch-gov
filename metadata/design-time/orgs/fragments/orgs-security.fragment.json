@@ -1,0 +1,148 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "orgs",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "dap-sys-org": [
+          "department_code",
+          "department_level",
+          "department_type_code",
+          "is_enable",
+          "manage_user_id"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_hrbp_list",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "HRBP列表涉个人数据，需授权查看"
+      }
+    ],
+    "authzProjection": {
+      "description": "组织业务对象在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 orgs BO。",
+      "usageNote": "用于数据权限、列表行级过滤。策略表达式中典型引用包括 res.department_code、res.department_level、res.is_enable 等。",
+      "attributes": [
+        {
+          "code": "org_id",
+          "name": "组织ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-org",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "组织资源唯一标识。",
+          "i18nKey": "auth.resource.res_org.attr.org_id"
+        },
+        {
+          "code": "department_code",
+          "name": "部门编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-org",
+            "fieldCode": "department_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "部门编码。典型表达式：res.department_code == 'D10001'。",
+          "i18nKey": "auth.resource.res_org.attr.department_code"
+        },
+        {
+          "code": "department_level",
+          "name": "部门层级",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-org",
+            "fieldCode": "department_level"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "资源属性",
+          "description": "部门层级，用于按层级划定数据范围。",
+          "i18nKey": "auth.resource.res_org.attr.department_level"
+        },
+        {
+          "code": "department_type_code",
+          "name": "部门类型编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-org",
+            "fieldCode": "department_type_code"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "部门类型，用于按类型划定数据范围。",
+          "i18nKey": "auth.resource.res_org.attr.department_type_code"
+        },
+        {
+          "code": "is_enable",
+          "name": "启用状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-org",
+            "fieldCode": "is_enable"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "Y",
+              "label": "启用"
+            },
+            {
+              "value": "N",
+              "label": "禁用"
+            }
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "部门启用状态。",
+          "i18nKey": "auth.resource.res_org.attr.is_enable"
+        },
+        {
+          "code": "manage_user_id",
+          "name": "负责人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-org",
+            "fieldCode": "manage_user_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 60,
+          "displayGroup": "数据范围",
+          "description": "部门负责人。典型表达式：sub.user_id == res.manage_user_id。",
+          "i18nKey": "auth.resource.res_org.attr.manage_user_id"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "orgs 首版 SECURITY Fragment，含行级过滤字段、敏感字段分级和 ABAC 资源属性投影"
+  ]
+}

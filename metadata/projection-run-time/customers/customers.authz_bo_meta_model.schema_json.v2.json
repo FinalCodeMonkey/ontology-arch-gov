@@ -1,0 +1,1136 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='customers'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'customers'",
+    "generated_from": "customers.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.546147+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "customer",
+        "name": "客户主实体",
+        "isPrimary": true,
+        "tableName": "crm_customer",
+        "rowLevelRuleEntries": [
+          "business_type",
+          "market_segment",
+          "customer_category",
+          "parent_customer_id",
+          "fop_customer_id",
+          "customer_no",
+          "customer_name",
+          "customer_short_name",
+          "data_source",
+          "country",
+          "province",
+          "city",
+          "district",
+          "neocrm_code"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "customer_no",
+            "name": "客户编号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "bizNo",
+            "columnName": "biz_no",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_name",
+            "name": "客户全称（全局唯一）",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_short_name",
+            "name": "客户简称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerShortName",
+            "columnName": "customer_short_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "data_source",
+            "name": "数据来源",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "dataSource",
+            "columnName": "data_source",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "business_type",
+            "name": "业务分类",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "businessType",
+            "columnName": "business_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "market_segment",
+            "name": "细分市场",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "marketSegment",
+            "columnName": "market_segment",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_category",
+            "name": "客户分类",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerCategory",
+            "columnName": "customer_category",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "parent_customer_id",
+            "name": "所属一级客户",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentCustomerId",
+            "columnName": "parent_customer_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "fop_customer_id",
+            "name": "业务主体客户",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "fopCustomerId",
+            "columnName": "fop_customer_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "country",
+            "name": "国家",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "country",
+            "columnName": "country",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "province",
+            "name": "省份",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "province",
+            "columnName": "province",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "city",
+            "name": "市",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "city",
+            "columnName": "city",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "district",
+            "name": "区县",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "district",
+            "columnName": "district",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "address_detail",
+            "name": "详细地址",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "addressDetail",
+            "columnName": "address_detail",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "neocrm_code",
+            "name": "销售易CRM客户编号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "neocrmCode",
+            "columnName": "neocrm_code",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "logo_url",
+            "name": "客户Logo URL",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "logoUrl",
+            "columnName": "logo_url",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "displayFieldMappings": {
+          "primary_customer_name": {
+            "code": "primary_customer_name",
+            "name": "一级客户名称",
+            "type": "STRING",
+            "fieldName": "primaryCustomerName",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "parent_customer_id",
+            "sourceRefColumnName": "parent_customer_id",
+            "refBoCode": "customers",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "customer",
+            "refTableName": "crm_customer",
+            "refPkColumnName": "id",
+            "refFieldCode": "customer_name",
+            "refColumnName": "customer_name",
+            "sourceBoCode": "customers"
+          },
+          "fop_customer_name": {
+            "code": "fop_customer_name",
+            "name": "业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "fopCustomerName",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "fop_customer_id",
+            "sourceRefColumnName": "fop_customer_id",
+            "refBoCode": "customers",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "customer",
+            "refTableName": "crm_customer",
+            "refPkColumnName": "id",
+            "refFieldCode": "customer_name",
+            "refColumnName": "customer_name",
+            "sourceBoCode": "customers"
+          },
+          "parent_customer_primary_customer_name": {
+            "code": "parent_customer_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "parent_customer_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customers"
+          },
+          "parent_customer_fop_customer_name": {
+            "code": "parent_customer_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_customer_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customers"
+          },
+          "fop_customer_primary_customer_name": {
+            "code": "fop_customer_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "fop_customer_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customers"
+          },
+          "fop_customer_fop_customer_name": {
+            "code": "fop_customer_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "fop_customer_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customers"
+          }
+        }
+      },
+      {
+        "code": "customer-business-info",
+        "name": "客户工商信息",
+        "isPrimary": false,
+        "tableName": "crm_customer_business_info",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "source",
+            "name": "数据来源",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "source",
+            "columnName": "source",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "company_name",
+            "name": "企业名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "companyName",
+            "columnName": "company_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "reg_number",
+            "name": "工商注册号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "regNumber",
+            "columnName": "reg_number",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "legal_person_name",
+            "name": "法定代表人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "legalPersonName",
+            "columnName": "legal_person_name",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "credit_code",
+            "name": "统一社会信用代码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "creditCode",
+            "columnName": "credit_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "org_number",
+            "name": "组织机构代码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "orgNumber",
+            "columnName": "org_number",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "reg_status",
+            "name": "登记状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "regStatus",
+            "columnName": "reg_status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "reg_capital",
+            "name": "注册资本",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "regCapital",
+            "columnName": "reg_capital",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "actual_capital",
+            "name": "实缴资本",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "actualCapital",
+            "columnName": "actual_capital",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tax_number",
+            "name": "纳税人识别号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "taxNumber",
+            "columnName": "tax_number",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "company_type",
+            "name": "公司类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "companyType",
+            "columnName": "company_type",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "taxpayer_qualification",
+            "name": "纳税人资质",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "taxpayerQualification",
+            "columnName": "taxpayer_qualification",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "establish_time",
+            "name": "成立日期",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "establishTime",
+            "columnName": "establish_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "social_staff_num",
+            "name": "参保人数",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "socialStaffNum",
+            "columnName": "social_staff_num",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "industry",
+            "name": "所属行业",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "industry",
+            "columnName": "industry",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "former_names",
+            "name": "曾用名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "formerNames",
+            "columnName": "former_names",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "business_term",
+            "name": "营业期限",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "businessTerm",
+            "columnName": "business_term",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "reg_institute",
+            "name": "登记机关",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "regInstitute",
+            "columnName": "reg_institute",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "reg_location",
+            "name": "注册地址",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "regLocation",
+            "columnName": "reg_location",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "approved_time",
+            "name": "核准日期",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "approvedTime",
+            "columnName": "approved_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "phone_number",
+            "name": "联系方式",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "phoneNumber",
+            "columnName": "phone_number",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "english_name",
+            "name": "英文名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "englishName",
+            "columnName": "english_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "listing_status",
+            "name": "上市状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "listingStatus",
+            "columnName": "listing_status",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "staff_scale",
+            "name": "人员规模",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "staffScale",
+            "columnName": "staff_scale",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "business_scope",
+            "name": "经营范围",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "businessScope",
+            "columnName": "business_scope",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "fetched_at",
+            "name": "抓取时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "fetchedAt",
+            "columnName": "fetched_at",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "valid_until",
+            "name": "有效期截止时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "validUntil",
+            "columnName": "valid_until",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "business-info",
+        "parentEntityCode": "customer",
+        "displayFieldMappings": {
+          "parent_primary_customer_name": {
+            "code": "parent_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "parent_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer-business-info",
+                "fromTableName": "crm_customer_business_info",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customers"
+          },
+          "parent_fop_customer_name": {
+            "code": "parent_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "parent_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer-business-info",
+                "fromTableName": "crm_customer_business_info",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customers"
+          }
+        }
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建客户",
+        "scope": "BO",
+        "act_aliases": "quick-create-tier1",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "update,bpm-callback",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除客户",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import,import-template",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST_CUSTOMER_BUSINESS_INFO",
+        "name": "查询客户工商信息列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-business-info",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-business-info"
+      },
+      {
+        "code": "READ_CUSTOMER_BUSINESS_INFO",
+        "name": "查看客户工商信息详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-business-info",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-business-info"
+      },
+      {
+        "code": "CREATE_CUSTOMER_BUSINESS_INFO",
+        "name": "新建客户工商信息",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-business-info"
+      },
+      {
+        "code": "UPDATE_CUSTOMER_BUSINESS_INFO",
+        "name": "更新客户工商信息",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-business-info"
+      },
+      {
+        "code": "DELETE_CUSTOMER_BUSINESS_INFO",
+        "name": "删除客户工商信息",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-business-info"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'customers' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'customers' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + customers_bo_meta_id + CREATE",
+      "RES_DATA_BO + customers_bo_meta_id + UPDATE",
+      "RES_DATA_BO + customers_bo_meta_id + DELETE",
+      "RES_DATA_BO + customers_bo_meta_id + EXPORT",
+      "RES_DATA_BO + customers_bo_meta_id + IMPORT",
+      "RES_DATA_BO + customers_bo_meta_id + LIST",
+      "RES_DATA_BO + customers_bo_meta_id + READ",
+      "RES_DATA_BO + customers_bo_meta_id + LIST_CUSTOMER_BUSINESS_INFO",
+      "RES_DATA_BO + customers_bo_meta_id + READ_CUSTOMER_BUSINESS_INFO",
+      "RES_DATA_BO + customers_bo_meta_id + CREATE_CUSTOMER_BUSINESS_INFO",
+      "RES_DATA_BO + customers_bo_meta_id + UPDATE_CUSTOMER_BUSINESS_INFO",
+      "RES_DATA_BO + customers_bo_meta_id + DELETE_CUSTOMER_BUSINESS_INFO"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "ontologyCode": "crm-ontology",
+  "draftVersion": "1.1",
+  "schemaVersion": "2.0",
+  "description": "CRM 应用级本体推理元数据，跨 BO 管理 LINK、DERIVATION、TEMPORAL 和 ACTION_CHAIN。"
+}

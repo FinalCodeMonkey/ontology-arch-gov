@@ -1,0 +1,1718 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "device-inventories",
+  "boName": "设备盘点单",
+  "description": "设备盘点单业务对象，采用主从明细聚合建模（主表 crm_device-inventory + 明细子表 crm_device-inventory-detail）。以盘点单号（inventory_no）作为业务主键，管理设备盘点过程及结果。支持手工盘点和导入盘点两种方式，盘点明细记录设备序列号、产品信息、保修信息及异常说明。注意：当前后端 API 路径为 /api/inventories，元数据 resourcePath 为 /device-inventories，后续将重构后端路由对齐。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/device-inventories",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "inventory_no",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "FULL_AGGREGATE",
+      "updateScope": "FULL_AGGREGATE_PATCH",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": [
+        "device-inventory-detail"
+      ]
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "MASTER_DETAIL",
+    "nameField": "inventory_no",
+    "statusField": "inventory_status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 120,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "device-inventory",
+      "name": "盘点单主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_device_inventory",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键 Snowflake",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "主键",
+            "sortable": false,
+            "hidden": true,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "inventory_no",
+          "name": "盘点单号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "inventoryNo",
+          "columnName": "inventory_no",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "unique": true,
+            "message": "盘点单号不能为空且不超过32字符，且需唯一"
+          },
+          "view": {
+            "displayName": "盘点单号",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "placeholder": "请输入盘点单号",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "inventory_type",
+          "name": "盘点类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "inventoryType",
+          "columnName": "inventory_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "MANUAL",
+                "label": "手工盘点"
+              },
+              {
+                "value": "IMPORT",
+                "label": "导入盘点"
+              }
+            ],
+            "message": "盘点类型必须为 MANUAL 或 IMPORT"
+          },
+          "view": {
+            "displayName": "盘点类型",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择盘点类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "inventory_type"
+          }
+        },
+        {
+          "code": "device_count",
+          "name": "设备数",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "deviceCount",
+          "columnName": "device_count",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "设备数不能为空且为非负整数"
+          },
+          "view": {
+            "displayName": "设备数",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "NUMBER",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "GTE",
+                "label": "大于等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "inventory_status",
+          "name": "盘点状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "inventoryStatus",
+          "columnName": "inventory_status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 10,
+            "enum": [
+              {
+                "value": "DRAFT",
+                "label": "草稿"
+              }
+            ],
+            "message": "盘点状态必须为 DRAFT"
+          },
+          "view": {
+            "displayName": "盘点状态",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "IN",
+                "label": "属于"
+              }
+            ],
+            "dataType": "enum",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "inventory_status"
+          }
+        },
+        {
+          "code": "quote_no",
+          "name": "报价单号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "quoteNo",
+          "columnName": "quote_no",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "报价单号为关联商业数据，需按行级数据策略控制可见范围",
+          "validation": {
+            "max": 128
+          },
+          "view": {
+            "displayName": "报价单号",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "opportunity_codes",
+          "name": "商机编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "opportunityCodes",
+          "columnName": "opportunity_codes",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "商机编码为关联商业数据，需按行级数据策略控制可见范围",
+          "validation": {
+            "max": 300
+          },
+          "view": {
+            "displayName": "商机编码",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": false,
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "inventory_time",
+          "name": "盘点时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "inventoryTime",
+          "columnName": "inventory_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "盘点时间不能为空"
+          },
+          "view": {
+            "displayName": "盘点时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "remarks",
+          "name": "备注",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "remarks",
+          "columnName": "remarks",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "备注",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入备注",
+            "queryable": false,
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "删除标记",
+            "sortable": false,
+            "hidden": true,
+            "order": 150,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 110,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新时间",
+            "sortable": false,
+            "columnWidth": 160,
+            "format": "datetime",
+            "hidden": true,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建人",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新人",
+            "sortable": false,
+            "hidden": true,
+            "order": 130,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "租户编码",
+            "sortable": false,
+            "hidden": true,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "inventory_status",
+        "inventory_type",
+        "created_by"
+      ],
+      "rowFallbackScope": "NONE"
+    },
+    {
+      "code": "device-inventory-detail",
+      "name": "盘点明细",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_device_inventory_detail",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "明细主键 Snowflake",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "明细主键",
+            "sortable": false,
+            "hidden": true,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "parent_id",
+          "name": "所属盘点单ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "parentId",
+          "columnName": "parent_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "所属盘点单ID",
+            "sortable": false,
+            "hidden": true,
+            "order": 20,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "device_serial_no",
+          "name": "设备序列号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "deviceSerialNo",
+          "columnName": "device_serial_no",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "devices",
+            "refFieldCode": "device_serial_no",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "product_model",
+                "localCode": "product_model",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "product_line",
+                "localCode": "product_line",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "customer_name",
+                "localCode": "customer_name",
+                "displayRole": "NAME"
+              },
+              {
+                "refFieldCode": "fop_customer_name",
+                "localCode": "fop_customer_name",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "warranty_start_date",
+                "localCode": "warranty_start_date",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "warranty_end_date",
+                "localCode": "warranty_end_date",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "maintenance_service",
+                "localCode": "maintenance_service",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "renewal_days",
+                "localCode": "renewal_days",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "service_list_price",
+                "localCode": "service_list_price",
+                "displayRole": "EXTRA"
+              },
+              {
+                "refFieldCode": "contract_no",
+                "localCode": "contract_no",
+                "displayRole": "EXTRA"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "设备序列号不能为空且不超过64字符"
+          },
+          "view": {
+            "displayName": "设备序列号",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请输入设备序列号",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "devices",
+            "refField": "customer_name"
+          }
+        },
+        {
+          "code": "abnormal_desc",
+          "name": "异常说明",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "abnormalDesc",
+          "columnName": "abnormal_desc",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "异常说明",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入异常说明",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "product_model",
+          "name": "产品型号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "productModel",
+          "columnName": "product_model",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 128
+          },
+          "view": {
+            "displayName": "产品型号",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "product_line",
+          "name": "产品线",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "productLine",
+          "columnName": "product_line",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "产品线",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "customer_name",
+          "name": "下级客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerName",
+          "columnName": "customer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "客户名称为业务敏感信息，需按行级数据策略控制可见范围",
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "下级客户名称",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "fop_customer_name",
+          "name": "FOP客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "fopCustomerName",
+          "columnName": "fop_customer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "FOP客户名称为业务敏感信息，需按行级数据策略控制可见范围",
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "FOP客户名称",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "warranty_start_date",
+          "name": "保修开始日期",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "warrantyStartDate",
+          "columnName": "warranty_start_date",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "保修开始日期",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "warranty_end_date",
+          "name": "保修结束日期",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "warrantyEndDate",
+          "columnName": "warranty_end_date",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "保修结束日期",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "maintenance_service",
+          "name": "维保服务",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "maintenanceService",
+          "columnName": "maintenance_service",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 128
+          },
+          "view": {
+            "displayName": "维保服务",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 110,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "renewal_days",
+          "name": "续保天数",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "renewalDays",
+          "columnName": "renewal_days",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "min": 0
+          },
+          "view": {
+            "displayName": "续保天数",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 120,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "GTE",
+                "label": "大于等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "service_list_price",
+          "name": "服务 List 价",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "serviceListPrice",
+          "columnName": "service_list_price",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "fieldControl": "MASKED",
+          "privacyClass": "SENSITIVE",
+          "reason": "服务 List 价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值",
+          "validation": {
+            "min": 0
+          },
+          "view": {
+            "displayName": "服务 List 价",
+            "sortable": true,
+            "columnWidth": 130,
+            "format": "currency",
+            "order": 130,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "contract_no",
+          "name": "合同号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "contractNo",
+          "columnName": "contract_no",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "合同号为业务敏感信息，需按行级数据策略控制可见范围",
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "合同号",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 140,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "ecp_product_permission",
+          "name": "ECP产品权限",
+          "type": "BOOLEAN",
+          "isPk": false,
+          "fieldName": "ecpProductPermission",
+          "columnName": "ecp_product_permission",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "ECP产品权限",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 150,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SWITCH",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "boolean",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "删除标记",
+            "sortable": false,
+            "hidden": true,
+            "order": 160,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": false,
+            "hidden": true,
+            "order": 170,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新时间",
+            "sortable": false,
+            "hidden": true,
+            "order": 180,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "hidden": true,
+            "order": 190,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新人",
+            "sortable": false,
+            "hidden": true,
+            "order": 200,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "租户编码",
+            "sortable": false,
+            "hidden": true,
+            "order": 210,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "customer_name",
+        "fop_customer_name",
+        "contract_no"
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "device-inventory",
+      "parentRefField": "parent_id",
+      "routeSegment": "details",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "code": "SAVE",
+      "name": "保存盘点单",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "actionPath": "save",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<InventoryDetailVO>",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "保存盘点单（新建或更新），含盘点类型、状态、备注及明细列表。ID 为空时新建，非空时更新。API：POST /device-inventories/save。"
+    },
+    {
+      "code": "COPY",
+      "name": "复制盘点单",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "actionPath": "copy",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<InventoryDetailVO>",
+      "position": "ROW",
+      "triggerEvent": "API_CALL",
+      "description": "复制已有盘点单生成新的草稿盘点单，包含明细快照。API：POST /device-inventories/{id}/copy。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除盘点单",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "物理删除盘点单，仅草稿状态（DRAFT）可删除。级联删除明细记录。API：DELETE /device-inventories/{id}。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出盘点设备",
+      "scope": "GLOBAL",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "按盘点单导出盘点内设备信息为 Excel。API：POST /device-inventories/export。"
+    },
+    {
+      "code": "ONE_CLICK_QUOTE",
+      "name": "一键报价",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "CREATE",
+      "authzAction": "QUOTE",
+      "httpMethod": "POST",
+      "actionPath": "quote",
+      "supportsBatch": false,
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "基于盘点单设备明细一键生成报价单，关联商机编码。触发 OneClickQuoteDialog 对话框选择商机后生成报价。"
+    },
+    {
+      "code": "BATCH_DELETE_DETAIL",
+      "name": "批量删除明细",
+      "scope": "ENTITY",
+      "entityCode": "device-inventory-detail",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "batch-delete-details",
+      "supportsBatch": true,
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "批量删除盘点明细中选中的设备行。API：POST /device-inventories/{id}/save-incremental（增量保存删除标记）。"
+    },
+    {
+      "code": "BATCH_SET_MAINTENANCE",
+      "name": "批量设置维保服务",
+      "scope": "ENTITY",
+      "entityCode": "device-inventory-detail",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "batch-set-maintenance",
+      "supportsBatch": true,
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量设置选中明细行的维保服务字段。触发 EquipBatchMaintenanceDialog 对话框。"
+    },
+    {
+      "code": "BATCH_SET_WARRANTY",
+      "name": "批量修改保修期",
+      "scope": "ENTITY",
+      "entityCode": "device-inventory-detail",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "batch-set-warranty",
+      "supportsBatch": true,
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量修改选中明细行的保修开始/结束日期。触发 EquipBatchWarrantyDialog 对话框。"
+    },
+    {
+      "code": "MANUAL_INVENTORY_SESSION",
+      "name": "手工盘点会话",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "CREATE",
+      "authzAction": "INVENTORY",
+      "httpMethod": "POST",
+      "actionPath": "manual-sessions",
+      "supportsBatch": false,
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "以设备序列号为种子创建手工盘点会话（Redis 临时会话），支持分页查询、脏数据保存、提交生成盘点单。API：POST /device-inventories/manual-sessions。"
+    },
+    {
+      "code": "QUERY_MANUAL_SESSION_ITEMS",
+      "name": "查询手工盘点会话明细",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "POST",
+      "actionPath": "manual-sessions-items",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<ManualInventorySessionPageVO>",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "查询手工盘点会话的分页明细数据，sessionId 通过 RequestParam 传入。API：POST /device-inventories/manual-sessions-items。"
+    },
+    {
+      "code": "SAVE_MANUAL_SESSION_DIRTY",
+      "name": "保存手工盘点会话脏数据",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "manual-sessions-dirty",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "保存手工盘点会话中页内修改的脏数据，sessionId 通过 RequestParam 传入。API：POST /device-inventories/manual-sessions-dirty。"
+    },
+    {
+      "code": "COMMIT_MANUAL_SESSION",
+      "name": "提交手工盘点会话",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "manual-sessions-commit",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<InventoryDetailVO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "提交手工盘点会话，将临时会话中的脏数据合并后生成盘点单，sessionId 通过 RequestParam 传入。API：POST /device-inventories/manual-sessions-commit。"
+    },
+    {
+      "code": "DOWNLOAD_IMPORT_TEMPLATE",
+      "name": "下载导入模板",
+      "scope": "GLOBAL",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "IMPORT",
+      "httpMethod": "GET",
+      "actionPath": "import-template",
+      "async": true,
+      "singleResultType": "Void",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "下载盘点导入 Excel 模板文件，直接写入 HttpServletResponse。API：GET /device-inventories/import-template。"
+    },
+    {
+      "code": "PARSE_IMPORT_HEADER",
+      "name": "解析导入表头",
+      "scope": "GLOBAL",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import-parse-header",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<InventoryImportHeaderParseVO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "解析导入 Excel 文件的表头，返回字段列表供前端配置映射。API：POST /device-inventories/import-parse-header。"
+    },
+    {
+      "code": "QUERY_IMPORT_SESSION_PAGE",
+      "name": "查询导入会话分页",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "POST",
+      "actionPath": "import-sessions-page-query",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<InventoryImportSessionPageVO>",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "分页查询导入临时会话的预览数据，sessionId 通过 RequestParam 传入。API：POST /device-inventories/import-sessions-page-query。"
+    },
+    {
+      "code": "QUERY_SESSION_PRODUCT_MODELS",
+      "name": "查询会话产品型号",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "GET",
+      "actionPath": "sessions-product-models",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<List<String>>",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "跨 session 类型查询会话中的产品型号列表，sessionId 和 sessionType 通过 RequestParam 传入。API：GET /device-inventories/sessions-product-models。"
+    },
+    {
+      "code": "QUERY_IMPORT_SESSION_PROGRESS",
+      "name": "查询导入会话进度",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "GET",
+      "actionPath": "import-sessions-progress",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<InventoryImportSessionProgressVO>",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "查询导入临时会话的处理进度，sessionId 通过 RequestParam 传入。API：GET /device-inventories/import-sessions-progress。"
+    },
+    {
+      "code": "SAVE_IMPORT_SESSION_DIRTY",
+      "name": "保存导入会话脏数据",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "import-sessions-dirty",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "保存导入会话中页内修改的脏数据，sessionId 通过 RequestParam 传入。API：POST /device-inventories/import-sessions-dirty。"
+    },
+    {
+      "code": "COMMIT_IMPORT_SESSION",
+      "name": "提交导入会话",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "import-sessions-commit",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<InventoryCommitResultVO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "提交导入会话，合并脏数据后保存盘点单，sessionId 通过 RequestParam 传入。API：POST /device-inventories/import-sessions-commit。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "CREATE",
+      "name": "创建",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.createScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    },
+    {
+      "code": "LIST_DEVICE_INVENTORY_DETAIL",
+      "name": "查询盘点明细列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_DEVICE_INVENTORY_DETAIL",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(device-inventory-detail).listProjectionScope",
+      "entityCode": "device-inventory-detail"
+    },
+    {
+      "code": "READ_DEVICE_INVENTORY_DETAIL",
+      "name": "查看盘点明细详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_DEVICE_INVENTORY_DETAIL",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(device-inventory-detail).readScope",
+      "entityCode": "device-inventory-detail"
+    },
+    {
+      "code": "CREATE_DEVICE_INVENTORY_DETAIL",
+      "name": "新建盘点明细",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_DEVICE_INVENTORY_DETAIL",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(device-inventory-detail).createScope",
+      "entityCode": "device-inventory-detail"
+    }
+  ],
+  "rules": [
+    {
+      "code": "INVENTORY_NO_UNIQUE",
+      "name": "盘点单号唯一",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "盘点单号已存在，不允许重复创建",
+      "description": "创建盘点单时，inventory_no 在同一租户下必须唯一（含已逻辑删除记录）。盘点单号由 InventoryNoGenerator 自动生成。"
+    },
+    {
+      "code": "INVENTORY_DELETE_DRAFT_ONLY",
+      "name": "仅草稿状态可删除",
+      "ruleType": "STATE",
+      "scope": "ENTITY",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅草稿状态的盘点单可以删除",
+      "description": "盘点单删除前置校验：只有 DRAFT 状态的盘点单允许执行删除操作，非草稿状态禁止删除。",
+      "entityCode": "device-inventory",
+      "operationCode": "DELETE",
+      "expression": "inventory_status != 'DRAFT'",
+      "exprAst": {
+        "type": "binary",
+        "op": "NEQ",
+        "left": {
+          "type": "field",
+          "path": "inventory_status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "DRAFT"
+        }
+      }
+    },
+    {
+      "code": "INVENTORY_DETAIL_CASCADE_DELETE",
+      "name": "明细级联删除",
+      "ruleType": "CONSISTENCY",
+      "scope": "ENTITY",
+      "trigger": "AFTER_OPERATION",
+      "severity": "INFO",
+      "message": "删除盘点单时级联删除所有明细记录",
+      "description": "盘点单删除时，其关联的所有盘点明细记录（device-inventory-detail）通过 cascadeDelete=true 级联删除，不产生孤儿明细。",
+      "entityCode": "device-inventory-detail",
+      "operationCode": "DELETE"
+    },
+    {
+      "code": "DEVICE_SERIAL_NO_REF_INTEGRITY",
+      "name": "设备序列号引用完整性",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "WARN",
+      "message": "盘点明细中的设备序列号应在设备档案中存在",
+      "description": "盘点明细的 device_serial_no 引用设备档案 BO（devices）的 businessKeyField。保存明细时校验设备序列号在设备档案中存在，不存在则记录警告但不阻断（支持外部设备盘点场景）。",
+      "crossBoRef": {
+        "refBoCode": "devices",
+        "refFieldCode": "device_serial_no",
+        "localEntityCode": "device-inventory-detail",
+        "localFieldCode": "device_serial_no"
+      }
+    },
+    {
+      "code": "INVENTORY_DETAIL_PARENT_REF",
+      "name": "明细必须归属盘点单",
+      "ruleType": "CONSISTENCY",
+      "scope": "ENTITY",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "盘点明细必须归属一个盘点单",
+      "description": "盘点明细的 parent_id 不能为空，必须指向一个有效的盘点单主记录。防止产生孤儿明细记录。",
+      "entityCode": "device-inventory-detail",
+      "expression": "parent_id == null",
+      "exprAst": {
+        "type": "isNull",
+        "expr": {
+          "type": "field",
+          "path": "parent_id"
+        }
+      }
+    },
+    {
+      "code": "INVENTORY_DEVICE_COUNT_CONSISTENCY",
+      "name": "设备数与明细一致",
+      "ruleType": "CONSISTENCY",
+      "scope": "BO",
+      "trigger": "AFTER_OPERATION",
+      "severity": "WARN",
+      "message": "盘点单设备数应与明细行数一致",
+      "description": "保存盘点单后，校验 device_count 字段值与实际明细行数（未删除）一致，不一致时记录警告。",
+      "operationCode": "SAVE"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.814136+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "_scenario": "CBG互联网大厂竞争对手 — 华为/新华三/中兴/思科/阿里自身白盒",
+  "_scenarioDescription": "华为(7101):强势竞对,品牌强价格高,数据中心交换机领域主要威胁。新华三(7102):中等竞对,方案完整,渠道成熟。中兴(7103):弱竞对,教育行业布局弱。思科(7104):传统竞对,高端市场有优势。客户1101(阿里)面临华为+新华三2个竞对(竞争风险高)。客户1104(字节)面临华为1个竞对(竞争风险中)。",
+  "records": [
+    {
+      "id": 7101,
+      "competitor_name": "华为技术有限公司",
+      "company_scale": 200000,
+      "competition_level": "STRONG",
+      "advantage": "品牌影响力强，数据中心交换机产品线齐全，CloudEngine系列在互联网大厂有大量部署案例，政府关系深厚",
+      "disadvantage": "价格偏高，交付周期长，定制化灵活性不足，JDM合作模式不如凯捷灵活",
+      "strategy": "以JDM定制化服务和性价比差异化竞争，突出互联网行业深度合作优势，强调快速响应和灵活交付",
+      "remark": "互联网大厂数据中心主要竞争对手",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 7102,
+      "competitor_name": "新华三集团",
+      "company_scale": 15000,
+      "competition_level": "NORMAL",
+      "advantage": "产品线齐全，渠道体系成熟，Comware操作系统稳定性好，在运营商和政企有深厚积累",
+      "disadvantage": "技术创新力一般，互联网大厂案例较少，AI网络和高密交换领域布局滞后",
+      "strategy": "以技术创新和互联网行业解决方案深度拉开差距，突出智算网络和JDM合作能力",
+      "remark": "互联网大厂次要竞争对手",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 7103,
+      "competitor_name": "中兴通讯股份有限公司",
+      "company_scale": 80000,
+      "competition_level": "WEAK",
+      "advantage": "通信领域技术积累，5G网络设备有优势，海外市场覆盖广",
+      "disadvantage": "数据中心交换机产品线不完整，互联网大厂布局弱，渠道覆盖不足",
+      "strategy": "重点关注其通信领域动态，数据中心交换机暂不构成直接威胁",
+      "remark": "间接竞争对手",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 7104,
+      "competitor_name": "思科系统(中国)网络技术有限公司",
+      "company_scale": 80000,
+      "competition_level": "NORMAL",
+      "advantage": "Nexus系列数据中心交换机在全球互联网大厂有广泛部署，技术成熟度高，生态完整",
+      "disadvantage": "价格极高，国产化替代趋势下市场份额下降，本地化服务响应慢",
+      "strategy": "以国产化替代和性价比优势竞争，突出本地化服务和JDM定制能力",
+      "remark": "高端数据中心传统竞争对手",
+      "status": "ACTIVE"
+    }
+  ]
+}

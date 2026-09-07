@@ -1,0 +1,649 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scenes",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "scene",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_no",
+        "required": true,
+        "max": 50,
+        "unique": true,
+        "message": "场景编号不能为空且不超过50字"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "customers_id",
+        "required": true,
+        "message": "必须选择客户"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_name_dept",
+        "required": true,
+        "max": 200,
+        "message": "场景名称-部门标准不能为空且不超过200字",
+        "conditionalEnum": {
+          "dependsOn": "business_name",
+          "groups": [
+            {
+              "when": "JDM",
+              "enum": [
+                {
+                  "value": "JDM_SWITCH_2T",
+                  "label": "JDM交换机 2.0T"
+                },
+                {
+                  "value": "JDM_SWITCH_8T",
+                  "label": "JDM交换机 8.0T"
+                },
+                {
+                  "value": "JDM_SWITCH_16T",
+                  "label": "JDM交换机 16T"
+                },
+                {
+                  "value": "JDM_SWITCH_12_8T",
+                  "label": "JDM交换机 12.8T"
+                },
+                {
+                  "value": "JDM_SWITCH_25_6T",
+                  "label": "JDM交换机 25.6T"
+                },
+                {
+                  "value": "JDM_SWITCH_51_2T",
+                  "label": "JDM交换机 51.2T"
+                },
+                {
+                  "value": "JDM_SWITCH_102_4T",
+                  "label": "JDM交换机 102.4T"
+                },
+                {
+                  "value": "JDM_SWITCH_OTHER",
+                  "label": "JDM交换机-其他"
+                }
+              ]
+            },
+            {
+              "when": "AI_COMPUTE",
+              "enum": [
+                {
+                  "value": "DCN_3",
+                  "label": "DCN 3.0"
+                },
+                {
+                  "value": "DCN_4",
+                  "label": "DCN 4.0"
+                },
+                {
+                  "value": "DCN_5",
+                  "label": "DCN 5.0"
+                },
+                {
+                  "value": "MAN_400G",
+                  "label": "MAN城域网 400G"
+                },
+                {
+                  "value": "MAN_800G",
+                  "label": "MAN城域网 800G"
+                },
+                {
+                  "value": "DCI_400G",
+                  "label": "DCI骨干网 400G"
+                },
+                {
+                  "value": "DCI_800G",
+                  "label": "DCI骨干网 800G"
+                },
+                {
+                  "value": "EDGE_NET",
+                  "label": "边缘网络"
+                },
+                {
+                  "value": "DCN_MGMT_NET",
+                  "label": "DCN管理网"
+                }
+              ]
+            },
+            {
+              "when": "DCN",
+              "enum": [
+                {
+                  "value": "HPN_TRAIN_4",
+                  "label": "HPN训练网 4.0"
+                },
+                {
+                  "value": "HPN_TRAIN_5",
+                  "label": "HPN训练网 5.0"
+                },
+                {
+                  "value": "HPN_TRAIN_6",
+                  "label": "HPN训练网 6.0"
+                },
+                {
+                  "value": "HPN_STORAGE",
+                  "label": "HPN存储网"
+                },
+                {
+                  "value": "HPN_MGMT",
+                  "label": "HPN管理网"
+                }
+              ]
+            },
+            {
+              "when": "ESUN",
+              "enum": [
+                {
+                  "value": "SWITCH_NODE",
+                  "label": "交换节点"
+                },
+                {
+                  "value": "SUPER_NODE",
+                  "label": "超节点"
+                },
+                {
+                  "value": "SERVER_BOX",
+                  "label": "Server Box"
+                }
+              ]
+            },
+            {
+              "when": "OPTICAL",
+              "enum": [
+                {
+                  "value": "LPO",
+                  "label": "LPO"
+                },
+                {
+                  "value": "NPO",
+                  "label": "NPO"
+                },
+                {
+                  "value": "CPO",
+                  "label": "CPO"
+                }
+              ]
+            },
+            {
+              "when": "PARK",
+              "enum": [
+                {
+                  "value": "OFFICE_PARK",
+                  "label": "办公园区"
+                },
+                {
+                  "value": "LOGISTICS_PARK",
+                  "label": "物流园区"
+                },
+                {
+                  "value": "BRANCH_NET",
+                  "label": "分支网络"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_name_customer",
+        "required": true,
+        "max": 200,
+        "message": "场景名称-客户标准不能为空且不超过200字"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "business_name",
+        "required": true,
+        "max": 255,
+        "enum": [
+          {
+            "value": "JDM",
+            "label": "JDM"
+          },
+          {
+            "value": "DCN",
+            "label": "DCN"
+          },
+          {
+            "value": "AI_COMPUTE",
+            "label": "智算"
+          },
+          {
+            "value": "ESUN",
+            "label": "ESUN"
+          },
+          {
+            "value": "OPTICAL",
+            "label": "光"
+          },
+          {
+            "value": "PARK",
+            "label": "园区"
+          }
+        ],
+        "message": "业务名称必须是预定义值之一"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_category",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "H1",
+            "label": "H1"
+          },
+          {
+            "value": "H2",
+            "label": "H2"
+          },
+          {
+            "value": "H3",
+            "label": "H3"
+          }
+        ],
+        "message": "场景分类必须为H1、H2或H3"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "sales_owner_id",
+        "required": true,
+        "max": 64,
+        "message": "必须指定销售负责人"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "status",
+        "enum": [
+          {
+            "value": "DRAFT",
+            "label": "草稿"
+          },
+          {
+            "value": "ACTIVE",
+            "label": "活跃"
+          },
+          {
+            "value": "INACTIVE",
+            "label": "停用"
+          },
+          {
+            "value": "ARCHIVED",
+            "label": "已归档"
+          }
+        ],
+        "message": "场景状态值非法"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "scene_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "products_id",
+        "required": true,
+        "message": "必须选择产品型号"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "our_stage",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "0",
+            "label": "未开始"
+          },
+          {
+            "value": "1",
+            "label": "建立连接"
+          },
+          {
+            "value": "2",
+            "label": "技术交流"
+          },
+          {
+            "value": "3",
+            "label": "产品开发"
+          },
+          {
+            "value": "4",
+            "label": "入围测试"
+          },
+          {
+            "value": "5",
+            "label": "完成入围"
+          },
+          {
+            "value": "6",
+            "label": "灰度"
+          },
+          {
+            "value": "7",
+            "label": "上量"
+          },
+          {
+            "value": "8",
+            "label": "末期"
+          },
+          {
+            "value": "9",
+            "label": "EOL"
+          },
+          {
+            "value": "10",
+            "label": "暂停上量/待重新入围"
+          }
+        ],
+        "message": "我司阶段必须是预定义值之一"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_start_date",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_end_date",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "next_bid_date",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "current_progress",
+        "max": 500
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "line_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "products_id",
+        "required": true,
+        "message": "必须选择配件型号"
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "ratio",
+        "required": true,
+        "min": 1,
+        "message": "配比必须填写正整数"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "line_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "year",
+        "required": true,
+        "min": 2000,
+        "max": 2100,
+        "message": "请选择有效年份"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "customer_procurement_amount",
+        "required": true,
+        "min": 0,
+        "message": "客户采购规模必须为非负金额"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "estimated_share",
+        "required": true,
+        "min": 0,
+        "max": 100,
+        "message": "预计我司份额须在0到100之间"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "estimated_sales_amount",
+        "required": true,
+        "min": 0,
+        "message": "预计我司销量必须为非负金额"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "scene_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "year",
+        "required": true,
+        "min": 2000,
+        "max": 2100
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "yearly_procurement_scale",
+        "min": 0
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "kaijie_estimated_sales",
+        "min": 0
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "kaijie_estimated_share",
+        "min": 0,
+        "max": 100
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "competitor_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "summary_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "rival_share",
+        "required": true,
+        "min": 0,
+        "max": 100,
+        "message": "竞对份额须在0到100之间"
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "rival_sales_amount",
+        "min": 0
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "scene_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须选择团队成员"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 50,
+        "enum": [
+          {
+            "value": "SALES_OWNER",
+            "label": "销售负责人"
+          },
+          {
+            "value": "HARDWARE_SALES",
+            "label": "硬件销售"
+          },
+          {
+            "value": "SERVICE_SALES",
+            "label": "服务销售"
+          },
+          {
+            "value": "COLLABORATOR",
+            "label": "协同跟进人"
+          },
+          {
+            "value": "OTHER",
+            "label": "其他"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "permission",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          },
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          }
+        ],
+        "message": "权限必须为读写或只读"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "remark",
+        "max": 200
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "related_teams",
+        "max": 500
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "line_id",
+        "required": true
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须选择团队成员"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 50,
+        "enum": [
+          {
+            "value": "SALES_OWNER",
+            "label": "销售负责人"
+          },
+          {
+            "value": "HARDWARE_SALES",
+            "label": "硬件销售"
+          },
+          {
+            "value": "SERVICE_SALES",
+            "label": "服务销售"
+          },
+          {
+            "value": "COLLABORATOR",
+            "label": "协同跟进人"
+          },
+          {
+            "value": "OTHER",
+            "label": "其他"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "permission",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          },
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          }
+        ],
+        "message": "权限必须为读写或只读"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "remark",
+        "max": 200
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "related_teams",
+        "max": 500
+      }
+    ]
+  },
+  "changeNote": [
+    "scenes 首版 VALIDATION 设计态 Fragment"
+  ]
+}

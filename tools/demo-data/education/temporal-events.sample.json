@@ -1,0 +1,144 @@
+﻿{
+  "_scenario": "时态事件流 — 商机阶段推进 + 客户活动时间线（多客户对比）",
+  "_scenarioDescription": "商机2001:DC_01→DC_02→DC_03(2次推进,当前停留12天,流速正常)。商机2004:DC_01→DC_02(1次推进,停留45天,流速缓慢→触发停滞预警)。商机2005:DC_04→DC_05→CLOSED_WON(赢单,触发后置动作链)。客户1001:3次活动(90天内)。客户1003:1次活动(120天前,超出90天窗口→activity_count_90d=0)。",
+  "stageEvents": [
+    {
+      "boCode": "opportunities",
+      "objectId": 2001,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_01",
+      "toState": "DC_02",
+      "eventTime": "2026-06-10T09:00:00",
+      "actorId": "10001",
+      "snapshot": {
+        "project_stage": "DC_02",
+        "predict_category": "C",
+        "expected_order_amount": 300000.00,
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2001,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_02",
+      "toState": "DC_03",
+      "eventTime": "2026-07-01T10:30:00",
+      "actorId": "10001",
+      "snapshot": {
+        "project_stage": "DC_03",
+        "predict_category": "B",
+        "expected_order_amount": 400000.00,
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2004,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_01",
+      "toState": "DC_02",
+      "eventTime": "2026-05-28T16:00:00",
+      "actorId": "10003",
+      "snapshot": {
+        "project_stage": "DC_02",
+        "predict_category": "C",
+        "expected_order_amount": 800000.00,
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2005,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_04",
+      "toState": "DC_05",
+      "eventTime": "2026-06-15T14:00:00",
+      "actorId": "10001",
+      "snapshot": {
+        "project_stage": "DC_05",
+        "predict_category": "A",
+        "expected_order_amount": 1200000.00,
+        "status": "ACTIVE"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2005,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_05",
+      "toState": "CLOSED_WON",
+      "eventTime": "2026-06-20T10:00:00",
+      "actorId": "10001",
+      "snapshot": {
+        "project_stage": "DC_05",
+        "predict_category": "A",
+        "expected_order_amount": 1200000.00,
+        "status": "CLOSED_WON"
+      }
+    }
+  ],
+  "activityEvents": [
+    {
+      "boCode": "sales-activities",
+      "objectId": 1001,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-07-10T14:30:00",
+      "snapshot": {
+        "visit_subject": "教育园区网方案沟通",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1001,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-06-20T10:00:00",
+      "snapshot": {
+        "visit_subject": "技术交流 — 核心交换机选型",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1001,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-05-15T09:30:00",
+      "snapshot": {
+        "visit_subject": "需求调研 — 园区网现状摸底",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1004,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-06-10T13:00:00",
+      "snapshot": {
+        "visit_subject": "智慧校园方案汇报",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1004,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-05-20T10:00:00",
+      "snapshot": {
+        "visit_subject": "项目启动会",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1003,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-03-15T14:00:00",
+      "snapshot": {
+        "visit_subject": "初步接触 — 了解网络需求",
+        "status": "COMPLETED"
+      }
+    }
+  ]
+}
+

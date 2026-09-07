@@ -1,0 +1,144 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "change-records",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "change-record": [
+          "biz_type",
+          "biz_id",
+          "status",
+          "operator_id",
+          "action_type",
+          "approval_record_id",
+          "change_record_no"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "change-record",
+        "fieldCode": "original_snapshot_json",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "原始快照可能包含敏感业务数据完整副本，限制可见"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "changes_json",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "变更差异可能包含敏感字段变更，限制可见"
+      }
+    ],
+    "authzProjection": {
+      "description": "变更记录资源 ABAC 属性投影。通用设计，支持按业务对象类型、变更状态、操作人等维度进行数据权限控制。",
+      "usageNote": "用于数据权限和列表行级过滤。策略表达式中典型引用包括 res.biz_type、res.status、res.operator_id、res.change_record_no 等。",
+      "attributes": [
+        {
+          "code": "change_id",
+          "name": "变更记录ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "change-record",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "变更记录唯一标识。",
+          "i18nKey": "auth.resource.res_change-record.attr.change_id"
+        },
+        {
+          "code": "biz_type",
+          "name": "业务对象类型",
+          "type": "STRING",
+          "source": {
+            "entityCode": "change-record",
+            "fieldCode": "biz_type"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "业务对象类型，用于按业务域过滤变更记录。典型表达式：res.biz_type == 'customers'。",
+          "i18nKey": "auth.resource.res_change-record.attr.biz_type"
+        },
+        {
+          "code": "operator_id",
+          "name": "操作人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "change-record",
+            "fieldCode": "operator_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "操作人。典型表达式：sub.user_id == res.operator_id。",
+          "i18nKey": "auth.resource.res_change-record.attr.operator_id"
+        },
+        {
+          "code": "status",
+          "name": "变更状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "change-record",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "DRAFT",
+              "label": "草稿"
+            },
+            {
+              "value": "PENDING_APPROVAL",
+              "label": "待审批"
+            },
+            {
+              "value": "APPROVED",
+              "label": "已通过"
+            },
+            {
+              "value": "REJECTED",
+              "label": "已驳回"
+            },
+            {
+              "value": "APPLIED",
+              "label": "已应用"
+            },
+            {
+              "value": "CANCELLED",
+              "label": "已取消"
+            }
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "变更状态。典型表达式：res.status == 'APPLIED'。",
+          "i18nKey": "auth.resource.res_change-record.attr.status"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "变更记录 BO 首版 SECURITY Fragment，含行级过滤字段、PII/CONFIDENTIAL 字段分级和 ABAC 资源属性投影",
+    "变更快照和差异 JSON 标记为 CONFIDENTIAL"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-targets",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建目标",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "supportsBatch": false,
+        "singleResultType": "ApiResponse<TargetVO>",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "新建销售目标记录，选择目标方类型、目标对象、目标类型、适配规则、年份/月份和目标值。API：POST /sales-targets。"
+      },
+      {
+        "code": "UPDATE",
+        "name": "编辑目标",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "update",
+        "supportsBatch": false,
+        "singleResultType": "ApiResponse<TargetVO>",
+        "position": "ROW",
+        "triggerEvent": "OPEN_FORM",
+        "description": "修改目标记录的目标方、目标类型、适配规则、年份/月份和目标值。API：POST /sales-targets/{id}/update。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除目标",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "supportsBatch": false,
+        "singleResultType": "Void",
+        "position": "ROW",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "逻辑删除目标记录（is_deleted=1）。删除前校验复合唯一键约束。API：DELETE /sales-targets/{id}。"
+      }
+    ]
+  }
+}

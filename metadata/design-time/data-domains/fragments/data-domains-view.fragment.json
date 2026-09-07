@@ -1,0 +1,281 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "data-domains",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 50,
+      "formLayout": "VERTICAL",
+      "formColumns": 1,
+      "formLabelWidth": 120,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "id",
+        "displayName": "主键ID",
+        "sortable": false,
+        "columnWidth": 80,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "parent_id",
+        "displayName": "父节点",
+        "sortable": false,
+        "order": 20,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "data-domains",
+        "placeholder": "请选择父节点（留空为根节点）",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "level_type",
+        "displayName": "层级类型",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "SELECT",
+        "dictCode": "data_domain_level_type",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "domain_code",
+        "displayName": "领域编码",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入领域编码（全局唯一）",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "domain_name",
+        "displayName": "领域名称",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入领域名称",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "sort_order",
+        "displayName": "排序序号",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "请输入排序序号",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 70,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "created_at",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 80,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "updated_by",
+        "displayName": "更新人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 90,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "updated_at",
+        "displayName": "更新时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "is_deleted",
+        "displayName": "逻辑删除标记",
+        "sortable": false,
+        "hidden": true,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "tenant_id",
+        "displayName": "租户标识",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入租户标识",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "app_code",
+        "displayName": "应用代码",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 130,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入应用代码",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      }
+    ]
+  },
+  "changeNote": [
+    "data-domains 首版 VIEW Fragment",
+    "parent_id 使用 OBJECT_SELECT 自引用 data-domains BO 实现父节点选择",
+    "level_type 使用 SELECT + dictCode 字典",
+    "树形结构默认每页 50 条，VERTICAL 布局",
+    "审计字段默认只读"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "operation-logs",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "operation-log",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "operation-log",
+        "fieldCode": "biz_type",
+        "required": true,
+        "max": 32,
+        "message": "业务对象类型不能为空且不超过32字"
+      },
+      {
+        "entityCode": "operation-log",
+        "fieldCode": "operation_type",
+        "required": true,
+        "max": 50,
+        "message": "操作类型不能为空且不超过50字"
+      },
+      {
+        "entityCode": "operation-log",
+        "fieldCode": "operator_id",
+        "required": true,
+        "message": "操作人不能为空"
+      },
+      {
+        "entityCode": "operation-log",
+        "fieldCode": "operator_name",
+        "max": 100
+      },
+      {
+        "entityCode": "operation-log",
+        "fieldCode": "description",
+        "max": 500
+      }
+    ]
+  },
+  "changeNote": [
+    "操作审计日志 BO 首版 VALIDATION Fragment，含业务类型必填、操作类型必填、操作人必填校验"
+  ]
+}

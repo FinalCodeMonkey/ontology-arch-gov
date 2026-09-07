@@ -1,0 +1,240 @@
+{
+  "_scenario": "CBG互联网大厂场景 — DCN3.0/4.0/5.0、JDM交换机、HPN训练网、智算网络",
+  "_scenarioDescription": "场景6101:阿里园区DCN3.0(客户1101,H1,采购2376万,份额34%,S6510,2-技术交流)。场景6102:阿里DCN4.0(客户1103,H1,采购2244万,份额36%,S6930-2C,3-产品开发)。场景6103:字节JDM交换机12.8T(客户1104,H1,采购1683万,份额35%,S6510,3-产品开发)。场景6104:腾讯智算核心网络(客户1105,H2,采购1848万,份额38%,S9510,4-获得入围机会)。场景6105:京东ESUN交换产品(客户1106,H2,采购1173万,份额32%,S6930-2C,4-获得入围机会)。场景6106:小米多云数据平台(客户1108,H1,采购966万,份额31%,S6580,4-获得入围机会)。",
+  "records": [
+    {
+      "id": 6101,
+      "scene_no": "SCENE-CBG-001",
+      "customers_id": 1101,
+      "customer_name": "阿里巴巴(中国)有限公司",
+      "primary_customer_name": "阿里巴巴(中国)有限公司",
+      "scene_name_dept": "园区",
+      "scene_name_customer": "阿里巴巴园区DCN3.0项目",
+      "business_name": "PARK",
+      "scene_category": "H1",
+      "sales_owner_id": "20001",
+      "sales_owner_name": "成鹏",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6201,
+          "scene_id": 6101,
+          "products_id": 9001,
+          "product_model": "S6510",
+          "product_category": "园区交换",
+          "product_series": "S6510",
+          "our_stage": "2",
+          "lifecycle_start_date": "2026-01-01",
+          "lifecycle_end_date": "2030-12-31",
+          "next_bid_date": "2026-04-10",
+          "current_progress": "已完成POC测试，等待客户确认",
+          "annual_estimates": [
+            {
+              "id": 6301,
+              "line_id": 6201,
+              "year": 2026,
+              "customer_procurement_amount": 23760000,
+              "estimated_share": 34.0,
+              "estimated_sales_amount": 8078400
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6102,
+      "scene_no": "SCENE-CBG-002",
+      "customers_id": 1103,
+      "customer_name": "阿里巴巴(中国)有限公司(IDC)",
+      "primary_customer_name": "阿里巴巴(中国)有限公司",
+      "scene_name_dept": "DCN 4.0",
+      "scene_name_customer": "阿里巴巴DCN4.0项目",
+      "business_name": "DCN",
+      "scene_category": "H1",
+      "sales_owner_id": "20001",
+      "sales_owner_name": "成鹏",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6202,
+          "scene_id": 6102,
+          "products_id": 9002,
+          "product_model": "S6930-2C",
+          "product_category": "数据中心交换",
+          "product_series": "S6930",
+          "our_stage": "3",
+          "lifecycle_start_date": "2026-01-01",
+          "lifecycle_end_date": "2030-12-31",
+          "next_bid_date": "2026-05-13",
+          "current_progress": "样品已交付，客户内部测试中",
+          "annual_estimates": [
+            {
+              "id": 6302,
+              "line_id": 6202,
+              "year": 2026,
+              "customer_procurement_amount": 22440000,
+              "estimated_share": 36.0,
+              "estimated_sales_amount": 8078400
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6103,
+      "scene_no": "SCENE-CBG-003",
+      "customers_id": 1104,
+      "customer_name": "北京字节跳动科技有限公司",
+      "primary_customer_name": "北京字节跳动科技有限公司",
+      "scene_name_dept": "JDM交换机 12.8T",
+      "scene_name_customer": "字节DCN数据中心交换机",
+      "business_name": "DCN",
+      "scene_category": "H1",
+      "sales_owner_id": "20002",
+      "sales_owner_name": "侯博伟",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6203,
+          "scene_id": 6103,
+          "products_id": 9001,
+          "product_model": "S6510",
+          "product_category": "数据中心交换",
+          "product_series": "S6510",
+          "our_stage": "3",
+          "lifecycle_start_date": "2026-01-01",
+          "lifecycle_end_date": "2030-12-31",
+          "next_bid_date": "2026-05-13",
+          "current_progress": "框架协议已签署，首批订单已下发",
+          "annual_estimates": [
+            {
+              "id": 6303,
+              "line_id": 6203,
+              "year": 2026,
+              "customer_procurement_amount": 16830000,
+              "estimated_share": 35.0,
+              "estimated_sales_amount": 5890500
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6104,
+      "scene_no": "SCENE-CBG-004",
+      "customers_id": 1105,
+      "customer_name": "腾讯科技服务(深圳)有限公司",
+      "primary_customer_name": "腾讯科技服务(深圳)有限公司",
+      "scene_name_dept": "智算核心网络",
+      "scene_name_customer": "腾讯智算核心网络项目",
+      "business_name": "AI_COMPUTE",
+      "scene_category": "H2",
+      "sales_owner_id": "20003",
+      "sales_owner_name": "谢军",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6204,
+          "scene_id": 6104,
+          "products_id": 9003,
+          "product_model": "S9510",
+          "product_category": "核心交换",
+          "product_series": "S9510",
+          "our_stage": "4",
+          "lifecycle_start_date": "2025-01-01",
+          "lifecycle_end_date": "2029-12-31",
+          "next_bid_date": "2026-06-16",
+          "current_progress": "已完成技术交流，待商务报价",
+          "annual_estimates": [
+            {
+              "id": 6304,
+              "line_id": 6204,
+              "year": 2026,
+              "customer_procurement_amount": 18480000,
+              "estimated_share": 38.0,
+              "estimated_sales_amount": 7022400
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6105,
+      "scene_no": "SCENE-CBG-005",
+      "customers_id": 1106,
+      "customer_name": "京东科技信息技术有限公司",
+      "primary_customer_name": "京东科技信息技术有限公司",
+      "scene_name_dept": "ESUN交换产品",
+      "scene_name_customer": "京东ESUN交换产品项目",
+      "business_name": "ESUN",
+      "scene_category": "H2",
+      "sales_owner_id": "20004",
+      "sales_owner_name": "杨成",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6205,
+          "scene_id": 6105,
+          "products_id": 9002,
+          "product_model": "S6930-2C",
+          "product_category": "数据中心交换",
+          "product_series": "S6930",
+          "our_stage": "4",
+          "lifecycle_start_date": "2025-01-01",
+          "lifecycle_end_date": "2029-12-31",
+          "next_bid_date": "2026-06-16",
+          "current_progress": "入围测试通过，等待集采框架分配",
+          "annual_estimates": [
+            {
+              "id": 6305,
+              "line_id": 6205,
+              "year": 2026,
+              "customer_procurement_amount": 11730000,
+              "estimated_share": 32.0,
+              "estimated_sales_amount": 3753600
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6106,
+      "scene_no": "SCENE-CBG-006",
+      "customers_id": 1108,
+      "customer_name": "小米科技有限责任公司",
+      "primary_customer_name": "小米科技有限责任公司",
+      "scene_name_dept": "多云数据平台",
+      "scene_name_customer": "小米多云数据平台项目",
+      "business_name": "DCN",
+      "scene_category": "H1",
+      "sales_owner_id": "20001",
+      "sales_owner_name": "成鹏",
+      "status": "ACTIVE",
+      "scene_products": [
+        {
+          "id": 6206,
+          "scene_id": 6106,
+          "products_id": 9004,
+          "product_model": "S6580",
+          "product_category": "数据中心交换",
+          "product_series": "S6580",
+          "our_stage": "4",
+          "lifecycle_start_date": "2025-01-01",
+          "lifecycle_end_date": "2029-12-31",
+          "next_bid_date": "2026-06-16",
+          "current_progress": "灰度阶段，首批设备已上线运行",
+          "annual_estimates": [
+            {
+              "id": 6306,
+              "line_id": 6206,
+              "year": 2026,
+              "customer_procurement_amount": 9660000,
+              "estimated_share": 31.0,
+              "estimated_sales_amount": 2994600
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

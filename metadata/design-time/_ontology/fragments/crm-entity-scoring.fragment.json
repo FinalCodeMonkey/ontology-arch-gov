@@ -1,0 +1,326 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "crm-ontology",
+  "metaType": "DERIVATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "derivedObjects": [
+      {
+        "code": "entity-scoring",
+        "name": "实体基础评分",
+        "objectKind": "COMPUTED_FIELD",
+        "description": "实体级别的基础评分计算，作为 DERIVED_VIEW 中 weightedScore 的输入。含商机活跃、销售活动、关系治理、竞争风险反向、客户等级五项评分。",
+        "root": {
+          "boCode": "customers",
+          "entityCode": "customer",
+          "idField": "id"
+        },
+        "dependencies": [
+          { "boCode": "opportunities",   "viaLink": "CUSTOMER_HAS_OPPORTUNITY", "required": false },
+          { "boCode": "sales-activities", "viaLink": "CUSTOMER_HAS_ACTIVITY",   "required": false },
+          { "boCode": "competitors",     "viaLink": "OPPORTUNITY_COMPETES_WITH", "required": false }
+        ],
+        "fields": [
+          {
+            "code": "active_opportunity_count",
+            "name": "活跃商机数",
+            "type": "INTEGER",
+            "expression": {
+              "type": "temporalAggregate",
+              "fn": "count",
+              "source": "opportunities",
+              "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+              "window": "CURRENT_QUARTER",
+              "timeField": "created_time",
+              "where": {
+                "type": "binary",
+                "op": "EQ",
+                "left": { "type": "field", "path": "status" },
+                "right": { "type": "literal", "value": "ACTIVE" }
+              }
+            },
+            "cacheable": true
+          },
+          {
+            "code": "won_opportunity_count",
+            "name": "已赢单商机数",
+            "type": "INTEGER",
+            "expression": {
+              "type": "temporalAggregate",
+              "fn": "count",
+              "source": "opportunities",
+              "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+              "window": "CURRENT_YEAR",
+              "timeField": "updated_time",
+              "where": {
+                "type": "binary",
+                "op": "EQ",
+                "left": { "type": "field", "path": "status" },
+                "right": { "type": "literal", "value": "CLOSED_WON" }
+              }
+            },
+            "cacheable": true
+          },
+          {
+            "code": "activity_count_90d",
+            "name": "近90天活动数",
+            "type": "INTEGER",
+            "expression": {
+              "type": "metric",
+              "code": "activity_count_90d"
+            },
+            "cacheable": true
+          },
+          {
+            "code": "competitor_count",
+            "name": "关联竞争对手数",
+            "type": "INTEGER",
+            "expression": {
+              "type": "temporalAggregate",
+              "fn": "count",
+              "source": "competitors",
+              "viaLink": "OPPORTUNITY_COMPETES_WITH",
+              "window": "CURRENT_YEAR",
+              "timeField": "created_time"
+            },
+            "cacheable": true
+          },
+
+          {
+            "code": "opportunity_activity_score",
+            "name": "商机活跃评分",
+            "type": "DECIMAL",
+            "expression": {
+              "type": "caseWhen",
+              "cases": [
+                {
+                  "condition": {
+                    "type": "logical",
+                    "op": "AND",
+                    "items": [
+                      { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "activity_count_90d" }, "right": { "type": "literal", "value": 0 } },
+                      { "type": "binary", "op": "LTE", "left": { "type": "metric", "code": "active_opportunity_count" }, "right": { "type": "literal", "value": 1 } }
+                    ]
+                  },
+                  "result": {
+                    "type": "scalarFunc",
+                    "fn": "min",
+                    "expr": {
+                      "type": "scalarOp",
+                      "op": "MUL",
+                      "left":  { "type": "metric",  "code": "active_opportunity_count" },
+                      "right": { "type": "literal", "value": 20 }
+                    },
+                    "args": [100]
+                  }
+                }
+              ],
+              "defaultResult": {
+                "type": "scalarFunc",
+                "fn": "min",
+                "expr": {
+                  "type": "scalarOp",
+                  "op": "MUL",
+                  "left":  { "type": "metric",  "code": "active_opportunity_count" },
+                  "right": { "type": "literal", "value": 40 }
+                },
+                "args": [100]
+              }
+            },
+            "cacheable": true
+          },
+          {
+            "code": "won_opportunity_score",
+            "name": "赢单商机评分",
+            "type": "DECIMAL",
+            "expression": {
+              "type": "scalarFunc",
+              "fn": "min",
+              "expr": {
+                "type": "scalarOp",
+                "op": "MUL",
+                "left":  { "type": "metric",  "code": "won_opportunity_count" },
+                "right": { "type": "literal", "value": 150 }
+              },
+              "args": [100]
+            },
+            "cacheable": true
+          },
+          {
+            "code": "sales_activity_score",
+            "name": "销售活动支撑评分",
+            "type": "DECIMAL",
+            "expression": {
+              "type": "scalarFunc",
+              "fn": "min",
+              "expr": {
+                "type": "scalarOp",
+                "op": "MUL",
+                "left":  { "type": "metric",  "code": "activity_count_90d" },
+                "right": { "type": "literal", "value": 25 }
+              },
+              "args": [100]
+            },
+            "cacheable": true
+          },
+          {
+            "code": "relation_governance_score",
+            "name": "关系治理评分",
+            "type": "DECIMAL",
+            "expression": {
+              "type": "caseWhen",
+              "cases": [
+                {
+                  "condition": {
+                    "type": "binary", "op": "EQ",
+                    "left": { "type": "field", "path": "customer-relations.status" },
+                    "right": { "type": "literal", "value": "APPROVED" }
+                  },
+                  "result": { "type": "literal", "value": 95 }
+                },
+                {
+                  "condition": {
+                    "type": "binary", "op": "EQ",
+                    "left": { "type": "field", "path": "customer-relations.status" },
+                    "right": { "type": "literal", "value": "PENDING_APPROVAL" }
+                  },
+                  "result": { "type": "literal", "value": 50 }
+                },
+                {
+                  "condition": {
+                    "type": "binary", "op": "EQ",
+                    "left": { "type": "field", "path": "customer-relations.status" },
+                    "right": { "type": "literal", "value": "DRAFT" }
+                  },
+                  "result": { "type": "literal", "value": 35 }
+                },
+                {
+                  "condition": {
+                    "type": "binary", "op": "EQ",
+                    "left": { "type": "field", "path": "customer-relations.status" },
+                    "right": { "type": "literal", "value": "CHANGED" }
+                  },
+                  "result": { "type": "literal", "value": 30 }
+                }
+              ],
+              "defaultResult": { "type": "literal", "value": 50 }
+            },
+            "cacheable": true
+          },
+          {
+            "code": "competitor_risk_reverse_score",
+            "name": "竞争风险反向评分",
+            "type": "DECIMAL",
+            "expression": {
+              "type": "scalarFunc",
+              "fn": "max",
+              "expr": {
+                "type": "scalarOp",
+                "op": "SUB",
+                "left": { "type": "literal", "value": 90 },
+                "right": {
+                  "type": "scalarOp",
+                  "op": "MUL",
+                  "left":  { "type": "metric",  "code": "competitor_count" },
+                  "right": { "type": "literal", "value": 15 }
+                }
+              },
+              "args": [20]
+            },
+            "cacheable": true
+          },
+          {
+            "code": "competitor_risk_level",
+            "name": "竞争风险等级",
+            "type": "STRING",
+            "description": "基于竞对最高级别+数量因子的竞争风险等级。1 STRONG→MEDIUM，2+ STRONG→HIGH，其余取 competitor_max_risk_level。",
+            "expression": {
+              "type": "caseWhen",
+              "cases": [
+                {
+                  "condition": {
+                    "type": "logical", "op": "AND",
+                    "items": [
+                      { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "competitor_max_risk_level" }, "right": { "type": "literal", "value": "HIGH" } },
+                      { "type": "binary", "op": "GT", "left": { "type": "metric", "code": "_strong_competitor_count" }, "right": { "type": "literal", "value": 1 } }
+                    ]
+                  },
+                  "result": { "type": "literal", "value": "HIGH" }
+                },
+                {
+                  "condition": {
+                    "type": "logical", "op": "AND",
+                    "items": [
+                      { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "competitor_max_risk_level" }, "right": { "type": "literal", "value": "HIGH" } },
+                      { "type": "binary", "op": "EQ", "left": { "type": "metric", "code": "_strong_competitor_count" }, "right": { "type": "literal", "value": 1 } }
+                    ]
+                  },
+                  "result": { "type": "literal", "value": "MEDIUM" }
+                }
+              ],
+              "defaultResult": { "type": "metric", "code": "competitor_max_risk_level" }
+            },
+            "cacheable": false
+          },
+          {
+            "code": "customer_level_score",
+            "name": "客户等级评分",
+            "type": "DECIMAL",
+            "expression": {
+              "type": "caseWhen",
+              "cases": [
+                {
+                  "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "market_segment" }, "right": { "type": "literal", "value": "INTERNET_T1" } },
+                  "result": { "type": "literal", "value": 95 }
+                },
+                {
+                  "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "market_segment" }, "right": { "type": "literal", "value": "EDUCATION_T1" } },
+                  "result": { "type": "literal", "value": 95 }
+                },
+                {
+                  "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "market_segment" }, "right": { "type": "literal", "value": "INTERNET_T2" } },
+                  "result": { "type": "literal", "value": 75 }
+                },
+                {
+                  "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "market_segment" }, "right": { "type": "literal", "value": "EDUCATION_T2" } },
+                  "result": { "type": "literal", "value": 75 }
+                },
+                {
+                  "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "market_segment" }, "right": { "type": "literal", "value": "INTERNET_T3" } },
+                  "result": { "type": "literal", "value": 55 }
+                },
+                {
+                  "condition": { "type": "binary", "op": "EQ", "left": { "type": "field", "path": "market_segment" }, "right": { "type": "literal", "value": "EDUCATION_T3" } },
+                  "result": { "type": "literal", "value": 55 }
+                }
+              ],
+              "defaultResult": { "type": "literal", "value": 70 }
+            },
+            "cacheable": true
+          }
+        ],
+        "materialization": {
+          "mode": "ON_READ_CACHE",
+          "ttlSeconds": 3600
+        },
+        "apiExposure": {
+          "enabled": false
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "CRM 实体级基础评分 DERIVATION Fragment 首版。",
+    "抽取 customer-360 中 5 个 intermediate 评分到独立文件：",
+    "  opportunity_activity_score  → 无活动+≤1商机时 min(count×20,100)，否则 min(count×40,100)",
+    "  sales_activity_score       → min(activity_count_90d × 25, 100)",
+    "  relation_governance_score  → 50（中性基线，待后续接入关系治理数据后动态化）",
+    "  competitor_risk_reverse…   → max(90 − competitor_count × 15, 20)（无竞对=90基线）",
+    "  competitor_risk_level      → caseWhen: max_risk=HIGH + strong_count>1 → HIGH; max_risk=HIGH + strong_count=1 → MEDIUM; else max_risk（元数据驱动数量因子）",
+    "  customer_level_score       → 按 market_segment 梯度：T1=95, T2=75, T3=55, 默认=70",
+    "这些评分被 customer-360.customer_health_score.weightedScore 的 scoreRef 引用。"
+  ]
+}

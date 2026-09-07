@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/expression-ast.schema.json",
+  "title": "Structure Rule Expression AST — 结构化规则表达式",
+  "description": "JSON AST 格式的结构化规则表达式。替代 RULE.expression 自由文本，用于发布校验和运行时执行。支持的节点类型：literal、field、metric、binary、logical、scalarOp、scalarFunc、isNull、isNotNull、inSet、exists、aggregate、temporalAggregate、weightedScore、caseWhen、pipelineAggregate。",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [Expression AST] 章节。",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "AST 节点类型",
+      "enum": [
+        "literal",
+        "field",
+        "metric",
+        "binary",
+        "logical",
+        "scalarOp",
+        "scalarFunc",
+        "isNull",
+        "isNotNull",
+        "inSet",
+        "exists",
+        "aggregate",
+        "temporalAggregate",
+        "weightedScore",
+        "caseWhen",
+        "pipelineAggregate"
+      ]
+    },
+    "value": {
+      "description": "字面量值（type=literal 时必需）。支持 string / number / boolean / array"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*(\\.[a-z][a-z0-9_-]*)*$",
+      "description": "字段路径。entity 层支持 kebab-case（如 opportunity-product），属性层 snake_case。跨 BO 引用必须通过 viaLink"
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "跨 BO 查询的源 BO boCode。type=aggregate/temporalAggregate/exists/pipelineAggregate 时有效"
+    },
+    "viaLink": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]*$",
+      "description": "跨 BO 查询使用的 LINK code"
+    },
+    "fn": {
+      "type": "string",
+      "enum": ["count", "sum", "avg", "min", "max", "dateDiff", "velocityLevel"],
+      "description": "聚合函数。type=aggregate 时: count/sum/avg/min/max; type=temporalAggregate 时另可: dateDiff/velocityLevel"
+    },
+    "field": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "被聚合的字段。type=aggregate 且 fn≠count 时必需"
+    },
+    "window": {
+      "type": "string",
+      "pattern": "^(P\\d+[DHMWY]|CURRENT_QUARTER|LAST_QUARTER|CURRENT_MONTH|LAST_MONTH|CURRENT_YEAR|LAST_YEAR)$",
+      "description": "时间窗口。type=temporalAggregate 时必需"
+    },
+    "timeField": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "时间字段。type=temporalAggregate 时有效"
+    },
+    "stateField": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "状态字段。type=temporalAggregate 且 fn=velocityLevel/dateDiff 时可选，用于定位状态变化"
+    },
+    "args": {
+      "type": "array",
+      "description": "额外参数。type=temporalAggregate 且 fn=dateDiff 时如 [\"now\", \"DAY\"]；type=scalarFunc 时如 [100] 表示封顶值",
+      "items": {
+        "type": ["string", "number"]
+      }
+    },
+    "op": {
+      "type": "string",
+      "enum": [
+        "EQ", "NEQ", "GT", "GTE", "LT", "LTE",
+        "IN", "NOT_IN", "CONTAINS",
+        "LIKE", "STARTS_WITH", "ENDS_WITH",
+        "AND", "OR", "NOT",
+        "WITHIN", "BEFORE", "AFTER", "DURATION_GT", "DURATION_LT",
+        "ADD", "SUB", "MUL", "DIV", "MOD"
+      ],
+      "description": "操作符。AND/OR/NOT 用于 logical 节点；EQ/NEQ/GT/... 用于 binary/inSet 节点；ADD/SUB/MUL/DIV/MOD 用于 scalarOp 节点"
+    },
+    "left": {
+      "type": "object",
+      "description": "二元操作左操作数。type=binary 时必需，子节点类型为 literal/field/metric/aggregate/temporalAggregate"
+    },
+    "right": {
+      "type": "object",
+      "description": "二元操作右操作数。type=binary 时必需，子节点类型为 literal/field/metric"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "description": "逻辑操作子节点列表。type=logical 时必需",
+      "items": {
+        "type": "object"
+      }
+    },
+    "expr": {
+      "type": "object",
+      "description": "一元操作的子表达式。type=isNull 或 isNotNull 时必需"
+    },
+    "where": {
+      "type": "object",
+      "description": "聚合或存在性查询的过滤条件。type=aggregate/temporalAggregate/exists 时可选"
+    },
+    "code": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "引用已定义的时态指标 code。type=metric 时必需"
+    },
+    "itemsForWeight": {
+      "type": "array",
+      "minItems": 1,
+      "description": "加权评分子项列表。type=weightedScore 时必需",
+      "items": {
+        "type": "object",
+        "required": ["weight", "scoreRef"],
+        "additionalProperties": false,
+        "properties": {
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "权重，各项 weight 之和应为 1.0"
+          },
+          "scoreRef": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "引用另一个派生字段或评分字段的 code"
+          }
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "description": "条件分支列表。type=caseWhen 时必需",
+      "items": {
+        "type": "object",
+        "required": ["condition", "result"],
+        "additionalProperties": false,
+        "properties": {
+          "condition": {
+            "type": "object",
+            "description": "分支条件 AST 节点"
+          },
+          "result": {
+            "description": "分支结果，可以是 literal 值或表达式 AST"
+          }
+        }
+      }
+    },
+    "defaultResult": {
+      "description": "默认结果。type=caseWhen 时可选，所有条件不命中时的回退值"
+    },
+    "amountField": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "金额字段。type=pipelineAggregate 时必需，如 expected_order_amount"
+    },
+    "stageField": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "阶段字段。type=pipelineAggregate 时必需，如 project_stage"
+    },
+    "stageProbabilityMap": {
+      "type": "object",
+      "description": "阶段→概率映射。type=pipelineAggregate 时必需，key 为阶段值（如 DC_01），value 为权重（0-1）",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "type": { "const": "literal" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["value"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "field" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["path"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "metric" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["code"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "binary" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["op", "left", "right"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "logical" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["op", "items"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "isNull" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["expr"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "isNotNull" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["expr"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "inSet" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["op", "left", "right"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "exists" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["source", "viaLink"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "aggregate" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["fn", "source", "viaLink"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "temporalAggregate" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["fn", "source", "viaLink", "window", "timeField"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "weightedScore" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["itemsForWeight"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "scalarOp" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["op", "left", "right"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "scalarFunc" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["fn", "expr"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "caseWhen" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["cases"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "pipelineAggregate" } },
+        "required": ["type"]
+      },
+      "then": { "required": ["source", "amountField", "stageField", "viaLink", "stageProbabilityMap"] }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "operation-logs",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": []
+  },
+  "changeNote": [
+    "操作审计日志 BO 首版 RULE Fragment",
+    "审计日志为追加只读性质，无业务规则约束"
+  ]
+}

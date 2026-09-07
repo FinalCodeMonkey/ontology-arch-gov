@@ -1,0 +1,134 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "x-territory-regs",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "filing_no",
+        "required": true,
+        "max": 64,
+        "unique": true,
+        "message": "报备单号不能为空且不超过64字符，全局唯一"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "project_name",
+        "required": true,
+        "max": 255,
+        "message": "项目名称不能为空且不超过255字符"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_id",
+        "required": true,
+        "message": "客户不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "customer_owner_id",
+        "required": true,
+        "message": "客户所有人不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "filing_owner_id",
+        "required": true,
+        "message": "报备负责人不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "reason",
+        "required": true,
+        "message": "报备理由不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "ownership_note",
+        "required": true,
+        "message": "主导权及合作分量说明不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "status",
+        "required": true,
+        "enum": [
+          { "value": "DRAFT",    "label": "草稿" },
+          { "value": "PENDING",  "label": "审批中" },
+          { "value": "APPROVED", "label": "已通过" },
+          { "value": "REJECTED", "label": "已驳回" }
+        ],
+        "message": "报备状态必须为预定义值之一"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "flow_instance_id",
+        "max": 64
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "linked_opportunity_id",
+        "unique": true,
+        "message": "一个商机只能关联一条报备单"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "linked_opportunity_code",
+        "max": 64
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "filing_id",
+        "required": true,
+        "message": "所属报备单不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 32,
+        "enum": [
+          { "value": "LEAD",       "label": "主导方" },
+          { "value": "SUPPORT",    "label": "协作方" },
+          { "value": "OBSERVER",   "label": "观察者" }
+        ],
+        "message": "成员角色不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "permission_code",
+        "required": true,
+        "enum": [
+          { "value": "READ",  "label": "只读" },
+          { "value": "WRITE", "label": "读写" }
+        ],
+        "message": "权限码不能为空"
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "member_user_name",
+        "max": 100
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "related_teams",
+        "max": 1000
+      },
+      {
+        "entityCode": "x-territory-reg-team-member",
+        "fieldCode": "remark",
+        "max": 500
+      }
+    ]
+  },
+  "changeNote": [
+    "跨地盘项目报备 BO 首版 VALIDATION Fragment",
+    "member_role 枚举值为建议初始集合，业务上可扩展",
+    "linked_opportunity_id unique 约束对应 DDL uk_linked_opportunity_id"
+  ]
+}

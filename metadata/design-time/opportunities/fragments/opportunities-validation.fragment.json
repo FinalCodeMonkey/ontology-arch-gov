@@ -1,0 +1,920 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "opportunities",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_name",
+        "required": true,
+        "max": 200,
+        "unique": true,
+        "message": "业务机会名称不能为空、不超过200字且不可重复"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_code",
+        "required": true,
+        "max": 64,
+        "unique": true,
+        "message": "业务机会编码不能为空且不可重复"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "project_type",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "DC",
+            "label": "DC项目"
+          },
+          {
+            "value": "OC_MAIN",
+            "label": "OC主项目"
+          },
+          {
+            "value": "OC_SUB",
+            "label": "OC子项目"
+          },
+          {
+            "value": "BC",
+            "label": "BC项目"
+          },
+          {
+            "value": "EC",
+            "label": "EC项目"
+          }
+        ],
+        "message": "项目类型必须为 DC项目/OC主项目/OC子项目/BC项目/EC项目 之一"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "customers_id",
+        "required": true,
+        "message": "必须选择业务主体客户"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "business_customer_name",
+        "max": 200
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "market_segment",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "INTERNET_T1",
+            "label": "互联网-T1客户"
+          },
+          {
+            "value": "INTERNET_T2",
+            "label": "互联网-T2客户"
+          },
+          {
+            "value": "INTERNET_T3",
+            "label": "互联网-T3客户"
+          }
+        ],
+        "message": "细分市场必须为预定义值之一"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "currency",
+        "required": true,
+        "max": 16,
+        "enum": [
+          {
+            "value": "CNY",
+            "label": "人民币"
+          },
+          {
+            "value": "USD",
+            "label": "美元"
+          }
+        ],
+        "message": "币种必须为 人民币/美元 之一"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_bid_date",
+        "required": true,
+        "message": "预计开标日期不能为空"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_start_date",
+        "required": true,
+        "message": "OC主项目类型时预计下单开始日期必填",
+        "conditional": {
+          "dependsOn": "project_type",
+          "when": ["OC_MAIN"],
+          "description": "仅OC主项目类型需要填写预计下单开始日期和截止日期"
+        }
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_end_date",
+        "required": true,
+        "message": "OC主项目类型时预计下单截止日期必填",
+        "conditional": {
+          "dependsOn": "project_type",
+          "when": ["OC_MAIN"],
+          "description": "仅OC主项目类型需要填写预计下单截止日期"
+        }
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_date",
+        "required": true,
+        "message": "非OC主项目类型时预计下单日期必填",
+        "conditional": {
+          "dependsOn": "project_type",
+          "whenNot": ["OC_MAIN"],
+          "description": "OC_MAIN 类型不填预计下单日期，改为填预计下单开始/截止日期"
+        }
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "project_stage",
+        "required": true,
+        "max": 64,
+        "conditionalEnum": {
+          "dependsOn": "project_type",
+          "groups": [
+            {
+              "when": "DC",
+              "enum": [
+                {
+                  "value": "DC_01",
+                  "label": "业务驱动 确定需求"
+                },
+                {
+                  "value": "DC_02",
+                  "label": "产品和方案 详设"
+                },
+                {
+                  "value": "DC_03",
+                  "label": "确定产品技术规格 圈定供应商"
+                },
+                {
+                  "value": "DC_04",
+                  "label": "制定规则 研发标招标"
+                },
+                {
+                  "value": "DC_05",
+                  "label": "得到结果 签订研发标合同"
+                },
+                {
+                  "value": "DC_06",
+                  "label": "EVT样机交付 完成软硬件对接"
+                },
+                {
+                  "value": "DC_07",
+                  "label": "EVT样机交付 完成软硬件联调"
+                },
+                {
+                  "value": "DC_08",
+                  "label": "PVT样机交付 验收付款"
+                }
+              ]
+            },
+            {
+              "when": "OC_MAIN",
+              "enum": [
+                {
+                  "value": "OC_MAIN_01",
+                  "label": "业务驱动 确定需求"
+                },
+                {
+                  "value": "OC_MAIN_02",
+                  "label": "产品和方案 详设"
+                },
+                {
+                  "value": "OC_MAIN_03",
+                  "label": "确定产品技术规格 圈定供应商"
+                },
+                {
+                  "value": "OC_MAIN_04",
+                  "label": "确定产品开发计划 完成开发"
+                },
+                {
+                  "value": "OC_MAIN_05",
+                  "label": "测试验收 确定入围供应商"
+                },
+                {
+                  "value": "OC_MAIN_06",
+                  "label": "收集采购需求 确定采购计划"
+                },
+                {
+                  "value": "OC_MAIN_07",
+                  "label": "制定规则 集采框架招标"
+                },
+                {
+                  "value": "OC_MAIN_08",
+                  "label": "得到结果 签订合同"
+                },
+                {
+                  "value": "OC_MAIN_09",
+                  "label": "框架合同到期 关单"
+                }
+              ]
+            },
+            {
+              "when": "OC_SUB",
+              "enum": [
+                {
+                  "value": "OC_SUB_01",
+                  "label": "集采已中标/框架协议已签订 未发出FCST或要货计划"
+                },
+                {
+                  "value": "OC_SUB_02",
+                  "label": "集采已中标/框架协议已签订 已发出FCST或要货计划"
+                },
+                {
+                  "value": "OC_SUB_03",
+                  "label": "集采已中标/框架协议已签订 已发出正式PO单或采购合同 交付实施、验收付款"
+                },
+                {
+                  "value": "OC_SUB_04",
+                  "label": "交付实施 验收付款"
+                }
+              ]
+            },
+            {
+              "when": "BC",
+              "enum": [
+                {
+                  "value": "BC_01",
+                  "label": "业务驱动 确定需求"
+                },
+                {
+                  "value": "BC_02",
+                  "label": "方案调研 启动项目"
+                },
+                {
+                  "value": "BC_03",
+                  "label": "确定方案 圈定供应商"
+                },
+                {
+                  "value": "BC_04",
+                  "label": "制定规则 落实采购"
+                },
+                {
+                  "value": "BC_05",
+                  "label": "得到结果 签订合同"
+                },
+                {
+                  "value": "BC_06",
+                  "label": "交付实施 验收付款"
+                }
+              ]
+            },
+            {
+              "when": "EC",
+              "enum": [
+                {
+                  "value": "EC_01",
+                  "label": "业务驱动 确定需求"
+                },
+                {
+                  "value": "EC_02",
+                  "label": "技术调研 解法评估"
+                },
+                {
+                  "value": "EC_03",
+                  "label": "解法初设 形成Demo"
+                },
+                {
+                  "value": "EC_04",
+                  "label": "测试验证 方案优化"
+                },
+                {
+                  "value": "EC_05",
+                  "label": "验证成功 确定价值"
+                },
+                {
+                  "value": "EC_06",
+                  "label": "立项论证 审批通过"
+                }
+              ]
+            }
+          ]
+        },
+        "message": "项目阶段必须为当前项目类型对应的预定义值之一"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "parent_opportunity_id",
+        "required": true,
+        "message": "OC子项目必须关联框架主项目",
+        "conditional": {
+          "dependsOn": "project_type",
+          "when": ["OC_SUB"],
+          "description": "仅OC子项目类型必填关联框架主项目"
+        }
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "parent_opportunity_name",
+        "max": 200
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "predict_category",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "LEAD",
+            "label": "线索"
+          },
+          {
+            "value": "OPPORTUNITY_MINUS",
+            "label": "机会-"
+          },
+          {
+            "value": "OPPORTUNITY",
+            "label": "机会"
+          },
+          {
+            "value": "OPPORTUNITY_PLUS",
+            "label": "机会+"
+          },
+          {
+            "value": "POSSIBLE_MINUS",
+            "label": "可能-"
+          },
+          {
+            "value": "POSSIBLE",
+            "label": "可能"
+          },
+          {
+            "value": "POSSIBLE_PLUS",
+            "label": "可能+"
+          },
+          {
+            "value": "ADVANTAGE",
+            "label": "优势"
+          }
+        ],
+        "message": "预测类别必须为预定义值之一"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "biz_attribution",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "JDM",
+            "label": "JDM"
+          },
+          {
+            "value": "COMMERCIAL",
+            "label": "商用"
+          },
+          {
+            "value": "ESUN",
+            "label": "ESUN"
+          },
+          {
+            "value": "OPTICAL",
+            "label": "光"
+          },
+          {
+            "value": "PARK",
+            "label": "园区"
+          }
+        ],
+        "message": "业务归属必须为预定义值之一"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "domestic_overseas",
+        "required": true,
+        "max": 16,
+        "enum": [
+          {
+            "value": "DOMESTIC",
+            "label": "国内"
+          },
+          {
+            "value": "OVERSEAS",
+            "label": "海外"
+          }
+        ],
+        "message": "国内/海外必须为预定义值之一"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "presales_engineer",
+        "required": true,
+        "max": 64,
+        "message": "必须指定售前工程师"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "customer_owner",
+        "required": true,
+        "max": 64,
+        "message": "客户所有人不能为空"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_owner",
+        "required": true,
+        "max": 64,
+        "message": "必须指定机会所有人"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_amount",
+        "required": true,
+        "min": 0,
+        "message": "预计下单金额/集采框架总金额不能为空且必须为非负数"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "status",
+        "required": true,
+        "enum": [
+          {
+            "value": "DRAFT",
+            "label": "草稿"
+          },
+          {
+            "value": "ACTIVE",
+            "label": "活跃"
+          },
+          {
+            "value": "CLOSED_WON",
+            "label": "赢单关闭"
+          },
+          {
+            "value": "CLOSED_LOST",
+            "label": "输单关闭"
+          },
+          {
+            "value": "CANCELLED",
+            "label": "已取消"
+          }
+        ],
+        "message": "商机状态值非法"
+      },
+      {
+        "entityCode": "opportunity-scene",
+        "fieldCode": "opportunity_id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity-scene",
+        "fieldCode": "scene_id",
+        "required": true,
+        "message": "必须选择关联场景"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "is_in_funnel",
+        "required": false,
+        "message": "是否进入漏斗为销售预测字段，默认false"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "is_committed",
+        "required": false,
+        "message": "是否承诺为销售预测字段，默认false"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "is_deleted",
+        "required": true,
+        "min": 0,
+        "max": 1,
+        "message": "删除标记必须为0或1"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "opportunity_id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "product_id",
+        "required": true,
+        "message": "必须选择产品"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "unit_price",
+        "required": true,
+        "min": 0,
+        "message": "出货单价不能为空且必须为非负数"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "quantity",
+        "required": true,
+        "min": 0,
+        "message": "数量不能为空且必须为非负整数"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "ratio",
+        "min": 1,
+        "message": "场景典配配比必须为正整数",
+        "conditional": {
+          "allOf": [
+            { "dependsOn": "parent_product_id", "notNull": true },
+            { "dependsOn": "scene_id", "notNull": true }
+          ],
+          "description": "仅场景典配配件行（parent_product_id 和 scene_id 同时非空）需要填写典配比。非场景独立配件不要求此值"
+        }
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "opportunity_id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "必须选择团队成员"
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "SALES_LEADER",
+            "label": "销售负责人"
+          },
+          {
+            "value": "HARDWARE_SALES",
+            "label": "硬件销售"
+          },
+          {
+            "value": "SERVICE_SALES",
+            "label": "服务销售"
+          },
+          {
+            "value": "COLLABORATOR",
+            "label": "协同跟进人"
+          },
+          {
+            "value": "OTHER",
+            "label": "其他"
+          }
+        ],
+        "message": "团队成员角色必须为销售负责人/硬件销售/服务销售/协同跟进人/其他之一"
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "member_name",
+        "max": 64
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "permission",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "READ_WRITE",
+            "label": "读写"
+          },
+          {
+            "value": "READ_ONLY",
+            "label": "只读"
+          }
+        ],
+        "message": "权限设置必须为读写或只读"
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "remark",
+        "max": 200
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "related_teams",
+        "max": 512,
+        "message": "关联模块团队不超过512字"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "opportunity_id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "sequence_no",
+        "required": true,
+        "min": 1,
+        "message": "序号不能为空且必须为正整数"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "from_stage_code",
+        "max": 64,
+        "enum": [
+          {"value": "DC_01", "label": "业务驱动 确定需求"},
+          {"value": "DC_02", "label": "产品和方案 详设"},
+          {"value": "DC_03", "label": "确定产品技术规格 圈定供应商"},
+          {"value": "DC_04", "label": "制定规则 研发标招标"},
+          {"value": "DC_05", "label": "得到结果 签订研发标合同"},
+          {"value": "DC_06", "label": "EVT样机交付 完成软硬件对接"},
+          {"value": "DC_07", "label": "EVT样机交付 完成软硬件联调"},
+          {"value": "DC_08", "label": "PVT样机交付 验收付款"},
+          {"value": "OC_MAIN_01", "label": "业务驱动 确定需求"},
+          {"value": "OC_MAIN_02", "label": "产品和方案 详设"},
+          {"value": "OC_MAIN_03", "label": "确定产品技术规格 圈定供应商"},
+          {"value": "OC_MAIN_04", "label": "确定产品开发计划 完成开发"},
+          {"value": "OC_MAIN_05", "label": "测试验收 确定入围供应商"},
+          {"value": "OC_MAIN_06", "label": "收集采购需求 确定采购计划"},
+          {"value": "OC_MAIN_07", "label": "制定规则 集采框架招标"},
+          {"value": "OC_MAIN_08", "label": "得到结果 签订合同"},
+          {"value": "OC_MAIN_09", "label": "框架合同到期 关单"},
+          {"value": "OC_SUB_01", "label": "集采已中标/框架协议已签订 未发出FCST或要货计划"},
+          {"value": "OC_SUB_02", "label": "集采已中标/框架协议已签订 已发出FCST或要货计划"},
+          {"value": "OC_SUB_03", "label": "集采已中标/框架协议已签订 已发出正式PO单或采购合同 交付实施、验收付款"},
+          {"value": "OC_SUB_04", "label": "交付实施 验收付款"},
+          {"value": "BC_01", "label": "业务驱动 确定需求"},
+          {"value": "BC_02", "label": "方案调研 启动项目"},
+          {"value": "BC_03", "label": "确定方案 圈定供应商"},
+          {"value": "BC_04", "label": "制定规则 落实采购"},
+          {"value": "BC_05", "label": "得到结果 签订合同"},
+          {"value": "BC_06", "label": "交付实施 验收付款"},
+          {"value": "EC_01", "label": "业务驱动 确定需求"},
+          {"value": "EC_02", "label": "技术调研 解法评估"},
+          {"value": "EC_03", "label": "解法初设 形成Demo"},
+          {"value": "EC_04", "label": "测试验证 方案优化"},
+          {"value": "EC_05", "label": "验证成功 确定价值"},
+          {"value": "EC_06", "label": "立项论证 审批通过"}
+        ],
+        "message": "来源阶段编码必须为预定义的客户采购阶段值之一"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "from_stage_name",
+        "max": 128,
+        "message": "来源阶段名称不超过128字"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "stage_code",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {"value": "DC_01", "label": "业务驱动 确定需求"},
+          {"value": "DC_02", "label": "产品和方案 详设"},
+          {"value": "DC_03", "label": "确定产品技术规格 圈定供应商"},
+          {"value": "DC_04", "label": "制定规则 研发标招标"},
+          {"value": "DC_05", "label": "得到结果 签订研发标合同"},
+          {"value": "DC_06", "label": "EVT样机交付 完成软硬件对接"},
+          {"value": "DC_07", "label": "EVT样机交付 完成软硬件联调"},
+          {"value": "DC_08", "label": "PVT样机交付 验收付款"},
+          {"value": "OC_MAIN_01", "label": "业务驱动 确定需求"},
+          {"value": "OC_MAIN_02", "label": "产品和方案 详设"},
+          {"value": "OC_MAIN_03", "label": "确定产品技术规格 圈定供应商"},
+          {"value": "OC_MAIN_04", "label": "确定产品开发计划 完成开发"},
+          {"value": "OC_MAIN_05", "label": "测试验收 确定入围供应商"},
+          {"value": "OC_MAIN_06", "label": "收集采购需求 确定采购计划"},
+          {"value": "OC_MAIN_07", "label": "制定规则 集采框架招标"},
+          {"value": "OC_MAIN_08", "label": "得到结果 签订合同"},
+          {"value": "OC_MAIN_09", "label": "框架合同到期 关单"},
+          {"value": "OC_SUB_01", "label": "集采已中标/框架协议已签订 未发出FCST或要货计划"},
+          {"value": "OC_SUB_02", "label": "集采已中标/框架协议已签订 已发出FCST或要货计划"},
+          {"value": "OC_SUB_03", "label": "集采已中标/框架协议已签订 已发出正式PO单或采购合同 交付实施、验收付款"},
+          {"value": "OC_SUB_04", "label": "交付实施 验收付款"},
+          {"value": "BC_01", "label": "业务驱动 确定需求"},
+          {"value": "BC_02", "label": "方案调研 启动项目"},
+          {"value": "BC_03", "label": "确定方案 圈定供应商"},
+          {"value": "BC_04", "label": "制定规则 落实采购"},
+          {"value": "BC_05", "label": "得到结果 签订合同"},
+          {"value": "BC_06", "label": "交付实施 验收付款"},
+          {"value": "EC_01", "label": "业务驱动 确定需求"},
+          {"value": "EC_02", "label": "技术调研 解法评估"},
+          {"value": "EC_03", "label": "解法初设 形成Demo"},
+          {"value": "EC_04", "label": "测试验证 方案优化"},
+          {"value": "EC_05", "label": "验证成功 确定价值"},
+          {"value": "EC_06", "label": "立项论证 审批通过"}
+        ],
+        "message": "阶段编码必须为预定义的客户采购阶段值之一"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "stage_name",
+        "max": 128,
+        "message": "阶段名称不超过128字"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "stage_status",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {
+            "value": "IN_PROGRESS",
+            "label": "进行中"
+          },
+          {
+            "value": "COMPLETED",
+            "label": "已完成"
+          },
+          {
+            "value": "ROLLBACK",
+            "label": "已回退"
+          }
+        ],
+        "message": "阶段状态必须为 进行中/已完成/已回退 之一"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "operation_type",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {
+            "value": "ADVANCE",
+            "label": "阶段推进"
+          },
+          {
+            "value": "ROLLBACK",
+            "label": "阶段回退"
+          },
+          {
+            "value": "RESTART",
+            "label": "项目重启"
+          },
+          {
+            "value": "SUPPLEMENT",
+            "label": "补充说明"
+          }
+        ],
+        "message": "操作类型必须为 阶段推进/阶段回退/项目重启/补充说明 之一"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "promoter",
+        "required": true,
+        "max": 64,
+        "message": "推进人不能为空"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "promoted_time",
+        "required": true,
+        "message": "推进时间不能为空"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "description",
+        "max": 2000,
+        "message": "推进说明不超过2000字"
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "stage_history_id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "file_name",
+        "required": true,
+        "max": 255,
+        "message": "文件名称不能为空且不超过255字"
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "uploaded_by",
+        "required": true,
+        "max": 64,
+        "message": "上传人不能为空"
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "uploaded_time",
+        "required": true,
+        "message": "上传时间不能为空"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "opportunity_id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "quotation_no",
+        "required": true,
+        "max": 64,
+        "message": "报价单号不能为空且不超过64字"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "quotation_type",
+        "required": true,
+        "max": 128,
+        "message": "报价单类型不能为空"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "total_amount",
+        "required": true,
+        "min": 0,
+        "message": "出货价合计不能为空且必须为非负数"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "quotation_status",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {
+            "value": "DRAFT",
+            "label": "草稿"
+          },
+          {
+            "value": "SAVED",
+            "label": "已保存"
+          },
+          {
+            "value": "PENDING_APPROVAL",
+            "label": "审批中"
+          },
+          {
+            "value": "APPROVED",
+            "label": "已审批"
+          },
+          {
+            "value": "REJECTED",
+            "label": "已驳回"
+          }
+        ],
+        "message": "报价单状态必须为 草稿/已保存/审批中/已审批/已驳回 之一"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "created_time",
+        "required": true,
+        "message": "创建时间不能为空"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "quotation_id",
+        "required": true
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "product_id",
+        "required": true,
+        "message": "产品ID不能为空"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "product_category",
+        "max": 64
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "product_series",
+        "max": 64
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "list_price",
+        "min": 0
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "unit_price",
+        "required": true,
+        "min": 0,
+        "message": "出货单价不能为空且必须为非负数"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "quantity",
+        "required": true,
+        "min": 0,
+        "message": "数量不能为空且必须为非负整数"
+      }
+    ]
+  }
+}

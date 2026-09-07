@@ -1,0 +1,224 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "products",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "product": [
+          "tenant_code",
+          "status",
+          "product_category",
+          "product_line"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "product",
+        "fieldCode": "domestic_retail_price",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "国内市场零售报价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "oversea_retail_price",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "海外市场零售报价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "product",
+        "fieldCode": "sales_code",
+        "fieldControl": "OPEN",
+        "privacyClass": "SENSITIVE",
+        "reason": "销售代码为内部编码，需全员可见以便业务协同"
+      }
+    ],
+    "authzProjection": {
+      "description": "产品业务对象在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 products BO，投影编码由发布服务根据 boCode 自动派生。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。rowSecurity 声明 DATA 策略候选字段，fieldSecurity 声明 FIELD 策略候选字段，authzProjection 随 products 的 authz-bo-meta-model.schema_json 发布，声明 PIP 可返回的 res.* 属性契约。策略表达式中典型引用方式包括 res.tenant_code、res.status、res.product_category、res.product_line 等。字段控制发布到 PSP 时需将 MASKED/HIDDEN 转换为 MASK/HIDE。",
+      "attributes": [
+        {
+          "code": "product_id",
+          "name": "产品ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "product",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "产品资源唯一标识，供 PIP 按 ID 拉取完整属性集合；不暴露给 ABAC 表达式做条件判断。",
+          "i18nKey": "auth.resource.res_product.attr.product_id",
+          "valueExamples": [
+            "1",
+            "100"
+          ]
+        },
+        {
+          "code": "product_model",
+          "name": "产品型号",
+          "type": "STRING",
+          "source": {
+            "entityCode": "product",
+            "fieldCode": "product_model"
+          },
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "产品型号名称，主要用于展示和审计，不建议作为权限判断条件。",
+          "i18nKey": "auth.resource.res_product.attr.product_model",
+          "valueExamples": [
+            "S6510",
+            "S6930-2C"
+          ]
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "product",
+            "fieldCode": "tenant_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "产品所属租户。典型表达式：sub.tenant_code == res.tenant_code。",
+          "i18nKey": "auth.resource.res_product.attr.tenant_code",
+          "valueExamples": [
+            "gov-default",
+            "ent-default"
+          ]
+        },
+        {
+          "code": "status",
+          "name": "产品状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "product",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "ACTIVE",
+              "label": "启用"
+            },
+            {
+              "value": "INACTIVE",
+              "label": "停用"
+            }
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "产品启用状态。典型表达式：res.status == 'ACTIVE'。",
+          "i18nKey": "auth.resource.res_product.attr.status",
+          "valueExamples": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        },
+        {
+          "code": "product_category",
+          "name": "产品类别",
+          "type": "STRING",
+          "source": {
+            "entityCode": "product",
+            "fieldCode": "product_category"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "SWITCH",
+              "label": "交换机"
+            },
+            {
+              "value": "ROUTER",
+              "label": "路由器"
+            },
+            {
+              "value": "WIRELESS",
+              "label": "无线"
+            },
+            {
+              "value": "SECURITY",
+              "label": "安全"
+            },
+            {
+              "value": "SERVER",
+              "label": "服务器"
+            },
+            {
+              "value": "STORAGE",
+              "label": "存储"
+            },
+            {
+              "value": "CLOUD_COMPUTING",
+              "label": "云计算"
+            },
+            {
+              "value": "SOFTWARE",
+              "label": "软件"
+            },
+            {
+              "value": "SERVICE",
+              "label": "服务"
+            },
+            {
+              "value": "ACCESSORY",
+              "label": "配件"
+            }
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "产品所属类别。典型表达式：res.product_category == 'SWITCH'。product_category 存储编码值如 SWITCH/ROUTER/SERVER 等。",
+          "i18nKey": "auth.resource.res_product.attr.product_category",
+          "valueExamples": [
+            "SWITCH",
+            "ROUTER"
+          ]
+        },
+        {
+          "code": "product_line",
+          "name": "所属产品线",
+          "type": "STRING",
+          "source": {
+            "entityCode": "product",
+            "fieldCode": "product_line"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 60,
+          "displayGroup": "资源属性",
+          "description": "产品所属产品线。典型表达式：contains(sub.product_line_scope, res.product_line)。",
+          "i18nKey": "auth.resource.res_product.attr.product_line",
+          "valueExamples": [
+            "园区交换产品线",
+            "数据中心交换产品"
+          ]
+        }
+      ]
+    }
+  }
+}

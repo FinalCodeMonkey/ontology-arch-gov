@@ -1,0 +1,355 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-targets",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "VERTICAL",
+      "formColumns": 1,
+      "formLabelWidth": 120,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "target",
+        "fieldCode": "id",
+        "displayName": "主键",
+        "sortable": false,
+        "hidden": true,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "owner_type",
+        "displayName": "目标方类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "SELECT",
+        "dictCode": "target_owner_type",
+        "placeholder": "请选择目标方类型",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "owner_id",
+        "displayName": "目标对象",
+        "sortable": false,
+        "columnWidth": 180,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择目标对象",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "refField": "staff_name",
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "owner_name",
+        "displayName": "目标对象名称",
+        "sortable": true,
+        "columnWidth": 180,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "goal_type",
+        "displayName": "目标类型",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "SELECT",
+        "dictCode": "target_type",
+        "placeholder": "请选择目标类型",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "apply_rule",
+        "displayName": "适配规则",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "SELECT",
+        "dictCode": "target_apply_rule",
+        "placeholder": "请选择适配规则",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "target_year",
+        "displayName": "目标年份",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "NUMBER",
+        "placeholder": "如 2026",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "target_month",
+        "displayName": "目标月份",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "1-12，年度规则留空",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "goal_value",
+        "displayName": "目标值",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入目标值",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "remarks",
+        "displayName": "备注",
+        "sortable": false,
+        "columnWidth": 160,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入备注",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "updated_time",
+        "displayName": "更新时间",
+        "sortable": true,
+        "columnWidth": 168,
+        "format": "datetime",
+        "order": 110,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 168,
+        "format": "datetime",
+        "hidden": true,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "hidden": true,
+        "order": 130,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "updated_by",
+        "displayName": "更新人",
+        "sortable": false,
+        "hidden": true,
+        "order": 140,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "tenant_code",
+        "displayName": "租户编码",
+        "sortable": false,
+        "hidden": true,
+        "order": 150,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "is_deleted",
+        "displayName": "删除标记",
+        "sortable": false,
+        "hidden": true,
+        "order": 160,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      }
+    ]
+  }
+}

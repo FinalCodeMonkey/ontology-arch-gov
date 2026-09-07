@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "2.0",
+  "changeNote": "data-domains 首版 bo-info.json",
+  "boCode": "data-domains",
+  "appCode": "crm",
+  "draftVersion": "1.0",
+  "tenantId": "cbg"
+}

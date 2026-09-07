@@ -60,7 +60,7 @@ authz_meta_model.schema_view / UI Model / API Contract / Permission Items
 
 | ruleType | 规则范围 | 典型例子 | 与现有 Fragment 的关系 |
 |----------|----------|----------|--------------------------|
-| `VALIDATION` | 字段级、表单级、导入级校验 | 必填、唯一、长度、枚举、跨字段日期关系 | 可由 `VALIDATION` Fragment 承载或派生到 `RULE` |
+| `COMPLEX_VALIDATION` | 字段级、表单级、导入级校验 | 必填、唯一、长度、枚举、跨字段日期关系 | 可由 `VALIDATION` Fragment 承载或派生到 `RULE` |
 | `STATE` | 状态机、操作前置条件、可编辑性 | `DRAFT` 才允许编辑，`ACTIVE` 才允许归档 | 由 `RULE` 承载，并影响 `OPERATION` 是否可执行 |
 | `DERIVATION` | 计算字段、汇总字段、投影属性 | 从产品清单汇总 `our_stage`、预计销量 | 由 `RULE` 承载，结果可写回 `MODEL` computed 字段或 `SECURITY.authzProjection` |
 | `PERMISSION` | 权限策略、数据范围、字段控制 | 本部门可见、负责人可编辑、金额字段脱敏 | 可由 `SECURITY` Fragment 承载，并派生 PSP 策略模板 |
@@ -216,7 +216,7 @@ MODEL / VALIDATION / SECURITY / RULE / VIEW / OPERATION Fragment
 | 主实体规则 | `isPrimary=true` 必须对应 `aggregateRole=ROOT` |
 | 业务唯一键 | 默认 `{bo_snake}_no`，允许业务覆盖 |
 | 行级安全 | 默认 `rowFallbackScope=NONE` |
-| 原型操作抽取 | 默认要求 `prototypeRefs`，过滤纯 UI utility |
+| 操作识别 | 默认按业务/API 语义维护；原型最多作为离线候选输入，不持久化 `prototypeRefs` |
 
 ## 5. Java 核心片段
 
@@ -296,7 +296,7 @@ public BoSchemaView assemble(GovernanceProfile profile, Map<BoMetaType, JsonNode
 }
 ```
 
-`deriveStandardCrudOperations` 根据 `MODEL.apiConfig`、聚合根策略、子实体策略和 alternate API 自动生成标准 CRUD 虚拟 Operation。`mergeOperations` 以显式 OPERATION Fragment 为优先级：同一路由或同一标准语义被显式声明时，保留显式 Operation 的 `code`、`authzAction`、`prototypeRefs` 和展示配置。
+`deriveStandardCrudOperations` 根据 `MODEL.apiConfig`、聚合根策略、子实体策略和 alternate API 自动生成标准 CRUD 虚拟 Operation。`mergeOperations` 以显式 OPERATION Fragment 为优先级：同一路由或同一标准语义被显式声明时，保留显式 Operation 的 `code`、`authzAction`、展示位置和触发事件等治理信息。
 
 `mergeRuleSubsets` 的职责是把 `VALIDATION`、`SECURITY` 中已经专业化维护的规则投影进统一规则目录，同时保留 `RULE` Fragment 中声明的状态、派生、一致性和自动化规则。合并后的规则目录可用于：
 
@@ -305,39 +305,19 @@ public BoSchemaView assemble(GovernanceProfile profile, Map<BoMetaType, JsonNode
 - Authz 派生：把 `PERMISSION` 类规则映射为 PSP 的 DATA / STATE / ENV / FIELD 策略模板。
 - 运行时执行：由应用服务在事务内执行一致性、状态、派生和自动化规则。
 
-### 5.3.1 Operation 从原型按钮抽取
+### 5.3.1 Operation 识别与原型输入边界
 
-`OPERATION` Fragment 可以从界面原型按钮抽取，但必须区分业务操作和纯 UI 交互。
+`OPERATION` Fragment 以业务/API 语义为准。界面原型按钮最多作为离线候选输入，用于帮助发现可能的业务操作；候选结果必须经过 DDD 聚合边界、API 路径规范、批量语义、返回值规范和权限动作治理后，才能写入 OPERATION Fragment。
 
-| 原型交互 | 是否生成 Operation | 说明 |
-|----------|--------------------|------|
-| 新建场景、导入、导出、编辑场景 | 是 | BO 级或全局业务操作 |
-| 新建产品清单、编辑产品清单、删除产品清单 | 是 | 聚合内子实体操作 |
-| 新增配件、删除配件、年度测算新增行、年度测算删除行 | 是 | 可合并为产品清单维护命令，也可派生成子实体操作 |
-| 竞对调整、保存调整、新建竞争对手、删除竞争对手 | 是 | 竞对年度调整命令 |
-| 新增团队成员、查看、编辑、删除 | 是 | 团队成员子实体操作 |
-| 刷新、列设置、全屏、分页、Tab 切换、年份切换、弹窗关闭 | 否 | UI utility，不进入 BO Operation |
+| 交互/API 行为 | 是否生成 Operation | 说明 |
+|---------------|--------------------|------|
+| 新建、导入、导出、删除、保存修改 | 是 | 标准 CRUD 或数据交换命令 |
+| 打开编辑态且需要编辑 DTO、选项、互斥锁 | 是 | 显式编辑会话 Operation，`authzAction=UPDATE` |
+| 释放/续租编辑锁 | 是 | 有后端副作用，显式声明为 `CUSTOM`，`authzAction=UPDATE` |
+| 提交审批、发布、归档、作废、竞对调整 | 是 | 独立业务命令，按需使用独立 `authzAction` |
+| 打开普通弹窗、Tab 切换、刷新、列设置、全屏、分页、关闭弹窗 | 否 | 纯 UI utility，不进入 BO Operation |
 
-抽取后的 Operation 应保留 `prototypeRefs`，用于追溯按钮来源：
-
-```json
-{
-    "code": "CREATE_TEAM_MEMBER",
-    "name": "新增团队成员",
-    "scope": "ENTITY",
-    "entityCode": "scene_team_member",
-    "prototypeRefs": [
-        {
-            "file": "government/场景管理/场景详情.html",
-            "label": "新增团队成员",
-            "event": "openAtmDialog()",
-            "positionHint": "详情页团队成员 Tab 顶部"
-        }
-    ]
-}
-```
-
-原型按钮是 Operation 候选源，不是最终 API 合同。发布校验仍需根据 DDD 聚合边界、API 路径规范、批量语义和返回值规范进行二次治理。
+OPERATION Fragment 不得持久化原型文件路径、按钮文案、事件函数或 `prototypeRefs`。这些信息如果需要保留，只能存放在外部原型分析报告、需求文档或任务记录中，不进入 BO 元数据和发布态 API 合同。
 
 ### 5.4 发布校验
 
@@ -375,7 +355,7 @@ public void validate(BoSchemaView schemaView) {
 
 ### 5.5 Authz Model 派生
 
-`SECURITY` Fragment 到 PSP 的映射不是单一步骤：`authzProjection` 合并到 `authz_bo_meta_model.schema_json` 中 SCENE 这条 BO 元数据的安全投影，`rowSecurity` 合并进 BO 发布态行级字段，`fieldSecurity` 合并进 BO 发布态字段控制元数据。详细运行时关系见 [security-fragment-psp-mapping.md](security-fragment-psp-mapping.md)。
+`SECURITY` Fragment 到 PSP 的映射不是单一步骤：`authzProjection` 合并到 `authz_bo_meta_model.schema_json` 中 scenes 这条 BO 元数据的安全投影，`rowSecurity` 合并进 BO 发布态行级字段，`fieldSecurity` 合并进 BO 发布态字段控制元数据。详细运行时关系见 [security-fragment-psp-mapping.md](security-fragment-psp-mapping.md)。
 
 ```java
 public AuthzSchemaView deriveAuthzModel(BoSchemaView boSchemaView, SecurityFragment security) {
@@ -451,7 +431,7 @@ public ApiContract deriveApiContract(BoSchemaView schemaView) {
 
 1. 写入 `gov_bo_meta_release`，并设置当前版本。
 2. 更新或插入 `authz_bo_meta_model.schema_json`。
-3. 在 `authz_bo_meta_model.schema_json` 中写入 `RES_SCENE` 安全投影，作为该 BO 元数据的 `res.*` 属性契约。
+3. 在 `authz_bo_meta_model.schema_json` 中写入 `scenes` 安全投影，作为该 BO 元数据的 `res.*` 属性契约。
 4. 派生权限项、UI 模型、API 合同。
 5. 记录审计日志，包含 releaseVersion、checksum、发布人、来源 fragment 版本。
 

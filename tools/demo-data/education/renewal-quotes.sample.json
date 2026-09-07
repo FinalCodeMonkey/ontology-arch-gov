@@ -1,0 +1,28 @@
+{
+  "_scenario": "教育行业续保报价记录",
+  "_scenarioDescription": "深圳职院赢单后续保报价。凯捷网络DC项目续保报价。",
+  "records": [
+    {
+      "id": 1,
+      "inventory_id": 99001,
+      "inventory_no": "INV-EDU-001",
+      "quote_type_code": "RENEWAL",
+      "sales_opportunity_type_code": "RENEWAL",
+      "crm_opportunity_code": "OPP-2026-005",
+      "crm_opportunity_name": "智慧校园二期扩容",
+      "submit_time": "2026-06-10T11:00:00",
+      "submit_status": 1
+    },
+    {
+      "id": 2,
+      "inventory_id": 99002,
+      "inventory_no": "INV-EDU-002",
+      "quote_type_code": "RENEWAL",
+      "sales_opportunity_type_code": "RENEWAL",
+      "crm_opportunity_code": "OPP-2026-001",
+      "crm_opportunity_name": "凯捷网络2026年教育园区网改造项目",
+      "submit_time": "2026-07-01T10:30:00",
+      "submit_status": 1
+    }
+  ]
+}

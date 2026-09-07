@@ -1,0 +1,1897 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "sales-activities",
+  "boName": "销售活动",
+  "description": "销售活动业务对象，采用主从明细聚合建模（主表 crm_customer_visit_record + 子表 crm_customer_visit_follow_up + 子表 customer_visit_team）。记录销售人员对客户的拜访活动，包含拜访客户、拜访时间、拜访场景(scenes BO)、联系人(contacts BO)、活动信息(富文本)、信息分享(存入visit-team-member)、记录人及下一步动作跟进。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/sales-activities",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "FULL_AGGREGATE",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": [
+        "visit-follow-up",
+        "visit-team-member"
+      ]
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "MASTER_DETAIL",
+    "nameField": "visit_subject",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "visit_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "VERTICAL",
+    "formColumns": 1,
+    "formLabelWidth": 120,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "visit-record",
+      "name": "拜访记录主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_customer_visit_record",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键 Snowflake",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "主键",
+            "sortable": false,
+            "hidden": true,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "parent_id",
+          "name": "拜访客户",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "parentId",
+          "columnName": "parent_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "customers",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "customer_name",
+                "localCode": "customer_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "拜访客户不能为空"
+          },
+          "view": {
+            "displayName": "客户",
+            "sortable": false,
+            "hidden": true,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "customers",
+            "refField": "customer_name"
+          }
+        },
+        {
+          "code": "customer_name",
+          "name": "客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerName",
+          "columnName": "customer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "客户名称为业务敏感信息，需按行级数据策略控制可见范围",
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "客户名称",
+            "sortable": true,
+            "columnWidth": 180,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "visit_subject",
+          "name": "拜访主题",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "visitSubject",
+          "columnName": "visit_subject",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "max": 200,
+            "message": "拜访主题不超过200字符"
+          },
+          "view": {
+            "displayName": "拜访主题",
+            "sortable": true,
+            "columnWidth": 200,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入拜访主题",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "visit_time",
+          "name": "拜访时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "visitTime",
+          "columnName": "visit_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "拜访时间不能为空"
+          },
+          "view": {
+            "displayName": "拜访时间",
+            "sortable": true,
+            "columnWidth": 168,
+            "format": "datetime",
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "DATETIME",
+            "placeholder": "请选择拜访时间",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "visit_method",
+          "name": "拜访方式",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "visitMethod",
+          "columnName": "visit_method",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "OFFLINE",
+                "label": "线下拜访"
+              },
+              {
+                "value": "VIDEO",
+                "label": "视频会议"
+              },
+              {
+                "value": "CALL",
+                "label": "电话拜访"
+              },
+              {
+                "value": "OTHER",
+                "label": "其他"
+              }
+            ],
+            "message": "拜访方式必须为 OFFLINE/VIDEO/CALL/OTHER 之一"
+          },
+          "view": {
+            "displayName": "拜访方式",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择拜访方式",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "visit_method"
+          }
+        },
+        {
+          "code": "activity_content",
+          "name": "活动信息",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "activityContent",
+          "columnName": "activity_content",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "活动信息富文本含客户拜访详情，属业务机密，需按行级数据策略控制可见范围",
+          "validation": {
+            "required": true,
+            "message": "活动信息不能为空"
+          },
+          "view": {
+            "displayName": "活动信息富文本",
+            "sortable": false,
+            "hidden": true,
+            "order": 80,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "RICH_TEXT",
+            "placeholder": "请输入活动信息",
+            "queryable": false,
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "activity_plain_text",
+          "name": "活动信息纯文本摘要",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "activityPlainText",
+          "columnName": "activity_plain_text",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 2000
+          },
+          "view": {
+            "displayName": "活动信息",
+            "sortable": false,
+            "columnWidth": 300,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "contact_ids_snapshot",
+          "name": "联系人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "contactIdsSnapshot",
+          "columnName": "contact_ids_snapshot",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": false,
+          "crossBoRef": {
+            "refBoCode": "contacts",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "name",
+                "localCode": "contact_names_display",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "max": 1024
+          },
+          "view": {
+            "displayName": "联系人",
+            "sortable": false,
+            "hidden": true,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "queryable": true,
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "contacts",
+            "refField": "name"
+          }
+        },
+        {
+          "code": "contact_names_display",
+          "name": "联系人名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "contactNamesDisplay",
+          "columnName": "contact_names_display",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false
+        },
+        {
+          "code": "scene_ids_snapshot",
+          "name": "拜访场景",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "sceneIdsSnapshot",
+          "columnName": "scene_ids_snapshot",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "scenes",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "scene_name_customer",
+                "localCode": "scene_names_display",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "max": 512
+          },
+          "view": {
+            "displayName": "拜访场景",
+            "sortable": false,
+            "columnWidth": 150,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请输入拜访场景",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "scenes",
+            "refField": "scene_name_customer"
+          }
+        },
+        {
+          "code": "scene_names_display",
+          "name": "拜访场景名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "sceneNamesDisplay",
+          "columnName": "scene_names_display",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false
+        },
+        {
+          "code": "next_action",
+          "name": "下一步动作",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "nextAction",
+          "columnName": "next_action",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 2000
+          },
+          "view": {
+            "displayName": "下一步动作",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 120,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入下一步动作",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "next_action_updated_time",
+          "name": "下一步动作更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "nextActionUpdatedTime",
+          "columnName": "next_action_updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "动作更新时间",
+            "sortable": true,
+            "columnWidth": 168,
+            "format": "datetime",
+            "order": 130,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "record_user_id",
+          "name": "记录人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "recordUserId",
+          "columnName": "record_user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "record_user_name",
+                "displayRole": "NAME"
+              },
+              {
+                "refFieldCode": "department_code",
+                "localCode": "record_user_department_code",
+                "displayRole": "EXTRA"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "记录人不能为空"
+          },
+          "view": {
+            "displayName": "记录人ID",
+            "sortable": false,
+            "hidden": true,
+            "order": 150,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "record_user_name",
+          "name": "记录人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "recordUserName",
+          "columnName": "record_user_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "记录人",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 140,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "record_user_department_code",
+          "name": "记录人部门编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "recordUserDepartmentCode",
+          "columnName": "record_user_department_code",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false
+        },
+        {
+          "code": "last_modified_user_id",
+          "name": "最近修改人用户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "lastModifiedUserId",
+          "columnName": "last_modified_user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "last_modified_user_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "最近修改人ID",
+            "sortable": false,
+            "hidden": true,
+            "order": 170,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "last_modified_user_name",
+          "name": "最近修改人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "lastModifiedUserName",
+          "columnName": "last_modified_user_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "最近修改人",
+            "sortable": false,
+            "hidden": true,
+            "order": 160,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "删除标记",
+            "sortable": false,
+            "hidden": true,
+            "order": 230,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 168,
+            "format": "datetime",
+            "hidden": true,
+            "order": 180,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新时间",
+            "sortable": false,
+            "hidden": true,
+            "order": 190,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "hidden": true,
+            "order": 200,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新人",
+            "sortable": false,
+            "hidden": true,
+            "order": 210,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "租户编码",
+            "sortable": false,
+            "hidden": true,
+            "order": 220,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "parent_id",
+        "visit_method",
+        "record_user_id",
+        "last_modified_user_id"
+      ],
+      "rowFallbackScope": "NONE"
+    },
+    {
+      "code": "visit-follow-up",
+      "name": "拜访跟进记录",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_customer_visit_follow_up",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "跟进记录主键 Snowflake",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "跟进记录主键",
+            "sortable": false,
+            "hidden": true,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "parent_id",
+          "name": "拜访记录ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "parentId",
+          "columnName": "parent_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "拜访记录ID",
+            "sortable": false,
+            "hidden": true,
+            "order": 20,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "previous_action",
+          "name": "更新前下一步动作",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "previousAction",
+          "columnName": "previous_action",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新前动作",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": false,
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "current_action",
+          "name": "更新后下一步动作",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "currentAction",
+          "columnName": "current_action",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "更新后下一步动作不能为空"
+          },
+          "view": {
+            "displayName": "更新后动作",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "operator_user_id",
+          "name": "跟进人用户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "operatorUserId",
+          "columnName": "operator_user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "operator_user_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "跟进人不能为空"
+          },
+          "view": {
+            "displayName": "跟进人ID",
+            "sortable": false,
+            "hidden": true,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "operator_user_name",
+          "name": "跟进人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "operatorUserName",
+          "columnName": "operator_user_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "跟进人",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "follow_up_time",
+          "name": "跟进时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "followUpTime",
+          "columnName": "follow_up_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "跟进时间",
+            "sortable": true,
+            "columnWidth": 168,
+            "format": "datetime",
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "删除标记",
+            "sortable": false,
+            "hidden": true,
+            "order": 80,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": false,
+            "hidden": true,
+            "order": 90,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新时间",
+            "sortable": false,
+            "hidden": true,
+            "order": 100,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "hidden": true,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新人",
+            "sortable": false,
+            "hidden": true,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "租户编码",
+            "sortable": false,
+            "hidden": true,
+            "order": 130,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "operator_user_id"
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "visit-record",
+      "parentRefField": "parent_id",
+      "routeSegment": "follow-ups",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    },
+    {
+      "code": "visit-team-member",
+      "name": "拜访团队成员",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "customer_visit_team",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "成员关联ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "order": 10,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "visit_id",
+          "name": "拜访记录ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "visitId",
+          "columnName": "visit_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "order": 20,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "customer_id",
+          "name": "客户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customerId",
+          "columnName": "customer_id",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "客户ID不能为空"
+          },
+          "view": {
+            "order": 30,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "user_id",
+          "name": "成员ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "userId",
+          "columnName": "user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "member_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "成员ID不能为空"
+          },
+          "view": {
+            "displayName": "信息分享",
+            "columnWidth": 120,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择信息分享内容（可多选）",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "member_name",
+          "name": "成员姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "memberName",
+          "columnName": "user_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 128
+          },
+          "view": {
+            "displayName": "分享人姓名",
+            "columnWidth": 100,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "member_role",
+          "name": "角色",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "memberRole",
+          "columnName": "member_role",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "CREATOR",
+                "label": "记录人"
+              },
+              {
+                "value": "MEMBER",
+                "label": "团队成员"
+              }
+            ],
+            "message": "团队角色必须为 CREATOR/MEMBER 之一"
+          },
+          "view": {
+            "displayName": "团队角色",
+            "columnWidth": 80,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择角色",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "visit_team_member_role"
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "order": 70,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "order": 80,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "order": 90,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "order": 100,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "order": 110,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "order": 120,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "user_id"
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "visit-record",
+      "parentRefField": "visit_id",
+      "routeSegment": "team",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "录入拜访",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<Map<String, Object>>",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建客户拜访记录，填写拜访主题、时间、方式、活动内容、联系人、场景和下一步动作。API：POST /sales-activities。"
+    },
+    {
+      "code": "UPDATE",
+      "name": "编辑拜访",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "update",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "ROW",
+      "triggerEvent": "OPEN_FORM",
+      "description": "修改拜访记录的拜访主题、时间、方式、活动内容等信息。API：POST /sales-activities/{id}/update。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除拜访",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除拜访记录（is_deleted=1），级联删除跟进记录。API：DELETE /sales-activities/{id}。"
+    },
+    {
+      "code": "FOLLOW_UP",
+      "name": "动作跟进",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "FOLLOW_UP",
+      "httpMethod": "POST",
+      "actionPath": "follow-up",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<Map<String, Object>>",
+      "position": "ROW",
+      "triggerEvent": "OPEN_FORM",
+      "description": "更新拜访记录的下一步动作，同时生成跟进记录（visit-follow-up），记录动作变更历史。API：POST /sales-activities/{id}/follow-up。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "LIST_VISIT_FOLLOW_UP",
+      "name": "查询拜访跟进记录列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_VISIT_FOLLOW_UP",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-follow-up).listProjectionScope",
+      "entityCode": "visit-follow-up"
+    },
+    {
+      "code": "READ_VISIT_FOLLOW_UP",
+      "name": "查看拜访跟进记录详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_VISIT_FOLLOW_UP",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-follow-up).readScope",
+      "entityCode": "visit-follow-up"
+    },
+    {
+      "code": "CREATE_VISIT_FOLLOW_UP",
+      "name": "新建拜访跟进记录",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_VISIT_FOLLOW_UP",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-follow-up).createScope",
+      "entityCode": "visit-follow-up"
+    },
+    {
+      "code": "UPDATE_VISIT_FOLLOW_UP",
+      "name": "更新拜访跟进记录",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_VISIT_FOLLOW_UP",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-follow-up).updateScope",
+      "entityCode": "visit-follow-up"
+    },
+    {
+      "code": "DELETE_VISIT_FOLLOW_UP",
+      "name": "删除拜访跟进记录",
+      "scope": "ENTITY",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_VISIT_FOLLOW_UP",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-follow-up).deleteScope",
+      "entityCode": "visit-follow-up"
+    },
+    {
+      "code": "LIST_VISIT_TEAM_MEMBER",
+      "name": "查询拜访团队成员列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_VISIT_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-team-member).listProjectionScope",
+      "entityCode": "visit-team-member"
+    },
+    {
+      "code": "READ_VISIT_TEAM_MEMBER",
+      "name": "查看拜访团队成员详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_VISIT_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-team-member).readScope",
+      "entityCode": "visit-team-member"
+    },
+    {
+      "code": "CREATE_VISIT_TEAM_MEMBER",
+      "name": "新建拜访团队成员",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_VISIT_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-team-member).createScope",
+      "entityCode": "visit-team-member"
+    },
+    {
+      "code": "UPDATE_VISIT_TEAM_MEMBER",
+      "name": "更新拜访团队成员",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_VISIT_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-team-member).updateScope",
+      "entityCode": "visit-team-member"
+    },
+    {
+      "code": "DELETE_VISIT_TEAM_MEMBER",
+      "name": "删除拜访团队成员",
+      "scope": "ENTITY",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_VISIT_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(visit-team-member).deleteScope",
+      "entityCode": "visit-team-member"
+    }
+  ],
+  "rules": [
+    {
+      "code": "VISIT_CUSTOMER_REF_INTEGRITY",
+      "name": "客户引用完整性",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "关联的客户ID在客户档案中不存在",
+      "description": "拜访记录的 parent_id 引用 customers BO 的 id。保存时校验客户在 customers BO 中存在且未删除。",
+      "crossBoRef": {
+        "refBoCode": "customers",
+        "refFieldCode": "id",
+        "localEntityCode": "visit-record",
+        "localFieldCode": "parent_id"
+      }
+    },
+    {
+      "code": "VISIT_RECORD_USER_REF_INTEGRITY",
+      "name": "记录人引用完整性",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "WARN",
+      "message": "记录人在用户档案中不存在",
+      "description": "拜访记录的 record_user_id 引用 users BO 的 id。保存时校验用户在 users BO 中存在，不存在则记录警告但不阻断。",
+      "crossBoRef": {
+        "refBoCode": "users",
+        "refFieldCode": "user_id",
+        "localEntityCode": "visit-record",
+        "localFieldCode": "record_user_id"
+      }
+    },
+    {
+      "code": "VISIT_FOLLOW_UP_CASCADE_DELETE",
+      "name": "跟进记录级联删除",
+      "ruleType": "CONSISTENCY",
+      "scope": "ENTITY",
+      "trigger": "AFTER_OPERATION",
+      "severity": "INFO",
+      "message": "删除拜访记录时级联删除所有跟进记录",
+      "description": "拜访记录删除时，其关联的所有跟进记录（visit-follow-up）通过 cascadeDelete=true 级联删除，不产生孤儿跟进记录。",
+      "entityCode": "visit-follow-up",
+      "operationCode": "DELETE"
+    },
+    {
+      "code": "VISIT_FOLLOW_UP_PARENT_REF",
+      "name": "跟进记录必须归属拜访记录",
+      "ruleType": "CONSISTENCY",
+      "scope": "ENTITY",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "跟进记录必须归属一个拜访记录",
+      "description": "跟进记录的 parent_id 不能为空，必须指向一个有效的拜访记录。防止产生孤儿跟进记录。",
+      "entityCode": "visit-follow-up",
+      "expression": "parent_id == null",
+      "exprAst": {
+        "type": "isNull",
+        "expr": {
+          "type": "field",
+          "path": "parent_id"
+        }
+      }
+    },
+    {
+      "code": "VISIT_FOLLOW_UP_ACTION_HISTORY",
+      "name": "跟进动作历史记录",
+      "ruleType": "AUTOMATION",
+      "scope": "ENTITY",
+      "trigger": "AFTER_OPERATION",
+      "severity": "INFO",
+      "message": "动作跟进时自动生成跟进历史记录",
+      "description": "执行 FOLLOW_UP 操作时，系统自动将当前 next_action 作为 previous_action、新动作为 current_action，生成 visit-follow-up 跟进记录，并更新 visit-record 的 next_action 和 next_action_updated_time。",
+      "entityCode": "visit-follow-up",
+      "operationCode": "FOLLOW_UP"
+    },
+    {
+      "code": "VISIT_ACTIVITY_CONTENT_REQUIRED",
+      "name": "活动信息必填",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "ENTITY",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "活动信息不能为空",
+      "description": "创建拜访记录时 activity_content（活动信息富文本）为必填字段，不允许提交空内容。",
+      "entityCode": "visit-record",
+      "operationCode": "CREATE",
+      "expression": "activity_content == null || activity_content.trim().isEmpty()",
+      "exprAst": {
+        "type": "logical",
+        "op": "OR",
+        "items": [
+          {
+            "type": "isNull",
+            "expr": {
+              "type": "field",
+              "path": "activity_content"
+            }
+          },
+          {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "activity_content"
+            },
+            "right": {
+              "type": "literal",
+              "value": ""
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:25.132837+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

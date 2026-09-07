@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/action-chain-fragment.schema.json",
+  "title": "BO ACTION_CHAIN fragment — 事件驱动动作链",
+  "description": "声明跨 BO 自动化动作链：触发条件、执行步骤拓扑、幂等策略、失败策略和权限策略。动作链默认异步执行，不扩大原业务事务边界。",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [ACTION_CHAIN Fragment] 章节。",
+  "type": "object",
+  "required": ["chains"],
+  "additionalProperties": false,
+  "properties": {
+    "chains": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；chain.code 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "trigger", "executionMode", "steps"],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "description": "动作链编码，如 OPPORTUNITY_WIN_POST_ACTIONS"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "动作链显示名，如 '商机赢单后置动作链'"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "trigger": {
+            "type": "object",
+            "required": ["type"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["OPERATION_COMPLETED", "ON_STATE_CHANGE", "SCHEDULED", "EVENT_RECEIVED"],
+                "description": "触发类型"
+              },
+              "boCode": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$",
+                "description": "触发 BO。type=OPERATION_COMPLETED/ON_STATE_CHANGE 时必需"
+              },
+              "operationCode": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$",
+                "description": "触发操作 code。type=OPERATION_COMPLETED 时必需"
+              },
+              "eventCode": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$",
+                "description": "外部事件编码。type=EVENT_RECEIVED 时必需"
+              },
+              "cronExpression": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "cron 表达式。type=SCHEDULED 时必需"
+              },
+              "maxCycleLimit": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10000,
+                "default": 1000,
+                "description": "单次定时扫描最大处理对象数。防止全表扫描拖垮数据库"
+              },
+              "fromState": {
+                "type": "string",
+                "description": "源状态。type=ON_STATE_CHANGE 时可选，限定状态变化来源"
+              },
+              "toState": {
+                "type": "string",
+                "description": "目标状态。type=ON_STATE_CHANGE 时可选，限定状态变化目的地"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "type": { "const": "OPERATION_COMPLETED" } },
+                  "required": ["type"]
+                },
+                "then": { "required": ["boCode", "operationCode"] }
+              },
+              {
+                "if": {
+                  "properties": { "type": { "const": "ON_STATE_CHANGE" } },
+                  "required": ["type"]
+                },
+                "then": { "required": ["boCode"] }
+              },
+              {
+                "if": {
+                  "properties": { "type": { "const": "SCHEDULED" } },
+                  "required": ["type"]
+                },
+                "then": { "required": ["cronExpression"] }
+              },
+              {
+                "if": {
+                  "properties": { "type": { "const": "EVENT_RECEIVED" } },
+                  "required": ["type"]
+                },
+                "then": { "required": ["eventCode"] }
+              }
+            ]
+          },
+          "condition": {
+            "type": "object",
+            "description": "可选，动作链执行前置条件。结构化规则 AST。不满足条件时跳过整条链"
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": ["SYNC", "ASYNC"],
+            "default": "ASYNC",
+            "description": "执行模式。SYNC=与触发方同事务执行（慎用），ASYNC=异步执行（默认推荐）"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_\\$\\{\\}:]+$",
+            "description": "幂等键模板。支持 ${boCode} ${objectId} ${operationCode} ${eventTime} 等变量代换"
+          },
+          "maxRetries": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 3,
+            "description": "每步最大重试次数"
+          },
+          "steps": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "description": "动作链步骤列表。发布服务校验拓扑无循环。",
+            "items": {
+              "type": "object",
+              "required": ["code", "name", "stepType", "failurePolicy"],
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]*$",
+                  "description": "步骤编码，链内唯一"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "步骤显示名"
+                },
+                "stepType": {
+                  "type": "string",
+                  "enum": [
+                    "DERIVATION_REFRESH",
+                    "BO_OPERATION",
+                    "STATE_CHANGE",
+                    "NOTIFICATION",
+                    "EXTERNAL_CALL",
+                    "EVENT_PUBLISH",
+                    "SCRIPTLESS_MAPPING"
+                  ],
+                  "description": "步骤类型"
+                },
+                "target": {
+                  "type": "object",
+                  "description": "步骤目标。根据 stepType 选择不同字段",
+                  "additionalProperties": false,
+                  "properties": {
+                    "derivedCode": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]*$",
+                      "description": "派生对象 code。stepType=DERIVATION_REFRESH 时必需"
+                    },
+                    "boCode": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9-]*$",
+                      "description": "目标 BO boCode。stepType=BO_OPERATION/STATE_CHANGE 时必需"
+                    },
+                    "operationCode": {
+                      "type": "string",
+                      "pattern": "^[A-Z][A-Z0-9_]*$",
+                      "description": "目标操作 code。stepType=BO_OPERATION 时必需"
+                    },
+                    "channel": {
+                      "type": "string",
+                      "enum": ["TODO_CENTER", "EMAIL", "SMS", "IN_APP", "WEBHOOK", "WECHAT_WORK"],
+                      "description": "通知渠道。stepType=NOTIFICATION 时有效"
+                    },
+                    "eventCode": {
+                      "type": "string",
+                      "pattern": "^[A-Z][A-Z0-9_]*$",
+                      "description": "事件编码。stepType=EVENT_PUBLISH 时必需"
+                    }
+                  }
+                },
+                "inputMapping": {
+                  "type": "object",
+                  "description": "输入字段映射。key 为目标参数名，value 为源字段路径（支持 ${} 变量代换和 triggerContext 引用）",
+                  "additionalProperties": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                },
+                "dependsOn": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[A-Z][A-Z0-9_]*$"
+                  },
+                  "description": "依赖的前置步骤 code 列表。空数组或不填表示无依赖，与触发事件并发执行",
+                  "default": []
+                },
+                "failurePolicy": {
+                  "type": "string",
+                  "enum": ["FAIL_FAST", "RETRY", "IGNORE", "COMPENSATE", "MANUAL_REVIEW"],
+                  "default": "RETRY",
+                  "description": "失败策略"
+                },
+                "compensateStepCode": {
+                  "type": "string",
+                  "pattern": "^[A-Z][A-Z0-9_]*$",
+                  "description": "补偿步骤 code。仅 failurePolicy=COMPENSATE 时有效"
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": { "stepType": { "const": "DERIVATION_REFRESH" } },
+                    "required": ["stepType"]
+                  },
+                  "then": { "required": ["target"] }
+                },
+                {
+                  "if": {
+                    "properties": { "stepType": { "const": "BO_OPERATION" } },
+                    "required": ["stepType"]
+                  },
+                  "then": { "required": ["target"] }
+                },
+                {
+                  "if": {
+                    "properties": { "stepType": { "const": "EVENT_PUBLISH" } },
+                    "required": ["stepType"]
+                  },
+                  "then": { "required": ["target"] }
+                }
+              ]
+            }
+          },
+          "maxTriggerDepth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 3,
+            "description": "动作链间触发最大深度。防止 A→B→A 循环触发。0 表示禁止链间触发"
+          }
+        }
+      },
+      "default": []
+    }
+  }
+}

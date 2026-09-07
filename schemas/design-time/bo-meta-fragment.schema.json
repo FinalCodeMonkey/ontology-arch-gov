@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "title": "BO meta fragment envelope",
+  "description": "设计态 BO 元数据 Fragment 外壳。content 应按 metaType 分别使用 fragments/*.schema.json 校验。",
+  "$comment": "版本策略详见同级目录下的 VERSIONING.md。",
+  "type": "object",
+  "required": ["tenantId", "appCode", "boCode", "metaType", "draftVersion", "schemaVersion", "content"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "title": "$schema" },
+    "tenantId": { "type": "string", "minLength": 1, "maxLength": 50, "title": "租户标识" },
+    "appCode": { "type": "string", "minLength": 1, "maxLength": 50, "title": "应用代码" },
+    "boCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "title": "本体标识", "description": "BO 标识符（应为 REST 资源路径第一段值，复数小写 kebab-case）或应用级本体标识（_ontology 目录下为 {appCode}-ontology）。发布服务据此派生 PSP bo_code。" },
+    "metaType": { "type": "string", "enum": ["MODEL", "VALIDATION", "SECURITY", "RULE", "VIEW", "OPERATION", "LINK", "DERIVATION", "TEMPORAL", "ACTION_CHAIN"], "title": "元数据类型" },
+    "draftVersion": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+){0,2}$", "title": "草稿版本", "description": "草稿版本号。格式与 schemaVersion 一致，如 0.1、1.0。每次保存草稿时递增。" },
+    "schemaVersion": { "type": "string", "pattern": "^v?[0-9]+(\\.[0-9]+){0,2}$", "title": "Schema 版本", "description": "Fragment schema 格式版本号。当前最新为 2.0；仅当 Fragment schema 结构发生不兼容变更时升级。示例：1.0、2.0、v2.0.0。" },
+    "content": { "type": "object", "title": "内容" },
+    "changeNote": {
+      "type": "array",
+      "description": "变更说明。每条一个要点，发布时拼接为单行。",
+      "items": { "type": "string", "maxLength": 500 },
+      "minItems": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "metaType": { "const": "MODEL" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/model-fragment.schema.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "VALIDATION" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/validation-fragment.schema.v3.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "SECURITY" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/security-fragment.schema.v3.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "RULE" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/rule-fragment.schema.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "VIEW" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/view-fragment.schema.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "OPERATION" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/operation-fragment.schema.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "LINK" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/link-fragment.schema.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "DERIVATION" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/derivation-fragment.schema.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "TEMPORAL" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/temporal-fragment.schema.json" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "metaType": { "const": "ACTION_CHAIN" } },
+        "required": ["metaType"]
+      },
+      "then": {
+        "properties": {
+          "content": { "$ref": "fragments/action-chain-fragment.schema.json" }
+        }
+      }
+    }
+  ]
+}

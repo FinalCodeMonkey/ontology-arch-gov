@@ -1,0 +1,103 @@
+/* ═══════════════════════════════════════════════════════════════════
+   EAP Enterprise IDE Workspace Design — Shared CSS Variables
+   Used by: bo-ontology-graph.html, bo-metadata-editor.html
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  --bg-base:       #09090b;
+  --bg-surface:    #18181b;
+  --bg-elevated:   #27272a;
+  --border-subtle: #27272a;
+  --border-strong: #3f3f46;
+  --text-primary:  #f4f4f5;
+  --text-secondary:#a1a1aa;
+  --text-tertiary: #71717a;
+  --accent:        #3b82f6;
+  --accent-dim:    rgba(59,130,246,0.15);
+  --success:       #10b981;
+  --warning:       #f59e0b;
+  --danger:        #ef4444;
+  --info:          #0ea5e9;
+  --purple:        #8b5cf6;
+  --cross-bo:      #f59e0b;
+  --cross-bo-display: #fbbf24;
+  --header-h:      48px;
+  --footer-h:      28px;
+  --panel-w:       480px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; overflow: hidden; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg-base); color: var(--text-primary);
+  height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+  -webkit-font-smoothing: antialiased; font-size: 13px;
+}
+
+/* ── Shared layout ── */
+.app-header {
+  height: var(--header-h); background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-strong); display: flex;
+  align-items: center; padding: 0 16px; z-index: 50; flex-shrink: 0;
+  justify-content: space-between;
+}
+.app-footer {
+  height: var(--footer-h); background: var(--accent); color: #fff;
+  display: flex; align-items: center; padding: 0 16px; font-size: 11px;
+  justify-content: space-between; z-index: 50; flex-shrink: 0; font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 13px; letter-spacing: 0.5px; }
+.brand-badge { background: var(--text-primary); color: var(--bg-base); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+/* ── Shared buttons ── */
+.btn {
+  padding: 5px 12px; border: 1px solid var(--border-strong); border-radius: 6px;
+  background: var(--bg-base); color: var(--text-primary); cursor: pointer;
+  font-size: 12px; font-weight: 500; transition: all .2s;
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.btn:hover { background: var(--bg-elevated); border-color: var(--text-tertiary); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff !important; }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-success { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.3); color: #34d399; }
+.btn-danger { color: #fca5a5; }
+.btn-danger:hover { background: rgba(239,68,68,.1); color: #f87171; }
+.btn-outline { border-color: var(--border-strong); }
+.btn-icon-text {
+  background: var(--bg-base); color: var(--text-primary); border: 1px solid var(--border-strong);
+  padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex;
+  align-items: center; gap: 6px; font-size: 12px; font-weight: 500; transition: all 0.2s;
+}
+.btn-icon-text:hover { background: var(--accent-dim); color: #fff; border-color: var(--accent); }
+
+/* ── Shared modals ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(2px);
+  z-index: 9999; display: flex; align-items: center; justify-content: center;
+  opacity: 1; transition: opacity .2s;
+}
+.modal-overlay.hidden { opacity: 0; pointer-events: none; }
+.modal-box {
+  background: var(--bg-surface); border: 1px solid var(--border-strong);
+  border-radius: 8px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+}
+.modal-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--border-strong);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.modal-close, .modal-close-btn {
+  background: none; border: none; color: var(--text-tertiary); cursor: pointer; padding: 4px 8px;
+}
+.modal-close:hover, .modal-close-btn:hover { color: var(--text-primary); }
+.modal-footer {
+  padding: 14px 20px; border-top: 1px solid var(--border-strong);
+  display: flex; justify-content: flex-end; gap: 8px;
+  background: var(--bg-base); border-radius: 0 0 8px 8px;
+}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }

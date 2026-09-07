@@ -1,0 +1,139 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "data-domains",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "ALL",
+      "entriesByEntity": {
+        "authz-data-domain": [
+          "tenant_id",
+          "app_code",
+          "level_type",
+          "domain_code",
+          "is_deleted"
+        ]
+      }
+    },
+    "fieldSecurity": [],
+    "authzProjection": {
+      "description": "数据领域在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-data-domain.id + act_code 定位 data-domains BO。",
+      "usageNote": "用于数据权限、列表行级过滤。策略表达式中典型引用包括 res.tenant_id、res.app_code、res.level_type、res.domain_code 等。",
+      "attributes": [
+        {
+          "code": "data_domain_id",
+          "name": "数据领域ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "authz-data-domain",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "数据领域唯一标识。",
+          "i18nKey": "auth.resource.res_data_domain.attr.data_domain_id"
+        },
+        {
+          "code": "domain_code",
+          "name": "领域编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-data-domain",
+            "fieldCode": "domain_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "领域编码，全局唯一。典型表达式：res.domain_code == 'SALES'。",
+          "i18nKey": "auth.resource.res_data_domain.attr.domain_code"
+        },
+        {
+          "code": "domain_name",
+          "name": "领域名称",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-data-domain",
+            "fieldCode": "domain_name"
+          },
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "基本标识",
+          "description": "领域名称，主要用于展示。",
+          "i18nKey": "auth.resource.res_data_domain.attr.domain_name"
+        },
+        {
+          "code": "level_type",
+          "name": "层级类型",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-data-domain",
+            "fieldCode": "level_type"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 40,
+          "displayGroup": "层级信息",
+          "description": "层级类型。典型表达式：res.level_type == 'SUBJECT'。",
+          "i18nKey": "auth.resource.res_data_domain.attr.level_type",
+          "allowedValues": [
+            { "value": "SUBJECT_GROUP", "label": "主题域分组" },
+            { "value": "SUBJECT", "label": "主题域" },
+            { "value": "SUB_SUBJECT", "label": "主题子域" }
+          ]
+        },
+        {
+          "code": "tenant_id",
+          "name": "租户标识",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-data-domain",
+            "fieldCode": "tenant_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 50,
+          "displayGroup": "租户隔离",
+          "description": "租户隔离标识。典型表达式：res.tenant_id == sub.tenant_id。",
+          "i18nKey": "auth.resource.res_data_domain.attr.tenant_id"
+        },
+        {
+          "code": "app_code",
+          "name": "应用代码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-data-domain",
+            "fieldCode": "app_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 60,
+          "displayGroup": "租户隔离",
+          "description": "应用代码。典型表达式：res.app_code == 'crm'。",
+          "i18nKey": "auth.resource.res_data_domain.attr.app_code"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "data-domains 首版 SECURITY Fragment",
+    "无敏感字段，fieldSecurity 为空数组（已审慎确认）",
+    "行级过滤字段包含 tenant_id、app_code、level_type、domain_code",
+    "fallbackScope=ALL，未命中数据策略时默认可见全部",
+    "authzProjection 派生 6 个资源属性，level_type 使用 allowedValues 枚举"
+  ]
+}

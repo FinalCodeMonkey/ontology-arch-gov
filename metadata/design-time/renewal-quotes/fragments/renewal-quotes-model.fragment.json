@@ -1,0 +1,243 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "renewal-quotes",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "renewal-quotes",
+    "boName": "续保报价提交记录",
+    "description": "续保报价提交记录业务对象，单表建模（SINGLE）。记录设备盘点单生成的续保报价提交到 CRM 系统的记录，包含报价类型、销售机会类型、CRM 回写状态等。通过 parent_id 关联设备盘点单（device-inventories BO）。PSP 中 bo_code 为 renewal-quotes。",
+    "apiConfig": {
+      "resourcePath": "/renewal-quotes",
+      "idField": "id",
+      "idType": "LONG",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "quote_type_code",
+      "statusField": "submit_status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "submit_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "renewal-quote",
+        "name": "续保报价提交记录",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_renewal_quote",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "inventory_id",
+            "fieldName": "inventoryId",
+            "columnName": "parent_id",
+            "name": "关联盘点单ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "device-inventories",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "inventory_no",
+                  "localCode": "inventory_no",
+                  "displayRole": "BUSINESS_KEY"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "BUSINESS_FLOW"
+            },
+            "filterable": true
+          },
+          {
+            "code": "inventory_no",
+            "fieldName": "inventoryNo",
+            "name": "盘点单编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": true
+          },
+          {
+            "code": "quote_type_code",
+            "fieldName": "quoteTypeCode",
+            "columnName": "quote_type_code",
+            "name": "报价类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "sales_opportunity_type_code",
+            "fieldName": "salesOpportunityTypeCode",
+            "columnName": "sales_opportunity_type_code",
+            "name": "销售机会类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "crm_opportunity_code",
+            "fieldName": "crmOpportunityCode",
+            "columnName": "crm_opportunity_code",
+            "name": "CRM业务机会编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "crm_opportunity_name",
+            "fieldName": "crmOpportunityName",
+            "columnName": "crm_opportunity_name",
+            "name": "CRM业务机会名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "submit_time",
+            "fieldName": "submitTime",
+            "columnName": "submit_time",
+            "name": "提交时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "callback_time",
+            "fieldName": "callbackTime",
+            "columnName": "callback_time",
+            "name": "CRM回写时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "submit_status",
+            "fieldName": "submitStatus",
+            "columnName": "submit_status",
+            "name": "提交状态",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true
+          },
+          {
+            "code": "fail_reason",
+            "fieldName": "failReason",
+            "columnName": "fail_reason",
+            "name": "失败原因",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "续保报价提交记录 BO 首版 MODEL Fragment",
+    "parent_id 列映射为 code=inventory_id（语义化命名），CROSS_BO_REF → device-inventories.id",
+    "inventory_no 为 CROSS_BO_DISPLAY（redundant=false，DDL 中无此列）",
+    "crm_opportunity_code/name 暂作 NORMAL（CRM 系统外部编码，非本平台 BO 引用）",
+    "submit_status 为 STATUS"
+  ]
+}

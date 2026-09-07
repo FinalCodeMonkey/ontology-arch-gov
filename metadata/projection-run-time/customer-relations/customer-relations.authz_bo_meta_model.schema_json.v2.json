@@ -1,0 +1,3670 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='customer-relations'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'customer-relations'",
+    "generated_from": "customer-relations.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.508476+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "customer-relation",
+        "name": "客户主实体",
+        "isPrimary": true,
+        "tableName": "crm_customer_relation",
+        "rowLevelRuleEntries": [
+          "customer_id",
+          "owner_user_id",
+          "department_code",
+          "region",
+          "status",
+          "billing_province",
+          "billing_city",
+          "latest_visitor_id",
+          "responsible_pre_sales_id",
+          "service_sales_id"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "customer_id",
+            "name": "关联客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "customerId",
+            "columnName": "customer_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "owner_user_id",
+            "name": "客户所有人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "ownerUserId",
+            "columnName": "owner_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "owner_user_name",
+            "name": "客户所有人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "ownerUserName",
+            "columnName": "owner_user_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "department_code",
+            "name": "二级部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentCode",
+            "columnName": "department_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "department_name",
+            "name": "二级部门/大区/BG",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "departmentName",
+            "columnName": "department_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "region",
+            "name": "区域",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "region",
+            "columnName": "region",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "status",
+            "name": "审批状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "latest_visitor_id",
+            "name": "最新跟进人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "latestVisitorId",
+            "columnName": "latest_visitor_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "latest_visit_time",
+            "name": "最近拜访时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "latestVisitTime",
+            "columnName": "latest_visit_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "responsible_pre_sales_id",
+            "name": "客户责任售前用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "responsiblePreSalesId",
+            "columnName": "responsible_pre_sales_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "responsible_pre_sales_name",
+            "name": "客户责任售前姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "responsiblePreSalesName",
+            "columnName": "responsible_pre_sales_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "service_sales_id",
+            "name": "服务销售用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "serviceSalesId",
+            "columnName": "service_sales_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "service_sales_name",
+            "name": "服务销售姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "serviceSalesName",
+            "columnName": "service_sales_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remarks",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remarks",
+            "columnName": "remarks",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "billing_province",
+            "name": "开单省份",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "billingProvince",
+            "columnName": "billing_province",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "billing_city",
+            "name": "开单城市",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "billingCity",
+            "columnName": "billing_city",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "displayFieldMappings": {
+          "customer_name": {
+            "code": "customer_name",
+            "name": "客户全称",
+            "type": "STRING",
+            "fieldName": "customerName",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "customer_id",
+            "sourceRefColumnName": "customer_id",
+            "refBoCode": "customers",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "customer",
+            "refTableName": "crm_customer",
+            "refPkColumnName": "id",
+            "refFieldCode": "customer_name",
+            "refColumnName": "customer_name",
+            "sourceBoCode": "customer-relations"
+          },
+          "customer_no": {
+            "code": "customer_no",
+            "name": "客户业务编号",
+            "type": "STRING",
+            "fieldName": "customerBizNo",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "customer_id",
+            "sourceRefColumnName": "customer_id",
+            "refBoCode": "customers",
+            "refPkFieldCode": "id",
+            "displayRole": "BUSINESS_KEY",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "customer",
+            "refTableName": "crm_customer",
+            "refPkColumnName": "id",
+            "refFieldCode": "customer_no",
+            "refColumnName": "biz_no",
+            "sourceBoCode": "customer-relations"
+          },
+          "primary_department_name": {
+            "code": "primary_department_name",
+            "name": "所属部门",
+            "type": "STRING",
+            "fieldName": "primaryDepartmentName",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "department_code",
+            "sourceRefColumnName": "department_code",
+            "refBoCode": "orgs",
+            "refPkFieldCode": "department_code",
+            "displayRole": "EXTRA",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-org",
+            "refTableName": "dap_sys_org",
+            "refPkColumnName": "department_code",
+            "refFieldCode": "parent_department_name",
+            "refColumnName": "parent_department_name",
+            "sourceBoCode": "customer-relations"
+          },
+          "latest_visitor_name": {
+            "code": "latest_visitor_name",
+            "name": "最新跟进人姓名",
+            "type": "STRING",
+            "fieldName": "latestVisitorName",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "latest_visitor_id",
+            "sourceRefColumnName": "latest_visitor_id",
+            "refBoCode": "users",
+            "refPkFieldCode": "user_id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "dap-sys-user",
+            "refTableName": "dap_sys_user",
+            "refPkColumnName": "user_id",
+            "refFieldCode": "staff_name",
+            "refColumnName": "staff_name",
+            "sourceBoCode": "customer-relations"
+          },
+          "customer_primary_customer_name": {
+            "code": "customer_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "customer_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "customer_fop_customer_name": {
+            "code": "customer_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "customer_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-team-member",
+        "name": "客户团队成员",
+        "isPrimary": false,
+        "tableName": "crm_customer_team_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "团队成员用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permission",
+            "columnName": "permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "related_teams",
+            "name": "关联模块团队",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "pagePermission",
+            "columnName": "page_permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remarks",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "team-members",
+        "parentEntityCode": "customer-relation",
+        "displayFieldMappings": {
+          "parent_customer_name": {
+            "code": "parent_customer_name",
+            "name": "客户主实体 / 客户全称",
+            "type": "STRING",
+            "fieldName": "parent_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户全称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-team-member",
+                "fromTableName": "crm_customer_team_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_customer_no": {
+            "code": "parent_customer_no",
+            "name": "客户主实体 / 客户业务编号",
+            "type": "STRING",
+            "fieldName": "parent_customer_no",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户业务编号"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-team-member",
+                "fromTableName": "crm_customer_team_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_no",
+              "columnName": "biz_no"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_primary_department_name": {
+            "code": "parent_primary_department_name",
+            "name": "客户主实体 / 所属部门",
+            "type": "STRING",
+            "fieldName": "parent_primary_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "所属部门"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-team-member",
+                "fromTableName": "crm_customer_team_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "department_code",
+                "fromRefColumnName": "department_code",
+                "toBoCode": "orgs",
+                "toEntityCode": "dap-sys-org",
+                "toTableName": "dap_sys_org",
+                "toPkFieldCode": "department_code",
+                "toPkColumnName": "department_code"
+              }
+            ],
+            "target": {
+              "boCode": "orgs",
+              "entityCode": "dap-sys-org",
+              "tableName": "dap_sys_org",
+              "fieldCode": "parent_department_name",
+              "columnName": "parent_department_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_latest_visitor_name": {
+            "code": "parent_latest_visitor_name",
+            "name": "客户主实体 / 最新跟进人姓名",
+            "type": "STRING",
+            "fieldName": "parent_latest_visitor_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "最新跟进人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-team-member",
+                "fromTableName": "crm_customer_team_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "latest_visitor_id",
+                "fromRefColumnName": "latest_visitor_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-competition",
+        "name": "客户竞争信息",
+        "isPrimary": false,
+        "tableName": "crm_customer_competition",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联根实体ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "customer_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "competitor_id",
+            "name": "竞争对手ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "competitorId",
+            "columnName": "competitor_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "strategic_intent",
+            "name": "战略意图",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "strategicIntent",
+            "columnName": "strategic_intent",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "recent_action_product_tech",
+            "name": "近期动作-产品技术",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "recentActionProductTech",
+            "columnName": "recent_action_product_tech",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "recent_action_business_supply",
+            "name": "近期动作-商务供应",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "recentActionBusinessSupply",
+            "columnName": "recent_action_business_supply",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "recent_action_quality_service",
+            "name": "近期动作-质量服务",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "recentActionQualityService",
+            "columnName": "recent_action_quality_service",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "competitions",
+        "parentEntityCode": "customer-relation",
+        "displayFieldMappings": {
+          "competitor_name": {
+            "code": "competitor_name",
+            "name": "竞争对手名称",
+            "type": "STRING",
+            "fieldName": "competitorName",
+            "mappingKind": "DIRECT_DISPLAY_REF",
+            "sourceRefCode": "competitor_id",
+            "sourceRefColumnName": "competitor_id",
+            "refBoCode": "competitors",
+            "refPkFieldCode": "id",
+            "displayRole": "NAME",
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "refEntityCode": "competitor",
+            "refTableName": "crm_master_competitor",
+            "refPkColumnName": "id",
+            "refFieldCode": "competitor_name",
+            "refColumnName": "competitor_name",
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_customer_name": {
+            "code": "parent_customer_name",
+            "name": "客户主实体 / 客户全称",
+            "type": "STRING",
+            "fieldName": "parent_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户全称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition",
+                "fromTableName": "crm_customer_competition",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_customer_no": {
+            "code": "parent_customer_no",
+            "name": "客户主实体 / 客户业务编号",
+            "type": "STRING",
+            "fieldName": "parent_customer_no",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户业务编号"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition",
+                "fromTableName": "crm_customer_competition",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_no",
+              "columnName": "biz_no"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_primary_department_name": {
+            "code": "parent_primary_department_name",
+            "name": "客户主实体 / 所属部门",
+            "type": "STRING",
+            "fieldName": "parent_primary_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "所属部门"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition",
+                "fromTableName": "crm_customer_competition",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "department_code",
+                "fromRefColumnName": "department_code",
+                "toBoCode": "orgs",
+                "toEntityCode": "dap-sys-org",
+                "toTableName": "dap_sys_org",
+                "toPkFieldCode": "department_code",
+                "toPkColumnName": "department_code"
+              }
+            ],
+            "target": {
+              "boCode": "orgs",
+              "entityCode": "dap-sys-org",
+              "tableName": "dap_sys_org",
+              "fieldCode": "parent_department_name",
+              "columnName": "parent_department_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_latest_visitor_name": {
+            "code": "parent_latest_visitor_name",
+            "name": "客户主实体 / 最新跟进人姓名",
+            "type": "STRING",
+            "fieldName": "parent_latest_visitor_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "最新跟进人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition",
+                "fromTableName": "crm_customer_competition",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "latest_visitor_id",
+                "fromRefColumnName": "latest_visitor_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-competition-member",
+        "name": "竞争信息团队成员",
+        "isPrimary": false,
+        "tableName": "crm_customer_competition_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联竞争信息ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permission",
+            "columnName": "permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "competition-members",
+        "parentEntityCode": "customer-competition",
+        "displayFieldMappings": {
+          "parent_competitor_name": {
+            "code": "parent_competitor_name",
+            "name": "客户竞争信息 / 竞争对手名称",
+            "type": "STRING",
+            "fieldName": "parent_competitor_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户竞争信息",
+              "竞争对手名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition-member",
+                "fromTableName": "crm_customer_competition_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-competition",
+                "toTableName": "crm_customer_competition",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition",
+                "fromTableName": "crm_customer_competition",
+                "fromRefCode": "competitor_id",
+                "fromRefColumnName": "competitor_id",
+                "toBoCode": "competitors",
+                "toEntityCode": "competitor",
+                "toTableName": "crm_master_competitor",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "competitors",
+              "entityCode": "competitor",
+              "tableName": "crm_master_competitor",
+              "fieldCode": "competitor_name",
+              "columnName": "competitor_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_parent_customer_id": {
+            "code": "parent_parent_customer_id",
+            "name": "所属客户ID",
+            "type": "LONG",
+            "fieldName": "parent_parent_customer_id",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户竞争信息",
+              "所属客户ID"
+            ],
+            "operators": [
+              "EQ",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition-member",
+                "fromTableName": "crm_customer_competition_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-competition",
+                "toTableName": "crm_customer_competition",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition",
+                "fromTableName": "crm_customer_competition",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customer-relations",
+              "entityCode": "customer-relation",
+              "tableName": "crm_customer_relation",
+              "fieldCode": "customer_id",
+              "columnName": "customer_id"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-competition-sale",
+        "name": "竞对产品销量",
+        "isPrimary": false,
+        "tableName": "crm_customer_competition_sale",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联竞争信息ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "sort_no",
+            "name": "排序号",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "sortNo",
+            "columnName": "sort_no",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "sales_year",
+            "name": "年份",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "salesYear",
+            "columnName": "sales_year",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_category",
+            "name": "销售产品大类",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "productCategory",
+            "columnName": "product_category",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_name",
+            "name": "典型产品名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "productName",
+            "columnName": "product_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "annual_sales",
+            "name": "年度销量",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "annualSales",
+            "columnName": "annual_sales",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "next_year_target",
+            "name": "下一年度目标",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "nextYearTarget",
+            "columnName": "next_year_target",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "competition-sales",
+        "parentEntityCode": "customer-competition",
+        "displayFieldMappings": {
+          "parent_competitor_name": {
+            "code": "parent_competitor_name",
+            "name": "客户竞争信息 / 竞争对手名称",
+            "type": "STRING",
+            "fieldName": "parent_competitor_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户竞争信息",
+              "竞争对手名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition-sale",
+                "fromTableName": "crm_customer_competition_sale",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-competition",
+                "toTableName": "crm_customer_competition",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-competition",
+                "fromTableName": "crm_customer_competition",
+                "fromRefCode": "competitor_id",
+                "fromRefColumnName": "competitor_id",
+                "toBoCode": "competitors",
+                "toEntityCode": "competitor",
+                "toTableName": "crm_master_competitor",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "competitors",
+              "entityCode": "competitor",
+              "tableName": "crm_master_competitor",
+              "fieldCode": "competitor_name",
+              "columnName": "competitor_name"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-industry-strategy",
+        "name": "客户业务和战略",
+        "isPrimary": false,
+        "tableName": "crm_customer_industry_strategy",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联根实体ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "customer_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_current",
+            "name": "是否当前版本",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isCurrent",
+            "columnName": "is_current",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "main_product",
+            "name": "主要产品",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "mainProduct",
+            "columnName": "main_product",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "revenue_data",
+            "name": "营收数据",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "revenueData",
+            "columnName": "revenue_data",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "gross_margin_data",
+            "name": "毛利率数据",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "grossMarginData",
+            "columnName": "gross_margin_data",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "corp_strategy",
+            "name": "公司战略",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "corpStrategy",
+            "columnName": "corp_strategy",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "ai_strategy",
+            "name": "AI战略",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "aiStrategy",
+            "columnName": "ai_strategy",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "infra_plan",
+            "name": "基础设施投资计划",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "infraPlan",
+            "columnName": "infra_plan",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "version_no",
+            "name": "版本号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "versionNo",
+            "columnName": "version_no",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "version_remark",
+            "name": "版本说明",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "versionRemark",
+            "columnName": "version_remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "industry-strategies",
+        "parentEntityCode": "customer-relation",
+        "displayFieldMappings": {
+          "parent_customer_name": {
+            "code": "parent_customer_name",
+            "name": "客户主实体 / 客户全称",
+            "type": "STRING",
+            "fieldName": "parent_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户全称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-industry-strategy",
+                "fromTableName": "crm_customer_industry_strategy",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_customer_no": {
+            "code": "parent_customer_no",
+            "name": "客户主实体 / 客户业务编号",
+            "type": "STRING",
+            "fieldName": "parent_customer_no",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户业务编号"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-industry-strategy",
+                "fromTableName": "crm_customer_industry_strategy",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_no",
+              "columnName": "biz_no"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_primary_department_name": {
+            "code": "parent_primary_department_name",
+            "name": "客户主实体 / 所属部门",
+            "type": "STRING",
+            "fieldName": "parent_primary_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "所属部门"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-industry-strategy",
+                "fromTableName": "crm_customer_industry_strategy",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "department_code",
+                "fromRefColumnName": "department_code",
+                "toBoCode": "orgs",
+                "toEntityCode": "dap-sys-org",
+                "toTableName": "dap_sys_org",
+                "toPkFieldCode": "department_code",
+                "toPkColumnName": "department_code"
+              }
+            ],
+            "target": {
+              "boCode": "orgs",
+              "entityCode": "dap-sys-org",
+              "tableName": "dap_sys_org",
+              "fieldCode": "parent_department_name",
+              "columnName": "parent_department_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_latest_visitor_name": {
+            "code": "parent_latest_visitor_name",
+            "name": "客户主实体 / 最新跟进人姓名",
+            "type": "STRING",
+            "fieldName": "parent_latest_visitor_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "最新跟进人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-industry-strategy",
+                "fromTableName": "crm_customer_industry_strategy",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "latest_visitor_id",
+                "fromRefColumnName": "latest_visitor_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-industry-strategy-member",
+        "name": "业务和战略团队成员",
+        "isPrimary": false,
+        "tableName": "crm_customer_industry_strategy_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联业务和战略ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permission",
+            "columnName": "permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "strategy-members",
+        "parentEntityCode": "customer-industry-strategy",
+        "displayFieldMappings": {
+          "parent_parent_customer_id": {
+            "code": "parent_parent_customer_id",
+            "name": "所属客户ID",
+            "type": "LONG",
+            "fieldName": "parent_parent_customer_id",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户业务和战略",
+              "所属客户ID"
+            ],
+            "operators": [
+              "EQ",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-industry-strategy-member",
+                "fromTableName": "crm_customer_industry_strategy_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-industry-strategy",
+                "toTableName": "crm_customer_industry_strategy",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-industry-strategy",
+                "fromTableName": "crm_customer_industry_strategy",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customer-relations",
+              "entityCode": "customer-relation",
+              "tableName": "crm_customer_relation",
+              "fieldCode": "customer_id",
+              "columnName": "customer_id"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-industry-biz",
+        "name": "核心业务明细",
+        "isPrimary": false,
+        "tableName": "crm_customer_industry_biz",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联业务和战略ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "sort_no",
+            "name": "排序号",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "sortNo",
+            "columnName": "sort_no",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "biz_name",
+            "name": "核心业务名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "bizName",
+            "columnName": "biz_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "biz_result",
+            "name": "经营成果",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "bizResult",
+            "columnName": "biz_result",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "industry-biz",
+        "parentEntityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "customer-infra-architecture",
+        "name": "客户基础设施架构",
+        "isPrimary": false,
+        "tableName": "crm_customer_infra_architecture",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联根实体ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "customer_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "arch_name",
+            "name": "架构名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "archName",
+            "columnName": "arch_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "arch_category",
+            "name": "通算/智算架构",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "archCategory",
+            "columnName": "arch_category",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "server_info",
+            "name": "服务器",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "serverInfo",
+            "columnName": "server_info",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "nic_info",
+            "name": "网卡",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "nicInfo",
+            "columnName": "nic_info",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "network_info",
+            "name": "网络",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "networkInfo",
+            "columnName": "network_info",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "module_info",
+            "name": "模块",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "moduleInfo",
+            "columnName": "module_info",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "diagram_file_id",
+            "name": "架构图文件ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "diagramFileId",
+            "columnName": "diagram_file_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "diagram_file_name",
+            "name": "架构图文件名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "diagramFileName",
+            "columnName": "diagram_file_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "pod_usage",
+            "name": "单POD用量",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "podUsage",
+            "columnName": "pod_usage",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "pod_count",
+            "name": "POD数量",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "podCount",
+            "columnName": "pod_count",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "shortlist_date",
+            "name": "完成入围时间",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "shortlistDate",
+            "columnName": "shortlist_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "gray_date",
+            "name": "灰度时间",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "grayDate",
+            "columnName": "gray_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "mass_production_date",
+            "name": "量产时间",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "massProductionDate",
+            "columnName": "mass_production_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "eol_date",
+            "name": "EOL时间",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "eolDate",
+            "columnName": "eol_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "infra-architectures",
+        "parentEntityCode": "customer-relation",
+        "displayFieldMappings": {
+          "parent_customer_name": {
+            "code": "parent_customer_name",
+            "name": "客户主实体 / 客户全称",
+            "type": "STRING",
+            "fieldName": "parent_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户全称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-infra-architecture",
+                "fromTableName": "crm_customer_infra_architecture",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_customer_no": {
+            "code": "parent_customer_no",
+            "name": "客户主实体 / 客户业务编号",
+            "type": "STRING",
+            "fieldName": "parent_customer_no",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "客户业务编号"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-infra-architecture",
+                "fromTableName": "crm_customer_infra_architecture",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_no",
+              "columnName": "biz_no"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_primary_department_name": {
+            "code": "parent_primary_department_name",
+            "name": "客户主实体 / 所属部门",
+            "type": "STRING",
+            "fieldName": "parent_primary_department_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "所属部门"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-infra-architecture",
+                "fromTableName": "crm_customer_infra_architecture",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "department_code",
+                "fromRefColumnName": "department_code",
+                "toBoCode": "orgs",
+                "toEntityCode": "dap-sys-org",
+                "toTableName": "dap_sys_org",
+                "toPkFieldCode": "department_code",
+                "toPkColumnName": "department_code"
+              }
+            ],
+            "target": {
+              "boCode": "orgs",
+              "entityCode": "dap-sys-org",
+              "tableName": "dap_sys_org",
+              "fieldCode": "parent_department_name",
+              "columnName": "parent_department_name"
+            },
+            "sourceBoCode": "customer-relations"
+          },
+          "parent_latest_visitor_name": {
+            "code": "parent_latest_visitor_name",
+            "name": "客户主实体 / 最新跟进人姓名",
+            "type": "STRING",
+            "fieldName": "parent_latest_visitor_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "最新跟进人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-infra-architecture",
+                "fromTableName": "crm_customer_infra_architecture",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-relation",
+                "fromTableName": "crm_customer_relation",
+                "fromRefCode": "latest_visitor_id",
+                "fromRefColumnName": "latest_visitor_id",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      },
+      {
+        "code": "customer-infra-architecture-member",
+        "name": "客户基础设施架构团队成员",
+        "isPrimary": false,
+        "tableName": "crm_customer_infra_architecture_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "关联基础设施架构ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permission",
+            "columnName": "permission",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "infra-architecture-members",
+        "parentEntityCode": "customer-infra-architecture",
+        "displayFieldMappings": {
+          "parent_parent_customer_id": {
+            "code": "parent_parent_customer_id",
+            "name": "所属客户ID",
+            "type": "LONG",
+            "fieldName": "parent_parent_customer_id",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户基础设施架构",
+              "所属客户ID"
+            ],
+            "operators": [
+              "EQ",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-infra-architecture-member",
+                "fromTableName": "crm_customer_infra_architecture_member",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "parent_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-infra-architecture",
+                "toTableName": "crm_customer_infra_architecture",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "PARENT_REF",
+                "fromBoCode": "customer-relations",
+                "fromEntityCode": "customer-infra-architecture",
+                "fromTableName": "crm_customer_infra_architecture",
+                "fromRefCode": "parent_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customer-relations",
+                "toEntityCode": "customer-relation",
+                "toTableName": "crm_customer_relation",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customer-relations",
+              "entityCode": "customer-relation",
+              "tableName": "crm_customer_relation",
+              "fieldCode": "customer_id",
+              "columnName": "customer_id"
+            },
+            "sourceBoCode": "customer-relations"
+          }
+        }
+      }
+    ],
+    "operations": [
+      {
+        "code": "ACTIVATE",
+        "name": "激活关系治理",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "CHECK_DUPLICATE",
+        "name": "查重",
+        "scope": "BO",
+        "act_aliases": "check-duplicate",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "DRAFT",
+        "name": "暂存",
+        "scope": "BO",
+        "act_aliases": "draft",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "update",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除关系治理",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "SUBMIT",
+        "name": "提交审批",
+        "scope": "BO",
+        "act_aliases": "submit",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "CHANGE",
+        "name": "变更",
+        "scope": "BO",
+        "act_aliases": "change",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "TRANSFER",
+        "name": "客户转移",
+        "scope": "BO",
+        "act_aliases": "transfer",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "ADD_TEAM_MEMBER",
+        "name": "新增团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-team-member"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "view-team-member,read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "EDIT_TEAM_MEMBER",
+        "name": "编辑团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-team-member"
+      },
+      {
+        "code": "REMOVE_TEAM_MEMBER",
+        "name": "移除团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-team-member"
+      },
+      {
+        "code": "CREATE_COMPETITION",
+        "name": "新增竞争信息",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-competition"
+      },
+      {
+        "code": "VIEW_COMPETITION",
+        "name": "查看竞争信息",
+        "scope": "ENTITY",
+        "act_aliases": "view-competition",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-competition"
+      },
+      {
+        "code": "EDIT_COMPETITION",
+        "name": "编辑竞争信息",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-competition"
+      },
+      {
+        "code": "DELETE_COMPETITION",
+        "name": "删除竞争信息",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-competition"
+      },
+      {
+        "code": "CREATE_COMPETITION_MEMBER",
+        "name": "新增竞争信息团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-competition-member"
+      },
+      {
+        "code": "EDIT_COMPETITION_MEMBER",
+        "name": "编辑竞争信息团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-competition-member"
+      },
+      {
+        "code": "DELETE_COMPETITION_MEMBER",
+        "name": "删除竞争信息团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-competition-member"
+      },
+      {
+        "code": "CREATE_COMPETITION_SALE",
+        "name": "新增竞对产品销量",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-competition-sale"
+      },
+      {
+        "code": "EDIT_COMPETITION_SALE",
+        "name": "编辑竞对产品销量",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-competition-sale"
+      },
+      {
+        "code": "DELETE_COMPETITION_SALE",
+        "name": "删除竞对产品销量",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-competition-sale"
+      },
+      {
+        "code": "CREATE_STRATEGY",
+        "name": "新增业务和战略",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "VIEW_STRATEGY",
+        "name": "查看业务和战略",
+        "scope": "ENTITY",
+        "act_aliases": "view-strategy",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "EDIT_STRATEGY",
+        "name": "编辑业务和战略",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "DELETE_STRATEGY",
+        "name": "删除业务和战略",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "VIEW_STRATEGY_HISTORY",
+        "name": "查看历史版本",
+        "scope": "ENTITY",
+        "act_aliases": "history",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "CREATE_STRATEGY_MEMBER",
+        "name": "新增业务和战略团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-industry-strategy-member"
+      },
+      {
+        "code": "EDIT_STRATEGY_MEMBER",
+        "name": "编辑业务和战略团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-industry-strategy-member"
+      },
+      {
+        "code": "DELETE_STRATEGY_MEMBER",
+        "name": "删除业务和战略团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-industry-strategy-member"
+      },
+      {
+        "code": "CREATE_INDUSTRY_BIZ",
+        "name": "新增核心业务",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-industry-biz"
+      },
+      {
+        "code": "EDIT_INDUSTRY_BIZ",
+        "name": "编辑核心业务",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-industry-biz"
+      },
+      {
+        "code": "DELETE_INDUSTRY_BIZ",
+        "name": "删除核心业务",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-industry-biz"
+      },
+      {
+        "code": "CREATE_INFRA_ARCHITECTURE",
+        "name": "新增基础设施架构",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-infra-architecture"
+      },
+      {
+        "code": "VIEW_INFRA_ARCHITECTURE",
+        "name": "查看基础设施架构",
+        "scope": "ENTITY",
+        "act_aliases": "view-infra-architecture",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-infra-architecture"
+      },
+      {
+        "code": "EDIT_INFRA_ARCHITECTURE",
+        "name": "编辑基础设施架构",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-infra-architecture"
+      },
+      {
+        "code": "DELETE_INFRA_ARCHITECTURE",
+        "name": "删除基础设施架构",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-infra-architecture"
+      },
+      {
+        "code": "CREATE_INFRA_ARCHITECTURE_MEMBER",
+        "name": "新增基础设施架构团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "customer-infra-architecture-member"
+      },
+      {
+        "code": "EDIT_INFRA_ARCHITECTURE_MEMBER",
+        "name": "编辑基础设施架构团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "customer-infra-architecture-member"
+      },
+      {
+        "code": "DELETE_INFRA_ARCHITECTURE_MEMBER",
+        "name": "删除基础设施架构团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE",
+        "entityCode": "customer-infra-architecture-member"
+      },
+      {
+        "code": "REVOKE",
+        "name": "撤回审批",
+        "scope": "BO",
+        "act_aliases": "revoke",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "CREATE",
+        "name": "创建",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "LIST_CUSTOMER_TEAM_MEMBER",
+        "name": "查询客户团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-team-member"
+      },
+      {
+        "code": "READ_CUSTOMER_TEAM_MEMBER",
+        "name": "查看客户团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-team-member"
+      },
+      {
+        "code": "LIST_CUSTOMER_COMPETITION",
+        "name": "查询客户竞争信息列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-competition",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-competition"
+      },
+      {
+        "code": "READ_CUSTOMER_COMPETITION",
+        "name": "查看客户竞争信息详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-competition",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-competition"
+      },
+      {
+        "code": "LIST_CUSTOMER_COMPETITION_MEMBER",
+        "name": "查询竞争信息团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-competition-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-competition-member"
+      },
+      {
+        "code": "READ_CUSTOMER_COMPETITION_MEMBER",
+        "name": "查看竞争信息团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-competition-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-competition-member"
+      },
+      {
+        "code": "LIST_CUSTOMER_COMPETITION_SALE",
+        "name": "查询竞对产品销量列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-competition-sale",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-competition-sale"
+      },
+      {
+        "code": "READ_CUSTOMER_COMPETITION_SALE",
+        "name": "查看竞对产品销量详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-competition-sale",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-competition-sale"
+      },
+      {
+        "code": "LIST_CUSTOMER_INDUSTRY_STRATEGY",
+        "name": "查询客户业务和战略列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-industry-strategy",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "READ_CUSTOMER_INDUSTRY_STRATEGY",
+        "name": "查看客户业务和战略详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-industry-strategy",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-strategy"
+      },
+      {
+        "code": "LIST_CUSTOMER_INDUSTRY_STRATEGY_MEMBER",
+        "name": "查询业务和战略团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-industry-strategy-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-strategy-member"
+      },
+      {
+        "code": "READ_CUSTOMER_INDUSTRY_STRATEGY_MEMBER",
+        "name": "查看业务和战略团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-industry-strategy-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-strategy-member"
+      },
+      {
+        "code": "LIST_CUSTOMER_INDUSTRY_BIZ",
+        "name": "查询核心业务明细列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-industry-biz",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-biz"
+      },
+      {
+        "code": "READ_CUSTOMER_INDUSTRY_BIZ",
+        "name": "查看核心业务明细详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-industry-biz",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-industry-biz"
+      },
+      {
+        "code": "LIST_CUSTOMER_INFRA_ARCHITECTURE",
+        "name": "查询客户基础设施架构列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-infra-architecture",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-infra-architecture"
+      },
+      {
+        "code": "READ_CUSTOMER_INFRA_ARCHITECTURE",
+        "name": "查看客户基础设施架构详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-infra-architecture",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-infra-architecture"
+      },
+      {
+        "code": "LIST_CUSTOMER_INFRA_ARCHITECTURE_MEMBER",
+        "name": "查询客户基础设施架构团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-customer-infra-architecture-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-infra-architecture-member"
+      },
+      {
+        "code": "READ_CUSTOMER_INFRA_ARCHITECTURE_MEMBER",
+        "name": "查看客户基础设施架构团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-customer-infra-architecture-member",
+        "primaryDataAction": "READ",
+        "entityCode": "customer-infra-architecture-member"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'customer-relations' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'customer-relations' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + customer-relations_bo_meta_id + ACTIVATE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CHECK_DUPLICATE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DRAFT",
+      "RES_DATA_BO + customer-relations_bo_meta_id + UPDATE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + SUBMIT",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CHANGE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EXPORT",
+      "RES_DATA_BO + customer-relations_bo_meta_id + TRANSFER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + ADD_TEAM_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_TEAM_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + REMOVE_TEAM_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_COMPETITION",
+      "RES_DATA_BO + customer-relations_bo_meta_id + VIEW_COMPETITION",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_COMPETITION",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_COMPETITION",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_COMPETITION_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_COMPETITION_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_COMPETITION_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_COMPETITION_SALE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_COMPETITION_SALE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_COMPETITION_SALE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_STRATEGY",
+      "RES_DATA_BO + customer-relations_bo_meta_id + VIEW_STRATEGY",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_STRATEGY",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_STRATEGY",
+      "RES_DATA_BO + customer-relations_bo_meta_id + VIEW_STRATEGY_HISTORY",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_STRATEGY_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_STRATEGY_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_STRATEGY_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_INDUSTRY_BIZ",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_INDUSTRY_BIZ",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_INDUSTRY_BIZ",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_INFRA_ARCHITECTURE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + VIEW_INFRA_ARCHITECTURE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_INFRA_ARCHITECTURE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_INFRA_ARCHITECTURE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE_INFRA_ARCHITECTURE_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + EDIT_INFRA_ARCHITECTURE_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + DELETE_INFRA_ARCHITECTURE_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + REVOKE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST",
+      "RES_DATA_BO + customer-relations_bo_meta_id + CREATE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_TEAM_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_TEAM_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_COMPETITION",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_COMPETITION",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_COMPETITION_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_COMPETITION_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_COMPETITION_SALE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_COMPETITION_SALE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_INDUSTRY_STRATEGY",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_INDUSTRY_STRATEGY",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_INDUSTRY_STRATEGY_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_INDUSTRY_STRATEGY_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_INDUSTRY_BIZ",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_INDUSTRY_BIZ",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_INFRA_ARCHITECTURE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_INFRA_ARCHITECTURE",
+      "RES_DATA_BO + customer-relations_bo_meta_id + LIST_CUSTOMER_INFRA_ARCHITECTURE_MEMBER",
+      "RES_DATA_BO + customer-relations_bo_meta_id + READ_CUSTOMER_INFRA_ARCHITECTURE_MEMBER"
+    ]
+  }
+}

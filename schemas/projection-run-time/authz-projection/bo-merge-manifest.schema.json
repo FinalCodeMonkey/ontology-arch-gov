@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/projection-run-time/authz-projection/bo-merge-manifest.schema.json",
+  "title": "BO Merge Manifest",
+  "description": "BO 合并投影清单。声明如何将多个设计态 BO 的投影合并为单一 PSP authz_bo_meta_model，适配共享物理表的运行态场景。发布服务读取此清单，将多个 BO 的 schema_view 合并后输出单一 schema_json。",
+  "$comment": "结构说明详见父目录下的 README.md 中 [bo-merge-manifest] 章节。",
+  "type": "object",
+  "required": ["mergeCode", "mergeName", "targetBoCode", "targetTableName", "sources", "mergeRules"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "mergeCode": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "合并清单编码，用于标识此合并配置。"
+    },
+    "mergeName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "合并清单名称。"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "合并说明。"
+    },
+    "targetBoCode": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "合并后写入 PSP 的 bo_code。通常取 PRIMARY BO 的 boCode。"
+    },
+    "targetTableName": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "合并后根实体的物理表名。用于解决多 BO 共享单表的场景。"
+    },
+    "sources": {
+      "type": "array",
+      "description": "合并来源 BO 列表。第一个 PRIMARY BO 的根实体作为合并基础，后续 SECONDARY BO 的实体按策略合并进来。",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/MergeSource" }
+    },
+    "mergeRules": { "$ref": "#/$defs/MergeRules" }
+  },
+  "$defs": {
+    "MergeSource": {
+      "type": "object",
+      "description": "合并来源 BO 声明。",
+      "required": ["boCode", "role"],
+      "additionalProperties": false,
+      "properties": {
+        "boCode": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "来源 BO 编码。"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["PRIMARY", "SECONDARY"],
+          "description": "PRIMARY=合并基础（根实体属性以此为准）；SECONDARY=合并补充（属性追加到 PRIMARY 根实体或透传子实体）。"
+        },
+        "entityMergeStrategy": {
+          "type": "object",
+          "description": "实体合并策略。key 为来源 BO 中的实体 code，value 为合并方式。",
+          "additionalProperties": { "$ref": "#/$defs/EntityMergeStrategy" }
+        },
+        "operationRename": {
+          "type": "object",
+          "description": "操作重命名映射。key 为来源 BO 中的 operation code，value 为合并后的 operation code。用于避免与 PRIMARY BO 的操作冲突。",
+          "additionalProperties": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]*$" }
+        },
+        "operationExclude": {
+          "type": "array",
+          "description": "需要排除的操作 code 列表。如 SECONDARY BO 的 ACTIVATE/DELETE 在单表模式下无意义。",
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_-]*$" },
+          "uniqueItems": true,
+          "default": []
+        }
+      }
+    },
+    "EntityMergeStrategy": {
+      "type": "object",
+      "description": "单个实体的合并策略。",
+      "required": ["mergeType"],
+      "additionalProperties": false,
+      "properties": {
+        "mergeType": {
+          "type": "string",
+          "enum": ["SAME_ROW_COLUMN_SUBSET", "PASS_THROUGH", "EXCLUDE"],
+          "description": "SAME_ROW_COLUMN_SUBSET=与 PRIMARY 根实体共享物理行，将此实体的属性（排除 excludeAttributes）追加到 PRIMARY 根实体；PASS_THROUGH=直接透传为独立子实体，仅修改 parentEntityCode 指向合并后的根实体；EXCLUDE=排除此实体不参与合并。"
+        },
+        "mergeInto": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "合并目标实体 code（仅 mergeType=SAME_ROW_COLUMN_SUBSET 时有效）。通常为 PRIMARY BO 的根实体 code。"
+        },
+        "sharedPk": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否共享主键（仅 mergeType=SAME_ROW_COLUMN_SUBSET）。true 表示此实体的 id 与 PRIMARY 根实体的 id 是同一列，合并后不重复添加 id 属性。"
+        },
+        "excludeAttributes": {
+          "type": "array",
+          "description": "合并时排除的属性 code 列表。通常排除 id/customer_id/审计字段等与 PRIMARY 重复或无意义的字段。",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "reparentTo": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "合并后子实体的 parentEntityCode 改为此值（仅 mergeType=PASS_THROUGH 时有效）。通常为 PRIMARY BO 的根实体 code。"
+        }
+      }
+    },
+    "MergeRules": {
+      "type": "object",
+      "description": "全局合并规则。",
+      "required": ["rootEntity", "operations"],
+      "additionalProperties": false,
+      "properties": {
+        "rootEntity": {
+          "type": "object",
+          "description": "根实体合并规则。",
+          "required": ["mergedCode", "mergedTableName", "attributeSource", "conflictResolution", "rowLevelRuleEntries"],
+          "additionalProperties": false,
+          "properties": {
+            "mergedCode": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$",
+              "description": "合并后根实体的 code。"
+            },
+            "mergedTableName": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$",
+              "description": "合并后根实体的 tableName。"
+            },
+            "attributeSource": {
+              "type": "string",
+              "enum": ["MERGE_BY_COLUMN_NAME"],
+              "description": "属性合并方式。MERGE_BY_COLUMN_NAME=按 columnName 去重合并，相同 columnName 的属性只保留一个。"
+            },
+            "conflictResolution": {
+              "type": "string",
+              "enum": ["PRIMARY_WINS"],
+              "description": "属性冲突解决策略。PRIMARY_WINS=columnName 相同时保留 PRIMARY BO 的属性定义。"
+            },
+            "rowLevelRuleEntries": {
+              "type": "string",
+              "enum": ["MERGE_ALL"],
+              "description": "行级过滤字段合并方式。MERGE_ALL=取所有来源 BO 的 rowLevelRuleEntries 并集。"
+            }
+          }
+        },
+        "operations": {
+          "type": "object",
+          "description": "操作合并规则。",
+          "required": ["deduplicateByAuthzAction", "conflictResolution"],
+          "additionalProperties": false,
+          "properties": {
+            "deduplicateByAuthzAction": {
+              "type": "boolean",
+              "default": true,
+              "description": "是否按 authzAction 去重。true 时相同 authzAction 的操作只保留一个（取 PRIMARY）。"
+            },
+            "conflictResolution": {
+              "type": "string",
+              "enum": ["PRIMARY_WINS"],
+              "description": "操作冲突解决策略。PRIMARY_WINS=相同 authzAction 时保留 PRIMARY BO 的操作定义。"
+            }
+          }
+        }
+      }
+    }
+  }
+}

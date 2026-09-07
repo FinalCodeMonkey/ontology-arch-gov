@@ -1,0 +1,77 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "data-domains",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "level_type",
+        "required": true,
+        "max": 20,
+        "message": "层级类型不能为空且不超过20字"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "domain_code",
+        "required": true,
+        "max": 100,
+        "unique": true,
+        "message": "领域编码不能为空、不超过100字且全局唯一"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "domain_name",
+        "required": true,
+        "max": 200,
+        "message": "领域名称不能为空且不超过200字"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "sort_order",
+        "required": true,
+        "min": 0,
+        "message": "排序序号不能为空且不小于0"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "tenant_id",
+        "required": true,
+        "max": 50,
+        "message": "租户标识不能为空且不超过50字"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "app_code",
+        "required": true,
+        "max": 50,
+        "message": "应用代码不能为空且不超过50字"
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "created_by",
+        "max": 100
+      },
+      {
+        "entityCode": "authz-data-domain",
+        "fieldCode": "updated_by",
+        "max": 100
+      }
+    ]
+  },
+  "changeNote": [
+    "data-domains 首版 VALIDATION Fragment",
+    "domain_code 标记 required + unique（全局唯一，与 DDL uk_authz-data-domain_code 对齐）",
+    "level_type 标记 required，取值由 RULE fragment 约束为枚举",
+    "sort_order 标记 required + min(0)"
+  ]
+}

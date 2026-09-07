@@ -1,0 +1,5619 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "opportunities",
+  "boName": "商机",
+  "description": "商机（业务机会）管理业务对象，采用主从明细聚合建模。承接客户场景到商机落地的核心经营过程，包含基本信息、产品清单和团队成员。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/opportunities",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "opportunity_code",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "FULL_AGGREGATE",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "CASCADE_AGGREGATE",
+      "detailEmbedEntities": [
+        "opportunity-scene",
+        "opportunity-product",
+        "opportunity-team-member",
+        "opportunity-stage-history",
+        "opportunity-quotation"
+      ]
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "MASTER_DETAIL",
+    "nameField": "opportunity_name",
+    "statusField": "status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "APPLICATION",
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "opportunity",
+      "name": "商机主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_opportunity",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "商机ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "opportunity_code",
+          "name": "业务机会编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "opportunity_code",
+          "columnName": "opportunity_code",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "unique": true,
+            "message": "业务机会编码不能为空且不可重复"
+          },
+          "view": {
+            "displayName": "业务机会编码",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 5,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "opportunity_name",
+          "name": "业务机会名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "opportunity_name",
+          "columnName": "opportunity_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 200,
+            "unique": true,
+            "message": "业务机会名称不能为空、不超过200字且不可重复"
+          },
+          "view": {
+            "displayName": "业务机会名称",
+            "sortable": true,
+            "columnWidth": 200,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入业务机会名称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "project_type",
+          "name": "项目类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "project_type",
+          "columnName": "project_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "DC",
+                "label": "DC项目"
+              },
+              {
+                "value": "OC_MAIN",
+                "label": "OC主项目"
+              },
+              {
+                "value": "OC_SUB",
+                "label": "OC子项目"
+              },
+              {
+                "value": "BC",
+                "label": "BC项目"
+              },
+              {
+                "value": "EC",
+                "label": "EC项目"
+              }
+            ],
+            "message": "项目类型必须为 DC项目/OC主项目/OC子项目/BC项目/EC项目 之一"
+          },
+          "view": {
+            "displayName": "项目类型",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "placeholder": "请选择项目类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "opportunity_project_type"
+          }
+        },
+        {
+          "code": "opportunity_owner",
+          "name": "机会所有人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "opportunity_owner",
+          "columnName": "opportunity_owner",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "opportunity_owner_name",
+                "displayRole": "NAME"
+              },
+              {
+                "refFieldCode": "department_code",
+                "localCode": "opportunity_owner_department_code",
+                "displayRole": "EXTRA"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "必须指定机会所有人"
+          },
+          "view": {
+            "displayName": "机会所有人",
+            "sortable": false,
+            "columnWidth": 110,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择机会所有人",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "opportunity_owner_name",
+          "name": "机会所有人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "opportunity_owner_name",
+          "columnName": "opportunity_owner_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "机会所有人姓名",
+            "sortable": false,
+            "columnWidth": 110,
+            "order": 41,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "opportunity_owner_department_code",
+          "name": "机会所有人部门编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "opportunity_owner_department_code",
+          "columnName": "opportunity_owner_department_code",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false
+        },
+        {
+          "code": "customers_id",
+          "name": "业务主体客户ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "customers_id",
+          "columnName": "customers_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "customers",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "customer_name",
+                "localCode": "business_customer_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "必须选择业务主体客户"
+          },
+          "view": {
+            "displayName": "业务主体客户",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 54,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择业务主体客户",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "customers",
+            "refField": "customer_name"
+          }
+        },
+        {
+          "code": "business_customer_name",
+          "name": "业务主体客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "business_customer_name",
+          "columnName": "business_customer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "业务主体客户名称",
+            "sortable": false,
+            "columnWidth": 180,
+            "hidden": false,
+            "order": 55,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "primary_customer_name",
+          "name": "一级客户名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "primary_customer_name",
+          "columnName": "primary_customer_name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "一级客户名称",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 56,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "market_segment",
+          "name": "细分市场",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "market_segment",
+          "columnName": "market_segment",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "INTERNET_T1",
+                "label": "互联网-T1客户"
+              },
+              {
+                "value": "INTERNET_T2",
+                "label": "互联网-T2客户"
+              },
+              {
+                "value": "INTERNET_T3",
+                "label": "互联网-T3客户"
+              }
+            ],
+            "message": "细分市场必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "细分市场",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 57,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择细分市场",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "opportunity_market_segment"
+          }
+        },
+        {
+          "code": "currency",
+          "name": "币种",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "currency",
+          "columnName": "currency",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 16,
+            "enum": [
+              {
+                "value": "CNY",
+                "label": "人民币"
+              },
+              {
+                "value": "USD",
+                "label": "美元"
+              }
+            ],
+            "message": "币种必须为 人民币/美元 之一"
+          },
+          "view": {
+            "displayName": "币种",
+            "sortable": false,
+            "columnWidth": 90,
+            "order": 61,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择币种",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "opportunity_currency"
+          }
+        },
+        {
+          "code": "parent_opportunity_id",
+          "name": "关联框架主项目ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "parent_opportunity_id",
+          "columnName": "parent_opportunity_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "opportunities",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "opportunity_name",
+                "localCode": "parent_opportunity_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "OC子项目必须关联框架主项目"
+          },
+          "view": {
+            "displayName": "关联框架主项目",
+            "sortable": false,
+            "columnWidth": 250,
+            "order": 164,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择关联框架主项目",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "opportunities",
+            "refField": "opportunity_name"
+          }
+        },
+        {
+          "code": "parent_opportunity_name",
+          "name": "关联框架主项目名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "parent_opportunity_name",
+          "columnName": "parent_opportunity_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "关联框架主项目名称",
+            "sortable": false,
+            "columnWidth": 250,
+            "order": 165,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "expected_order_amount",
+          "name": "预计下单金额/集采框架总金额",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "expected_order_amount",
+          "columnName": "expected_order_amount",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "MASKED",
+          "privacyClass": "SENSITIVE",
+          "reason": "预计下单金额/集采框架总金额为敏感商业数据，默认脱敏显示",
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "预计下单金额/集采框架总金额不能为空且必须为非负数"
+          },
+          "view": {
+            "displayName": "预计下单金额",
+            "sortable": true,
+            "columnWidth": 130,
+            "format": "currency",
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "请输入预计下单金额",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "expected_bid_date",
+          "name": "预计开标日期",
+          "type": "DATE",
+          "isPk": false,
+          "fieldName": "expected_bid_date",
+          "columnName": "expected_bid_date",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "预计开标日期不能为空"
+          },
+          "view": {
+            "displayName": "预计开标日期",
+            "sortable": true,
+            "columnWidth": 130,
+            "format": "date",
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "placeholder": "请选择预计开标日期",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "date",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "expected_order_start_date",
+          "name": "预计下单开始日期",
+          "type": "DATE",
+          "isPk": false,
+          "fieldName": "expected_order_start_date",
+          "columnName": "expected_order_start_date",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "message": "OC主项目类型时预计下单开始日期必填"
+          },
+          "view": {
+            "displayName": "预计下单开始日期",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "date",
+            "order": 82,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "placeholder": "请选择预计下单开始日期",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "expected_order_end_date",
+          "name": "预计下单截止日期",
+          "type": "DATE",
+          "isPk": false,
+          "fieldName": "expected_order_end_date",
+          "columnName": "expected_order_end_date",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "message": "OC主项目类型时预计下单截止日期必填"
+          },
+          "view": {
+            "displayName": "预计下单截止日期",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "date",
+            "order": 84,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "placeholder": "请选择预计下单截止日期",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "expected_order_date",
+          "name": "预计下单日期",
+          "type": "DATE",
+          "isPk": false,
+          "fieldName": "expected_order_date",
+          "columnName": "expected_order_date",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "非OC主项目类型时预计下单日期必填"
+          },
+          "view": {
+            "displayName": "预计下单日期",
+            "sortable": true,
+            "columnWidth": 130,
+            "format": "date",
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "placeholder": "请选择预计下单日期",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "date",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "project_stage",
+          "name": "客户采购阶段",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "project_stage",
+          "columnName": "project_stage",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "项目阶段必须为当前项目类型对应的预定义值之一",
+            "conditionalEnum": {
+              "dependsOn": "project_type",
+              "groups": [
+                {
+                  "when": "DC",
+                  "enum": [
+                    {
+                      "value": "DC_01",
+                      "label": "业务驱动 确定需求"
+                    },
+                    {
+                      "value": "DC_02",
+                      "label": "产品和方案 详设"
+                    },
+                    {
+                      "value": "DC_03",
+                      "label": "确定产品技术规格 圈定供应商"
+                    },
+                    {
+                      "value": "DC_04",
+                      "label": "制定规则 研发标招标"
+                    },
+                    {
+                      "value": "DC_05",
+                      "label": "得到结果 签订研发标合同"
+                    },
+                    {
+                      "value": "DC_06",
+                      "label": "EVT样机交付 完成软硬件对接"
+                    },
+                    {
+                      "value": "DC_07",
+                      "label": "EVT样机交付 完成软硬件联调"
+                    },
+                    {
+                      "value": "DC_08",
+                      "label": "PVT样机交付 验收付款"
+                    }
+                  ]
+                },
+                {
+                  "when": "OC_MAIN",
+                  "enum": [
+                    {
+                      "value": "OC_MAIN_01",
+                      "label": "业务驱动 确定需求"
+                    },
+                    {
+                      "value": "OC_MAIN_02",
+                      "label": "产品和方案 详设"
+                    },
+                    {
+                      "value": "OC_MAIN_03",
+                      "label": "确定产品技术规格 圈定供应商"
+                    },
+                    {
+                      "value": "OC_MAIN_04",
+                      "label": "确定产品开发计划 完成开发"
+                    },
+                    {
+                      "value": "OC_MAIN_05",
+                      "label": "测试验收 确定入围供应商"
+                    },
+                    {
+                      "value": "OC_MAIN_06",
+                      "label": "收集采购需求 确定采购计划"
+                    },
+                    {
+                      "value": "OC_MAIN_07",
+                      "label": "制定规则 集采框架招标"
+                    },
+                    {
+                      "value": "OC_MAIN_08",
+                      "label": "得到结果 签订合同"
+                    },
+                    {
+                      "value": "OC_MAIN_09",
+                      "label": "框架合同到期 关单"
+                    }
+                  ]
+                },
+                {
+                  "when": "OC_SUB",
+                  "enum": [
+                    {
+                      "value": "OC_SUB_01",
+                      "label": "集采已中标/框架协议已签订 未发出FCST或要货计划"
+                    },
+                    {
+                      "value": "OC_SUB_02",
+                      "label": "集采已中标/框架协议已签订 已发出FCST或要货计划"
+                    },
+                    {
+                      "value": "OC_SUB_03",
+                      "label": "集采已中标/框架协议已签订 已发出正式PO单或采购合同 交付实施、验收付款"
+                    },
+                    {
+                      "value": "OC_SUB_04",
+                      "label": "交付实施 验收付款"
+                    }
+                  ]
+                },
+                {
+                  "when": "BC",
+                  "enum": [
+                    {
+                      "value": "BC_01",
+                      "label": "业务驱动 确定需求"
+                    },
+                    {
+                      "value": "BC_02",
+                      "label": "方案调研 启动项目"
+                    },
+                    {
+                      "value": "BC_03",
+                      "label": "确定方案 圈定供应商"
+                    },
+                    {
+                      "value": "BC_04",
+                      "label": "制定规则 落实采购"
+                    },
+                    {
+                      "value": "BC_05",
+                      "label": "得到结果 签订合同"
+                    },
+                    {
+                      "value": "BC_06",
+                      "label": "交付实施 验收付款"
+                    }
+                  ]
+                },
+                {
+                  "when": "EC",
+                  "enum": [
+                    {
+                      "value": "EC_01",
+                      "label": "业务驱动 确定需求"
+                    },
+                    {
+                      "value": "EC_02",
+                      "label": "技术调研 解法评估"
+                    },
+                    {
+                      "value": "EC_03",
+                      "label": "解法初设 形成Demo"
+                    },
+                    {
+                      "value": "EC_04",
+                      "label": "测试验证 方案优化"
+                    },
+                    {
+                      "value": "EC_05",
+                      "label": "验证成功 确定价值"
+                    },
+                    {
+                      "value": "EC_06",
+                      "label": "立项论证 审批通过"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "view": {
+            "displayName": "客户采购阶段",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "placeholder": "根据项目类型自动生成",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_project_stage"
+          }
+        },
+        {
+          "code": "predict_category",
+          "name": "预测类别",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "predict_category",
+          "columnName": "predict_category",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "LEAD",
+                "label": "线索"
+              },
+              {
+                "value": "OPPORTUNITY_MINUS",
+                "label": "机会-"
+              },
+              {
+                "value": "OPPORTUNITY",
+                "label": "机会"
+              },
+              {
+                "value": "OPPORTUNITY_PLUS",
+                "label": "机会+"
+              },
+              {
+                "value": "POSSIBLE_MINUS",
+                "label": "可能-"
+              },
+              {
+                "value": "POSSIBLE",
+                "label": "可能"
+              },
+              {
+                "value": "POSSIBLE_PLUS",
+                "label": "可能+"
+              },
+              {
+                "value": "ADVANTAGE",
+                "label": "优势"
+              }
+            ],
+            "message": "预测类别必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "预测类别",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择预测类别",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "opportunity_predict_category"
+          }
+        },
+        {
+          "code": "biz_attribution",
+          "name": "业务名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "biz_attribution",
+          "columnName": "biz_attribution",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "JDM",
+                "label": "JDM"
+              },
+              {
+                "value": "COMMERCIAL",
+                "label": "商用"
+              },
+              {
+                "value": "ESUN",
+                "label": "ESUN"
+              },
+              {
+                "value": "OPTICAL",
+                "label": "光"
+              },
+              {
+                "value": "PARK",
+                "label": "园区"
+              }
+            ],
+            "message": "业务归属必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "业务名称",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 110,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择业务名称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "opportunity_biz_attribution"
+          }
+        },
+        {
+          "code": "domestic_overseas",
+          "name": "国内/海外",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "domestic_overseas",
+          "columnName": "domestic_overseas",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 16,
+            "enum": [
+              {
+                "value": "DOMESTIC",
+                "label": "国内"
+              },
+              {
+                "value": "OVERSEAS",
+                "label": "海外"
+              }
+            ],
+            "message": "国内/海外必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "国内/海外",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 140,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "domestic_overseas"
+          }
+        },
+        {
+          "code": "presales_engineer",
+          "name": "售前工程师",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "presales_engineer",
+          "columnName": "presales_engineer",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "presales_engineer_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "必须指定售前工程师"
+          },
+          "view": {
+            "displayName": "售前工程师",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 150,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择售前工程师",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "presales_engineer_name",
+          "name": "售前工程师姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "presales_engineer_name",
+          "columnName": "presales_engineer_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "售前工程师姓名",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 151,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "customer_owner",
+          "name": "客户所有人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customer_owner",
+          "columnName": "customer_owner",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "customer_owner_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "客户所有人不能为空"
+          },
+          "view": {
+            "displayName": "客户所有人",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 160,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "按客户自动带出，不可手动编辑",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "disabled": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "customer_owner_name",
+          "name": "客户所有人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "customer_owner_name",
+          "columnName": "customer_owner_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "客户所有人姓名",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 161,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_in_funnel",
+          "name": "是否进入漏斗",
+          "type": "BOOLEAN",
+          "isPk": false,
+          "fieldName": "is_in_funnel",
+          "columnName": "is_in_funnel",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "是否进入漏斗为销售预测核心指标，仅销售预测角色可编辑，其他角色只读",
+          "validation": {
+            "required": false,
+            "message": "是否进入漏斗为销售预测字段，默认false"
+          },
+          "view": {
+            "displayName": "是否进入漏斗",
+            "sortable": false,
+            "columnWidth": 110,
+            "order": 169,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SWITCH",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "boolean",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "is_committed",
+          "name": "是否承诺",
+          "type": "BOOLEAN",
+          "isPk": false,
+          "fieldName": "is_committed",
+          "columnName": "is_committed",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "是否承诺为销售预测核心指标，仅销售预测角色可编辑，其他角色只读",
+          "validation": {
+            "required": false,
+            "message": "是否承诺为销售预测字段，默认false"
+          },
+          "view": {
+            "displayName": "是否承诺",
+            "sortable": false,
+            "columnWidth": 110,
+            "order": 171,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SWITCH",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "boolean",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "status",
+          "name": "状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "status",
+          "columnName": "status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "enum": [
+              {
+                "value": "DRAFT",
+                "label": "草稿"
+              },
+              {
+                "value": "ACTIVE",
+                "label": "活跃"
+              },
+              {
+                "value": "CLOSED_WON",
+                "label": "赢单关闭"
+              },
+              {
+                "value": "CLOSED_LOST",
+                "label": "输单关闭"
+              },
+              {
+                "value": "CANCELLED",
+                "label": "已取消"
+              }
+            ],
+            "message": "商机状态值非法"
+          },
+          "view": {
+            "displayName": "状态",
+            "sortable": true,
+            "columnWidth": 90,
+            "hidden": true,
+            "order": 200,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_status"
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "is_deleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "min": 0,
+            "max": 1,
+            "message": "删除标记必须为0或1"
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "created_time",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 170,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updated_time",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 220,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "created_by",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 210,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updated_by",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 230,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "status",
+        "project_type",
+        "biz_attribution",
+        "domestic_overseas",
+        "predict_category",
+        "project_stage",
+        "opportunity_owner",
+        "customer_owner",
+        "customers_id",
+        "market_segment",
+        "parent_opportunity_id"
+      ],
+      "rowFallbackScope": "NONE"
+    },
+    {
+      "code": "opportunity-product",
+      "name": "商机产品清单",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_opportunity_product",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "产品清单行ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "产品清单行ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "opportunity_id",
+          "name": "所属商机ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "opportunity_id",
+          "columnName": "opportunity_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "所属商机ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 11,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "scene_id",
+          "name": "场景ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "scene_id",
+          "columnName": "scene_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": false,
+          "crossBoRef": {
+            "refBoCode": "scenes",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "scene_name_customer",
+                "localCode": "scene_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "view": {
+            "displayName": "场景",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择场景",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "scenes",
+            "refField": "scene_name_customer"
+          }
+        },
+        {
+          "code": "scene_name",
+          "name": "场景名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "scene_name",
+          "columnName": "scene_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false
+        },
+        {
+          "code": "product_id",
+          "name": "产品ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "product_id",
+          "columnName": "product_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "products",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "product_model",
+                "localCode": "product_model",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "必须选择产品"
+          },
+          "view": {
+            "displayName": "产品型号",
+            "sortable": false,
+            "columnWidth": 220,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择产品型号",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "products",
+            "refField": "product_model"
+          }
+        },
+        {
+          "code": "product_model",
+          "name": "产品型号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_model",
+          "columnName": "product_model",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "产品型号",
+            "sortable": true,
+            "columnWidth": 220,
+            "order": 21,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "unit_price",
+          "name": "出货单价",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "unit_price",
+          "columnName": "unit_price",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "MASKED",
+          "privacyClass": "SENSITIVE",
+          "reason": "出货单价为敏感价格数据，默认脱敏",
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "出货单价不能为空且必须为非负数"
+          },
+          "view": {
+            "displayName": "出货单价",
+            "sortable": true,
+            "columnWidth": 90,
+            "format": "currency",
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "请输入出货单价",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "quantity",
+          "name": "数量",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "quantity",
+          "columnName": "quantity",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "数量不能为空且必须为非负整数"
+          },
+          "view": {
+            "displayName": "数量",
+            "sortable": true,
+            "columnWidth": 70,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "请输入数量",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "parent_product_id",
+          "name": "所属主产品行ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "parent_product_id",
+          "columnName": "parent_product_id",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "所属主产品行ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 49,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "ratio",
+          "name": "配比",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "ratio",
+          "columnName": "ratio",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "min": 1,
+            "message": "场景典配配比必须为正整数"
+          },
+          "view": {
+            "displayName": "典配配比",
+            "sortable": false,
+            "columnWidth": 80,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "请输入场景典配配比",
+            "exportable": true,
+            "importable": true
+          }
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "opportunity",
+      "parentRefField": "opportunity_id",
+      "routeSegment": "opportunity-product",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    },
+    {
+      "code": "opportunity-team-member",
+      "name": "商机团队成员",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_opportunity_team_member",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "团队成员行ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "团队成员行ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "opportunity_id",
+          "name": "所属商机ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "opportunity_id",
+          "columnName": "opportunity_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          }
+        },
+        {
+          "code": "user_id",
+          "name": "成员用户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "user_id",
+          "columnName": "user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": false,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "member_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "必须选择团队成员"
+          },
+          "view": {
+            "displayName": "成员用户ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 11,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "member_name",
+          "name": "成员姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "member_name",
+          "columnName": "member_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "成员姓名",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "member_role",
+          "name": "角色",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "member_role",
+          "columnName": "member_role",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "SALES_LEADER",
+                "label": "销售负责人"
+              },
+              {
+                "value": "HARDWARE_SALES",
+                "label": "硬件销售"
+              },
+              {
+                "value": "SERVICE_SALES",
+                "label": "服务销售"
+              },
+              {
+                "value": "COLLABORATOR",
+                "label": "协同跟进人"
+              },
+              {
+                "value": "OTHER",
+                "label": "其他"
+              }
+            ],
+            "message": "团队成员角色必须为销售负责人/硬件销售/服务销售/协同跟进人/其他之一"
+          },
+          "view": {
+            "displayName": "角色",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择角色",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_team_member_role"
+          }
+        },
+        {
+          "code": "permission",
+          "name": "权限设置",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "permission",
+          "columnName": "permission",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "READ_WRITE",
+                "label": "读写"
+              },
+              {
+                "value": "READ_ONLY",
+                "label": "只读"
+              }
+            ],
+            "message": "权限设置必须为读写或只读"
+          },
+          "view": {
+            "displayName": "权限设置",
+            "sortable": false,
+            "columnWidth": 110,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择权限",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_team_member_permission"
+          }
+        },
+        {
+          "code": "remark",
+          "name": "备注",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "remark",
+          "columnName": "remark",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "备注",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 50,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入备注",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "related_teams",
+          "name": "关联模块团队",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "related_teams",
+          "columnName": "related_teams",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 512,
+            "message": "关联模块团队不超过512字"
+          },
+          "view": {
+            "displayName": "关联模块团队",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 60,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入关联模块团队",
+            "exportable": true,
+            "importable": false
+          }
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "opportunity",
+      "parentRefField": "opportunity_id",
+      "routeSegment": "opportunity-team-member",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    },
+    {
+      "code": "opportunity-scene",
+      "name": "商机关联场景",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_opportunity_scene",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "关联行ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "关联行ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "opportunity_id",
+          "name": "所属商机ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "opportunity_id",
+          "columnName": "opportunity_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          }
+        },
+        {
+          "code": "scene_id",
+          "name": "场景ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "scene_id",
+          "columnName": "scene_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "scenes",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "scene_name_customer",
+                "localCode": "scene_name",
+                "displayRole": "NAME"
+              },
+              {
+                "refFieldCode": "scene_category",
+                "localCode": "scene_category",
+                "displayRole": "EXTRA"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "必须选择关联场景"
+          },
+          "view": {
+            "displayName": "场景ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 11,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "scenes",
+            "refField": "scene_name_customer"
+          }
+        },
+        {
+          "code": "scene_name",
+          "name": "场景名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "scene_name",
+          "columnName": "scene_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "场景名称",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "scene_category",
+          "name": "场景分类",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "scene_category",
+          "columnName": "scene_category",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "场景分类",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "opportunity",
+      "parentRefField": "opportunity_id",
+      "routeSegment": "scenes",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    },
+    {
+      "code": "opportunity-stage-history",
+      "name": "商机阶段推进历史",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_opportunity_sales_flow",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "阶段历史ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "阶段历史ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "opportunity_id",
+          "name": "所属商机ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "opportunity_id",
+          "columnName": "opportunity_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          }
+        },
+        {
+          "code": "sequence_no",
+          "name": "序号",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "sequence_no",
+          "columnName": "sequence_no",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "min": 1,
+            "message": "序号不能为空且必须为正整数"
+          },
+          "view": {
+            "displayName": "序号",
+            "sortable": true,
+            "columnWidth": 70,
+            "order": 15,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "from_stage_code",
+          "name": "来源阶段编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "from_stage_code",
+          "columnName": "from_stage_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 64,
+            "enum": [
+              {
+                "value": "DC_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "DC_02",
+                "label": "产品和方案 详设"
+              },
+              {
+                "value": "DC_03",
+                "label": "确定产品技术规格 圈定供应商"
+              },
+              {
+                "value": "DC_04",
+                "label": "制定规则 研发标招标"
+              },
+              {
+                "value": "DC_05",
+                "label": "得到结果 签订研发标合同"
+              },
+              {
+                "value": "DC_06",
+                "label": "EVT样机交付 完成软硬件对接"
+              },
+              {
+                "value": "DC_07",
+                "label": "EVT样机交付 完成软硬件联调"
+              },
+              {
+                "value": "DC_08",
+                "label": "PVT样机交付 验收付款"
+              },
+              {
+                "value": "OC_MAIN_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "OC_MAIN_02",
+                "label": "产品和方案 详设"
+              },
+              {
+                "value": "OC_MAIN_03",
+                "label": "确定产品技术规格 圈定供应商"
+              },
+              {
+                "value": "OC_MAIN_04",
+                "label": "确定产品开发计划 完成开发"
+              },
+              {
+                "value": "OC_MAIN_05",
+                "label": "测试验收 确定入围供应商"
+              },
+              {
+                "value": "OC_MAIN_06",
+                "label": "收集采购需求 确定采购计划"
+              },
+              {
+                "value": "OC_MAIN_07",
+                "label": "制定规则 集采框架招标"
+              },
+              {
+                "value": "OC_MAIN_08",
+                "label": "得到结果 签订合同"
+              },
+              {
+                "value": "OC_MAIN_09",
+                "label": "框架合同到期 关单"
+              },
+              {
+                "value": "OC_SUB_01",
+                "label": "集采已中标/框架协议已签订 未发出FCST或要货计划"
+              },
+              {
+                "value": "OC_SUB_02",
+                "label": "集采已中标/框架协议已签订 已发出FCST或要货计划"
+              },
+              {
+                "value": "OC_SUB_03",
+                "label": "集采已中标/框架协议已签订 已发出正式PO单或采购合同 交付实施、验收付款"
+              },
+              {
+                "value": "OC_SUB_04",
+                "label": "交付实施 验收付款"
+              },
+              {
+                "value": "BC_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "BC_02",
+                "label": "方案调研 启动项目"
+              },
+              {
+                "value": "BC_03",
+                "label": "确定方案 圈定供应商"
+              },
+              {
+                "value": "BC_04",
+                "label": "制定规则 落实采购"
+              },
+              {
+                "value": "BC_05",
+                "label": "得到结果 签订合同"
+              },
+              {
+                "value": "BC_06",
+                "label": "交付实施 验收付款"
+              },
+              {
+                "value": "EC_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "EC_02",
+                "label": "技术调研 解法评估"
+              },
+              {
+                "value": "EC_03",
+                "label": "解法初设 形成Demo"
+              },
+              {
+                "value": "EC_04",
+                "label": "测试验证 方案优化"
+              },
+              {
+                "value": "EC_05",
+                "label": "验证成功 确定价值"
+              },
+              {
+                "value": "EC_06",
+                "label": "立项论证 审批通过"
+              }
+            ],
+            "message": "来源阶段编码必须为预定义的客户采购阶段值之一"
+          },
+          "view": {
+            "displayName": "来源阶段编码",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 18,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_project_stage"
+          }
+        },
+        {
+          "code": "from_stage_name",
+          "name": "来源阶段名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "from_stage_name",
+          "columnName": "from_stage_name",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 128,
+            "message": "来源阶段名称不超过128字"
+          },
+          "view": {
+            "displayName": "来源阶段",
+            "sortable": false,
+            "columnWidth": 160,
+            "order": 19,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "stage_code",
+          "name": "阶段编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "stage_code",
+          "columnName": "stage_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "DC_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "DC_02",
+                "label": "产品和方案 详设"
+              },
+              {
+                "value": "DC_03",
+                "label": "确定产品技术规格 圈定供应商"
+              },
+              {
+                "value": "DC_04",
+                "label": "制定规则 研发标招标"
+              },
+              {
+                "value": "DC_05",
+                "label": "得到结果 签订研发标合同"
+              },
+              {
+                "value": "DC_06",
+                "label": "EVT样机交付 完成软硬件对接"
+              },
+              {
+                "value": "DC_07",
+                "label": "EVT样机交付 完成软硬件联调"
+              },
+              {
+                "value": "DC_08",
+                "label": "PVT样机交付 验收付款"
+              },
+              {
+                "value": "OC_MAIN_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "OC_MAIN_02",
+                "label": "产品和方案 详设"
+              },
+              {
+                "value": "OC_MAIN_03",
+                "label": "确定产品技术规格 圈定供应商"
+              },
+              {
+                "value": "OC_MAIN_04",
+                "label": "确定产品开发计划 完成开发"
+              },
+              {
+                "value": "OC_MAIN_05",
+                "label": "测试验收 确定入围供应商"
+              },
+              {
+                "value": "OC_MAIN_06",
+                "label": "收集采购需求 确定采购计划"
+              },
+              {
+                "value": "OC_MAIN_07",
+                "label": "制定规则 集采框架招标"
+              },
+              {
+                "value": "OC_MAIN_08",
+                "label": "得到结果 签订合同"
+              },
+              {
+                "value": "OC_MAIN_09",
+                "label": "框架合同到期 关单"
+              },
+              {
+                "value": "OC_SUB_01",
+                "label": "集采已中标/框架协议已签订 未发出FCST或要货计划"
+              },
+              {
+                "value": "OC_SUB_02",
+                "label": "集采已中标/框架协议已签订 已发出FCST或要货计划"
+              },
+              {
+                "value": "OC_SUB_03",
+                "label": "集采已中标/框架协议已签订 已发出正式PO单或采购合同 交付实施、验收付款"
+              },
+              {
+                "value": "OC_SUB_04",
+                "label": "交付实施 验收付款"
+              },
+              {
+                "value": "BC_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "BC_02",
+                "label": "方案调研 启动项目"
+              },
+              {
+                "value": "BC_03",
+                "label": "确定方案 圈定供应商"
+              },
+              {
+                "value": "BC_04",
+                "label": "制定规则 落实采购"
+              },
+              {
+                "value": "BC_05",
+                "label": "得到结果 签订合同"
+              },
+              {
+                "value": "BC_06",
+                "label": "交付实施 验收付款"
+              },
+              {
+                "value": "EC_01",
+                "label": "业务驱动 确定需求"
+              },
+              {
+                "value": "EC_02",
+                "label": "技术调研 解法评估"
+              },
+              {
+                "value": "EC_03",
+                "label": "解法初设 形成Demo"
+              },
+              {
+                "value": "EC_04",
+                "label": "测试验证 方案优化"
+              },
+              {
+                "value": "EC_05",
+                "label": "验证成功 确定价值"
+              },
+              {
+                "value": "EC_06",
+                "label": "立项论证 审批通过"
+              }
+            ],
+            "message": "阶段编码必须为预定义的客户采购阶段值之一"
+          },
+          "view": {
+            "displayName": "阶段编码",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_project_stage"
+          }
+        },
+        {
+          "code": "stage_name",
+          "name": "阶段名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "stage_name",
+          "columnName": "stage_name",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 128,
+            "message": "阶段名称不超过128字"
+          },
+          "view": {
+            "displayName": "阶段名称",
+            "sortable": false,
+            "columnWidth": 160,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "stage_status",
+          "name": "阶段状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "stage_status",
+          "columnName": "stage_status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "IN_PROGRESS",
+                "label": "进行中"
+              },
+              {
+                "value": "COMPLETED",
+                "label": "已完成"
+              },
+              {
+                "value": "ROLLBACK",
+                "label": "已回退"
+              }
+            ],
+            "message": "阶段状态必须为 进行中/已完成/已回退 之一"
+          },
+          "view": {
+            "displayName": "阶段状态",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_stage_status"
+          }
+        },
+        {
+          "code": "operation_type",
+          "name": "操作类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "operation_type",
+          "columnName": "action_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "ADVANCE",
+                "label": "阶段推进"
+              },
+              {
+                "value": "ROLLBACK",
+                "label": "阶段回退"
+              },
+              {
+                "value": "RESTART",
+                "label": "项目重启"
+              },
+              {
+                "value": "SUPPLEMENT",
+                "label": "补充说明"
+              }
+            ],
+            "message": "操作类型必须为 阶段推进/阶段回退/项目重启/补充说明 之一"
+          },
+          "view": {
+            "displayName": "操作类型",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_stage_operation_type"
+          }
+        },
+        {
+          "code": "promoter",
+          "name": "推进人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "promoter",
+          "columnName": "operator_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "promoter_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "推进人不能为空"
+          },
+          "view": {
+            "displayName": "推进人ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 11,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "promoter_name",
+          "name": "推进人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "promoter_name",
+          "columnName": "operator_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "view": {
+            "displayName": "推进人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "promoted_time",
+          "name": "推进时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "promoted_time",
+          "columnName": "operate_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "推进时间不能为空"
+          },
+          "view": {
+            "displayName": "推进时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "description",
+          "name": "推进说明",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "description",
+          "columnName": "remark",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 2000,
+            "message": "推进说明不超过2000字"
+          },
+          "view": {
+            "displayName": "推进说明",
+            "sortable": false,
+            "columnWidth": 300,
+            "order": 80,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入推进说明",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "attachment_count",
+          "name": "附件数量",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "attachment_count",
+          "columnName": "attachment_count",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "附件数量",
+            "sortable": false,
+            "columnWidth": 90,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "created_time",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "created_by",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updated_time",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后更新时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 95,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updated_by",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后更新人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 96,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "opportunity",
+      "parentRefField": "opportunity_id",
+      "routeSegment": "opportunity-stage-history",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    },
+    {
+      "code": "opportunity-stage-attachment",
+      "name": "商机阶段推进附件",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_opportunity_sales_flow_attachment",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "附件ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "附件ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "stage_history_id",
+          "name": "所属阶段历史ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "stage_history_id",
+          "columnName": "flow_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          }
+        },
+        {
+          "code": "file_name",
+          "name": "文件名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "file_name",
+          "columnName": "file_name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 255,
+            "message": "文件名称不能为空且不超过255字"
+          },
+          "view": {
+            "displayName": "文件名称",
+            "sortable": false,
+            "columnWidth": 220,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "file_size",
+          "name": "文件大小",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "file_size",
+          "columnName": "file_size",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "文件大小",
+            "sortable": false,
+            "columnWidth": 100,
+            "format": "fileSize",
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "file_type",
+          "name": "文件类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "file_type",
+          "columnName": "file_ext",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "文件类型",
+            "sortable": false,
+            "columnWidth": 80,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "sort_order",
+          "name": "排序",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "sort_order",
+          "columnName": "sort_order",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "file_id",
+          "name": "文件服务器ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "file_id",
+          "columnName": "file_id",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "uploaded_by",
+          "name": "上传人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "uploaded_by",
+          "columnName": "uploaded_by",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": false,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "uploaded_by_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "上传人不能为空"
+          },
+          "view": {
+            "displayName": "上传人",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "uploaded_by_name",
+          "name": "上传人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "uploaded_by_name",
+          "columnName": "uploaded_by_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "上传人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 51,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "uploaded_time",
+          "name": "上传时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "uploaded_time",
+          "columnName": "uploaded_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "message": "上传时间不能为空"
+          },
+          "view": {
+            "displayName": "上传时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "created_time",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "created_by",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updated_time",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updated_by",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "opportunity-stage-history",
+      "parentRefField": "stage_history_id",
+      "routeSegment": "attachments",
+      "cascadeDelete": true,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    },
+    {
+      "code": "opportunity-quotation",
+      "name": "商机报价单",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_opportunity_quote",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "报价单行ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "报价单行ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "opportunity_id",
+          "name": "所属商机ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "opportunity_id",
+          "columnName": "opportunity_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          }
+        },
+        {
+          "code": "quotation_no",
+          "name": "报价单号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "quotation_no",
+          "columnName": "ecp_doc_id",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "报价单号不能为空且不超过64字"
+          },
+          "view": {
+            "displayName": "报价单号",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "ecp_order_id",
+          "name": "新ECP报价单ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "ecp_order_id",
+          "columnName": "ecp_order_id",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "quotation_type",
+          "name": "报价单类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "quotation_type",
+          "columnName": "quote_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 128,
+            "message": "报价单类型不能为空"
+          },
+          "view": {
+            "displayName": "报价单类型",
+            "sortable": false,
+            "columnWidth": 280,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "quotation_status",
+          "name": "报价单状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "quotation_status",
+          "columnName": "status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "DRAFT",
+                "label": "草稿"
+              },
+              {
+                "value": "SAVED",
+                "label": "已保存"
+              },
+              {
+                "value": "PENDING_APPROVAL",
+                "label": "审批中"
+              },
+              {
+                "value": "APPROVED",
+                "label": "已审批"
+              },
+              {
+                "value": "REJECTED",
+                "label": "已驳回"
+              }
+            ],
+            "message": "报价单状态必须为 草稿/已保存/审批中/已审批/已驳回 之一"
+          },
+          "view": {
+            "displayName": "报价单状态",
+            "sortable": false,
+            "columnWidth": 110,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "dictCode": "opportunity_quotation_status"
+          }
+        },
+        {
+          "code": "total_amount",
+          "name": "出货价合计",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "total_amount",
+          "columnName": "total_amount",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "出货价合计不能为空且必须为非负数"
+          },
+          "view": {
+            "displayName": "出货价合计",
+            "sortable": true,
+            "columnWidth": 120,
+            "format": "currency",
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "net_sales_amount",
+          "name": "净销售额",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "net_sales_amount",
+          "columnName": "net_sales_amount",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "source_system",
+          "name": "所属系统",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "source_system",
+          "columnName": "source_system",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "service_start_time",
+          "name": "服务开始时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "service_start_time",
+          "columnName": "service_start_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "service_end_time",
+          "name": "服务结束时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "service_end_time",
+          "columnName": "service_end_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "net_sales_discount",
+          "name": "净销售折扣(不含服务)",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "net_sales_discount",
+          "columnName": "net_sales_discount",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "industry_net_sales_discount",
+          "name": "行业净销售折扣(不含服务)",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "industry_net_sales_discount",
+          "columnName": "industry_net_sales_discount",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "ecp_edit_url",
+          "name": "报价单跳转链接",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "ecp_edit_url",
+          "columnName": "document_url",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "点击跳转ECP编辑",
+            "sortable": false,
+            "columnWidth": 150,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "LINK",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "purchase_type",
+          "name": "采购类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "purchase_type",
+          "columnName": "purchase_type",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "created_time",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "message": "创建时间不能为空"
+          },
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updated_time",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "created_by",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updated_by",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "opportunity",
+      "parentRefField": "opportunity_id",
+      "routeSegment": "quotations",
+      "cascadeDelete": false,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    },
+    {
+      "code": "opportunity-quotation-product",
+      "name": "报价单产品清单",
+      "isPrimary": false,
+      "aggregateRole": "SUB_ENTITY",
+      "tableName": "crm_opportunity_quotation_product",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "报价单产品行ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "view": {
+            "displayName": "报价单产品行ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "quotation_id",
+          "name": "所属报价单ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "quotation_id",
+          "columnName": "quotation_id",
+          "semanticRole": "PARENT_REF",
+          "filterable": false,
+          "validation": {
+            "required": true
+          }
+        },
+        {
+          "code": "product_id",
+          "name": "产品ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "product_id",
+          "columnName": "product_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "products",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "product_model",
+                "localCode": "product_model",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "产品ID不能为空"
+          },
+          "view": {
+            "displayName": "产品ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 19,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "products",
+            "refField": "product_model"
+          }
+        },
+        {
+          "code": "product_model",
+          "name": "产品型号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_model",
+          "columnName": "product_model",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "产品型号",
+            "sortable": true,
+            "columnWidth": 220,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "product_category",
+          "name": "产品类别",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_category",
+          "columnName": "product_category",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "产品类别",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "product_series",
+          "name": "产品系列",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_series",
+          "columnName": "product_series",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "产品系列",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "list_price",
+          "name": "列表价",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "list_price",
+          "columnName": "list_price",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "min": 0
+          },
+          "view": {
+            "displayName": "列表价",
+            "sortable": true,
+            "columnWidth": 90,
+            "format": "currency",
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "unit_price",
+          "name": "出货单价",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "unit_price",
+          "columnName": "unit_price",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "出货单价不能为空且必须为非负数"
+          },
+          "view": {
+            "displayName": "出货单价",
+            "sortable": true,
+            "columnWidth": 90,
+            "format": "currency",
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "quantity",
+          "name": "数量",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "quantity",
+          "columnName": "quantity",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "数量不能为空且必须为非负整数"
+          },
+          "view": {
+            "displayName": "数量",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "scene_id",
+          "name": "场景ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "scene_id",
+          "columnName": "scene_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": false,
+          "crossBoRef": {
+            "refBoCode": "scenes",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "scene_name_customer",
+                "localCode": "scene_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "view": {
+            "displayName": "场景ID",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 11,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": false,
+            "importable": true,
+            "refObject": "scenes",
+            "refField": "scene_name_customer"
+          }
+        },
+        {
+          "code": "scene_name",
+          "name": "场景名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "scene_name",
+          "columnName": "scene_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "view": {
+            "displayName": "场景名称",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_accessory",
+          "name": "是否配件",
+          "type": "BOOLEAN",
+          "isPk": false,
+          "fieldName": "is_accessory",
+          "columnName": "is_accessory",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "是否配件",
+            "sortable": false,
+            "columnWidth": 80,
+            "order": 90,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SWITCH",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "parent_product_model",
+          "name": "主产品型号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "parent_product_model",
+          "columnName": "parent_product_model",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "主产品型号",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 100,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowFallbackScope": "NONE",
+      "parentEntityCode": "opportunity-quotation",
+      "parentRefField": "quotation_id",
+      "routeSegment": "products",
+      "cascadeDelete": false,
+      "entityApiPolicy": {
+        "listProjectionScope": "ENTITY_ONLY",
+        "readScope": "ENTITY_ONLY",
+        "createScope": "ENTITY_ONLY",
+        "updateScope": "ENTITY_ONLY",
+        "deleteScope": "ENTITY_ONLY"
+      }
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新增业务机会",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建商机，分两步向导：第一步录入基本信息与归属人员，第二步录入产品清单。标准 API：POST /opportunities。"
+    },
+    {
+      "code": "IMPORT",
+      "name": "导入",
+      "scope": "GLOBAL",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import",
+      "async": false,
+      "singleResultType": "ApiResponse<OpportunityImportResultDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量导入商机数据，含必填和枚举校验，导入后自动查重。API：POST /opportunities/import。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "GLOBAL",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "ApiResponse<ExportTaskDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "导出商机列表数据，金额字段按权限脱敏。API：POST /opportunities/export。"
+    },
+    {
+      "code": "COPY",
+      "name": "复制商机",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "actionPath": "copy",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "复制当前商机数据进入新建页面，业务机会名称自动追加「-复制」。API：POST /opportunities/{id}/copy。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑商机",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "PATCH",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑商机基本信息与人员。项目类型创建后不可修改，禁止修改 is_in_funnel 和 is_committed（走 UPDATE_SALES_FORECAST）。标准 API：PATCH /opportunities/{id}。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除商机",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "singleResultType": "Void",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除商机（含级联删除子实体：产品清单、团队成员、场景关联、阶段历史、报价单引用）。仅草稿态商机可删除，已跟进（ACTIVE）和已结束（终态）商机不可删除。API：DELETE /opportunities/{id}。"
+    },
+    {
+      "code": "CREATE_QUOTATION",
+      "name": "创建报价单",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_QUOTATION",
+      "httpMethod": "POST",
+      "actionPath": "create-quotation",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<QuotationDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "REDIRECT",
+      "description": "跳转至 ECP 系统创建报价单，自动将产品清单带入 ECP。按项目类型限制可选报价类型。API：POST /opportunities/{id}/create-quotation。"
+    },
+    {
+      "code": "APPLY_PROJECT_MATERIALS",
+      "name": "项目资料申请",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "CREATE",
+      "authzAction": "APPLY_PROJECT_MATERIALS",
+      "httpMethod": "POST",
+      "actionPath": "apply-materials",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<ProjectMaterialsResultDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "向相关部门申请项目资料（如技术方案、测试报告、资质文件等），支持选择资料类型和填写申请说明。API：POST /opportunities/{id}/apply-materials。"
+    },
+    {
+      "code": "ADVANCE_STAGE",
+      "name": "推进销售阶段",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "ADVANCE_STAGE",
+      "httpMethod": "POST",
+      "actionPath": "advance-stage",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "手动推进销售流程至指定阶段，支持跨阶段推进，推进说明非必填。API：POST /opportunities/{id}/advance-stage。"
+    },
+    {
+      "code": "ROLLBACK_STAGE",
+      "name": "退回上一阶段",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "ROLLBACK_STAGE",
+      "httpMethod": "POST",
+      "actionPath": "rollback-stage",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "将销售流程退回到上一阶段，历史推进记录保留。API：POST /opportunities/{id}/rollback-stage。"
+    },
+    {
+      "code": "START_PROGRESS",
+      "name": "开始跟进",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "START_PROGRESS",
+      "httpMethod": "POST",
+      "actionPath": "start-progress",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "将草稿态商机激活为跟进中状态（DRAFT → ACTIVE），触发销售流程第一阶段。无审批环节，销售人员创建商机后直接开始跟进。API：POST /opportunities/{id}/start-progress。"
+    },
+    {
+      "code": "WIN",
+      "name": "赢单",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "WIN",
+      "httpMethod": "POST",
+      "actionPath": "win",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "商机成功签约，商机进入「已赢单」终态。仅 ACTIVE 状态可赢单，结束后允许重启。API：POST /opportunities/{id}/win。"
+    },
+    {
+      "code": "LOSE",
+      "name": "输单",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "LOSE",
+      "httpMethod": "POST",
+      "actionPath": "lose",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "商机竞争失败，商机进入「已输单」终态。仅 ACTIVE 状态可输单，结束后允许重启。API：POST /opportunities/{id}/lose。"
+    },
+    {
+      "code": "CANCEL",
+      "name": "取消商机",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "CANCEL",
+      "httpMethod": "POST",
+      "actionPath": "cancel",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "因客户取消项目、预算撤回等原因终止，商机进入「已取消」终态。DRAFT/ACTIVE 可取消，已终态不重复取消。API：POST /opportunities/{id}/cancel。"
+    },
+    {
+      "code": "RESTART",
+      "name": "重启商机",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "RESTART",
+      "httpMethod": "POST",
+      "actionPath": "restart",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "重新启动已终态（赢单/输单/取消）的商机，销售流程从第一阶段重新开始，历史记录保留。API：POST /opportunities/{id}/restart。"
+    },
+    {
+      "code": "FINISH",
+      "name": "结束销售流程",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "FINISH",
+      "httpMethod": "POST",
+      "actionPath": "finish",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "结束当前销售流程，根据 finishType 决定终止还是完成。API：POST /opportunities/{id}/finish。"
+    },
+    {
+      "code": "CREATE_PRODUCT",
+      "name": "新建产品清单",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-product",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_PRODUCT",
+      "httpMethod": "POST",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityProductDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "在商机下新增产品清单行。API：POST /opportunities/{id}/opportunity-product。"
+    },
+    {
+      "code": "EDIT_PRODUCT",
+      "name": "编辑产品清单",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-product",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "EDIT_PRODUCT",
+      "httpMethod": "PATCH",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityProductDTO>",
+      "position": "ROW",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑产品型号、出货单价和数量。API：PATCH /opportunities/{id}/opportunity-product/{subId}。"
+    },
+    {
+      "code": "DELETE_PRODUCT",
+      "name": "删除产品清单",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-product",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_PRODUCT",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "singleResultType": "Void",
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "删除产品清单行。API：DELETE /opportunities/{id}/opportunity-product/{subId}。"
+    },
+    {
+      "code": "CREATE_TEAM_MEMBER",
+      "name": "新增团队成员",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-team-member",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_TEAM_MEMBER",
+      "httpMethod": "POST",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityTeamMemberDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新增商机团队成员，含成员姓名、角色、权限设置和备注。API：POST /opportunities/{id}/opportunity-team-member。"
+    },
+    {
+      "code": "EDIT_TEAM_MEMBER",
+      "name": "编辑团队成员",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-team-member",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "EDIT_TEAM_MEMBER",
+      "httpMethod": "PATCH",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityTeamMemberDTO>",
+      "position": "ROW",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑团队成员角色、权限和备注。API：PATCH /opportunities/{id}/opportunity-team-member/{subId}。"
+    },
+    {
+      "code": "DELETE_TEAM_MEMBER",
+      "name": "删除团队成员",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-team-member",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_TEAM_MEMBER",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "singleResultType": "Void",
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "删除团队成员。API：DELETE /opportunities/{id}/opportunity-team-member/{subId}。"
+    },
+    {
+      "code": "UPDATE_SALES_FORECAST",
+      "name": "编辑销售预测",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_SALES_FORECAST",
+      "httpMethod": "PATCH",
+      "actionPath": "sales-forecast",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<SalesForecastDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "独立编辑商机的销售预测字段（是否进入漏斗、是否承诺、预测类别），需专门角色授权。与普通编辑（EDIT_OPPORTUNITY）隔离。API：PATCH /opportunities/{id}/sales-forecast。"
+    },
+    {
+      "code": "EDIT_STAGE_RECORD",
+      "name": "编辑阶段记录",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-stage-history",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "EDIT_STAGE_RECORD",
+      "httpMethod": "PATCH",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityStageHistoryDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑已有阶段推进记录的推进说明和附件，不改变阶段本身。用于补充会议纪要、方案评审、测试报告等资料。API：PATCH /opportunities/{id}/opportunity-stage-history/{subId}。"
+    },
+    {
+      "code": "READ_NODE_DETAIL",
+      "name": "按阶段编码查询节点详情",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-stage-history",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_NODE_DETAIL",
+      "httpMethod": "POST",
+      "actionPath": "node-detail",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<SalesFlowNodeDetailView>",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "按 stageCode 查询阶段推进历史节点的详情（推进说明 + 附件）。API：POST /opportunities/{id}/opportunity-stage-history/node-detail。"
+    },
+    {
+      "code": "UPDATE_NODE_RECORD",
+      "name": "按阶段编码编辑节点记录",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-stage-history",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_NODE_RECORD",
+      "httpMethod": "POST",
+      "actionPath": "node-update",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "按 stageCode 编辑阶段推进记录的推进说明和附件。API：POST /opportunities/{id}/opportunity-stage-history/node-update。"
+    },
+    {
+      "code": "SUPPLEMENT_STAGE_DESCRIPTION",
+      "name": "仅补充说明",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-stage-history",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "SUPPLEMENT_STAGE_DESCRIPTION",
+      "httpMethod": "PATCH",
+      "actionPath": "supplement-description",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityStageHistoryDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "仅补充当前阶段的推进说明文字，不上传附件。API：PATCH /opportunities/{id}/opportunity-stage-history/{subId}/supplement-description。"
+    },
+    {
+      "code": "SUPPLEMENT_STAGE_ATTACHMENT",
+      "name": "仅补充附件",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-stage-history",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "SUPPLEMENT_STAGE_ATTACHMENT",
+      "httpMethod": "POST",
+      "actionPath": "supplement-attachment",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityStageHistoryDTO>",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "仅补充当前阶段的附件，不修改推进说明。API：POST /opportunities/{id}/opportunity-stage-history/{subId}/supplement-attachment。"
+    },
+    {
+      "code": "DELETE_STAGE_ATTACHMENT",
+      "name": "删除阶段附件",
+      "scope": "ENTITY",
+      "entityCode": "opportunity-stage-attachment",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_STAGE_ATTACHMENT",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "singleResultType": "Void",
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "删除阶段推进记录中的附件文件。API：DELETE /opportunities/{id}/opportunity-stage-history/{subId}/attachments/{attachmentId}。"
+    },
+    {
+      "code": "SUMMARY",
+      "name": "商机列表汇总",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "POST",
+      "actionPath": "summary",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<OpportunityListSummaryDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "查询商机列表底部汇总（受当前筛选条件影响，不受分页影响）。API：POST /opportunities/summary。"
+    },
+    {
+      "code": "TRANSFER",
+      "name": "商机转移",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "TRANSFER",
+      "httpMethod": "POST",
+      "actionPath": "transfer",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "变更商机所有人，同步处理团队成员记录。API：POST /opportunities/{id}/transfer。"
+    },
+    {
+      "code": "SYNC_CBG_TO_ECP",
+      "name": "同步商机至ECP",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "SYNC",
+      "httpMethod": "POST",
+      "actionPath": "sync-cbg-to-ecp",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<Boolean>",
+      "position": "DETAIL",
+      "triggerEvent": "API_CALL",
+      "description": "单个业务机会同步到ECP（insert or update）。API：POST /opportunities/{id}/sync-cbg-to-ecp。"
+    },
+    {
+      "code": "BATCH_SYNC_CBG_TO_ECP",
+      "name": "批量同步商机至ECP",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "SYNC",
+      "httpMethod": "POST",
+      "actionPath": "batch-sync-cbg-to-ecp",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<Boolean>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "批量业务机会同步到ECP。API：POST /opportunities/batch-sync-cbg-to-ecp。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    },
+    {
+      "code": "LIST_OPPORTUNITY_PRODUCT",
+      "name": "查询商机产品清单列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_OPPORTUNITY_PRODUCT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-product).listProjectionScope",
+      "entityCode": "opportunity-product"
+    },
+    {
+      "code": "READ_OPPORTUNITY_PRODUCT",
+      "name": "查看商机产品清单详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_OPPORTUNITY_PRODUCT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-product).readScope",
+      "entityCode": "opportunity-product"
+    },
+    {
+      "code": "LIST_OPPORTUNITY_TEAM_MEMBER",
+      "name": "查询商机团队成员列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_OPPORTUNITY_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-team-member).listProjectionScope",
+      "entityCode": "opportunity-team-member"
+    },
+    {
+      "code": "READ_OPPORTUNITY_TEAM_MEMBER",
+      "name": "查看商机团队成员详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_OPPORTUNITY_TEAM_MEMBER",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-team-member).readScope",
+      "entityCode": "opportunity-team-member"
+    },
+    {
+      "code": "LIST_OPPORTUNITY_SCENE",
+      "name": "查询商机关联场景列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_OPPORTUNITY_SCENE",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-scene).listProjectionScope",
+      "entityCode": "opportunity-scene"
+    },
+    {
+      "code": "READ_OPPORTUNITY_SCENE",
+      "name": "查看商机关联场景详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_OPPORTUNITY_SCENE",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-scene).readScope",
+      "entityCode": "opportunity-scene"
+    },
+    {
+      "code": "CREATE_OPPORTUNITY_SCENE",
+      "name": "新建商机关联场景",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_OPPORTUNITY_SCENE",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-scene).createScope",
+      "entityCode": "opportunity-scene"
+    },
+    {
+      "code": "UPDATE_OPPORTUNITY_SCENE",
+      "name": "更新商机关联场景",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_OPPORTUNITY_SCENE",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-scene).updateScope",
+      "entityCode": "opportunity-scene"
+    },
+    {
+      "code": "DELETE_OPPORTUNITY_SCENE",
+      "name": "删除商机关联场景",
+      "scope": "ENTITY",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_OPPORTUNITY_SCENE",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-scene).deleteScope",
+      "entityCode": "opportunity-scene"
+    },
+    {
+      "code": "LIST_OPPORTUNITY_STAGE_HISTORY",
+      "name": "查询商机阶段推进历史列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_OPPORTUNITY_STAGE_HISTORY",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-history).listProjectionScope",
+      "entityCode": "opportunity-stage-history"
+    },
+    {
+      "code": "READ_OPPORTUNITY_STAGE_HISTORY",
+      "name": "查看商机阶段推进历史详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_OPPORTUNITY_STAGE_HISTORY",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-history).readScope",
+      "entityCode": "opportunity-stage-history"
+    },
+    {
+      "code": "CREATE_OPPORTUNITY_STAGE_HISTORY",
+      "name": "新建商机阶段推进历史",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_OPPORTUNITY_STAGE_HISTORY",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-history).createScope",
+      "entityCode": "opportunity-stage-history"
+    },
+    {
+      "code": "DELETE_OPPORTUNITY_STAGE_HISTORY",
+      "name": "删除商机阶段推进历史",
+      "scope": "ENTITY",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_OPPORTUNITY_STAGE_HISTORY",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-history).deleteScope",
+      "entityCode": "opportunity-stage-history"
+    },
+    {
+      "code": "LIST_OPPORTUNITY_STAGE_ATTACHMENT",
+      "name": "查询商机阶段推进附件列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_OPPORTUNITY_STAGE_ATTACHMENT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-attachment).listProjectionScope",
+      "entityCode": "opportunity-stage-attachment"
+    },
+    {
+      "code": "READ_OPPORTUNITY_STAGE_ATTACHMENT",
+      "name": "查看商机阶段推进附件详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_OPPORTUNITY_STAGE_ATTACHMENT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-attachment).readScope",
+      "entityCode": "opportunity-stage-attachment"
+    },
+    {
+      "code": "CREATE_OPPORTUNITY_STAGE_ATTACHMENT",
+      "name": "新建商机阶段推进附件",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_OPPORTUNITY_STAGE_ATTACHMENT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-attachment).createScope",
+      "entityCode": "opportunity-stage-attachment"
+    },
+    {
+      "code": "UPDATE_OPPORTUNITY_STAGE_ATTACHMENT",
+      "name": "更新商机阶段推进附件",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_OPPORTUNITY_STAGE_ATTACHMENT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-stage-attachment).updateScope",
+      "entityCode": "opportunity-stage-attachment"
+    },
+    {
+      "code": "LIST_OPPORTUNITY_QUOTATION",
+      "name": "查询商机报价单列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_OPPORTUNITY_QUOTATION",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation).listProjectionScope",
+      "entityCode": "opportunity-quotation"
+    },
+    {
+      "code": "READ_OPPORTUNITY_QUOTATION",
+      "name": "查看商机报价单详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_OPPORTUNITY_QUOTATION",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation).readScope",
+      "entityCode": "opportunity-quotation"
+    },
+    {
+      "code": "CREATE_OPPORTUNITY_QUOTATION",
+      "name": "新建商机报价单",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_OPPORTUNITY_QUOTATION",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation).createScope",
+      "entityCode": "opportunity-quotation"
+    },
+    {
+      "code": "UPDATE_OPPORTUNITY_QUOTATION",
+      "name": "更新商机报价单",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_OPPORTUNITY_QUOTATION",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation).updateScope",
+      "entityCode": "opportunity-quotation"
+    },
+    {
+      "code": "DELETE_OPPORTUNITY_QUOTATION",
+      "name": "删除商机报价单",
+      "scope": "ENTITY",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_OPPORTUNITY_QUOTATION",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation).deleteScope",
+      "entityCode": "opportunity-quotation"
+    },
+    {
+      "code": "LIST_OPPORTUNITY_QUOTATION_PRODUCT",
+      "name": "查询报价单产品清单列表",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST_OPPORTUNITY_QUOTATION_PRODUCT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation-product).listProjectionScope",
+      "entityCode": "opportunity-quotation-product"
+    },
+    {
+      "code": "READ_OPPORTUNITY_QUOTATION_PRODUCT",
+      "name": "查看报价单产品清单详情",
+      "scope": "ENTITY",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ_OPPORTUNITY_QUOTATION_PRODUCT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation-product).readScope",
+      "entityCode": "opportunity-quotation-product"
+    },
+    {
+      "code": "CREATE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "name": "新建报价单产品清单",
+      "scope": "ENTITY",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation-product).createScope",
+      "entityCode": "opportunity-quotation-product"
+    },
+    {
+      "code": "UPDATE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "name": "更新报价单产品清单",
+      "scope": "ENTITY",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation-product).updateScope",
+      "entityCode": "opportunity-quotation-product"
+    },
+    {
+      "code": "DELETE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "name": "删除报价单产品清单",
+      "scope": "ENTITY",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE_OPPORTUNITY_QUOTATION_PRODUCT",
+      "derived": true,
+      "derivedFrom": "entityApiPolicy(opportunity-quotation-product).deleteScope",
+      "entityCode": "opportunity-quotation-product"
+    }
+  ],
+  "rules": [
+    {
+      "code": "OPPORTUNITY_PROJECT_TYPE_IMMUTABLE",
+      "name": "项目类型创建后不可修改",
+      "ruleType": "STATE",
+      "scope": "FIELD",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "项目类型创建后不允许修改",
+      "description": "商机项目类型（DC/OC_MAIN/OC_SUB/BC/EC）在创建后不可变更，因不同类型对应不同销售流程。",
+      "entityCode": "opportunity",
+      "fieldCode": "project_type"
+    },
+    {
+      "code": "OPPORTUNITY_BUSINESS_CUSTOMER_EXISTS",
+      "name": "商机关联业务主体客户必须存在",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "商机关联的业务主体客户不存在，请选择有效客户",
+      "description": "商机 customers_id 引用的客户必须在 customers BO 中存在。",
+      "crossBoRef": {
+        "refBoCode": "customers",
+        "refFieldCode": "id",
+        "localEntityCode": "opportunity",
+        "localFieldCode": "customers_id"
+      }
+    },
+    {
+      "code": "OPPORTUNITY_OC_MASTER_HAS_FRAMEWORK",
+      "name": "OC主项目必须填写预计下单金额/集采框架总金额",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "OC主项目必须填写预计下单金额/集采框架总金额",
+      "description": "OC主项目类型必须提供预计下单金额（集采框架总金额）。",
+      "expression": "project_type == 'OC_MAIN' && expected_order_amount == null",
+      "exprAst": {
+        "type": "logical",
+        "op": "AND",
+        "items": [
+          {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "project_type"
+            },
+            "right": {
+              "type": "literal",
+              "value": "OC_MAIN"
+            }
+          },
+          {
+            "type": "isNull",
+            "expr": {
+              "type": "field",
+              "path": "expected_order_amount"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_STAGE_FLOW",
+      "name": "销售流程阶段推进合法性",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "当前商机状态不允许推进阶段（已结束或已取消）",
+      "description": "已结束（CLOSED_WON/CLOSED_LOST/CANCELLED）的商机不允许推进阶段，仅允许重启。",
+      "operationCode": "ADVANCE_STAGE"
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_ROLLBACK_STAGE",
+      "name": "仅活跃商机可退回阶段",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "当前商机状态不允许退回阶段（仅活跃状态可退回）",
+      "description": "status != 'ACTIVE' 时禁止 ROLLBACK_STAGE。DRAFT 无阶段历史可退，终态（CLOSED_WON/CLOSED_LOST/CANCELLED）阶段已结束不允许退回。",
+      "operationCode": "ROLLBACK_STAGE"
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_WIN",
+      "name": "仅活跃商机可赢单",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅活跃状态的商机可标记赢单",
+      "description": "status != 'ACTIVE' 时禁止 WIN。DRAFT 必须先 SUBMIT→ACTIVE 后赢单；已终态不允许重复赢单。",
+      "operationCode": "WIN"
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_LOSE",
+      "name": "仅活跃商机可输单",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅活跃状态的商机可标记输单",
+      "description": "status != 'ACTIVE' 时禁止 LOSE。DRAFT 必须先 SUBMIT→ACTIVE 后输单；已终态不允许重复输单。",
+      "operationCode": "LOSE"
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_CANCEL",
+      "name": "终态商机不可取消",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "已结束的商机不可取消",
+      "description": "status 为 CLOSED_WON/CLOSED_LOST/CANCELLED 时禁止 CANCEL。DRAFT 和 ACTIVE 状态下允许取消。",
+      "operationCode": "CANCEL"
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_RESTART",
+      "name": "仅终态商机可重启",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅已结束（赢单/输单/取消）的商机可重启",
+      "description": "status 为 DRAFT/ACTIVE 时禁止 RESTART。只有 CLOSED_WON/CLOSED_LOST/CANCELLED 终态才允许重启。",
+      "operationCode": "RESTART"
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_START_PROGRESS",
+      "name": "仅草稿态可开始跟进",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅草稿状态的商机可开始跟进",
+      "description": "status != 'DRAFT' 时禁止 START_PROGRESS。已 ACTIVE 或终态商机不允许重新开始跟进。START_PROGRESS 将商机从 DRAFT 变更为 ACTIVE。",
+      "operationCode": "START_PROGRESS"
+    },
+    {
+      "code": "OPPORTUNITY_PRODUCT_ECP_AVAILABLE",
+      "name": "创建报价前校验产品上架状态",
+      "ruleType": "CONSISTENCY",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "以下型号产品尚未上架，无法进行ECP下单",
+      "description": "创建报价单前校验产品清单中所有产品型号在ECP系统是否已上架，未上架产品拦截并提示。",
+      "operationCode": "CREATE_QUOTATION"
+    },
+    {
+      "code": "OPPORTUNITY_STAGE_TYPE_MATCH",
+      "name": "项目阶段必须匹配项目类型",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "客户采购阶段与项目类型不匹配，请选择当前项目类型对应的阶段",
+      "description": "project_stage 的值必须属于当前 project_type 对应的阶段集合。DC项目对应DC_01~DC_08，OC主项目对应OC_MAIN_01~OC_MAIN_09，OC子项目对应OC_SUB_01~OC_SUB_04，BC项目对应BC_01~BC_06，EC项目对应EC_01~EC_06。",
+      "expression": "// project_stage 的前缀必须与 project_type 匹配。阶段编码格式如 DC_01、OC_MAIN_03 等，前缀（如 'DC_'）取自 project_type + '_'。\nproject_type + '_' != project_stage.substring(0, project_type.length() + 1)",
+      "exprAst": {
+        "type": "binary",
+        "op": "NEQ",
+        "left": {
+          "type": "field",
+          "path": "project_type"
+        },
+        "right": {
+          "type": "field",
+          "path": "project_stage"
+        }
+      },
+      "polarity": "safety"
+    },
+    {
+      "code": "OPPORTUNITY_OC_SUB_REQUIRES_PARENT_ID",
+      "name": "OC子项目必须关联框架主项目",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "OC子项目必须关联框架主项目",
+      "description": "OC子项目类型的商机必须填写 parent_opportunity_id。",
+      "expression": "project_type == 'OC_SUB' && parent_opportunity_id == null",
+      "exprAst": {
+        "type": "logical",
+        "op": "AND",
+        "items": [
+          {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "project_type"
+            },
+            "right": {
+              "type": "literal",
+              "value": "OC_SUB"
+            }
+          },
+          {
+            "type": "isNull",
+            "expr": {
+              "type": "field",
+              "path": "parent_opportunity_id"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "code": "OPPORTUNITY_QUOTATION_NOT_FOR_OC_MAIN",
+      "name": "OC主项目不允许创建报价单",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "OC主项目类型不支持创建报价单，请在OC子项目下创建",
+      "description": "OC主项目是集采框架协议，不直接产生报价单。报价单只能在DC/OC子/BC/EC项目类型下创建。",
+      "operationCode": "CREATE_QUOTATION",
+      "expression": "project_type == 'OC_MAIN'",
+      "exprAst": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "project_type"
+        },
+        "right": {
+          "type": "literal",
+          "value": "OC_MAIN"
+        }
+      }
+    },
+    {
+      "code": "OPPORTUNITY_QUOTATION_READ_ONLY",
+      "name": "报价单为ECP外部引用只读",
+      "ruleType": "STATE",
+      "scope": "ENTITY",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "报价单数据由ECP系统同步，不支持在CRM内直接增删改",
+      "description": "商机 quotation 子实体为 EXTERNAL_REF 性质，数据通过ECP系统回调同步写入，CRM侧仅支持只读展示和跳转ECP编辑。",
+      "entityCode": "opportunity-quotation"
+    },
+    {
+      "code": "OPPORTUNITY_STATUS_DELETE",
+      "name": "仅草稿态可删除",
+      "ruleType": "STATE",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅草稿状态的商机可删除，已跟进或已结束的商机不可删除",
+      "description": "status != 'DRAFT' 时禁止 DELETE。ACTIVE 和终态（CLOSED_WON/CLOSED_LOST/CANCELLED）商机不可删除，仅允许取消或重启。",
+      "operationCode": "DELETE"
+    },
+    {
+      "code": "OPPORTUNITY_PREDICT_CATEGORY_ORDER",
+      "name": "预测类别提升方向约束",
+      "ruleType": "STATE",
+      "scope": "FIELD",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "WARN",
+      "message": "预测类别不建议回退，请确认是否为合规的降级操作",
+      "description": "预测类别从线索→优势有 8 级置信度（LEAD < OPPORTUNITY_MINUS < OPPORTUNITY < OPPORTUNITY_PLUS < POSSIBLE_MINUS < POSSIBLE < POSSIBLE_PLUS < ADVANTAGE）。回退操作产生 WARN 而非 ERROR，由应用层二次确认。",
+      "entityCode": "opportunity",
+      "fieldCode": "predict_category"
+    },
+    {
+      "code": "OPPORTUNITY_EXPECTED_ORDER_AMOUNT_SEMANTIC",
+      "name": "预计下单金额/集采框架总金额双语义",
+      "ruleType": "DERIVATION",
+      "scope": "FIELD",
+      "trigger": "ON_READ",
+      "severity": "INFO",
+      "message": "非OC主项目表示预计下单金额，OC主项目表示集采框架总金额",
+      "description": "expected_order_amount 字段语义由 project_type 决定。",
+      "entityCode": "opportunity",
+      "fieldCode": "expected_order_amount"
+    },
+    {
+      "code": "OPPORTUNITY_PRODUCT_TREE_STRUCTURE",
+      "name": "产品行自引用树形结构约束",
+      "ruleType": "CONSISTENCY",
+      "scope": "FIELD",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "配件行必须关联本商机下的有效主产品行",
+      "description": "NULL=主产品行，非NULL=配件行，指向同表主产品行的id。",
+      "entityCode": "opportunity-product",
+      "fieldCode": "parent_product_id"
+    },
+    {
+      "code": "OPPORTUNITY_RATIO_CONDITIONAL",
+      "name": "场景典配配比条件填写",
+      "ruleType": "CONSISTENCY",
+      "scope": "FIELD",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "配比仅允许在场景典配配件行中填写",
+      "description": "仅同时满足 parent_product_id IS NOT NULL 且 scene_id IS NOT NULL 时填写。",
+      "entityCode": "opportunity-product",
+      "fieldCode": "ratio",
+      "expression": "(parent_product_id == null || scene_id == null) && ratio != null",
+      "exprAst": {
+        "type": "logical",
+        "op": "AND",
+        "items": [
+          {
+            "type": "logical",
+            "op": "OR",
+            "items": [
+              {
+                "type": "isNull",
+                "expr": {
+                  "type": "field",
+                  "path": "parent_product_id"
+                }
+              },
+              {
+                "type": "isNull",
+                "expr": {
+                  "type": "field",
+                  "path": "scene_id"
+                }
+              }
+            ]
+          },
+          {
+            "type": "isNotNull",
+            "expr": {
+              "type": "field",
+              "path": "ratio"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "code": "OPPORTUNITY_STAGE_HISTORY_AUDIT_SNAPSHOT",
+      "name": "阶段历史审计快照固化",
+      "ruleType": "AUTOMATION",
+      "scope": "OPERATION",
+      "trigger": "ON_STATE_CHANGE",
+      "severity": "INFO",
+      "message": "阶段推进需记录历史快照",
+      "description": "from_stage_code 从前一历史记录 stage_code 复制；stage_code 值域同 project_stage；from_stage_name/stage_name 写入时枚举标签固化。",
+      "operationCode": "ADVANCE_STAGE"
+    },
+    {
+      "code": "OPPORTUNITY_SERVICE_TIME_SCOPE",
+      "name": "服务时间仅售后服务销售使用",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "WARN",
+      "message": "服务时间仅针对售后服务销售的商机（EC类型）使用",
+      "description": "service_start_time / service_end_time 仅 EC 项目类型有意义。",
+      "expression": "project_type != 'EC' && (service_start_time != null || service_end_time != null)",
+      "exprAst": {
+        "type": "logical",
+        "op": "AND",
+        "items": [
+          {
+            "type": "binary",
+            "op": "NEQ",
+            "left": {
+              "type": "field",
+              "path": "project_type"
+            },
+            "right": {
+              "type": "literal",
+              "value": "EC"
+            }
+          },
+          {
+            "type": "logical",
+            "op": "OR",
+            "items": [
+              {
+                "type": "isNotNull",
+                "expr": {
+                  "type": "field",
+                  "path": "service_start_time"
+                }
+              },
+              {
+                "type": "isNotNull",
+                "expr": {
+                  "type": "field",
+                  "path": "service_end_time"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "code": "OPPORTUNITY_STAGE_CODE_DOMAIN",
+      "name": "阶段编码值域说明",
+      "ruleType": "DERIVATION",
+      "scope": "FIELD",
+      "trigger": "ON_READ",
+      "severity": "INFO",
+      "message": "阶段编码按项目类型分组",
+      "description": "枚举值按 project_type 分组：DC_01~DC_08 / OC_MAIN_01~OC_MAIN_09 / OC_SUB_01~OC_SUB_04 / BC_01~BC_06 / EC_01~EC_06。",
+      "entityCode": "opportunity-stage-history",
+      "fieldCode": "stage_code"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.876771+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

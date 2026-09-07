@@ -1,0 +1,405 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "orgs",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_code",
+        "displayName": "部门编码",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入部门编码",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_name",
+        "displayName": "部门名称",
+        "sortable": true,
+        "columnWidth": 180,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入部门名称",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_level",
+        "displayName": "部门层级",
+        "sortable": true,
+        "columnWidth": 90,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "org_department_level",
+        "placeholder": "请选择部门层级",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_type_code",
+        "displayName": "部门类型编码",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "org_department_type",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_type",
+        "displayName": "部门类型",
+        "sortable": false,
+        "columnWidth": 120,
+        "hidden": true,
+        "order": 55,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "parent_org_id",
+        "displayName": "上级组织",
+        "sortable": false,
+        "columnWidth": 180,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "ORG_SELECT",
+        "refObject": "orgs",
+        "placeholder": "请选择上级组织",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "parent_department_code",
+        "displayName": "上级部门编码",
+        "sortable": false,
+        "columnWidth": 130,
+        "hidden": true,
+        "order": 65,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "parent_department_name",
+        "displayName": "上级部门名称",
+        "sortable": false,
+        "columnWidth": 180,
+        "hidden": true,
+        "order": 68,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "manage_user_id",
+        "displayName": "负责人",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择负责人",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "manage_staff_no",
+        "displayName": "负责人工号",
+        "sortable": false,
+        "columnWidth": 100,
+        "hidden": true,
+        "order": 73,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "manage_name",
+        "displayName": "负责人姓名",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 75,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "portion_manage_user_id",
+        "displayName": "分管负责人",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择分管负责人",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "portion_manage_staff_no",
+        "displayName": "分管负责人工号",
+        "sortable": false,
+        "columnWidth": 110,
+        "hidden": true,
+        "order": 83,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "portion_manage_name",
+        "displayName": "分管负责人姓名",
+        "sortable": false,
+        "columnWidth": 110,
+        "hidden": true,
+        "order": 85,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "is_enable",
+        "displayName": "启用状态",
+        "sortable": true,
+        "columnWidth": 90,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SWITCH",
+        "dictCode": "org_enable_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "department_hrbp_list",
+        "displayName": "HRBP列表",
+        "sortable": false,
+        "columnWidth": 200,
+        "hidden": true,
+        "order": 100,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入HRBP列表",
+        "queryable": false,
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "dap-sys-org",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "format": "datetime",
+        "exportable": true,
+        "importable": false
+      }
+    ]
+  },
+  "changeNote": [
+    "orgs 首版 VIEW Fragment，含列表/详情/表单字段渲染配置，树形结构使用 ORG_SELECT 选择上级组织"
+  ]
+}

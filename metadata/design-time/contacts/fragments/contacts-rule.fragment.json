@@ -1,0 +1,168 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "contacts",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "CONTACT_PARENT_CUSTOMER_EXISTS",
+        "name": "联系人所关联客户必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "联系人所关联的客户不存在，请选择有效客户",
+        "description": "创建/更新联系人时，parent_id 引用的客户必须在 customers BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "id",
+          "localEntityCode": "customer-contact",
+          "localFieldCode": "customer_id"
+        }
+      },
+      {
+        "code": "CONTACT_NAME_UNIQUE_IN_CUSTOMER",
+        "name": "同一客户下联系人姓名唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "customer-contact",
+        "fieldCode": "name",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "count(customer-contact where customer_id == this.customer_id and name == this.name) <= 1",
+        "severity": "WARN",
+        "message": "该客户下已存在同名联系人，确认继续？",
+        "description": "同一客户（customer_id 相同）下联系人姓名不应重复，提示用户确认。",
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "customer-contact",
+            "where": {
+              "type": "logical",
+              "op": "AND",
+              "items": [
+                {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "customer_id"
+                  },
+                  "right": {
+                    "type": "field",
+                    "path": "customer_id"
+                  }
+                },
+                {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "name"
+                  },
+                  "right": {
+                    "type": "field",
+                    "path": "name"
+                  }
+                }
+              ]
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "RESUME_PERIOD_DATE_ORDER",
+        "name": "履历任职开始时间必须早于结束时间",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "customer-contact-resume",
+        "fieldCode": "period_start",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "period_end == null or period_start < period_end",
+        "severity": "ERROR",
+        "message": "任职开始时间必须早于结束时间",
+        "description": "履历创建或编辑时校验，拒绝开始时间晚于结束时间的输入。period_end 为空表示至今，不校验。",
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "period_end"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LT",
+              "left": {
+                "type": "field",
+                "path": "period_start"
+              },
+              "right": {
+                "type": "field",
+                "path": "period_end"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "EDUCATION_PERIOD_DATE_ORDER",
+        "name": "教育经历开始时间必须早于结束时间",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "customer-contact-education",
+        "fieldCode": "period_start",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "period_end == null or period_start < period_end",
+        "severity": "ERROR",
+        "message": "学习开始时间必须早于结束时间",
+        "description": "教育经历创建或编辑时校验，拒绝学习开始时间晚于结束时间的输入。period_end 为空表示至今，不校验。",
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "period_end"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LT",
+              "left": {
+                "type": "field",
+                "path": "period_start"
+              },
+              "right": {
+                "type": "field",
+                "path": "period_end"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "contacts 首版 RULE Fragment，含跨 BO 客户存在性校验、同客户姓名重复提示、履历日期顺序校验",
+    "CONTACT_NAME_UNIQUE_IN_CUSTOMER 补充 expression/entityCode/fieldCode，scope 改为 FIELD",
+    "新增 RESUME_PERIOD_DATE_ORDER 履历日期顺序校验规则",
+    "新增 EDUCATION_PERIOD_DATE_ORDER 教育经历日期顺序校验规则",
+    "对齐界面原型：删除 CONTACT_DECISION_ROLE_REQUIRES_CIRCLE 规则（in_decision_circle/decision_circle_role 字段已移除）"
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "releaseVersion": "1.0.0",
+  "releasedAt": "2026-09-07T13:15:16.829916+00:00",
+  "generatedBy": "bo-ontology-publish-gen.py",
+  "chains": [
+    {
+      "code": "OPPORTUNITY_WIN_POST_ACTIONS",
+      "name": "商机赢单后置动作链",
+      "description": "商机 WIN 后触发：刷新客户 360 和管道覆盖率，通知商机负责人。",
+      "trigger": {
+        "type": "OPERATION_COMPLETED",
+        "boCode": "opportunities",
+        "operationCode": "WIN"
+      },
+      "condition": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "opportunities.opportunity.status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "CLOSED_WON"
+        }
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${boCode}:${objectId}:${operationCode}:${eventTime}",
+      "maxRetries": 3,
+      "steps": [
+        {
+          "code": "REFRESH_CUSTOMER_360",
+          "name": "刷新客户360",
+          "stepType": "DERIVATION_REFRESH",
+          "target": {
+            "derivedCode": "customer-360"
+          },
+          "inputMapping": {
+            "customerId": "business_customer_id"
+          },
+          "dependsOn": [],
+          "failurePolicy": "RETRY"
+        },
+        {
+          "code": "REFRESH_PIPELINE_COVERAGE",
+          "name": "刷新销售管道覆盖率",
+          "stepType": "DERIVATION_REFRESH",
+          "target": {
+            "derivedCode": "pipeline-coverage"
+          },
+          "inputMapping": {
+            "ownerId": "opportunity_owner"
+          },
+          "dependsOn": [],
+          "failurePolicy": "RETRY"
+        },
+        {
+          "code": "NOTIFY_OWNER",
+          "name": "通知商机负责人",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "opportunity_owner",
+            "messageTemplate": "商机 {opportunity_name} 已赢单，客户评分和目标达成已更新。"
+          },
+          "dependsOn": [
+            "REFRESH_CUSTOMER_360",
+            "REFRESH_PIPELINE_COVERAGE"
+          ],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 3,
+      "triggerType": "OPERATION_COMPLETED",
+      "stepCount": 3
+    },
+    {
+      "code": "OPPORTUNITY_STAGE_STALLED_ALERT",
+      "name": "商机阶段停滞预警",
+      "description": "定时扫描阶段停留超过阈值的商机，生成预警并通知销售负责人。",
+      "trigger": {
+        "type": "SCHEDULED",
+        "cronExpression": "0 8 * * MON",
+        "maxCycleLimit": 1000
+      },
+      "condition": {
+        "type": "binary",
+        "op": "GT",
+        "left": {
+          "type": "metric",
+          "code": "stage_age_days"
+        },
+        "right": {
+          "type": "literal",
+          "value": 30
+        }
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${chainCode}:${boCode}:${objectId}:${scanDate}",
+      "maxRetries": 2,
+      "steps": [
+        {
+          "code": "NOTIFY_OWNER_STALLED",
+          "name": "通知销售负责人阶段停滞",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "opportunity_owner",
+            "messageTemplate": "商机 {opportunity_name} 在当前阶段已停留超过 {stage_age_days} 天，请关注推进。"
+          },
+          "dependsOn": [],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 0,
+      "triggerType": "SCHEDULED",
+      "stepCount": 1
+    },
+    {
+      "code": "CUSTOMER_CHURN_RISK_RAISED",
+      "name": "客户高流失风险动作链",
+      "description": "检测到客户高流失风险后，创建拜访建议通知客户负责人。",
+      "trigger": {
+        "type": "EVENT_RECEIVED",
+        "eventCode": "CUSTOMER_CHURN_RISK_HIGH"
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${chainCode}:${boCode}:${objectId}:${eventTime}",
+      "maxRetries": 3,
+      "steps": [
+        {
+          "code": "CREATE_VISIT_SUGGESTION",
+          "name": "创建拜访建议待办",
+          "stepType": "BO_OPERATION",
+          "target": {
+            "boCode": "sales-activities"
+          },
+          "inputMapping": {
+            "parentId": "customers_id",
+            "actorId": "owner_user_id"
+          },
+          "dependsOn": [],
+          "failurePolicy": "RETRY"
+        },
+        {
+          "code": "NOTIFY_CUSTOMER_OWNER",
+          "name": "通知客户负责人",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "owner_user_id",
+            "messageTemplate": "客户 {customer_name} 近90天无活动且无活跃商机，存在高流失风险，建议尽快安排拜访。"
+          },
+          "dependsOn": [
+            "CREATE_VISIT_SUGGESTION"
+          ],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 2,
+      "triggerType": "EVENT_RECEIVED",
+      "stepCount": 2
+    },
+    {
+      "code": "TARGET_COVERAGE_LOW_ALERT",
+      "name": "目标覆盖不足预警",
+      "description": "定时扫描销售管道覆盖率低于阈值的销售目标，通知销售经理。",
+      "trigger": {
+        "type": "SCHEDULED",
+        "cronExpression": "0 9 * * MON",
+        "maxCycleLimit": 200
+      },
+      "condition": {
+        "type": "binary",
+        "op": "LT",
+        "left": {
+          "type": "metric",
+          "code": "coverage_ratio"
+        },
+        "right": {
+          "type": "literal",
+          "value": 0.8
+        }
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${chainCode}:${boCode}:${objectId}:${scanDate}",
+      "maxRetries": 2,
+      "steps": [
+        {
+          "code": "NOTIFY_SALES_MANAGER",
+          "name": "通知销售经理管道覆盖不足",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "owner_id",
+            "messageTemplate": "销售目标 {owner_name} 的管道覆盖率仅 {coverage_ratio}，缺口 {gap_amount}，建议补充商机。"
+          },
+          "dependsOn": [],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 0,
+      "triggerType": "SCHEDULED",
+      "stepCount": 1
+    }
+  ],
+  "chainCount": 4
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "2.0",
+  "changeNote": "CRM 客户 BO 首版 MODEL Fragment，从现有 authz-bo-meta-model 迁移并补全聚合结构、API 配置和治理元数据。",
+  "boCode": "customers",
+  "appCode": "crm",
+  "draftVersion": "1.0",
+  "tenantId": "cbg"
+}

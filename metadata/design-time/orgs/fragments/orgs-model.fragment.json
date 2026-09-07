@@ -1,0 +1,270 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "orgs",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "orgs",
+    "boName": "组织",
+    "description": "组织架构业务对象，采用树形建模（TREE），主实体 dap-sys-org 通过 parent_org_id 自引用形成组织层级树。PSP 中 bo_code 为 orgs，对应数据表 dap-sys-org。",
+    "apiConfig": {
+      "resourcePath": "/orgs",
+      "idField": "id",
+      "idType": "STRING",
+      "businessKeyField": "department_code",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "TREE",
+      "nameField": "department_name",
+      "statusField": "is_enable",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "dap-sys-org",
+        "name": "组织实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "dap_sys_org",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "组织ID",
+            "type": "STRING",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "department_code",
+            "fieldName": "departmentCode",
+            "columnName": "department_code",
+            "name": "部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true
+          },
+          {
+            "code": "department_name",
+            "fieldName": "departmentName",
+            "columnName": "department_name",
+            "name": "部门名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true
+          },
+          {
+            "code": "department_level",
+            "fieldName": "departmentLevel",
+            "columnName": "department_level",
+            "name": "部门层级",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "department_type_code",
+            "fieldName": "departmentTypeCode",
+            "columnName": "department_type_code",
+            "name": "部门类型编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "department_type",
+            "fieldName": "departmentType",
+            "columnName": "department_type",
+            "name": "部门类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "parent_org_id",
+            "fieldName": "parentOrgId",
+            "columnName": "parent_org_id",
+            "name": "上级组织ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": true
+          },
+          {
+            "code": "parent_department_code",
+            "fieldName": "parentDepartmentCode",
+            "columnName": "parent_department_code",
+            "name": "上级部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "parent_department_name",
+            "fieldName": "parentDepartmentName",
+            "columnName": "parent_department_name",
+            "name": "上级部门名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "manage_user_id",
+            "fieldName": "manageUserId",
+            "columnName": "manage_user_id",
+            "name": "负责人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_no",
+                  "localCode": "manage_staff_no",
+                  "displayRole": "BUSINESS_KEY"
+                },
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "manage_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "manage_staff_no",
+            "fieldName": "manageStaffNo",
+            "columnName": "manage_staff_no",
+            "name": "负责人工号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "redundant": true
+          },
+          {
+            "code": "manage_name",
+            "fieldName": "manageName",
+            "columnName": "manage_name",
+            "name": "负责人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "redundant": true
+          },
+          {
+            "code": "portion_manage_user_id",
+            "fieldName": "portionManageUserId",
+            "columnName": "portion_manage_user_id",
+            "name": "分管负责人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_no",
+                  "localCode": "portion_manage_staff_no",
+                  "displayRole": "BUSINESS_KEY"
+                },
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "portion_manage_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "portion_manage_staff_no",
+            "fieldName": "portionManageStaffNo",
+            "columnName": "portion_manage_staff_no",
+            "name": "分管负责人工号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "redundant": true
+          },
+          {
+            "code": "portion_manage_name",
+            "fieldName": "portionManageName",
+            "columnName": "portion_manage_name",
+            "name": "分管负责人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "redundant": true
+          },
+          {
+            "code": "is_enable",
+            "fieldName": "isEnable",
+            "columnName": "is_enable",
+            "name": "启用状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "department_hrbp_list",
+            "fieldName": "departmentHrbpList",
+            "columnName": "department_hrbp_list",
+            "name": "HRBP列表",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  }
+}

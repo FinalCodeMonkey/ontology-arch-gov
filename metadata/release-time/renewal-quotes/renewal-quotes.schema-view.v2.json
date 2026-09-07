@@ -1,0 +1,788 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "renewal-quotes",
+  "boName": "续保报价提交记录",
+  "description": "续保报价提交记录业务对象，单表建模（SINGLE）。记录设备盘点单生成的续保报价提交到 CRM 系统的记录，包含报价类型、销售机会类型、CRM 回写状态等。通过 parent_id 关联设备盘点单（device-inventories BO）。PSP 中 bo_code 为 renewal-quotes。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/renewal-quotes",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "quote_type_code",
+    "statusField": "submit_status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "submit_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "renewal-quote",
+      "name": "续保报价提交记录",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_renewal_quote",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键（雪花ID）",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "inventory_id",
+          "name": "关联盘点单ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "inventoryId",
+          "columnName": "parent_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "device-inventories",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "inventory_no",
+                "localCode": "inventory_no",
+                "displayRole": "BUSINESS_KEY"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "必须指定关联盘点单"
+          },
+          "view": {
+            "displayName": "关联盘点单",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择盘点单",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "device-inventories",
+            "refField": "inventory_no"
+          }
+        },
+        {
+          "code": "inventory_no",
+          "name": "盘点单编号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "inventoryNo",
+          "columnName": "inventory_no",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "view": {
+            "displayName": "盘点单编号",
+            "sortable": true,
+            "columnWidth": 150,
+            "order": 25,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "quote_type_code",
+          "name": "报价类型编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "quoteTypeCode",
+          "columnName": "quote_type_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "message": "报价类型编码不能为空且不超过32字"
+          },
+          "view": {
+            "displayName": "报价类型",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择报价类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "renewal-quote_type"
+          }
+        },
+        {
+          "code": "sales_opportunity_type_code",
+          "name": "销售机会类型编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "salesOpportunityTypeCode",
+          "columnName": "sales_opportunity_type_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "销售机会类型编码不能为空且不超过64字"
+          },
+          "view": {
+            "displayName": "销售机会类型",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择销售机会类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "sales_opportunity_type"
+          }
+        },
+        {
+          "code": "crm_opportunity_code",
+          "name": "CRM业务机会编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "crmOpportunityCode",
+          "columnName": "crm_opportunity_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "CRM业务机会编码涉及外部系统数据，限制可见",
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "CRM业务机会编码",
+            "sortable": true,
+            "columnWidth": 150,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "crm_opportunity_name",
+          "name": "CRM业务机会名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "crmOpportunityName",
+          "columnName": "crm_opportunity_name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "CRM业务机会名称",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "submit_time",
+          "name": "提交时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "submitTime",
+          "columnName": "submit_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "提交时间不能为空"
+          },
+          "view": {
+            "displayName": "提交时间",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "callback_time",
+          "name": "CRM回写时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "callbackTime",
+          "columnName": "callback_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "CRM回写时间",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 80,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "submit_status",
+          "name": "提交状态",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "submitStatus",
+          "columnName": "submit_status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "enum": [
+              {
+                "value": "0",
+                "label": "待提交"
+              },
+              {
+                "value": "1",
+                "label": "提交成功"
+              },
+              {
+                "value": "2",
+                "label": "提交失败"
+              }
+            ],
+            "message": "提交状态必须为预定义值"
+          },
+          "view": {
+            "displayName": "提交状态",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": false,
+            "disabled": true,
+            "dictCode": "renewal-quote_submit_status"
+          }
+        },
+        {
+          "code": "fail_reason",
+          "name": "失败原因",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "failReason",
+          "columnName": "fail_reason",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "失败原因可能包含系统内部错误信息，限制可见",
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "失败原因",
+            "sortable": false,
+            "columnWidth": 300,
+            "order": 100,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "TEXTAREA",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "逻辑删除",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "inventory_id",
+        "quote_type_code",
+        "sales_opportunity_type_code",
+        "submit_status",
+        "crm_opportunity_code",
+        "submit_time"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "READ",
+      "name": "查询续保报价详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "GET",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<RenewalQuoteVO>",
+      "position": "ROW",
+      "triggerEvent": "OPEN_FORM",
+      "description": "按 ID 查询续保报价详情。API：GET /renewal-quotes/{id}。"
+    },
+    {
+      "code": "CREATE",
+      "name": "新建报价提交记录",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "description": "创建续保报价提交记录。API：POST /renewal-quotes。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑报价提交记录",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "update",
+      "description": "编辑续保报价提交记录。API：POST /renewal-quotes/{id}/update。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除报价提交记录",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "description": "逻辑删除报价提交记录。API：DELETE /renewal-quotes/{id}。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "description": "导出报价提交记录。API：POST /renewal-quotes/export。"
+    },
+    {
+      "code": "SUBMIT",
+      "name": "提交续保报价",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "SUBMIT",
+      "httpMethod": "POST",
+      "actionPath": "submit",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<RenewalQuoteVO>",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "提交续保报价，进入本地状态机流转，由 CRM 商机门面决定同步完成还是等待回调。API：POST /renewal-quotes/submit。"
+    },
+    {
+      "code": "MARK_SUCCESS",
+      "name": "手工标记成功",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "MARK_SUCCESS",
+      "httpMethod": "POST",
+      "actionPath": "mark-success",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<RenewalQuoteVO>",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "手工将续保报价标记为成功。API：POST /renewal-quotes/{id}/mark-success。"
+    },
+    {
+      "code": "MARK_FAILED",
+      "name": "手工标记失败",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "MARK_FAILED",
+      "httpMethod": "POST",
+      "actionPath": "mark-failed",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<RenewalQuoteVO>",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "手工将续保报价标记为失败。API：POST /renewal-quotes/{id}/mark-failed。"
+    },
+    {
+      "code": "RETRY_SUBMIT",
+      "name": "重新提交",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "RETRY_SUBMIT",
+      "httpMethod": "POST",
+      "actionPath": "retry-submit",
+      "description": "对提交失败的记录重新提交到 CRM。API：POST /renewal-quotes/{id}/retry-submit。"
+    },
+    {
+      "code": "QUERY_NEOCRM_OPPORTUNITIES",
+      "name": "查询可关联 CRM 商机",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "QUERY_NEOCRM_OPPORTUNITIES",
+      "httpMethod": "POST",
+      "actionPath": "neocrm-opportunity-query",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<PageResult<RenewalOpportunityVO>>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "查询当前用户的工号可关联的已有 CRM 商机列表。API：POST /renewal-quotes/neocrm-opportunity-query。"
+    },
+    {
+      "code": "CHECK_NEOCRM_OPPORTUNITY_COMPLIANCE",
+      "name": "校验 CRM 商机合规性",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "CHECK_NEOCRM_OPPORTUNITY_COMPLIANCE",
+      "httpMethod": "POST",
+      "actionPath": "neocrm-opportunity-compliance-check",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<RenewalOpportunityComplianceCheckVO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "校验商机名称和客户名称是否符合 CRM 阻断规则。API：POST /renewal-quotes/neocrm-opportunity-compliance-check。"
+    },
+    {
+      "code": "QUERY_NEOCRM_OPPORTUNITY_OPTIONS",
+      "name": "查询 CRM 商机下拉选项",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "QUERY_NEOCRM_OPPORTUNITY_OPTIONS",
+      "httpMethod": "GET",
+      "actionPath": "neocrm-opportunity-options",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<RenewalOpportunityOptionGroupsVO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "根据字段编码查询 CRM 新商机下拉选项分组。API：GET /renewal-quotes/neocrm-opportunity-options。"
+    },
+    {
+      "code": "QUERY_NEOCRM_OPPORTUNITY_STAGES",
+      "name": "查询 CRM 商机阶段",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "QUERY_NEOCRM_OPPORTUNITY_STAGES",
+      "httpMethod": "GET",
+      "actionPath": "neocrm-opportunity-stages",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<List<RenewalOptionItemVO>>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "根据 entityTypeApiKey 查询 CRM 商机阶段列表，用于采购阶段下拉。API：GET /renewal-quotes/neocrm-opportunity-stages。"
+    },
+    {
+      "code": "QUERY_SERVICE_PACKAGES",
+      "name": "查询维保服务包",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "QUERY_SERVICE_PACKAGES",
+      "httpMethod": "POST",
+      "actionPath": "service-packages-query",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<List<RenewalServicePackageOptionVO>>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "根据产品编码批量查询维保服务选项。API：POST /renewal-quotes/service-packages-query。"
+    },
+    {
+      "code": "QUERY_ECP_DEVICES",
+      "name": "查询 ECP 续保设备",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "QUERY_ECP_DEVICES",
+      "httpMethod": "POST",
+      "actionPath": "ecp-devices-query",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<PageResult<EcpRenewalQuoteDeviceVO>>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "ECP 查询续保报价关联设备列表（支持分页/全量）。API：POST /renewal-quotes/ecp-devices-query。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "QUOTE_INVENTORY_EXISTS",
+      "name": "报价记录关联盘点单必须存在",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "关联的设备盘点单不存在，请选择有效盘点单",
+      "description": "创建/更新报价提交记录时，inventory_id 引用的盘点单必须在 device-inventories BO 中存在。",
+      "crossBoRef": {
+        "refBoCode": "device-inventories",
+        "refFieldCode": "id",
+        "localEntityCode": "renewal-quote",
+        "localFieldCode": "inventory_id"
+      }
+    },
+    {
+      "code": "QUOTE_RETRY_ONLY_FAILED",
+      "name": "重新提交仅限失败记录",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅提交失败的记录可以重新提交",
+      "description": "RETRY_SUBMIT 操作时，submit_status 必须为 2（提交失败）。",
+      "expression": "submit_status != 2",
+      "exprAst": {
+        "type": "binary",
+        "op": "NEQ",
+        "left": {
+          "type": "field",
+          "path": "submit_status"
+        },
+        "right": {
+          "type": "literal",
+          "value": 2
+        }
+      }
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:25.062743+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

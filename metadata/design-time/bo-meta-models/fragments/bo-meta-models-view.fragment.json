@@ -1,0 +1,337 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "bo-meta-models",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "id",
+        "displayName": "主键ID",
+        "sortable": false,
+        "columnWidth": 80,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "tenant_id",
+        "displayName": "租户标识",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入租户标识",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "app_code",
+        "displayName": "应用代码",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入应用代码",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "bo_code",
+        "displayName": "BO标识",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入BO标识（复数小写kebab-case）",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "bo_name",
+        "displayName": "BO名称",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入BO名称",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "schema_json",
+        "displayName": "投影元数据JSON",
+        "sortable": false,
+        "order": 60,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "RICH_TEXT",
+        "placeholder": "请输入 authz-bo-meta-model-projection 投影 JSON",
+        "queryable": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "adapter_type",
+        "displayName": "适配器类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "bo_adapter_type",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "resolver",
+        "displayName": "解析器",
+        "sortable": false,
+        "columnWidth": 140,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "INPUT",
+        "placeholder": "请输入解析器标识",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "data_domain_id",
+        "displayName": "所属数据领域",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "data-domains",
+        "placeholder": "请选择数据领域",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "domain_name"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "data_domain_name",
+        "displayName": "数据领域名称",
+        "sortable": true,
+        "columnWidth": 140,
+        "hidden": true,
+        "order": 95,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 100,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "created_at",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 110,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "updated_by",
+        "displayName": "更新人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 120,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "updated_at",
+        "displayName": "更新时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 130,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "DATETIME",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "is_deleted",
+        "displayName": "逻辑删除标记",
+        "sortable": false,
+        "hidden": true,
+        "order": 140,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      }
+    ]
+  },
+  "changeNote": [
+    "bo-meta-models 首版 VIEW Fragment",
+    "schema_json 使用 RICH_TEXT 表单类型，仅在详情页展示",
+    "data_domain_id 使用 OBJECT_SELECT 关联 data-domains BO",
+    "adapter_type 使用 SELECT + dictCode 字典",
+    "审计字段（created_by/updated_by 等）默认只读"
+  ]
+}

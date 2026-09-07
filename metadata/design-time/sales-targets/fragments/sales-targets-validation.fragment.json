@@ -1,0 +1,136 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-targets",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "target",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "owner_type",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {
+            "value": "EMPLOYEE",
+            "label": "员工"
+          },
+          {
+            "value": "CUSTOMER",
+            "label": "客户"
+          }
+        ],
+        "message": "目标方类型必须为 EMPLOYEE 或 CUSTOMER"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "owner_id",
+        "required": true,
+        "max": 64,
+        "message": "目标对象ID不能为空且不超过64字符"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "owner_name",
+        "max": 200
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "goal_type",
+        "required": true,
+        "max": 64,
+        "enum": [
+          {
+            "value": "ORDER_AMOUNT",
+            "label": "订单"
+          },
+          {
+            "value": "INVOICE_AMOUNT",
+            "label": "开票"
+          },
+          {
+            "value": "GROSS_MARGIN_RATE",
+            "label": "毛利率"
+          },
+          {
+            "value": "VISIT_COUNT",
+            "label": "拜访次数"
+          },
+          {
+            "value": "SIGNED_CUSTOMER_COUNT",
+            "label": "签约个数"
+          },
+          {
+            "value": "LAST_YEAR_RENEWAL_FORECAST_AMOUNT",
+            "label": "上一年续保预测金额"
+          },
+          {
+            "value": "LAST_YEAR_RENEWAL_FORECAST_COUNT",
+            "label": "上一年续保预测数量"
+          },
+          {
+            "value": "CURRENT_YEAR_NEW_EXPIRING_FORECAST_AMOUNT",
+            "label": "当年新增出保预测金额"
+          },
+          {
+            "value": "CURRENT_YEAR_NEW_EXPIRING_FORECAST_COUNT",
+            "label": "当年新增出保预测数量"
+          }
+        ],
+        "message": "目标类型必须为预定义值之一"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "apply_rule",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {
+            "value": "YEARLY",
+            "label": "年度"
+          },
+          {
+            "value": "MONTHLY",
+            "label": "月度"
+          }
+        ],
+        "message": "适配规则必须为 YEARLY 或 MONTHLY"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "target_year",
+        "required": true,
+        "min": 2000,
+        "max": 2100,
+        "message": "目标年份不能为空且在合理范围内"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "target_month",
+        "min": 1,
+        "max": 12,
+        "message": "目标月份应在1-12之间，年度规则时留空"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "goal_value",
+        "required": true,
+        "min": 0,
+        "message": "目标值不能为空且须为非负数"
+      },
+      {
+        "entityCode": "target",
+        "fieldCode": "remarks",
+        "max": 500
+      }
+    ]
+  }
+}

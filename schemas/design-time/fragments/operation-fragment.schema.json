@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/operation-fragment.schema.json",
+  "title": "BO OPERATION fragment",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [OPERATION Fragment] 章节。",
+  "type": "object",
+  "required": ["operations"],
+  "additionalProperties": false,
+  "properties": {
+    "operations": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；operation.code 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "scope", "operationKind", "primaryDataAction", "authzAction"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+          "scope": {
+            "type": "string",
+            "enum": ["BO", "ENTITY", "GLOBAL"],
+            "description": "作用范围：BO=级联实体（作用于聚合根及所有下级实体，entityCode 可省略，默认主实体）、ENTITY=单实体（仅作用于指定 entityCode 的实体）、GLOBAL=全局（跨 BO 通用操作，无需 entityCode）"
+          },
+          "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "operationKind": { "type": "string", "enum": ["CREATE", "UPDATE", "DELETE", "STATE_CHANGE", "IMPORT", "EXPORT", "MERGE", "CUSTOM"] },
+          "primaryDataAction": {
+            "type": "string",
+            "enum": ["CREATE", "READ", "UPDATE", "DELETE"],
+            "description": "该操作对业务数据层的主效应。用于权限归类、审计、读写路由、数据策略匹配和治理校验；复杂业务命令只填写其主效应。"
+          },
+          "authzAction": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "description": "发布到 PSP authz_permission_item.act_code 的授权动作，也是多个 Operation 归并到同一权限项的聚合键。必须显式配置，推荐遵循以下映射约定：CREATE→CREATE、UPDATE→UPDATE、DELETE→DELETE、MERGE→UPDATE、IMPORT→IMPORT、EXPORT→EXPORT；STATE_CHANGE 和 CUSTOM 使用独立 authzAction。同一 BO 下相同 authzAction 只生成一条权限项，发布态可反向形成 permissionItem→operations 的派生关系；打开表单、保存表单等 UI 阶段不得单独生成 SAVE 权限项；提交审批、发布、归档、作废等独立业务命令应使用独立 authzAction。"
+          },
+          "httpMethod": { "type": "string", "enum": ["GET", "POST", "PATCH", "DELETE"], "default": "POST", "description": "操作触发的 HTTP 方法。PATCH 表达 REST 语义，Controller 实现层按治理规则降级为 POST + 动作路径。" },
+          "actionPath": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "supportsBatch": { "type": "boolean", "default": false },
+          "async": { "type": "boolean", "default": false },
+          "singleResultType": { "type": "string" },
+          "batchResultType": { "const": "BatchResultDTO", "description": "批量操作返回类型，固定为 BatchResultDTO。仅在 supportsBatch=true 时有意义；若 supportsBatch=false，发布服务应忽略本字段。" },
+          "description": { "type": "string", "maxLength": 500 },
+          "position": { "type": "string", "enum": ["TOOLBAR", "ROW", "DETAIL", "FLOATING"], "default": "ROW" },
+          "triggerEvent": { "type": "string", "enum": ["OPEN_FORM", "API_CALL", "REDIRECT", "CONFIRM_THEN_API"], "default": "API_CALL", "description": "触发形态仅描述交互入口类别，不保存原型文件、按钮文案或事件函数引用。\n\n示例 1 — OPEN_FORM 不拆分 SAVE 权限：CREATE/EDIT 配 OPEN_FORM 时，打开弹窗、表单填写、点确定提交全程共用同一个 authzAction；PSP 不生成 SAVE 权限项。scene-archs 的 CREATE（OPEN_FORM, authzAction=CREATE）和 EDIT（OPEN_FORM, authzAction=UPDATE）都是典型用法。\n\n示例 2 — 编辑锁三件套归并同一权限：scenes 的 OPEN_EDIT_SCENE（API_CALL）、EDIT_SCENE（API_CALL）、RELEASE_SCENE_EDIT_SESSION（API_CALL）三个操作 authzAction 均为 UPDATE，分别对应获取锁+打开编辑态、提交保存、取消时释放锁三个阶段；PSP 仅生成一条 UPDATE 权限项，不拆分 LOCK/UNLOCK。" }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "scope": { "const": "ENTITY" } },
+              "required": ["scope"]
+            },
+            "then": { "required": ["entityCode"] }
+          },
+          {
+            "if": {
+              "properties": {
+                "operationKind": { "const": "CUSTOM" },
+                "triggerEvent": { "enum": ["API_CALL", "CONFIRM_THEN_API"] }
+              },
+              "required": ["operationKind", "triggerEvent"]
+            },
+            "then": { "required": ["actionPath"] }
+          },
+          {
+            "$comment": "scope=BO 或 GLOBAL 时 entityCode 语义上不应出现；JSON Schema 无法表达 '禁止存在' 约束，由发布服务校验。"
+          }
+        ]
+      },
+      "default": []
+    }
+  }
+}

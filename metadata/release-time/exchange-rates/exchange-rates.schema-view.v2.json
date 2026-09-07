@@ -1,0 +1,923 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "exchange-rates",
+  "boName": "汇率",
+  "description": "汇率业务对象，作为全系统共享的汇率主数据。采用统一基准币种（CNY）模式，其他币种均相对基准维护汇率。当前固定使用月均汇率（MONTHLY_AVG），人工录入，按生效区间匹配最新有效汇率。商机、报价单、订单等模块均可引用。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/exchange-rates",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "rate_no",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "rate_no",
+    "statusField": "status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "APPLICATION",
+    "defaultSort": {
+      "field": "effective_date",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 120,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "exchange-rate",
+      "name": "汇率主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_master_exchange_rate",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "汇率ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "rate_no",
+          "name": "汇率编号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "rate_no",
+          "columnName": "rate_no",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "unique": true
+          },
+          "view": {
+            "displayName": "汇率编号",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "base_currency",
+          "name": "基准币种",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "base_currency",
+          "columnName": "base_currency",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 16,
+            "enum": [
+              {
+                "value": "CNY",
+                "label": "人民币"
+              },
+              {
+                "value": "USD",
+                "label": "美元"
+              }
+            ],
+            "message": "基准币种必须为 人民币/美元 之一"
+          },
+          "view": {
+            "displayName": "基准币种",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true,
+            "dictCode": "currency"
+          }
+        },
+        {
+          "code": "target_currency",
+          "name": "目标币种",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "target_currency",
+          "columnName": "target_currency",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 16,
+            "enum": [
+              {
+                "value": "CNY",
+                "label": "人民币"
+              },
+              {
+                "value": "USD",
+                "label": "美元"
+              },
+              {
+                "value": "EUR",
+                "label": "欧元"
+              },
+              {
+                "value": "JPY",
+                "label": "日元"
+              },
+              {
+                "value": "HKD",
+                "label": "港币"
+              }
+            ],
+            "message": "目标币种必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "目标币种",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择目标币种",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "IN",
+                "label": "属于"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "enum",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "currency"
+          }
+        },
+        {
+          "code": "rate_type",
+          "name": "汇率类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "rate_type",
+          "columnName": "rate_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "SPOT",
+                "label": "即期汇率"
+              },
+              {
+                "value": "MONTHLY_AVG",
+                "label": "月均汇率"
+              },
+              {
+                "value": "QUARTERLY_AVG",
+                "label": "季均汇率"
+              },
+              {
+                "value": "YEARLY_AVG",
+                "label": "年均汇率"
+              }
+            ],
+            "message": "汇率类型必须为 即期/月均/季均/年均 之一"
+          },
+          "view": {
+            "displayName": "汇率类型",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择汇率类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "IN",
+                "label": "属于"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "enum",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "exchange_rate_type"
+          }
+        },
+        {
+          "code": "rate",
+          "name": "汇率值",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "rate",
+          "columnName": "rate",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "汇率值不能为空且必须为正数"
+          },
+          "view": {
+            "displayName": "汇率值",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "请输入汇率值",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "effective_date",
+          "name": "生效日期",
+          "type": "DATE",
+          "isPk": false,
+          "fieldName": "effective_date",
+          "columnName": "effective_date",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "生效日期不能为空"
+          },
+          "view": {
+            "displayName": "生效日期",
+            "sortable": true,
+            "columnWidth": 130,
+            "format": "date",
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "placeholder": "请选择生效日期",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "date",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "expiry_date",
+          "name": "失效日期",
+          "type": "DATE",
+          "isPk": false,
+          "fieldName": "expiry_date",
+          "columnName": "expiry_date",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "失效日期不能为空"
+          },
+          "view": {
+            "displayName": "失效日期",
+            "sortable": true,
+            "columnWidth": 130,
+            "format": "date",
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "placeholder": "请选择失效日期",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "status",
+          "name": "状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "status",
+          "columnName": "status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "enum": [
+              {
+                "value": "ACTIVE",
+                "label": "生效"
+              },
+              {
+                "value": "INACTIVE",
+                "label": "失效"
+              }
+            ],
+            "message": "状态必须为 生效/失效 之一"
+          },
+          "view": {
+            "displayName": "状态",
+            "sortable": true,
+            "columnWidth": 80,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "IN",
+                "label": "属于"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "enum",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "exchange_rate_status"
+          }
+        },
+        {
+          "code": "source",
+          "name": "汇率来源",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "source",
+          "columnName": "source",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 128
+          },
+          "view": {
+            "displayName": "汇率来源",
+            "sortable": false,
+            "columnWidth": 150,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入汇率来源",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              },
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "remark",
+          "name": "备注",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "remark",
+          "columnName": "remark",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "备注",
+            "sortable": false,
+            "columnWidth": 200,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入备注",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "is_deleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "created_time",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 120,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updated_time",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "format": "datetime",
+            "order": 130,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "created_by",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updated_by",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 150,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "status",
+        "base_currency",
+        "target_currency",
+        "rate_type"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新增汇率",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<ExchangeRateDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新增汇率记录。标准 API：POST /exchange-rates。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑汇率",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "PATCH",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<ExchangeRateDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑汇率记录。标准 API：PATCH /exchange-rates/{id}。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除汇率",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "singleResultType": "Void",
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "删除汇率记录。标准 API：DELETE /exchange-rates/{id}。"
+    },
+    {
+      "code": "IMPORT",
+      "name": "导入",
+      "scope": "GLOBAL",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import",
+      "async": false,
+      "singleResultType": "ApiResponse<ExchangeRateImportResultDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量导入汇率数据。API：POST /exchange-rates/import。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "GLOBAL",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "ApiResponse<ExportTaskDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "导出汇率列表数据。API：POST /exchange-rates/export。"
+    },
+    {
+      "code": "ACTIVATE",
+      "name": "启用",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "ACTIVATE",
+      "httpMethod": "POST",
+      "actionPath": "activate",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<ExchangeRateDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "将汇率状态变更为生效。API：POST /exchange-rates/{id}/activate。"
+    },
+    {
+      "code": "DEACTIVATE",
+      "name": "停用",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "DEACTIVATE",
+      "httpMethod": "POST",
+      "actionPath": "deactivate",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<ExchangeRateDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "将汇率状态变更为失效。API：POST /exchange-rates/{id}/deactivate。"
+    },
+    {
+      "code": "QUERY_RATE",
+      "name": "查询有效汇率",
+      "scope": "GLOBAL",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "httpMethod": "POST",
+      "actionPath": "query-rate",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<ExchangeRateDTO>",
+      "position": "FLOATING",
+      "triggerEvent": "API_CALL",
+      "description": "按币种对+汇率类型+日期查询当前有效汇率。供商机、报价单等模块调用。API：POST /exchange-rates/query-rate。"
+    },
+    {
+      "code": "SAVE",
+      "name": "保存汇率",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "save",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<ExchangeRateDTO>",
+      "position": "FLOATING",
+      "triggerEvent": "API_CALL",
+      "description": "仪表盘快捷保存汇率。按 base_currency + target_currency + rate_type + effective_date + expiry_date 做 UPSERT：同周期记录存在则更新，否则新增。API：POST /exchange-rates/save。保存修改归并到 UPDATE 权限项。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "EXCHANGE_RATE_DATE_RANGE_VALID",
+      "name": "生效日期必须早于失效日期",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "生效日期必须早于失效日期",
+      "description": "汇率记录的 effective_date 必须严格早于 expiry_date。",
+      "expression": "effective_date >= expiry_date",
+      "exprAst": {
+        "type": "binary",
+        "op": "GTE",
+        "left": {
+          "type": "field",
+          "path": "effective_date"
+        },
+        "right": {
+          "type": "field",
+          "path": "expiry_date"
+        }
+      }
+    },
+    {
+      "code": "EXCHANGE_RATE_NO_OVERLAP",
+      "name": "同币种对同类型汇率区间不重叠",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "同币种对、同汇率类型的生效区间存在重叠，请调整生效/失效日期",
+      "description": "同一 base_currency + target_currency + rate_type 组合下，不允许存在生效区间重叠的记录。校验时须加 AND is_deleted = 0，已逻辑删除的记录不参与区间重叠判断。"
+    },
+    {
+      "code": "EXCHANGE_RATE_BASE_NOT_EQUAL_TARGET",
+      "name": "基准币种不能等于目标币种",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "基准币种不能与目标币种相同",
+      "description": "base_currency 和 target_currency 不能为同一个币种。",
+      "expression": "base_currency == target_currency",
+      "exprAst": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "base_currency"
+        },
+        "right": {
+          "type": "field",
+          "path": "target_currency"
+        }
+      }
+    },
+    {
+      "code": "EXCHANGE_RATE_DEACTIVATE_CHECK",
+      "name": "停用前校验无引用",
+      "ruleType": "CONSISTENCY",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "WARN",
+      "message": "该汇率正在被商机或报价单引用，停用后相关金额换算将使用历史汇率快照",
+      "description": "停用汇率前检查是否被活跃商机或报价单引用，如被引用则给出警告提示（不阻断操作）。",
+      "operationCode": "DEACTIVATE"
+    },
+    {
+      "code": "EXCHANGE_RATE_MONTHLY_AVG_DATE_RANGE",
+      "name": "月均汇率生效区间必须为自然月",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "月均汇率的生效日期必须为当月1日，失效日期必须为当月最后一天",
+      "description": "月均汇率代表上月的月均汇率值，生效区间覆盖当月整月。effective_date 必须为某月1日，expiry_date 必须为该月最后一天（如1月31日、2月28/29日等）。例如：2026-07-01 录入的6月月均汇率，effective_date=2026-07-01，expiry_date=2026-07-31。"
+    },
+    {
+      "code": "EXCHANGE_RATE_MONTHLY_AVG_LAG",
+      "name": "月均汇率录入时间不得早于次月",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "月均汇率只能在次月录入（如6月月均汇率只能在7月录入）",
+      "description": "月均汇率是事后统计值，必须等一个月结束后才能计算。effective_date 的前一个月即为该汇率值所代表的统计月份，录入时间（created_time）不得早于 effective_date。"
+    },
+    {
+      "code": "EXCHANGE_RATE_UNIQUE_BY_PERIOD",
+      "name": "同币种对同类型同生效区间唯一",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "同币种对、同汇率类型、同生效区间已存在记录，请直接编辑已有记录而非新增",
+      "description": "base_currency + target_currency + rate_type + effective_date + expiry_date 组合在 is_deleted = 0 的记录中必须唯一。UPSERT 逻辑：应用层先以上述五字段 AND is_deleted = 0 查询，存在则 UPDATE，否则 INSERT。已逻辑删除的同周期记录不影响本次新建。"
+    },
+    {
+      "code": "EXCHANGE_RATE_NO_CODING_RULE",
+      "name": "汇率编号自动生成规则",
+      "ruleType": "AUTOMATION",
+      "scope": "FIELD",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "INFO",
+      "message": "",
+      "description": "rate_no 由系统在创建时根据 base_currency、target_currency、rate_type 和 effective_date 自动拼接，不允许人工填写。分隔符使用下划线 _ ，日期部分保留 ISO 8601 原始格式（含连字符），split('_') 可精确还原各业务字段，不存在歧义。",
+      "entityCode": "exchange-rate",
+      "fieldCode": "rate_no"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.846672+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

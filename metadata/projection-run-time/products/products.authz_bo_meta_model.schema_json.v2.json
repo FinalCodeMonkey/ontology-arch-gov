@@ -1,0 +1,331 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='products'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'products'",
+    "generated_from": "products.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.873795+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "product",
+        "name": "产品主实体",
+        "isPrimary": true,
+        "tableName": "crm_master_product",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "status",
+          "product_category",
+          "product_line"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "产品ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "product_model",
+            "name": "产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_model",
+            "columnName": "product_model",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_category",
+            "name": "产品类别",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_category",
+            "columnName": "product_category",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_series",
+            "name": "产品系列",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_series",
+            "columnName": "product_series",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_department",
+            "name": "产品归属事业部",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_department",
+            "columnName": "product_department",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_line",
+            "name": "所属产品线",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "product_line",
+            "columnName": "product_line",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "sales_code",
+            "name": "产品销售代码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "sales_code",
+            "columnName": "sales_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "domestic_retail_price",
+            "name": "国内市场零售报价（元）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "domestic_retail_price",
+            "columnName": "domestic_retail_price",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "oversea_retail_price",
+            "name": "海外市场零售报价（美元）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "oversea_retail_price",
+            "columnName": "oversea_retail_price",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "has_domestic",
+            "name": "是否有国内数据",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "has_domestic",
+            "columnName": "has_domestic",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "has_oversea",
+            "name": "是否上海外报价",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "has_oversea",
+            "columnName": "has_oversea",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "domestic_enabled",
+            "name": "是否启用",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "domestic_enabled",
+            "columnName": "domestic_enabled",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "domestic_take_off_shelf_flag",
+            "name": "是否下架",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "domestic_take_off_shelf_flag",
+            "columnName": "domestic_take_off_shelf_flag",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "domestic_product_status",
+            "name": "国内产品状态",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "domestic_product_status",
+            "columnName": "domestic_product_status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "status",
+            "name": "产品状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建产品",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除产品",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "ACTIVATE",
+        "name": "启用产品",
+        "scope": "BO",
+        "act_aliases": "activate",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DEACTIVATE",
+        "name": "停用产品",
+        "scope": "BO",
+        "act_aliases": "deactivate",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'products' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'products' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + products_bo_meta_id + CREATE",
+      "RES_DATA_BO + products_bo_meta_id + IMPORT",
+      "RES_DATA_BO + products_bo_meta_id + EXPORT",
+      "RES_DATA_BO + products_bo_meta_id + UPDATE",
+      "RES_DATA_BO + products_bo_meta_id + DELETE",
+      "RES_DATA_BO + products_bo_meta_id + ACTIVATE",
+      "RES_DATA_BO + products_bo_meta_id + DEACTIVATE",
+      "RES_DATA_BO + products_bo_meta_id + LIST",
+      "RES_DATA_BO + products_bo_meta_id + READ"
+    ]
+  }
+}

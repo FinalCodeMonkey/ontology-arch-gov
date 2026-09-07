@@ -1,0 +1,960 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='x-territory-regs'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'x-territory-regs'",
+    "generated_from": "x-territory-regs.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:58.204374+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "x-territory-reg",
+        "name": "跨地盘报备主实体",
+        "isPrimary": true,
+        "tableName": "crm_cross_territory_filing",
+        "rowLevelRuleEntries": [
+          "customer_id",
+          "customer_owner_id",
+          "filing_owner_id",
+          "status",
+          "linked_opportunity_id",
+          "tenant_code"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "filing_no",
+            "name": "报备单号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "filingNo",
+            "columnName": "filing_no",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "project_name",
+            "name": "项目名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "projectName",
+            "columnName": "project_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_id",
+            "name": "客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "customerId",
+            "columnName": "customer_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_name",
+            "name": "客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_owner_id",
+            "name": "客户所有人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerOwnerId",
+            "columnName": "customer_owner_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_owner_name",
+            "name": "客户所有人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerOwnerName",
+            "columnName": "customer_owner_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "filing_owner_id",
+            "name": "报备负责人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "filingOwnerId",
+            "columnName": "filing_owner_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "filing_owner_name",
+            "name": "报备负责人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "filingOwnerName",
+            "columnName": "filing_owner_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "reason",
+            "name": "报备理由",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "reason",
+            "columnName": "reason",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "ownership_note",
+            "name": "主导权及合作分量说明",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "ownershipNote",
+            "columnName": "ownership_note",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "status",
+            "name": "报备状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "flow_instance_id",
+            "name": "Flowable流程实例ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "flowInstanceId",
+            "columnName": "flow_instance_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "linked_opportunity_id",
+            "name": "关联商机ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "linkedOpportunityId",
+            "columnName": "linked_opportunity_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "linked_opportunity_code",
+            "name": "关联商机编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "linkedOpportunityCode",
+            "columnName": "linked_opportunity_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "displayFieldMappings": {
+          "customer_primary_customer_name": {
+            "code": "customer_primary_customer_name",
+            "name": "客户主实体 / 一级客户名称",
+            "type": "STRING",
+            "fieldName": "customer_primary_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "一级客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "parent_customer_id",
+                "fromRefColumnName": "parent_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "x-territory-regs"
+          },
+          "customer_fop_customer_name": {
+            "code": "customer_fop_customer_name",
+            "name": "客户主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "customer_fop_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "客户主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "customer_id",
+                "fromRefColumnName": "customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "customers",
+                "fromEntityCode": "customer",
+                "fromTableName": "crm_customer",
+                "fromRefCode": "fop_customer_id",
+                "fromRefColumnName": "fop_customer_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "x-territory-regs"
+          },
+          "linked_opportunity_opportunity_owner_name": {
+            "code": "linked_opportunity_opportunity_owner_name",
+            "name": "商机主实体 / 机会所有人姓名",
+            "type": "STRING",
+            "fieldName": "linked_opportunity_opportunity_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "linked_opportunity_id",
+                "fromRefColumnName": "linked_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "x-territory-regs"
+          },
+          "linked_opportunity_opportunity_owner_department_code": {
+            "code": "linked_opportunity_opportunity_owner_department_code",
+            "name": "商机主实体 / 机会所有人部门编码",
+            "type": "STRING",
+            "fieldName": "linked_opportunity_opportunity_owner_department_code",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "机会所有人部门编码"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "linked_opportunity_id",
+                "fromRefColumnName": "linked_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "opportunity_owner",
+                "fromRefColumnName": "opportunity_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "department_code",
+              "columnName": "department_code"
+            },
+            "sourceBoCode": "x-territory-regs"
+          },
+          "linked_opportunity_business_customer_name": {
+            "code": "linked_opportunity_business_customer_name",
+            "name": "商机主实体 / 业务主体客户名称",
+            "type": "STRING",
+            "fieldName": "linked_opportunity_business_customer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "业务主体客户名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "linked_opportunity_id",
+                "fromRefColumnName": "linked_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customers_id",
+                "fromRefColumnName": "customers_id",
+                "toBoCode": "customers",
+                "toEntityCode": "customer",
+                "toTableName": "crm_customer",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "customers",
+              "entityCode": "customer",
+              "tableName": "crm_customer",
+              "fieldCode": "customer_name",
+              "columnName": "customer_name"
+            },
+            "sourceBoCode": "x-territory-regs"
+          },
+          "linked_opportunity_parent_opportunity_name": {
+            "code": "linked_opportunity_parent_opportunity_name",
+            "name": "商机主实体 / 关联框架主项目名称",
+            "type": "STRING",
+            "fieldName": "linked_opportunity_parent_opportunity_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "关联框架主项目名称"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "linked_opportunity_id",
+                "fromRefColumnName": "linked_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "parent_opportunity_id",
+                "fromRefColumnName": "parent_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              }
+            ],
+            "target": {
+              "boCode": "opportunities",
+              "entityCode": "opportunity",
+              "tableName": "crm_opportunity",
+              "fieldCode": "opportunity_name",
+              "columnName": "opportunity_name"
+            },
+            "sourceBoCode": "x-territory-regs"
+          },
+          "linked_opportunity_presales_engineer_name": {
+            "code": "linked_opportunity_presales_engineer_name",
+            "name": "商机主实体 / 售前工程师姓名",
+            "type": "STRING",
+            "fieldName": "linked_opportunity_presales_engineer_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "售前工程师姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "linked_opportunity_id",
+                "fromRefColumnName": "linked_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "presales_engineer",
+                "fromRefColumnName": "presales_engineer",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "x-territory-regs"
+          },
+          "linked_opportunity_customer_owner_name": {
+            "code": "linked_opportunity_customer_owner_name",
+            "name": "商机主实体 / 客户所有人姓名",
+            "type": "STRING",
+            "fieldName": "linked_opportunity_customer_owner_name",
+            "mappingKind": "CHAINED_DISPLAY_REF",
+            "labelPath": [
+              "商机主实体",
+              "客户所有人姓名"
+            ],
+            "operators": [
+              "EQ",
+              "LIKE",
+              "STARTS_WITH",
+              "ENDS_WITH",
+              "IN",
+              "IS_NULL",
+              "IS_NOT_NULL"
+            ],
+            "path": [
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "x-territory-regs",
+                "fromEntityCode": "x-territory-reg",
+                "fromTableName": "crm_cross_territory_filing",
+                "fromRefCode": "linked_opportunity_id",
+                "fromRefColumnName": "linked_opportunity_id",
+                "toBoCode": "opportunities",
+                "toEntityCode": "opportunity",
+                "toTableName": "crm_opportunity",
+                "toPkFieldCode": "id",
+                "toPkColumnName": "id"
+              },
+              {
+                "hopKind": "CROSS_BO_REF",
+                "fromBoCode": "opportunities",
+                "fromEntityCode": "opportunity",
+                "fromTableName": "crm_opportunity",
+                "fromRefCode": "customer_owner",
+                "fromRefColumnName": "customer_owner",
+                "toBoCode": "users",
+                "toEntityCode": "dap-sys-user",
+                "toTableName": "dap_sys_user",
+                "toPkFieldCode": "user_id",
+                "toPkColumnName": "user_id"
+              }
+            ],
+            "target": {
+              "boCode": "users",
+              "entityCode": "dap-sys-user",
+              "tableName": "dap_sys_user",
+              "fieldCode": "staff_name",
+              "columnName": "staff_name"
+            },
+            "sourceBoCode": "x-territory-regs"
+          }
+        }
+      },
+      {
+        "code": "x-territory-reg-team-member",
+        "name": "报备团队成员",
+        "isPrimary": false,
+        "tableName": "crm_cross_territory_filing_team_member",
+        "rowLevelRuleEntries": [],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "成员行ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "filing_id",
+            "name": "所属报备单ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "filingId",
+            "columnName": "filing_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_user_id",
+            "name": "成员用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberUserId",
+            "columnName": "member_user_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "member_user_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberUserName",
+            "columnName": "member_user_name",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "成员角色",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "permission_code",
+            "name": "权限码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "permissionCode",
+            "columnName": "permission_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "related_teams",
+            "name": "关联团队模块",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "relatedTeams",
+            "columnName": "related_teams",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "team-members",
+        "parentEntityCode": "x-territory-reg"
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建报备",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "update",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除报备",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "SUBMIT",
+        "name": "提交审批",
+        "scope": "BO",
+        "act_aliases": "submit",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "REVOKE",
+        "name": "撤回申请",
+        "scope": "BO",
+        "act_aliases": "revoke",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "APPROVE",
+        "name": "审批通过",
+        "scope": "BO",
+        "act_aliases": "approve",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "REJECT",
+        "name": "审批驳回",
+        "scope": "BO",
+        "act_aliases": "reject",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST_X_TERRITORY_REG_TEAM_MEMBER",
+        "name": "查询报备团队成员列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-x-territory-reg-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "x-territory-reg-team-member"
+      },
+      {
+        "code": "READ_X_TERRITORY_REG_TEAM_MEMBER",
+        "name": "查看报备团队成员详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-x-territory-reg-team-member",
+        "primaryDataAction": "READ",
+        "entityCode": "x-territory-reg-team-member"
+      },
+      {
+        "code": "UPDATE_X_TERRITORY_REG_TEAM_MEMBER",
+        "name": "更新报备团队成员",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE",
+        "entityCode": "x-territory-reg-team-member"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'x-territory-regs' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'x-territory-regs' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + CREATE",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + UPDATE",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + DELETE",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + SUBMIT",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + REVOKE",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + APPROVE",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + REJECT",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + EXPORT",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + LIST",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + READ",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + LIST_X_TERRITORY_REG_TEAM_MEMBER",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + READ_X_TERRITORY_REG_TEAM_MEMBER",
+      "RES_DATA_BO + x-territory-regs_bo_meta_id + UPDATE_X_TERRITORY_REG_TEAM_MEMBER"
+    ]
+  }
+}

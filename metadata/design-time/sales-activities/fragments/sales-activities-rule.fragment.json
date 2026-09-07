@@ -1,0 +1,129 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-activities",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "VISIT_CUSTOMER_REF_INTEGRITY",
+        "name": "客户引用完整性",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "关联的客户ID在客户档案中不存在",
+        "description": "拜访记录的 parent_id 引用 customers BO 的 id。保存时校验客户在 customers BO 中存在且未删除。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "id",
+          "localEntityCode": "visit-record",
+          "localFieldCode": "parent_id"
+        }
+      },
+      {
+        "code": "VISIT_RECORD_USER_REF_INTEGRITY",
+        "name": "记录人引用完整性",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "WARN",
+        "message": "记录人在用户档案中不存在",
+        "description": "拜访记录的 record_user_id 引用 users BO 的 id。保存时校验用户在 users BO 中存在，不存在则记录警告但不阻断。",
+        "crossBoRef": {
+          "refBoCode": "users",
+          "refFieldCode": "user_id",
+          "localEntityCode": "visit-record",
+          "localFieldCode": "record_user_id"
+        }
+      },
+      {
+        "code": "VISIT_FOLLOW_UP_CASCADE_DELETE",
+        "name": "跟进记录级联删除",
+        "ruleType": "CONSISTENCY",
+        "scope": "ENTITY",
+        "entityCode": "visit-follow-up",
+        "trigger": "AFTER_OPERATION",
+        "operationCode": "DELETE",
+        "severity": "INFO",
+        "message": "删除拜访记录时级联删除所有跟进记录",
+        "description": "拜访记录删除时，其关联的所有跟进记录（visit-follow-up）通过 cascadeDelete=true 级联删除，不产生孤儿跟进记录。"
+      },
+      {
+        "code": "VISIT_FOLLOW_UP_PARENT_REF",
+        "name": "跟进记录必须归属拜访记录",
+        "ruleType": "CONSISTENCY",
+        "scope": "ENTITY",
+        "entityCode": "visit-follow-up",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "expression": "parent_id == null",
+        "message": "跟进记录必须归属一个拜访记录",
+        "description": "跟进记录的 parent_id 不能为空，必须指向一个有效的拜访记录。防止产生孤儿跟进记录。",
+        "exprAst": {
+          "type": "isNull",
+          "expr": {
+            "type": "field",
+            "path": "parent_id"
+          }
+        }
+      },
+      {
+        "code": "VISIT_FOLLOW_UP_ACTION_HISTORY",
+        "name": "跟进动作历史记录",
+        "ruleType": "AUTOMATION",
+        "scope": "ENTITY",
+        "entityCode": "visit-follow-up",
+        "trigger": "AFTER_OPERATION",
+        "operationCode": "FOLLOW_UP",
+        "severity": "INFO",
+        "message": "动作跟进时自动生成跟进历史记录",
+        "description": "执行 FOLLOW_UP 操作时，系统自动将当前 next_action 作为 previous_action、新动作为 current_action，生成 visit-follow-up 跟进记录，并更新 visit-record 的 next_action 和 next_action_updated_time。"
+      },
+      {
+        "code": "VISIT_ACTIVITY_CONTENT_REQUIRED",
+        "name": "活动信息必填",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "ENTITY",
+        "entityCode": "visit-record",
+        "trigger": "BEFORE_VALIDATE",
+        "operationCode": "CREATE",
+        "severity": "ERROR",
+        "expression": "activity_content == null || activity_content.trim().isEmpty()",
+        "message": "活动信息不能为空",
+        "description": "创建拜访记录时 activity_content（活动信息富文本）为必填字段，不允许提交空内容。",
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "activity_content"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "activity_content"
+              },
+              "right": {
+                "type": "literal",
+                "value": ""
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "sales-activities 首版 RULE 设计态 Fragment，含客户引用完整性、记录人引用完整性、级联删除、跟进记录归属、动作历史自动化和活动信息必填规则"
+  ]
+}

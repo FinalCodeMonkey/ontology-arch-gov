@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "2.0",
+  "changeNote": "contacts 首版设计态 Fragment，含 MODEL/OPERATION/VALIDATION/SECURITY/RULE/VIEW 六类元数据。",
+  "boCode": "contacts",
+  "appCode": "crm",
+  "draftVersion": "1.0",
+  "tenantId": "cbg"
+}

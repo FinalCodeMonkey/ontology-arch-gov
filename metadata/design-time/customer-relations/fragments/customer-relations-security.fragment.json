@@ -1,0 +1,361 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customer-relations",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "customer-relation": [
+          "customer_id",
+          "owner_user_id",
+          "department_code",
+          "region",
+          "status",
+          "billing_province",
+          "billing_city",
+          "latest_visitor_id",
+          "responsible_pre_sales_id",
+          "service_sales_id"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "strategic_intent",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "竞争对手战略意图涉商业机密，需授权查看"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_product_tech",
+        "fieldControl": "MASKED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "竞争对手近期产品技术动作涉商业机密，默认脱敏"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_business_supply",
+        "fieldControl": "MASKED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "竞争对手近期商务供应动作涉商业机密，默认脱敏"
+      },
+      {
+        "entityCode": "customer-competition",
+        "fieldCode": "recent_action_quality_service",
+        "fieldControl": "MASKED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "竞争对手近期质量服务动作涉商业机密，默认脱敏"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "annual_sales",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "竞争对手年度销量为敏感竞争数据，默认脱敏"
+      },
+      {
+        "entityCode": "customer-competition-sale",
+        "fieldCode": "next_year_target",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "竞争对手下一年度目标为敏感竞争数据，默认脱敏"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "revenue_data",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户营收数据为敏感经营数据，默认脱敏"
+      },
+      {
+        "entityCode": "customer-industry-strategy",
+        "fieldCode": "gross_margin_data",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户毛利率数据为敏感经营数据，默认脱敏"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "server_info",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户基础设施服务器信息涉敏感技术数据，默认脱敏"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "nic_info",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户基础设施网卡信息涉敏感技术数据，默认脱敏"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "network_info",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户基础设施网络信息涉敏感技术数据，默认脱敏"
+      },
+      {
+        "entityCode": "customer-infra-architecture",
+        "fieldCode": "module_info",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户基础设施模块信息涉敏感技术数据，默认脱敏"
+      }
+    ],
+    "authzProjection": {
+      "description": "客户关系治理业务对象在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 customer-relations BO，投影编码由发布服务根据 boCode 自动派生。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。rowSecurity 声明 DATA 策略候选字段，fieldSecurity 声明 FIELD 策略候选字段，authzProjection 随 customer-relations 的 authz-bo-meta-model.schema_json 发布，声明 PIP 可返回的 res.* 属性契约。协议定引用方式包括 res.customer_id、res.owner_user_id、res.department_code、res.region、res.status 等。字段控制发布到 PSP 时需将 MASKED/HIDDEN 转换为 MASK/HIDE。",
+      "attributes": [
+        {
+          "code": "relation_id",
+          "name": "关系治理ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "关系治理资源唯一标识，供 PIP 按 ID 拉取完整属性集合；不暴露给 ABAC 表达式做条件判断。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.relation_id",
+          "valueExamples": [
+            "10001",
+            "10002"
+          ]
+        },
+        {
+          "code": "customer_id",
+          "name": "关联客户ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "customer_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "customers.id",
+          "referenceModel": "customers",
+          "displayOrder": 20,
+          "displayGroup": "数据范围",
+          "description": "关联的客户主数据。典型表达式：contains(sub.customer_scope_ids, res.customer_id)。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.customer_id",
+          "valueExamples": [
+            "2068959871393136600",
+            "2068959871393136601"
+          ]
+        },
+        {
+          "code": "owner_user_id",
+          "name": "客户所有人用户ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "owner_user_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "用于 owner == sub.userId 类行过滤策略。典型表达式：sub.user_id == res.owner_user_id。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.owner_user_id",
+          "valueExamples": [
+            "U10001"
+          ]
+        },
+        {
+          "code": "department_code",
+          "name": "二级部门编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "department_code"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "valueRef": "SUB_ORG.department_code",
+          "referenceModel": "SUB_ORG",
+          "displayOrder": 40,
+          "displayGroup": "数据范围",
+          "description": "用于部门在授权范围内类行过滤策略。典型表达式：contains(sub.department_scope, res.department_code)。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.department_code",
+          "valueExamples": [
+            "DPT-2001",
+            "DPT-2002"
+          ]
+        },
+        {
+          "code": "region",
+          "name": "区域",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "region"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 50,
+          "displayGroup": "数据范围",
+          "description": "用于区域可见类策略。典型表达式：contains(sub.region_scope, res.region)。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.region",
+          "valueExamples": [
+            "EAST",
+            "SOUTH"
+          ]
+        },
+        {
+          "code": "status",
+          "name": "审批状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "DRAFT",
+              "label": "草稿"
+            },
+            {
+              "value": "PENDING_APPROVAL",
+              "label": "待审批"
+            },
+            {
+              "value": "APPROVED",
+              "label": "已审批"
+            },
+            {
+              "value": "REJECTED",
+              "label": "已驳回"
+            },
+            {
+              "value": "CHANGED",
+              "label": "已变更"
+            },
+            {
+              "value": "INACTIVE",
+              "label": "停用"
+            }
+          ],
+          "displayOrder": 60,
+          "displayGroup": "资源属性",
+          "description": "审批状态。典型表达式：res.status == 'APPROVED'。用于仅可见已审批或排除草稿类状态过滤策略。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.status",
+          "valueExamples": [
+            "APPROVED",
+            "DRAFT"
+          ]
+        },
+        {
+          "code": "billing_province",
+          "name": "开单省份",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "billing_province"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 70,
+          "displayGroup": "数据范围",
+          "description": "用于省份可见类策略。典型表达式：contains(sub.province_scope, res.billing_province)。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.billing_province",
+          "valueExamples": [
+            "福建省",
+            "广东省"
+          ]
+        },
+        {
+          "code": "latest_visitor_id",
+          "name": "最新跟进人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "latest_visitor_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 80,
+          "displayGroup": "数据范围",
+          "description": "用于最新跟进人匹配类行过滤策略。典型表达式：sub.user_id == res.latest_visitor_id。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.latest_visitor_id",
+          "valueExamples": [
+            "U10001"
+          ]
+        },
+        {
+          "code": "responsible_pre_sales_id",
+          "name": "责任售前用户ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "responsible_pre_sales_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 90,
+          "displayGroup": "数据范围",
+          "description": "用于责任售前匹配类行过滤策略。典型表达式：sub.user_id == res.responsible_pre_sales_id。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.responsible_pre_sales_id",
+          "valueExamples": [
+            "U20001"
+          ]
+        },
+        {
+          "code": "service_sales_id",
+          "name": "服务销售用户ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "customer-relation",
+            "fieldCode": "service_sales_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 100,
+          "displayGroup": "数据范围",
+          "description": "用于服务销售匹配类行过滤策略。典型表达式：sub.user_id == res.service_sales_id。",
+          "i18nKey": "auth.resource.res_customer-relation.attr.service_sales_id",
+          "valueExamples": [
+            "U30001"
+          ]
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "MCR BO 首版 SECURITY Fragment，从 customers BO 迁移行级过滤字段和字段安全分级",
+    "authzProjection 以 customer-relation 为来源实体，投影 10 个 ABAC 属性：relation_id/customer_id/owner_user_id/department_code/region/status/billing_province/latest_visitor_id/responsible_pre_sales_id/service_sales_id",
+    "参照 scenes-security 模式，为 authzProjection 属性补充 valueExamples、displayOrder/displayGroup 分组、i18nKey、description 典型表达式",
+    "新增 fieldSecurity 条目：customer-competition recent_action_* 三字段 MASKED + annual_sales/next_year_target MASKED + customer-industry-strategy revenue_data/gross_margin_data MASKED + customer-infra-architecture server_info/nic_info/network_info/module_info MASKED"
+  ]
+}

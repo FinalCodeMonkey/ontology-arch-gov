@@ -1,0 +1,538 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "device-inventories",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "device-inventories",
+    "boName": "设备盘点单",
+    "description": "设备盘点单业务对象，采用主从明细聚合建模（主表 crm_device-inventory + 明细子表 crm_device-inventory-detail）。以盘点单号（inventory_no）作为业务主键，管理设备盘点过程及结果。支持手工盘点和导入盘点两种方式，盘点明细记录设备序列号、产品信息、保修信息及异常说明。注意：当前后端 API 路径为 /api/inventories，元数据 resourcePath 为 /device-inventories，后续将重构后端路由对齐。",
+    "apiConfig": {
+      "resourcePath": "/device-inventories",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "inventory_no",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "FULL_AGGREGATE",
+        "createScope": "FULL_AGGREGATE",
+        "updateScope": "FULL_AGGREGATE_PATCH",
+        "deleteScope": "CASCADE_AGGREGATE",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": [
+          "device-inventory-detail"
+        ]
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "MASTER_DETAIL",
+      "nameField": "inventory_no",
+      "statusField": "inventory_status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "device-inventory",
+        "name": "盘点单主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_device_inventory",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "inventory_no",
+            "fieldName": "inventoryNo",
+            "columnName": "inventory_no",
+            "name": "盘点单号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.inventory_no"
+          },
+          {
+            "code": "inventory_type",
+            "fieldName": "inventoryType",
+            "columnName": "inventory_type",
+            "name": "盘点类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.inventory_type"
+          },
+          {
+            "code": "device_count",
+            "fieldName": "deviceCount",
+            "columnName": "device_count",
+            "name": "设备数",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.device_count"
+          },
+          {
+            "code": "inventory_status",
+            "fieldName": "inventoryStatus",
+            "columnName": "inventory_status",
+            "name": "盘点状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true,
+            "defaultValue": "DRAFT",
+            "i18nKey": "bo.device-inventories.field.inventory_status"
+          },
+          {
+            "code": "quote_no",
+            "fieldName": "quoteNo",
+            "columnName": "quote_no",
+            "name": "报价单号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.quote_no"
+          },
+          {
+            "code": "opportunity_codes",
+            "fieldName": "opportunityCodes",
+            "columnName": "opportunity_codes",
+            "name": "商机编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.opportunity_codes"
+          },
+          {
+            "code": "inventory_time",
+            "fieldName": "inventoryTime",
+            "columnName": "inventory_time",
+            "name": "盘点时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.inventory_time"
+          },
+          {
+            "code": "remarks",
+            "fieldName": "remarks",
+            "columnName": "remarks",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.remarks"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.created_by"
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "device-inventory-detail",
+        "name": "盘点明细",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_device_inventory_detail",
+        "parentEntityCode": "device-inventory",
+        "parentRefField": "parent_id",
+        "routeSegment": "details",
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "明细主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "所属盘点单ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "device_serial_no",
+            "fieldName": "deviceSerialNo",
+            "columnName": "device_serial_no",
+            "name": "设备序列号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "devices",
+              "refFieldCode": "device_serial_no",
+              "displayFields": [
+                {
+                  "refFieldCode": "product_model",
+                  "localCode": "product_model",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "product_line",
+                  "localCode": "product_line",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "customer_name",
+                  "localCode": "customer_name",
+                  "displayRole": "NAME"
+                },
+                {
+                  "refFieldCode": "fop_customer_name",
+                  "localCode": "fop_customer_name",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "warranty_start_date",
+                  "localCode": "warranty_start_date",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "warranty_end_date",
+                  "localCode": "warranty_end_date",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "maintenance_service",
+                  "localCode": "maintenance_service",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "renewal_days",
+                  "localCode": "renewal_days",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "service_list_price",
+                  "localCode": "service_list_price",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "contract_no",
+                  "localCode": "contract_no",
+                  "displayRole": "EXTRA"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "BUSINESS_FLOW"
+            },
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.device_serial_no"
+          },
+          {
+            "code": "abnormal_desc",
+            "fieldName": "abnormalDesc",
+            "columnName": "abnormal_desc",
+            "name": "异常说明",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.abnormal_desc"
+          },
+          {
+            "code": "product_model",
+            "fieldName": "productModel",
+            "columnName": "product_model",
+            "name": "产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.product_model"
+          },
+          {
+            "code": "product_line",
+            "fieldName": "productLine",
+            "columnName": "product_line",
+            "name": "产品线",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.product_line"
+          },
+          {
+            "code": "customer_name",
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "name": "下级客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.customer_name"
+          },
+          {
+            "code": "fop_customer_name",
+            "fieldName": "fopCustomerName",
+            "columnName": "fop_customer_name",
+            "name": "FOP客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.fop_customer_name"
+          },
+          {
+            "code": "warranty_start_date",
+            "fieldName": "warrantyStartDate",
+            "columnName": "warranty_start_date",
+            "name": "保修开始日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.warranty_start_date"
+          },
+          {
+            "code": "warranty_end_date",
+            "fieldName": "warrantyEndDate",
+            "columnName": "warranty_end_date",
+            "name": "保修结束日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.warranty_end_date"
+          },
+          {
+            "code": "maintenance_service",
+            "fieldName": "maintenanceService",
+            "columnName": "maintenance_service",
+            "name": "维保服务",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.maintenance_service"
+          },
+          {
+            "code": "renewal_days",
+            "fieldName": "renewalDays",
+            "columnName": "renewal_days",
+            "name": "续保天数",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.renewal_days"
+          },
+          {
+            "code": "service_list_price",
+            "fieldName": "serviceListPrice",
+            "columnName": "service_list_price",
+            "name": "服务 List 价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.service_list_price"
+          },
+          {
+            "code": "contract_no",
+            "fieldName": "contractNo",
+            "columnName": "contract_no",
+            "name": "合同号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.device-inventories.field.detail.contract_no"
+          },
+          {
+            "code": "ecp_product_permission",
+            "fieldName": "ecpProductPermission",
+            "columnName": "ecp_product_permission",
+            "name": "ECP产品权限",
+            "type": "BOOLEAN",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "false",
+            "i18nKey": "bo.device-inventories.field.detail.ecp_product_permission"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.detail.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.detail.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.detail.created_by"
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.device-inventories.field.detail.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      }
+    ]
+  }
+}

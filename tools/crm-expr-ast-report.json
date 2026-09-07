@@ -1,0 +1,1279 @@
+{
+  "generatedAt": "2026-09-07T21:15:14.707193",
+  "generatedBy": "bo-expression-to-ast.py",
+  "totalExpressions": 52,
+  "autoConverted": 41,
+  "needsManual": 11,
+  "writtenBack": 0,
+  "boRules": {
+    "approval-records": [
+      {
+        "code": "APPROVAL_REVOKE_ONLY_PENDING",
+        "name": "撤回仅限待审批记录",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "status != 'PENDING'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "PENDING"
+          }
+        }
+      },
+      {
+        "code": "APPROVAL_REVOKE_REASON_REQUIRED",
+        "name": "撤回必须填写原因",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "revoke_reason == null || revoke_reason == ''",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "revoke_reason"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "revoke_reason"
+              },
+              "right": {
+                "type": "literal",
+                "value": ""
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "bo-meta-models": [
+      {
+        "code": "DELETED_BO_NOT_PUBLISHABLE",
+        "name": "已删除记录不可发布",
+        "ruleType": "STATE",
+        "originalExpression": "is_deleted == 0",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "is_deleted"
+          },
+          "right": {
+            "type": "literal",
+            "value": 0
+          }
+        }
+      }
+    ],
+    "change-records": [
+      {
+        "code": "CHANGE_APPROVAL_LINKED_WHEN_PENDING",
+        "name": "待审批变更必须关联审批记录",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "status == 'PENDING_APPROVAL' && approval_record_id == null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "PENDING_APPROVAL"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "approval_record_id"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "CHANGE_SNAPSHOT_REQUIRED_FOR_DRAFT",
+        "name": "草稿状态必须有原始快照",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "status == 'DRAFT' && original_snapshot_json == null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "DRAFT"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "original_snapshot_json"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "competitors": [
+      {
+        "code": "COMPETITOR_STATUS_EDITABLE_ONLY_ACTIVE",
+        "name": "仅活跃状态可编辑",
+        "ruleType": "STATE",
+        "originalExpression": "status == 'ACTIVE'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "ACTIVE"
+          }
+        }
+      }
+    ],
+    "contacts": [
+      {
+        "code": "CONTACT_NAME_UNIQUE_IN_CUSTOMER",
+        "name": "同一客户下联系人姓名唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "count(customer-contact where customer_id == this.customer_id and name == this.name) <= 1",
+        "autoConverted": false,
+        "reason": "unsupported pattern",
+        "suggestion": "需要人工编写 exprAst"
+      },
+      {
+        "code": "RESUME_PERIOD_DATE_ORDER",
+        "name": "履历任职开始时间必须早于结束时间",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "period_end == null or period_start < period_end",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "period_end"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LT",
+              "left": {
+                "type": "field",
+                "path": "period_start"
+              },
+              "right": {
+                "type": "field",
+                "path": "period_end"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "EDUCATION_PERIOD_DATE_ORDER",
+        "name": "教育经历开始时间必须早于结束时间",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "period_end == null or period_start < period_end",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "period_end"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LT",
+              "left": {
+                "type": "field",
+                "path": "period_start"
+              },
+              "right": {
+                "type": "field",
+                "path": "period_end"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "customer-relations": [
+      {
+        "code": "RELATION_STATUS_SUBMIT",
+        "name": "仅草稿状态可提交审批",
+        "ruleType": "STATE",
+        "originalExpression": "status == 'DRAFT'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DRAFT"
+          }
+        }
+      },
+      {
+        "code": "RELATION_STATUS_CHANGE",
+        "name": "仅已审批状态可提交变更",
+        "ruleType": "STATE",
+        "originalExpression": "status == 'APPROVED'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "APPROVED"
+          }
+        }
+      },
+      {
+        "code": "INFRA_ARCH_DATE_ORDER",
+        "name": "基础设施架构各阶段时间必须依次递增",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "shortlist_date <= gray_date && gray_date <= mass_production_date && mass_production_date <= eol_date",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "field",
+                "path": "shortlist_date"
+              },
+              "right": {
+                "type": "field",
+                "path": "gray_date"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "field",
+                "path": "gray_date"
+              },
+              "right": {
+                "type": "field",
+                "path": "mass_production_date"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "field",
+                "path": "mass_production_date"
+              },
+              "right": {
+                "type": "field",
+                "path": "eol_date"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "COMPETITION_UNIQUE_PER_RELATION",
+        "name": "同一关系治理下竞争对手不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "count(parent.competitions[competitor_id == this.competitor_id]) <= 1",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "competitions",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "competitor_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "competitor_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "STRATEGY_CURRENT_VERSION_UNIQUE",
+        "name": "同一关系治理仅允许一条当前版本战略",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "is_current != 1 || count(parent.industry-strategies[is_current == 1]) <= 1",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "is_current"
+              },
+              "right": {
+                "type": "literal",
+                "value": 1
+              }
+            },
+            {
+              "type": "binary",
+              "op": "LTE",
+              "left": {
+                "type": "aggregate",
+                "fn": "count",
+                "source": "industry-strategies",
+                "where": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "is_current"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 1
+                  }
+                }
+              },
+              "right": {
+                "type": "literal",
+                "value": 1
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "TEAM_MEMBER_UNIQUE_PER_RELATION",
+        "name": "同一关系治理下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "count(parent.team-members[user_id == this.user_id]) <= 1",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "team-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "COMPETITION_MEMBER_UNIQUE_PER_COMPETITION",
+        "name": "同一竞争信息下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "count(parent.competition-members[user_id == this.user_id]) <= 1",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "competition-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "STRATEGY_MEMBER_UNIQUE_PER_STRATEGY",
+        "name": "同一业务战略下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "count(parent.strategy-members[user_id == this.user_id]) <= 1",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "strategy-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "INFRA_ARCH_MEMBER_UNIQUE_PER_ARCH",
+        "name": "同一基础设施架构下团队成员不可重复",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "count(parent.infra-architecture-members[user_id == this.user_id]) <= 1",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "LTE",
+          "left": {
+            "type": "aggregate",
+            "fn": "count",
+            "source": "infra-architecture-members",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "user_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "user_id"
+              }
+            }
+          },
+          "right": {
+            "type": "literal",
+            "value": 1
+          }
+        }
+      },
+      {
+        "code": "RELATION_EDIT_LOCK_WHEN_PENDING",
+        "name": "待审批状态不可编辑",
+        "ruleType": "STATE",
+        "originalExpression": "status != 'PENDING_APPROVAL'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "PENDING_APPROVAL"
+          }
+        }
+      }
+    ],
+    "customers": [
+      {
+        "code": "CUSTOMER_CONTRACT_MUST_HAVE_FOP",
+        "name": "合同主体客户必须指定所属业务主体客户",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "customer_category != 'CONTRACT_ENTITY' || (fop_customer_id != null && ref.customer_category == 'FOP_CUSTOMER')",
+        "autoConverted": false,
+        "reason": "contains cross-BO reference (ref./refCount)",
+        "suggestion": "需要人工编写 exprAst"
+      },
+      {
+        "code": "CUSTOMER_PARENT_NO_CIRCULAR",
+        "name": "客户父级引用不可形成环路",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "parent_customer_id == null || parent_customer_id != id",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "OR",
+          "items": [
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "parent_customer_id"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "parent_customer_id"
+              },
+              "right": {
+                "type": "field",
+                "path": "id"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "CUSTOMER_DELETE_NO_ORPHAN_CHILDREN",
+        "name": "有子客户时不可删除父客户",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "refCount('customers', 'parent_customer_id', id) == 0",
+        "autoConverted": false,
+        "reason": "contains cross-BO reference (ref./refCount)",
+        "suggestion": "需要人工编写 exprAst"
+      }
+    ],
+    "data-domains": [
+      {
+        "code": "LEVEL_TYPE_ENUM",
+        "name": "层级类型枚举校验",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "level_type in ('SUBJECT_GROUP', 'SUBJECT', 'SUB_SUBJECT')",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "inSet",
+          "field": {
+            "type": "field",
+            "path": "level_type"
+          },
+          "values": [
+            {
+              "type": "literal",
+              "value": "SUBJECT_GROUP"
+            },
+            {
+              "type": "literal",
+              "value": "SUBJECT"
+            },
+            {
+              "type": "literal",
+              "value": "SUB_SUBJECT"
+            }
+          ]
+        }
+      }
+    ],
+    "device-inventories": [
+      {
+        "code": "INVENTORY_DELETE_DRAFT_ONLY",
+        "name": "仅草稿状态可删除",
+        "ruleType": "STATE",
+        "originalExpression": "inventory_status != 'DRAFT'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "inventory_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DRAFT"
+          }
+        }
+      },
+      {
+        "code": "INVENTORY_DETAIL_PARENT_REF",
+        "name": "明细必须归属盘点单",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "parent_id == null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "isNull",
+          "expr": {
+            "type": "field",
+            "path": "parent_id"
+          }
+        }
+      }
+    ],
+    "devices": [
+      {
+        "code": "DEVICE_STATUS_TRANSITION",
+        "name": "设备状态流转规则",
+        "ruleType": "STATE",
+        "originalExpression": "device_status == 'RUNNING' && newStatus == 'DECOMMISSIONED'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "device_status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "RUNNING"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "newStatus"
+              },
+              "right": {
+                "type": "literal",
+                "value": "DECOMMISSIONED"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "DEVICE_STATUS_EDITABLE",
+        "name": "设备状态可编辑性",
+        "ruleType": "STATE",
+        "originalExpression": "device_status == 'DECOMMISSIONED'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "device_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DECOMMISSIONED"
+          }
+        }
+      }
+    ],
+    "exchange-rates": [
+      {
+        "code": "EXCHANGE_RATE_DATE_RANGE_VALID",
+        "name": "生效日期必须早于失效日期",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "effective_date >= expiry_date",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "GTE",
+          "left": {
+            "type": "field",
+            "path": "effective_date"
+          },
+          "right": {
+            "type": "field",
+            "path": "expiry_date"
+          }
+        }
+      },
+      {
+        "code": "EXCHANGE_RATE_BASE_NOT_EQUAL_TARGET",
+        "name": "基准币种不能等于目标币种",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "base_currency == target_currency",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "base_currency"
+          },
+          "right": {
+            "type": "field",
+            "path": "target_currency"
+          }
+        }
+      }
+    ],
+    "opportunities": [
+      {
+        "code": "OPPORTUNITY_OC_MASTER_HAS_FRAMEWORK",
+        "name": "OC主项目必须填写预计下单金额/集采框架总金额",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "project_type == 'OC_MAIN' && expected_order_amount == null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "project_type"
+              },
+              "right": {
+                "type": "literal",
+                "value": "OC_MAIN"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "expected_order_amount"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "OPPORTUNITY_STAGE_TYPE_MATCH",
+        "name": "项目阶段必须匹配项目类型",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "// project_stage 的前缀必须与 project_type 匹配。阶段编码格式如 DC_01、OC_MAIN_03 等，前缀（如 'DC_'）取自 project_type + '_'。\nproject_type + '_' != project_stage.substring(0, project_type.length() + 1)",
+        "autoConverted": false,
+        "reason": "contains comments",
+        "suggestion": "需要人工编写 exprAst"
+      },
+      {
+        "code": "OPPORTUNITY_OC_SUB_REQUIRES_PARENT_ID",
+        "name": "OC子项目必须关联框架主项目",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "project_type == 'OC_SUB' && parent_opportunity_id == null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "project_type"
+              },
+              "right": {
+                "type": "literal",
+                "value": "OC_SUB"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "parent_opportunity_id"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "OPPORTUNITY_QUOTATION_NOT_FOR_OC_MAIN",
+        "name": "OC主项目不允许创建报价单",
+        "ruleType": "STATE",
+        "originalExpression": "project_type == 'OC_MAIN'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "project_type"
+          },
+          "right": {
+            "type": "literal",
+            "value": "OC_MAIN"
+          }
+        }
+      },
+      {
+        "code": "OPPORTUNITY_RATIO_CONDITIONAL",
+        "name": "场景典配配比条件填写",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "(parent_product_id == null || scene_id == null) && ratio != null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "logical",
+              "op": "OR",
+              "items": [
+                {
+                  "type": "isNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "parent_product_id"
+                  }
+                },
+                {
+                  "type": "isNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "scene_id"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "isNotNull",
+              "expr": {
+                "type": "field",
+                "path": "ratio"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "OPPORTUNITY_SERVICE_TIME_SCOPE",
+        "name": "服务时间仅售后服务销售使用",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "project_type != 'EC' && (service_start_time != null || service_end_time != null)",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "project_type"
+              },
+              "right": {
+                "type": "literal",
+                "value": "EC"
+              }
+            },
+            {
+              "type": "logical",
+              "op": "OR",
+              "items": [
+                {
+                  "type": "isNotNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "service_start_time"
+                  }
+                },
+                {
+                  "type": "isNotNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "service_end_time"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "orgs": [
+      {
+        "code": "ORG_DISABLE_CHECK_CHILDREN",
+        "name": "停用前检查子组织",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "is_enable == 'N'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "is_enable"
+          },
+          "right": {
+            "type": "literal",
+            "value": "N"
+          }
+        }
+      }
+    ],
+    "products": [
+      {
+        "code": "PRODUCT_INACTIVE_CHECK_SCENE_REF",
+        "name": "停用前检查场景引用",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "status == 'INACTIVE'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "INACTIVE"
+          }
+        }
+      }
+    ],
+    "renewal-quotes": [
+      {
+        "code": "QUOTE_RETRY_ONLY_FAILED",
+        "name": "重新提交仅限失败记录",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "submit_status != 2",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "submit_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": 2
+          }
+        }
+      }
+    ],
+    "sales-activities": [
+      {
+        "code": "VISIT_FOLLOW_UP_PARENT_REF",
+        "name": "跟进记录必须归属拜访记录",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "parent_id == null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "isNull",
+          "expr": {
+            "type": "field",
+            "path": "parent_id"
+          }
+        }
+      },
+      {
+        "code": "VISIT_ACTIVITY_CONTENT_REQUIRED",
+        "name": "活动信息必填",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "activity_content == null || activity_content.trim().isEmpty()",
+        "autoConverted": false,
+        "reason": "contains unsupported function calls",
+        "suggestion": "需要人工编写 exprAst"
+      }
+    ],
+    "sales-targets": [
+      {
+        "code": "MONTHLY_RULE_REQUIRES_MONTH",
+        "name": "月度规则必须填写月份",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "apply_rule == 'MONTHLY' && target_month == null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "apply_rule"
+              },
+              "right": {
+                "type": "literal",
+                "value": "MONTHLY"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "target_month"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "YEARLY_RULE_NO_MONTH",
+        "name": "年度规则不应填写月份",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "apply_rule == 'YEARLY' && target_month != null",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "apply_rule"
+              },
+              "right": {
+                "type": "literal",
+                "value": "YEARLY"
+              }
+            },
+            {
+              "type": "isNotNull",
+              "expr": {
+                "type": "field",
+                "path": "target_month"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "scenes": [
+      {
+        "code": "PRODUCT_LIFECYCLE_DATE_ORDER",
+        "name": "产品生命周期开始时间必须早于结束时间",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "lifecycle_start_date < lifecycle_end_date",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "LT",
+          "left": {
+            "type": "field",
+            "path": "lifecycle_start_date"
+          },
+          "right": {
+            "type": "field",
+            "path": "lifecycle_end_date"
+          }
+        }
+      },
+      {
+        "code": "ANNUAL_ESTIMATE_AMOUNT_CONSISTENCY",
+        "name": "年度测算销量应与采购规模×份额一致",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "abs(estimated_sales_amount - customer_procurement_amount * estimated_share / 100) <= 0.01",
+        "autoConverted": false,
+        "reason": "contains unsupported function calls (abs)",
+        "suggestion": "需要人工编写 exprAst"
+      },
+      {
+        "code": "RIVAL_SHARE_SUM_CONSISTENCY",
+        "name": "竞对份额之和加凯捷份额应约等于100%",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "abs(sum(rival_detail.rival_share) + kaijie_estimated_share - 100) <= 1",
+        "autoConverted": false,
+        "reason": "contains unsupported function calls (abs)",
+        "suggestion": "需要人工编写 exprAst"
+      },
+      {
+        "code": "TEAM_MEMBER_SALES_OWNER_MUST_MATCH_SCENE",
+        "name": "团队成员的销售负责人必须与场景销售负责人一致",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "member_role != 'SALES_OWNER' || user_id == scene.sales_owner_id",
+        "autoConverted": false,
+        "reason": "unsupported pattern",
+        "suggestion": "需要人工编写 exprAst"
+      }
+    ],
+    "users": [
+      {
+        "code": "USER_STATUS_EDITABLE",
+        "name": "离职用户不可编辑",
+        "ruleType": "STATE",
+        "originalExpression": "staff_status != '离职'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "staff_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "离职"
+          }
+        }
+      }
+    ],
+    "x-territory-regs": [
+      {
+        "code": "FILING_STATUS_TRANSITION",
+        "name": "报备状态机约束",
+        "ruleType": "STATE",
+        "originalExpression": "!(status == 'DRAFT' && operationCode IN ['APPROVE','REJECT']) && !(status == 'APPROVED' && operationCode IN ['SUBMIT','APPROVE','REJECT','REVOKE']) && !(status == 'REJECTED' && operationCode IN ['APPROVE','REJECT','REVOKE'])",
+        "autoConverted": false,
+        "reason": "unsupported pattern",
+        "suggestion": "需要人工编写 exprAst"
+      },
+      {
+        "code": "EDIT_ONLY_IN_DRAFT_OR_REJECTED",
+        "name": "编辑仅允许在草稿/被驳回状态",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "status NOT IN ('DRAFT', 'REJECTED')",
+        "autoConverted": false,
+        "reason": "unsupported pattern",
+        "suggestion": "需要人工编写 exprAst"
+      },
+      {
+        "code": "DELETE_ONLY_IN_DRAFT",
+        "name": "删除仅允许在草稿状态",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "status != 'DRAFT'",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DRAFT"
+          }
+        }
+      },
+      {
+        "code": "FLOW_INSTANCE_REQUIRED_ON_PENDING",
+        "name": "提交后必须存在流程实例",
+        "ruleType": "COMPLEX_VALIDATION",
+        "originalExpression": "status == 'PENDING' && (flow_instance_id == null || flow_instance_id == '')",
+        "autoConverted": true,
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "PENDING"
+              }
+            },
+            {
+              "type": "logical",
+              "op": "OR",
+              "items": [
+                {
+                  "type": "isNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "flow_instance_id"
+                  }
+                },
+                {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "flow_instance_id"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": ""
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "code": "LINKED_OPPORTUNITY_UNIQUE_PER_FILING",
+        "name": "同一商机只能关联一条报备单",
+        "ruleType": "CONSISTENCY",
+        "originalExpression": "COUNT(x-territory-regs WHERE linked_opportunity_id == $value AND id != $self.id AND is_deleted == 0) > 0",
+        "autoConverted": false,
+        "reason": "unsupported pattern",
+        "suggestion": "需要人工编写 exprAst"
+      }
+    ]
+  }
+}

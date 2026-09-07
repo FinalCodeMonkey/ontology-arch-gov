@@ -1,0 +1,206 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "users",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "dap-sys-user": [
+          "department_code",
+          "staff_status",
+          "staff_status_code",
+          "staff_type_code",
+          "staff_company_name",
+          "organization_type_code",
+          "manage_user_id",
+          "country_and_area_code",
+          "work_place_code",
+          "office_place_code"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "personal_email",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "个人邮箱涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "personal_mobile",
+        "fieldControl": "MASKED",
+        "privacyClass": "PII",
+        "reason": "个人手机号涉及个人隐私，默认脱敏显示"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_email",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "公司邮箱为内部敏感信息，需授权查看"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "birthday",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "出生日期涉及个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_management_jurisdiction",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "人员管理权限为内部管控信息，需授权查看"
+      }
+    ],
+    "authzProjection": {
+      "description": "用户业务对象在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 users BO。",
+      "usageNote": "用于数据权限、列表行级过滤。策略表达式中典型引用包括 res.department_code、res.staff_status、res.staff_type_code 等。",
+      "attributes": [
+        {
+          "code": "user_id_attr",
+          "name": "用户ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "用户资源唯一标识。",
+          "i18nKey": "auth.resource.res_user.attr.user_id"
+        },
+        {
+          "code": "staff_no",
+          "name": "工号",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "staff_no"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "员工工号。",
+          "i18nKey": "auth.resource.res_user.attr.staff_no"
+        },
+        {
+          "code": "staff_name",
+          "name": "员工姓名",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "staff_name"
+          },
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "基本标识",
+          "description": "员工姓名，主要用于展示。",
+          "i18nKey": "auth.resource.res_user.attr.staff_name"
+        },
+        {
+          "code": "department_code",
+          "name": "所属部门编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "department_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 40,
+          "displayGroup": "数据范围",
+          "description": "员工所属部门。典型表达式：contains(sub.dept_scope_ids, res.department_code)。",
+          "i18nKey": "auth.resource.res_user.attr.department_code",
+          "valueRef": "orgs.department_code",
+          "referenceModel": "orgs"
+        },
+        {
+          "code": "staff_status",
+          "name": "员工状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "staff_status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "员工在职状态。典型表达式：res.staff_status == '在职'。",
+          "i18nKey": "auth.resource.res_user.attr.staff_status"
+        },
+        {
+          "code": "staff_type_code",
+          "name": "员工类型编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "staff_type_code"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 60,
+          "displayGroup": "资源属性",
+          "description": "员工类型。",
+          "i18nKey": "auth.resource.res_user.attr.staff_type_code"
+        },
+        {
+          "code": "staff_company_name",
+          "name": "所属公司",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "staff_company_name"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 70,
+          "displayGroup": "数据范围",
+          "description": "员工所属公司。",
+          "i18nKey": "auth.resource.res_user.attr.staff_company_name"
+        },
+        {
+          "code": "organization_type_code",
+          "name": "组织类型编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "dap-sys-user",
+            "fieldCode": "organization_type_code"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 80,
+          "displayGroup": "资源属性",
+          "description": "组织类型。",
+          "i18nKey": "auth.resource.res_user.attr.organization_type_code"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "users 首版 SECURITY Fragment，含行级过滤字段、PII/敏感字段分级和 ABAC 资源属性投影",
+    "department_code 关联 orgs BO"
+  ]
+}

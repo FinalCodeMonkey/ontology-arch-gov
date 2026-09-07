@@ -1,0 +1,706 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customers",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "customers",
+    "boName": "客户",
+    "description": "CRM 客户主数据业务对象（MDM），主从明细聚合建模（MASTER_DETAIL）。主实体 crm_customer 记录客户档案核心信息（身份/分类/法务/地址）；子实体 crm_customer-business-info 记录工商信息缓存。运营/审批/归属字段由 customer-relations BO（MCR）管理。PSP 中 bo_code 为 customers。",
+    "apiConfig": {
+      "resourcePath": "/customers",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "customer_no",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "FULL_AGGREGATE",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "CASCADE_AGGREGATE",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": [
+          "customer-business-info"
+        ]
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "MASTER_DETAIL",
+      "nameField": "customer_name",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "customer",
+        "name": "客户主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_customer",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "customer_no",
+            "fieldName": "bizNo",
+            "columnName": "biz_no",
+            "name": "客户编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true
+          },
+          {
+            "code": "customer_name",
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "name": "客户全称（全局唯一）",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true
+          },
+          {
+            "code": "customer_short_name",
+            "fieldName": "customerShortName",
+            "columnName": "customer_short_name",
+            "name": "客户简称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "data_source",
+            "fieldName": "dataSource",
+            "columnName": "data_source",
+            "name": "数据来源",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "business_type",
+            "fieldName": "businessType",
+            "columnName": "business_type",
+            "name": "业务分类",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "market_segment",
+            "fieldName": "marketSegment",
+            "columnName": "market_segment",
+            "name": "细分市场",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "customer_category",
+            "fieldName": "customerCategory",
+            "columnName": "customer_category",
+            "name": "客户分类",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "parent_customer_id",
+            "fieldName": "parentCustomerId",
+            "columnName": "parent_customer_id",
+            "name": "所属一级客户",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "customers",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "customer_name",
+                  "localCode": "primary_customer_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "primary_customer_name",
+            "fieldName": "primaryCustomerName",
+            "name": "一级客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "fop_customer_id",
+            "fieldName": "fopCustomerId",
+            "columnName": "fop_customer_id",
+            "name": "业务主体客户",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "customers",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "customer_name",
+                  "localCode": "fop_customer_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "fop_customer_name",
+            "fieldName": "fopCustomerName",
+            "name": "业务主体客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "country",
+            "fieldName": "country",
+            "columnName": "country",
+            "name": "国家",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "province",
+            "fieldName": "province",
+            "columnName": "province",
+            "name": "省份",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "city",
+            "fieldName": "city",
+            "columnName": "city",
+            "name": "市",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "district",
+            "fieldName": "district",
+            "columnName": "district",
+            "name": "区县",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "address_detail",
+            "fieldName": "addressDetail",
+            "columnName": "address_detail",
+            "name": "详细地址",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "neocrm_code",
+            "fieldName": "neocrmCode",
+            "columnName": "neocrm_code",
+            "name": "销售易CRM客户编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "logo_url",
+            "fieldName": "logoUrl",
+            "columnName": "logo_url",
+            "name": "客户Logo URL",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-business-info",
+        "name": "客户工商信息",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_business_info",
+        "parentEntityCode": "customer",
+        "parentRefField": "parent_id",
+        "routeSegment": "business-info",
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "source",
+            "fieldName": "source",
+            "columnName": "source",
+            "name": "数据来源",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "company_name",
+            "fieldName": "companyName",
+            "columnName": "company_name",
+            "name": "企业名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "reg_number",
+            "fieldName": "regNumber",
+            "columnName": "reg_number",
+            "name": "工商注册号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "legal_person_name",
+            "fieldName": "legalPersonName",
+            "columnName": "legal_person_name",
+            "name": "法定代表人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "credit_code",
+            "fieldName": "creditCode",
+            "columnName": "credit_code",
+            "name": "统一社会信用代码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "org_number",
+            "fieldName": "orgNumber",
+            "columnName": "org_number",
+            "name": "组织机构代码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "reg_status",
+            "fieldName": "regStatus",
+            "columnName": "reg_status",
+            "name": "登记状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "reg_capital",
+            "fieldName": "regCapital",
+            "columnName": "reg_capital",
+            "name": "注册资本",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "actual_capital",
+            "fieldName": "actualCapital",
+            "columnName": "actual_capital",
+            "name": "实缴资本",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tax_number",
+            "fieldName": "taxNumber",
+            "columnName": "tax_number",
+            "name": "纳税人识别号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "company_type",
+            "fieldName": "companyType",
+            "columnName": "company_type",
+            "name": "公司类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "taxpayer_qualification",
+            "fieldName": "taxpayerQualification",
+            "columnName": "taxpayer_qualification",
+            "name": "纳税人资质",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "establish_time",
+            "fieldName": "establishTime",
+            "columnName": "establish_time",
+            "name": "成立日期",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "social_staff_num",
+            "fieldName": "socialStaffNum",
+            "columnName": "social_staff_num",
+            "name": "参保人数",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "industry",
+            "fieldName": "industry",
+            "columnName": "industry",
+            "name": "所属行业",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "former_names",
+            "fieldName": "formerNames",
+            "columnName": "former_names",
+            "name": "曾用名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "business_term",
+            "fieldName": "businessTerm",
+            "columnName": "business_term",
+            "name": "营业期限",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "reg_institute",
+            "fieldName": "regInstitute",
+            "columnName": "reg_institute",
+            "name": "登记机关",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "reg_location",
+            "fieldName": "regLocation",
+            "columnName": "reg_location",
+            "name": "注册地址",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "approved_time",
+            "fieldName": "approvedTime",
+            "columnName": "approved_time",
+            "name": "核准日期",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "phone_number",
+            "fieldName": "phoneNumber",
+            "columnName": "phone_number",
+            "name": "联系方式",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "english_name",
+            "fieldName": "englishName",
+            "columnName": "english_name",
+            "name": "英文名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "listing_status",
+            "fieldName": "listingStatus",
+            "columnName": "listing_status",
+            "name": "上市状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "staff_scale",
+            "fieldName": "staffScale",
+            "columnName": "staff_scale",
+            "name": "人员规模",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "business_scope",
+            "fieldName": "businessScope",
+            "columnName": "business_scope",
+            "name": "经营范围",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "fetched_at",
+            "fieldName": "fetchedAt",
+            "columnName": "fetched_at",
+            "name": "抓取时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "valid_until",
+            "fieldName": "validUntil",
+            "columnName": "valid_until",
+            "name": "有效期截止时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "MDM/MCR 分层拆分",
+    "根实体移除 MCR 字段（owner_user_id、status、approval_*、latest_visit_*、responsible_*、service_*、remarks、billing_* 等）",
+    "MCR 子实体（team_member、competition、industry_strategy 及其成员实体）迁移至 customer-relations BO",
+    "保留 crm_customer-business-info 子实体（工商信息缓存）"
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "x-territory-regs",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "x-territory-reg": [
+          "customer_id",
+          "customer_owner_id",
+          "filing_owner_id",
+          "status",
+          "linked_opportunity_id",
+          "tenant_code"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "reason",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "报备理由包含竞争敏感的商业判断，仅报备相关人员可见"
+      },
+      {
+        "entityCode": "x-territory-reg",
+        "fieldCode": "ownership_note",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "主导权及合作分量说明涉及内部销售协作分配，属于敏感业务信息"
+      }
+    ],
+    "authzProjection": {
+      "description": "跨地盘项目报备资源 ABAC 属性投影。支持按客户、报备负责人、状态、租户等维度进行数据权限控制。",
+      "usageNote": "行级安全策略典型表达式：sub.user_id == res.filing_owner_id（负责人自见）或 sub.customer_owner_id == res.customer_owner_id（客户所有人可见）。",
+      "attributes": [
+        {
+          "code": "filing_id",
+          "name": "报备单ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "x-territory-reg",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "报备单唯一标识",
+          "i18nKey": "auth.resource.res_x-territory-reg.attr.filing_id"
+        },
+        {
+          "code": "status",
+          "name": "报备状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "x-territory-reg",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            { "value": "DRAFT",    "label": "草稿" },
+            { "value": "PENDING",  "label": "审批中" },
+            { "value": "APPROVED", "label": "已通过" },
+            { "value": "REJECTED", "label": "已驳回" }
+          ],
+          "displayOrder": 20,
+          "displayGroup": "状态",
+          "description": "用于按审批状态过滤可见范围。典型表达式：res.status IN ['APPROVED']。",
+          "i18nKey": "auth.resource.res_x-territory-reg.attr.status"
+        },
+        {
+          "code": "customer_id",
+          "name": "客户ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "x-territory-reg",
+            "fieldCode": "customer_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "用于按客户过滤报备可见范围。",
+          "i18nKey": "auth.resource.res_x-territory-reg.attr.customer_id"
+        },
+        {
+          "code": "customer_owner_id",
+          "name": "客户所有人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "x-territory-reg",
+            "fieldCode": "customer_owner_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 40,
+          "displayGroup": "数据范围",
+          "description": "客户所有人（属地销售）。典型表达式：sub.user_id == res.customer_owner_id。",
+          "i18nKey": "auth.resource.res_x-territory-reg.attr.customer_owner_id"
+        },
+        {
+          "code": "filing_owner_id",
+          "name": "报备负责人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "x-territory-reg",
+            "fieldCode": "filing_owner_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 50,
+          "displayGroup": "数据范围",
+          "description": "跨地盘报备负责人（发起方销售）。典型表达式：sub.user_id == res.filing_owner_id。",
+          "i18nKey": "auth.resource.res_x-territory-reg.attr.filing_owner_id"
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户标识",
+          "type": "STRING",
+          "source": {
+            "entityCode": "x-territory-reg",
+            "fieldCode": "tenant_code"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "DENY",
+          "displayOrder": 60,
+          "displayGroup": "租户隔离",
+          "description": "多租户隔离字段。",
+          "i18nKey": "auth.resource.res_x-territory-reg.attr.tenant_code"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "跨地盘项目报备 BO 首版 SECURITY Fragment",
+    "reason 和 ownership_note 涉及竞争敏感信息，标记 RESTRICTED/SENSITIVE",
+    "行级安全支持按负责人、客户所有人、状态过滤"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/validation-fragment.schema.v3.json",
+  "title": "BO VALIDATION fragment",
+  "description": "字段级简单校验规则。用于声明 required、min/max、pattern、enum、unique 等标量约束。与 RULE fragment 的 COMPLEX_VALIDATION ruleType 职责不同：本 Fragment 承载声明式字段约束（对标 Java Bean Validation），RULE.ruleType=COMPLEX_VALIDATION 承载带 trigger/expression/action 的复杂校验流程规则。发布时两者分别投影到 bo-schema-view 的 attribute.validation 和顶层 rules。",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [VALIDATION Fragment] 章节。",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "rules": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；(entityCode, fieldCode) 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["entityCode", "fieldCode"],
+        "additionalProperties": false,
+        "properties": {
+          "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "required": { "type": "boolean", "default": false },
+          "min": { "type": "number", "description": "STRING 类型字段解释为最小字符长度；INTEGER/LONG/DECIMAL 类型解释为最小数値。若同时配置 min 和 max，则 min 必须 ≤ max（由 check_consistency.py 校验）。" },
+          "max": { "type": "number", "description": "STRING 类型字段解释为最大字符长度；INTEGER/LONG/DECIMAL 类型解释为最大数値。" },
+          "pattern": { "type": "string" },
+          "enum": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["value", "label"],
+              "additionalProperties": false,
+              "properties": {
+                "value": { "type": "string", "minLength": 1, "maxLength": 64, "description": "存储值/编码，用于数据持久化和策略表达式" },
+                "label": { "type": "string", "minLength": 1, "maxLength": 100, "description": "显示名，用于界面呈现" }
+              }
+            },
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "枚举值列表。每条为 {value, label} 对，value 用于数据存储和策略引用，label 用于 UI 展示。"
+          },
+          "unique": { "type": "boolean", "default": false },
+          "conditional": {
+            "type": "object",
+            "description": "条件校验：当指定条件满足时才触发本规则。支持 simple 模式（dependsOn + when/whenNot）或 allOf 模式（多个子条件都必须满足）。",
+            "additionalProperties": false,
+            "properties": {
+              "dependsOn": { "type": "string", "description": "simple 模式：依赖的同 entity 内字段 code" },
+              "when": { "description": "simple 模式：触发条件值，支持字符串或数组" },
+              "whenNot": { "description": "simple 模式：排除条件值，支持字符串或数组。与 when 互斥" },
+              "allOf": {
+                "type": "array",
+                "description": "allOf 模式：多个子条件都必须满足才触发。每个子条件含 dependsOn 和 notNull/equals 等",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "properties": {
+                    "dependsOn": { "type": "string" }
+                  }
+                }
+              },
+              "description": { "type": "string", "description": "condition 的描述文本" }
+            }
+          },
+          "conditionalEnum": {
+            "type": "object",
+            "description": "条件枚举：根据某字段的值动态切换 enum 选项列表。如 conditionalEnum.dependsOn='project_type' conditionalEnum.groups=[{when:'DC', enum:[...]}, ...]。",
+            "additionalProperties": false,
+            "properties": {
+              "dependsOn": { "type": "string" },
+              "groups": {
+                "type": "array",
+                "description": "按 dependsOn 字段值分组的枚举列表",
+                "items": {
+                  "type": "object",
+                  "required": ["when", "enum"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "when": { "type": "string" },
+                    "enum": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["value", "label"],
+                        "additionalProperties": false,
+                        "properties": {
+                          "value": { "type": "string", "minLength": 1 },
+                          "label": { "type": "string", "minLength": 1 }
+                        }
+                      },
+                      "minItems": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "message": { "type": "string", "maxLength": 300 },
+          "semanticMapping": {
+            "type": "object",
+            "description": "枚举字段值到上层本体的语义映射。如 competition_level.STRONG → risk_level.HIGH。推理引擎/本体评估器在跨域求值时使用。",
+            "required": ["targetOntology", "map"],
+            "additionalProperties": false,
+            "properties": {
+              "targetOntology": { "type": "string", "description": "映射目标本体的概念名，如 risk_level" },
+              "description": { "type": "string", "maxLength": 200 },
+              "map": {
+                "type": "object",
+                "description": "源字段值 → 目标本体值的映射表",
+                "minProperties": 1,
+                "additionalProperties": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "default": []
+    }
+  }
+}

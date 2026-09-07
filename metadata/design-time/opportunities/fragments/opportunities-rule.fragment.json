@@ -1,0 +1,433 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "opportunities",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "OPPORTUNITY_PROJECT_TYPE_IMMUTABLE",
+        "name": "项目类型创建后不可修改",
+        "ruleType": "STATE",
+        "scope": "FIELD",
+        "entityCode": "opportunity",
+        "fieldCode": "project_type",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "项目类型创建后不允许修改",
+        "description": "商机项目类型（DC/OC_MAIN/OC_SUB/BC/EC）在创建后不可变更，因不同类型对应不同销售流程。"
+      },
+      {
+        "code": "OPPORTUNITY_BUSINESS_CUSTOMER_EXISTS",
+        "name": "商机关联业务主体客户必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "商机关联的业务主体客户不存在，请选择有效客户",
+        "description": "商机 customers_id 引用的客户必须在 customers BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "customers",
+          "refFieldCode": "id",
+          "localEntityCode": "opportunity",
+          "localFieldCode": "customers_id"
+        }
+      },
+      {
+        "code": "OPPORTUNITY_OC_MASTER_HAS_FRAMEWORK",
+        "name": "OC主项目必须填写预计下单金额/集采框架总金额",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "project_type == 'OC_MAIN' && expected_order_amount == null",
+        "severity": "ERROR",
+        "message": "OC主项目必须填写预计下单金额/集采框架总金额",
+        "description": "OC主项目类型必须提供预计下单金额（集采框架总金额）。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "project_type"
+              },
+              "right": {
+                "type": "literal",
+                "value": "OC_MAIN"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "expected_order_amount"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_STAGE_FLOW",
+        "name": "销售流程阶段推进合法性",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "ADVANCE_STAGE",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "当前商机状态不允许推进阶段（已结束或已取消）",
+        "description": "已结束（CLOSED_WON/CLOSED_LOST/CANCELLED）的商机不允许推进阶段，仅允许重启。"
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_ROLLBACK_STAGE",
+        "name": "仅活跃商机可退回阶段",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "ROLLBACK_STAGE",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "当前商机状态不允许退回阶段（仅活跃状态可退回）",
+        "description": "status != 'ACTIVE' 时禁止 ROLLBACK_STAGE。DRAFT 无阶段历史可退，终态（CLOSED_WON/CLOSED_LOST/CANCELLED）阶段已结束不允许退回。"
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_WIN",
+        "name": "仅活跃商机可赢单",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "WIN",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "仅活跃状态的商机可标记赢单",
+        "description": "status != 'ACTIVE' 时禁止 WIN。DRAFT 必须先 SUBMIT→ACTIVE 后赢单；已终态不允许重复赢单。"
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_LOSE",
+        "name": "仅活跃商机可输单",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "LOSE",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "仅活跃状态的商机可标记输单",
+        "description": "status != 'ACTIVE' 时禁止 LOSE。DRAFT 必须先 SUBMIT→ACTIVE 后输单；已终态不允许重复输单。"
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_CANCEL",
+        "name": "终态商机不可取消",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "CANCEL",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "已结束的商机不可取消",
+        "description": "status 为 CLOSED_WON/CLOSED_LOST/CANCELLED 时禁止 CANCEL。DRAFT 和 ACTIVE 状态下允许取消。"
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_RESTART",
+        "name": "仅终态商机可重启",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "RESTART",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "仅已结束（赢单/输单/取消）的商机可重启",
+        "description": "status 为 DRAFT/ACTIVE 时禁止 RESTART。只有 CLOSED_WON/CLOSED_LOST/CANCELLED 终态才允许重启。"
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_START_PROGRESS",
+        "name": "仅草稿态可开始跟进",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "START_PROGRESS",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "仅草稿状态的商机可开始跟进",
+        "description": "status != 'DRAFT' 时禁止 START_PROGRESS。已 ACTIVE 或终态商机不允许重新开始跟进。START_PROGRESS 将商机从 DRAFT 变更为 ACTIVE。"
+      },
+      {
+        "code": "OPPORTUNITY_PRODUCT_ECP_AVAILABLE",
+        "name": "创建报价前校验产品上架状态",
+        "ruleType": "CONSISTENCY",
+        "scope": "OPERATION",
+        "operationCode": "CREATE_QUOTATION",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "以下型号产品尚未上架，无法进行ECP下单",
+        "description": "创建报价单前校验产品清单中所有产品型号在ECP系统是否已上架，未上架产品拦截并提示。"
+      },
+      {
+        "code": "OPPORTUNITY_STAGE_TYPE_MATCH",
+        "name": "项目阶段必须匹配项目类型",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "polarity": "safety",
+        "expression": "// project_stage 的前缀必须与 project_type 匹配。阶段编码格式如 DC_01、OC_MAIN_03 等，前缀（如 'DC_'）取自 project_type + '_'。\nproject_type + '_' != project_stage.substring(0, project_type.length() + 1)",
+        "severity": "ERROR",
+        "message": "客户采购阶段与项目类型不匹配，请选择当前项目类型对应的阶段",
+        "description": "project_stage 的值必须属于当前 project_type 对应的阶段集合。DC项目对应DC_01~DC_08，OC主项目对应OC_MAIN_01~OC_MAIN_09，OC子项目对应OC_SUB_01~OC_SUB_04，BC项目对应BC_01~BC_06，EC项目对应EC_01~EC_06。",
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "project_type"
+          },
+          "right": {
+            "type": "field",
+            "path": "project_stage"
+          }
+        }
+      },
+      {
+        "code": "OPPORTUNITY_OC_SUB_REQUIRES_PARENT_ID",
+        "name": "OC子项目必须关联框架主项目",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "project_type == 'OC_SUB' && parent_opportunity_id == null",
+        "severity": "ERROR",
+        "message": "OC子项目必须关联框架主项目",
+        "description": "OC子项目类型的商机必须填写 parent_opportunity_id。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "project_type"
+              },
+              "right": {
+                "type": "literal",
+                "value": "OC_SUB"
+              }
+            },
+            {
+              "type": "isNull",
+              "expr": {
+                "type": "field",
+                "path": "parent_opportunity_id"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "OPPORTUNITY_QUOTATION_NOT_FOR_OC_MAIN",
+        "name": "OC主项目不允许创建报价单",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "CREATE_QUOTATION",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "project_type == 'OC_MAIN'",
+        "severity": "ERROR",
+        "message": "OC主项目类型不支持创建报价单，请在OC子项目下创建",
+        "description": "OC主项目是集采框架协议，不直接产生报价单。报价单只能在DC/OC子/BC/EC项目类型下创建。",
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "project_type"
+          },
+          "right": {
+            "type": "literal",
+            "value": "OC_MAIN"
+          }
+        }
+      },
+      {
+        "code": "OPPORTUNITY_QUOTATION_READ_ONLY",
+        "name": "报价单为ECP外部引用只读",
+        "ruleType": "STATE",
+        "scope": "ENTITY",
+        "entityCode": "opportunity-quotation",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "报价单数据由ECP系统同步，不支持在CRM内直接增删改",
+        "description": "商机 quotation 子实体为 EXTERNAL_REF 性质，数据通过ECP系统回调同步写入，CRM侧仅支持只读展示和跳转ECP编辑。"
+      },
+      {
+        "code": "OPPORTUNITY_STATUS_DELETE",
+        "name": "仅草稿态可删除",
+        "ruleType": "STATE",
+        "scope": "OPERATION",
+        "operationCode": "DELETE",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "仅草稿状态的商机可删除，已跟进或已结束的商机不可删除",
+        "description": "status != 'DRAFT' 时禁止 DELETE。ACTIVE 和终态（CLOSED_WON/CLOSED_LOST/CANCELLED）商机不可删除，仅允许取消或重启。"
+      },
+      {
+        "code": "OPPORTUNITY_PREDICT_CATEGORY_ORDER",
+        "name": "预测类别提升方向约束",
+        "ruleType": "STATE",
+        "scope": "FIELD",
+        "entityCode": "opportunity",
+        "fieldCode": "predict_category",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "WARN",
+        "message": "预测类别不建议回退，请确认是否为合规的降级操作",
+        "description": "预测类别从线索→优势有 8 级置信度（LEAD < OPPORTUNITY_MINUS < OPPORTUNITY < OPPORTUNITY_PLUS < POSSIBLE_MINUS < POSSIBLE < POSSIBLE_PLUS < ADVANTAGE）。回退操作产生 WARN 而非 ERROR，由应用层二次确认。"
+      },
+      {
+        "code": "OPPORTUNITY_EXPECTED_ORDER_AMOUNT_SEMANTIC",
+        "name": "预计下单金额/集采框架总金额双语义",
+        "ruleType": "DERIVATION",
+        "scope": "FIELD",
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_amount",
+        "trigger": "ON_READ",
+        "severity": "INFO",
+        "message": "非OC主项目表示预计下单金额，OC主项目表示集采框架总金额",
+        "description": "expected_order_amount 字段语义由 project_type 决定。"
+      },
+      {
+        "code": "OPPORTUNITY_PRODUCT_TREE_STRUCTURE",
+        "name": "产品行自引用树形结构约束",
+        "ruleType": "CONSISTENCY",
+        "scope": "FIELD",
+        "entityCode": "opportunity-product",
+        "fieldCode": "parent_product_id",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "配件行必须关联本商机下的有效主产品行",
+        "description": "NULL=主产品行，非NULL=配件行，指向同表主产品行的id。"
+      },
+      {
+        "code": "OPPORTUNITY_RATIO_CONDITIONAL",
+        "name": "场景典配配比条件填写",
+        "ruleType": "CONSISTENCY",
+        "scope": "FIELD",
+        "entityCode": "opportunity-product",
+        "fieldCode": "ratio",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "(parent_product_id == null || scene_id == null) && ratio != null",
+        "severity": "ERROR",
+        "message": "配比仅允许在场景典配配件行中填写",
+        "description": "仅同时满足 parent_product_id IS NOT NULL 且 scene_id IS NOT NULL 时填写。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "logical",
+              "op": "OR",
+              "items": [
+                {
+                  "type": "isNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "parent_product_id"
+                  }
+                },
+                {
+                  "type": "isNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "scene_id"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "isNotNull",
+              "expr": {
+                "type": "field",
+                "path": "ratio"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "OPPORTUNITY_STAGE_HISTORY_AUDIT_SNAPSHOT",
+        "name": "阶段历史审计快照固化",
+        "ruleType": "AUTOMATION",
+        "scope": "OPERATION",
+        "operationCode": "ADVANCE_STAGE",
+        "trigger": "ON_STATE_CHANGE",
+        "severity": "INFO",
+        "message": "阶段推进需记录历史快照",
+        "description": "from_stage_code 从前一历史记录 stage_code 复制；stage_code 值域同 project_stage；from_stage_name/stage_name 写入时枚举标签固化。"
+      },
+      {
+        "code": "OPPORTUNITY_SERVICE_TIME_SCOPE",
+        "name": "服务时间仅售后服务销售使用",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "project_type != 'EC' && (service_start_time != null || service_end_time != null)",
+        "severity": "WARN",
+        "message": "服务时间仅针对售后服务销售的商机（EC类型）使用",
+        "description": "service_start_time / service_end_time 仅 EC 项目类型有意义。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "project_type"
+              },
+              "right": {
+                "type": "literal",
+                "value": "EC"
+              }
+            },
+            {
+              "type": "logical",
+              "op": "OR",
+              "items": [
+                {
+                  "type": "isNotNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "service_start_time"
+                  }
+                },
+                {
+                  "type": "isNotNull",
+                  "expr": {
+                    "type": "field",
+                    "path": "service_end_time"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "code": "OPPORTUNITY_STAGE_CODE_DOMAIN",
+        "name": "阶段编码值域说明",
+        "ruleType": "DERIVATION",
+        "scope": "FIELD",
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "stage_code",
+        "trigger": "ON_READ",
+        "severity": "INFO",
+        "message": "阶段编码按项目类型分组",
+        "description": "枚举值按 project_type 分组：DC_01~DC_08 / OC_MAIN_01~OC_MAIN_09 / OC_SUB_01~OC_SUB_04 / BC_01~BC_06 / EC_01~EC_06。"
+      }
+    ]
+  },
+  "changeNote": [
+    "opportunities 首版 RULE 设计态 Fragment，含名称唯一性、项目类型不可变、跨BO客户一致性、OC子项目父项目关联、状态流转控制与ECP产品上架校验",
+    "新增项目阶段与项目类型匹配校验规则（OPPORTUNITY_STAGE_TYPE_MATCH）",
+    "新增OC子项目必须关联框架主项目规则（OPPORTUNITY_OC_SUB_REQUIRES_PARENT_ID）",
+    "新增草稿→激活状态转换规则（OPPORTUNITY_STATUS_START_PROGRESS），移除SUBMIT审批规则",
+    "新增OC主项目不允许创建报价单规则（OPPORTUNITY_QUOTATION_NOT_FOR_OC_MAIN）",
+    "新增报价单ECP外部引用只读规则（OPPORTUNITY_QUOTATION_READ_ONLY）"
+  ]
+}

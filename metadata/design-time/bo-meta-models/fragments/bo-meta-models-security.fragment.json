@@ -1,0 +1,150 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "bo-meta-models",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "authz-bo-meta-model": [
+          "tenant_id",
+          "app_code",
+          "bo_code",
+          "adapter_type",
+          "data_domain_id",
+          "is_deleted"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "authz-bo-meta-model",
+        "fieldCode": "schema_json",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "投影元数据 JSON 包含完整 BO 权限模型结构，仅授权管理员可查看和修改"
+      }
+    ],
+    "authzProjection": {
+      "description": "BO 元模型注册表在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 bo-meta-models BO。",
+      "usageNote": "用于数据权限、列表行级过滤。策略表达式中典型引用包括 res.tenant_id、res.app_code、res.bo_code、res.data_domain_id 等。",
+      "attributes": [
+        {
+          "code": "bo_meta_model_id",
+          "name": "元模型ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "authz-bo-meta-model",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "BO 元模型注册记录唯一标识。",
+          "i18nKey": "auth.resource.res_bo_meta_model.attr.bo_meta_model_id"
+        },
+        {
+          "code": "tenant_id",
+          "name": "租户标识",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-bo-meta-model",
+            "fieldCode": "tenant_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "租户隔离标识。典型表达式：res.tenant_id == sub.tenant_id。",
+          "i18nKey": "auth.resource.res_bo_meta_model.attr.tenant_id"
+        },
+        {
+          "code": "app_code",
+          "name": "应用代码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-bo-meta-model",
+            "fieldCode": "app_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "基本标识",
+          "description": "应用代码。典型表达式：res.app_code == 'crm'。",
+          "i18nKey": "auth.resource.res_bo_meta_model.attr.app_code"
+        },
+        {
+          "code": "bo_code",
+          "name": "BO标识",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-bo-meta-model",
+            "fieldCode": "bo_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 40,
+          "displayGroup": "基本标识",
+          "description": "业务对象编码。典型表达式：res.bo_code == 'customers'。",
+          "i18nKey": "auth.resource.res_bo_meta_model.attr.bo_code"
+        },
+        {
+          "code": "adapter_type",
+          "name": "适配器类型",
+          "type": "STRING",
+          "source": {
+            "entityCode": "authz-bo-meta-model",
+            "fieldCode": "adapter_type"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 50,
+          "displayGroup": "适配配置",
+          "description": "BO 数据适配器类型。典型表达式：res.adapter_type == 'JAVA_BEAN'。",
+          "i18nKey": "auth.resource.res_bo_meta_model.attr.adapter_type",
+          "allowedValues": [
+            { "value": "JAVA_BEAN", "label": "Java Bean" },
+            { "value": "JPA_ENTITY", "label": "JPA Entity" },
+            { "value": "MYBATIS_MAPPER", "label": "MyBatis Mapper" },
+            { "value": "REST_API", "label": "REST API" }
+          ]
+        },
+        {
+          "code": "data_domain_id",
+          "name": "数据领域ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "authz-bo-meta-model",
+            "fieldCode": "data_domain_id"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 60,
+          "displayGroup": "数据范围",
+          "description": "所属数据领域。典型表达式：contains(sub.domain_scope_ids, res.data_domain_id)。",
+          "i18nKey": "auth.resource.res_bo_meta_model.attr.data_domain_id",
+          "valueRef": "data-domains.id",
+          "referenceModel": "data-domains"
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "bo-meta-models 首版 SECURITY Fragment",
+    "schema_json 标记为 RESTRICTED + CONFIDENTIAL，仅授权管理员可查看",
+    "行级过滤字段包含 tenant_id、app_code、bo_code、adapter_type、data_domain_id",
+    "authzProjection 派生 6 个资源属性，adapter_type 使用 allowedValues 枚举"
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "devices",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "device",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "device_serial_no",
+        "required": true,
+        "max": 64,
+        "unique": true,
+        "message": "设备序列号不能为空且不超过64字符，且需唯一"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "device_status",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {
+            "value": "RUNNING",
+            "label": "运行中"
+          },
+          {
+            "value": "PENDING_DECOMMISSION",
+            "label": "待裁撤"
+          },
+          {
+            "value": "DECOMMISSIONED",
+            "label": "已裁撤"
+          }
+        ],
+        "message": "设备状态必须为 RUNNING / PENDING_DECOMMISSION / DECOMMISSIONED 之一"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "order_id",
+        "max": 64
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "customer_name",
+        "max": 200
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "parent_customer_name",
+        "max": 200
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "fop_customer_name",
+        "max": 200
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "product_name",
+        "max": 200
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "product_model",
+        "max": 200
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "spec",
+        "max": 500
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "product_line",
+        "max": 100
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "material_code",
+        "max": 64
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "contract_no",
+        "max": 64
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "maintenance_service",
+        "max": 200
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "service_subject",
+        "max": 200
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "region",
+        "max": 100
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "product_status",
+        "max": 64
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "equip_maint_status",
+        "max": 64
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "data_source",
+        "max": 50
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "renewal_days",
+        "min": 0
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "renewal_times",
+        "min": 0
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "service_list_price",
+        "min": 0
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "hardware_list_price",
+        "min": 0
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "domestic_hardware_ship_price",
+        "min": 0
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "overseas_hardware_list_price_usd",
+        "min": 0
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "overseas_hardware_ship_price_usd",
+        "min": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "boCode": "customers",
+  "tables": {
+    "crm_customer": [
+      "id", "biz_no", "customer_name", "customer_short_name", "data_source", "business_type", "market_segment", "customer_category",
+      "parent_customer_id", "fop_customer_id", "owner_user_id", "owner_user_name",
+      "region", "department_code", "department_name", "country", "province",
+      "city", "district", "address_detail", "status", "neocrm_code", "logo_url", "remarks",
+      "latest_visitor_id", "latest_visit_time", "responsible_pre_sales_id",
+      "responsible_pre_sales_name", "service_sales_id", "service_sales_name",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code", "billing_province", "billing_city"
+    ],
+    "crm_customer_business_info": [
+      "id", "parent_id", "source", "company_name", "reg_number",
+      "legal_person_name", "credit_code", "org_number", "reg_status",
+      "reg_capital", "actual_capital", "tax_number", "company_type",
+      "taxpayer_qualification", "establish_time", "social_staff_num", "industry",
+      "former_names", "business_term", "reg_institute", "reg_location",
+      "approved_time", "phone_number", "staff_scale", "english_name", "listing_status",
+      "business_scope", "fetched_at", "valid_until",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_competition": [
+      "id", "customer_id", "competitor_id", "strategic_intent",
+      "recent_action_product_tech", "recent_action_business_supply",
+      "recent_action_quality_service", "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_competition_member": [
+      "id", "parent_id", "user_id", "user_name", "member_role", "permission", "remark",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_competition_sale": [
+      "id", "parent_id", "sort_no", "sales_year", "product_category",
+      "product_name", "annual_sales", "next_year_target",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_industry_biz": [
+      "id", "parent_id", "sort_no", "biz_name", "biz_result",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_industry_strategy": [
+      "id", "customer_id", "is_current", "main_product", "revenue_data", "gross_margin_data",
+      "corp_strategy", "ai_strategy", "infra_plan",
+      "version_no", "version_remark",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_industry_strategy_member": [
+      "id", "parent_id", "user_id", "user_name",
+      "member_role", "permission", "remark",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_infra_architecture": [
+      "id", "customer_id", "arch_name", "arch_category",
+      "server_info", "nic_info", "network_info", "module_info",
+      "diagram_file_id", "diagram_file_name",
+      "pod_usage", "pod_count", "shortlist_date", "gray_date",
+      "mass_production_date", "eol_date", "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_infra_architecture_member": [
+      "id", "parent_id", "user_id", "user_name",
+      "member_role", "permission", "remark",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ],
+    "crm_customer_team_member": [
+      "id", "parent_id", "user_id", "user_name",
+      "member_role", "permission", "page_permission", "remarks",
+      "is_deleted", "created_time", "updated_time", "created_by", "updated_by",
+      "tenant_code"
+    ]
+  }
+}

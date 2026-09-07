@@ -1,0 +1,245 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "devices",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "device": [
+          "tenant_code",
+          "device_status",
+          "region",
+          "data_source",
+          "product_line"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "device",
+        "fieldCode": "service_list_price",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "服务目录价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "hardware_list_price",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "硬件目录价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "domestic_hardware_ship_price",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "国内硬件出货价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "overseas_hardware_list_price_usd",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "海外硬件目录价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "overseas_hardware_ship_price_usd",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "海外硬件出货价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "customer_name",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "客户名称为业务敏感信息，需按行级数据策略控制可见范围"
+      },
+      {
+        "entityCode": "device",
+        "fieldCode": "contract_no",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "SENSITIVE",
+        "reason": "合同编号为业务敏感信息，需按行级数据策略控制可见范围"
+      }
+    ],
+    "authzProjection": {
+      "description": "设备档案业务对象在 PSP 中的资源属性投影。设备档案为'外部聚合+本地覆盖'混合数据架构，行级权限候选字段以本地可控制维度为主（区域、设备状态、数据来源、产品线）。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。rowSecurity 声明 DATA 策略候选字段，fieldSecurity 声明 FIELD 策略候选字段（价格类字段默认 MASKED）。策略表达式中典型引用方式包括 res.tenant_code、res.region、res.device_status、res.data_source 等。",
+      "attributes": [
+        {
+          "code": "device_id",
+          "name": "设备主键",
+          "type": "LONG",
+          "source": {
+            "entityCode": "device",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "设备资源唯一标识，供 PIP 按 ID 拉取完整属性集合。",
+          "i18nKey": "auth.resource.res_device.attr.device_id",
+          "valueExamples": [
+            "1",
+            "100"
+          ]
+        },
+        {
+          "code": "device_serial_no",
+          "name": "设备序列号",
+          "type": "STRING",
+          "source": {
+            "entityCode": "device",
+            "fieldCode": "device_serial_no"
+          },
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "设备序列号，业务主键，主要用于展示和审计。",
+          "i18nKey": "auth.resource.res_device.attr.device_serial_no",
+          "valueExamples": [
+            "G2S6A00001",
+            "G2S6A00002"
+          ]
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "device",
+            "fieldCode": "tenant_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "设备所属租户。典型表达式：sub.tenant_code == res.tenant_code。",
+          "i18nKey": "auth.resource.res_device.attr.tenant_code",
+          "valueExamples": [
+            "gov-default",
+            "ent-default"
+          ]
+        },
+        {
+          "code": "device_status",
+          "name": "设备状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "device",
+            "fieldCode": "device_status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "RUNNING",
+              "label": "运行中"
+            },
+            {
+              "value": "PENDING_DECOMMISSION",
+              "label": "待裁撤"
+            },
+            {
+              "value": "DECOMMISSIONED",
+              "label": "已裁撤"
+            }
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "设备运行状态。典型表达式：res.device_status == 'RUNNING'。",
+          "i18nKey": "auth.resource.res_device.attr.device_status",
+          "valueExamples": [
+            "RUNNING",
+            "DECOMMISSIONED"
+          ]
+        },
+        {
+          "code": "region",
+          "name": "区域",
+          "type": "STRING",
+          "source": {
+            "entityCode": "device",
+            "fieldCode": "region"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "设备所属区域。典型表达式：contains(sub.region_scope, res.region)。",
+          "i18nKey": "auth.resource.res_device.attr.region",
+          "valueExamples": [
+            "华东",
+            "华南"
+          ]
+        },
+        {
+          "code": "data_source",
+          "name": "数据来源",
+          "type": "STRING",
+          "source": {
+            "entityCode": "device",
+            "fieldCode": "data_source"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "allowedValues": [
+            {
+              "value": "EXTERNAL_AGGREGATED",
+              "label": "外部汇聚"
+            },
+            {
+              "value": "LOCAL_OVERRIDE_ONLY",
+              "label": "本地维护"
+            }
+          ],
+          "displayOrder": 70,
+          "displayGroup": "资源属性",
+          "description": "设备数据来源。典型表达式：res.data_source == 'EXTERNAL_AGGREGATED'。",
+          "i18nKey": "auth.resource.res_device.attr.data_source",
+          "valueExamples": [
+            "EXTERNAL_AGGREGATED",
+            "LOCAL_OVERRIDE_ONLY"
+          ]
+        },
+        {
+          "code": "product_line",
+          "name": "产品线",
+          "type": "STRING",
+          "source": {
+            "entityCode": "device",
+            "fieldCode": "product_line"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 80,
+          "displayGroup": "资源属性",
+          "description": "设备所属产品线。典型表达式：contains(sub.product_line_scope, res.product_line)。",
+          "i18nKey": "auth.resource.res_device.attr.product_line",
+          "valueExamples": [
+            "园区交换产品线",
+            "数据中心交换产品"
+          ]
+        }
+      ]
+    }
+  }
+}

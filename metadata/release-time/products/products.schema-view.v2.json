@@ -1,0 +1,1031 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "products",
+  "boName": "产品",
+  "description": "产品主数据业务对象，单表建模，记录产品型号、分类、系列、归属部门、产品线、销售代码、国内外零售报价、国内外启停用/下架/产品状态等信息。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/products",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "product_model",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "FULL_AGGREGATE",
+      "createScope": "FULL_AGGREGATE",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": []
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "product_model",
+    "statusField": "status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "product",
+      "name": "产品主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_master_product",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "产品ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "product_model",
+          "name": "产品型号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_model",
+          "columnName": "product_model",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 200,
+            "unique": true,
+            "message": "产品型号不能为空且不超过200字"
+          },
+          "view": {
+            "displayName": "产品型号",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入产品型号",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "product_category",
+          "name": "产品类别",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_category",
+          "columnName": "product_category",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 100,
+            "enum": [
+              {
+                "value": "SWITCH",
+                "label": "交换机"
+              },
+              {
+                "value": "ROUTER",
+                "label": "路由器"
+              },
+              {
+                "value": "WIRELESS",
+                "label": "无线"
+              },
+              {
+                "value": "SECURITY",
+                "label": "安全"
+              },
+              {
+                "value": "SERVER",
+                "label": "服务器"
+              },
+              {
+                "value": "STORAGE",
+                "label": "存储"
+              },
+              {
+                "value": "CLOUD_COMPUTING",
+                "label": "云计算"
+              },
+              {
+                "value": "SOFTWARE",
+                "label": "软件"
+              },
+              {
+                "value": "SERVICE",
+                "label": "服务"
+              },
+              {
+                "value": "ACCESSORY",
+                "label": "配件"
+              }
+            ],
+            "message": "产品类别必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "产品类别",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择产品类别",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "product_category"
+          }
+        },
+        {
+          "code": "product_series",
+          "name": "产品系列",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_series",
+          "columnName": "product_series",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "产品系列",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入产品系列",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "product_department",
+          "name": "产品归属事业部",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_department",
+          "columnName": "product_department",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "orgs",
+            "refFieldCode": "department_code",
+            "relationType": "MANY_TO_ONE"
+          },
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "产品归属事业部",
+            "sortable": true,
+            "columnWidth": 150,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请输入归属事业部",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "orgs"
+          }
+        },
+        {
+          "code": "product_line",
+          "name": "所属产品线",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "product_line",
+          "columnName": "product_line",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "所属产品线",
+            "sortable": true,
+            "columnWidth": 150,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入所属产品线",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "sales_code",
+          "name": "产品销售代码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "sales_code",
+          "columnName": "sales_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "OPEN",
+          "privacyClass": "SENSITIVE",
+          "reason": "销售代码为内部编码，需全员可见以便业务协同",
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "产品销售代码",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入销售代码",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "domestic_retail_price",
+          "name": "国内市场零售报价（元）",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "domestic_retail_price",
+          "columnName": "domestic_retail_price",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "MASKED",
+          "privacyClass": "SENSITIVE",
+          "reason": "国内市场零售报价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值",
+          "validation": {
+            "min": 0,
+            "message": "国内市场零售报价必须为非负数"
+          },
+          "view": {
+            "displayName": "国内市场零售报价（元）",
+            "sortable": true,
+            "columnWidth": 180,
+            "format": "currency",
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "如 ¥16,800",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "oversea_retail_price",
+          "name": "海外市场零售报价（美元）",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "oversea_retail_price",
+          "columnName": "oversea_retail_price",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "MASKED",
+          "privacyClass": "SENSITIVE",
+          "reason": "海外市场零售报价为敏感商业数据，默认脱敏显示，仅授权用户可查看精确值",
+          "validation": {
+            "min": 0,
+            "message": "海外市场零售报价必须为非负数"
+          },
+          "view": {
+            "displayName": "海外市场零售报价（美元）",
+            "sortable": true,
+            "columnWidth": 180,
+            "format": "currency",
+            "order": 85,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "如 $3,260",
+            "queryable": false,
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "has_domestic",
+          "name": "是否有国内数据",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "has_domestic",
+          "columnName": "has_domestic",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "enum": [
+              {
+                "value": "0",
+                "label": "否"
+              },
+              {
+                "value": "1",
+                "label": "是"
+              }
+            ],
+            "message": "是否有国内数据必须为 0(否) 或 1(是)"
+          }
+        },
+        {
+          "code": "has_oversea",
+          "name": "是否上海外报价",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "has_oversea",
+          "columnName": "has_oversea",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "enum": [
+              {
+                "value": "0",
+                "label": "否"
+              },
+              {
+                "value": "1",
+                "label": "是"
+              }
+            ],
+            "message": "是否上海外报价必须为 0(否) 或 1(是)"
+          },
+          "view": {
+            "displayName": "是否上海外报价",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 88,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "overseas_quoted_scope"
+          }
+        },
+        {
+          "code": "domestic_enabled",
+          "name": "是否启用",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "domestic_enabled",
+          "columnName": "domestic_enabled",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "enum": [
+              {
+                "value": "0",
+                "label": "启用"
+              },
+              {
+                "value": "1",
+                "label": "停用"
+              }
+            ],
+            "message": "是否启用必须为 0(启用) 或 1(停用)"
+          },
+          "view": {
+            "displayName": "是否启用",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "product_enabled"
+          }
+        },
+        {
+          "code": "domestic_take_off_shelf_flag",
+          "name": "是否下架",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "domestic_take_off_shelf_flag",
+          "columnName": "domestic_take_off_shelf_flag",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "enum": [
+              {
+                "value": "0",
+                "label": "否"
+              },
+              {
+                "value": "1",
+                "label": "是"
+              }
+            ],
+            "message": "是否下架必须为 0(否) 或 1(是)"
+          },
+          "view": {
+            "displayName": "是否下架",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 95,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "product_discontinued"
+          }
+        },
+        {
+          "code": "domestic_product_status",
+          "name": "国内产品状态",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "domestic_product_status",
+          "columnName": "domestic_product_status",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "enum": [
+              {
+                "value": "0",
+                "label": "量产"
+              },
+              {
+                "value": "1",
+                "label": "停止推广"
+              },
+              {
+                "value": "2",
+                "label": "停止下单"
+              }
+            ],
+            "message": "国内产品状态必须为 0(量产)、1(停止推广) 或 2(停止下单)"
+          },
+          "view": {
+            "displayName": "国内产品状态",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "product_status"
+          }
+        },
+        {
+          "code": "status",
+          "name": "产品状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "status",
+          "columnName": "status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 20,
+            "enum": [
+              {
+                "value": "ACTIVE",
+                "label": "启用"
+              },
+              {
+                "value": "INACTIVE",
+                "label": "停用"
+              }
+            ],
+            "message": "状态值非法，必须为 ACTIVE 或 INACTIVE"
+          },
+          "view": {
+            "displayName": "产品状态",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 105,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "status"
+          }
+        },
+        {
+          "code": "remark",
+          "name": "备注",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "remark",
+          "columnName": "remark",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "备注",
+            "sortable": false,
+            "columnWidth": 150,
+            "hidden": true,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入备注说明",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "is_deleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "created_time",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updated_time",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改时间",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 160,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "created_by",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 150,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updated_by",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "最后修改人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 170,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenant_code",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "status",
+        "product_category",
+        "product_line"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建产品",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<ProductDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建产品记录。点击新建按钮打开表单弹窗，填写产品型号、类别、系列、事业部、产品线、销售代码、国内外零售报价、是否上海外报价、启停用、下架和产品状态并保存。标准 API：POST /products，批量 API：POST /products/batch。"
+    },
+    {
+      "code": "IMPORT",
+      "name": "导入",
+      "scope": "GLOBAL",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import",
+      "async": false,
+      "singleResultType": "ApiResponse<ProductImportResultDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量导入产品数据，执行必填和枚举校验，支持国内/海外产品清单分类导入。API：POST /products/import。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "GLOBAL",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "ApiResponse<ExportTaskDTO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "导出产品列表数据，支持国内/海外产品清单分类导出，零售报价字段按权限脱敏处理。API：POST /products/export。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑产品",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "PATCH",
+      "supportsBatch": true,
+      "singleResultType": "ApiResponse<ProductDTO>",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "修改产品型号、类别、系列、事业部、产品线、销售代码、国内外零售报价、启停用、下架和产品状态。标准 API：PATCH /products/{id}，批量 API：PATCH /products/batch。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除产品",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "singleResultType": "Void",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除产品记录（is_deleted=1）。删除前校验未被场景产品清单引用。标准 API：DELETE /products/{id}，批量 API：DELETE /products/batch。"
+    },
+    {
+      "code": "ACTIVATE",
+      "name": "启用产品",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "ACTIVATE",
+      "httpMethod": "POST",
+      "actionPath": "activate",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "将已停用的产品重新启用，启用后可被场景产品清单引用。API：PUT /products/{id}/activate。"
+    },
+    {
+      "code": "DEACTIVATE",
+      "name": "停用产品",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "DEACTIVATE",
+      "httpMethod": "POST",
+      "actionPath": "deactivate",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "DETAIL",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "停用产品，停用后不可被场景产品清单引用。API：PUT /products/{id}/deactivate。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "PRODUCT_MODEL_UNIQUE",
+      "name": "产品型号唯一",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "产品型号已存在，请使用其他型号",
+      "description": "创建或修改产品时，product_model 在同一租户下必须唯一（含已逻辑删除记录）。"
+    },
+    {
+      "code": "PRODUCT_INACTIVE_CHECK_SCENE_REF",
+      "name": "停用前检查场景引用",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "WARN",
+      "message": "该产品在部分场景中被产品清单引用，停用将影响场景分析，确认继续？",
+      "description": "将产品从 ACTIVE 切换为 INACTIVE 前，检查是否被场景产品清单引用，提示操作影响。",
+      "expression": "status == 'INACTIVE'",
+      "exprAst": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "INACTIVE"
+        }
+      },
+      "crossBoRef": {
+        "refBoCode": "scenes",
+        "refFieldCode": "product_id",
+        "localEntityCode": "product",
+        "localFieldCode": "id"
+      }
+    },
+    {
+      "code": "PRODUCT_DELETE_CHECK_SCENE_REF",
+      "name": "删除前检查场景引用",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "该产品已被场景产品清单引用，请先解除关联后再删除",
+      "description": "删除产品前检查是否被场景产品清单引用，若有关联则禁止删除。",
+      "crossBoRef": {
+        "refBoCode": "scenes",
+        "refFieldCode": "product_id",
+        "localEntityCode": "product",
+        "localFieldCode": "id"
+      }
+    },
+    {
+      "code": "PRODUCT_STATUS_EDITABLE",
+      "name": "产品可编辑性",
+      "ruleType": "STATE",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "产品数据编辑不受状态限制，但删除需通过引用检查",
+      "description": "产品不同于场景，编辑不受状态限制（INACTIVE 产品仍可编辑）。仅 DELETE 操作需要额外的跨 BO 引用检查。"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.989779+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-targets",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "changeNote": "初始创建销售目标管理 BO 元数据，单表建模，复合唯一键保证目标记录唯一性"
+}

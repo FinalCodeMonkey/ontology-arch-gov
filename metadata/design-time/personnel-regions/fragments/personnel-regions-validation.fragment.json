@@ -1,0 +1,35 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "personnel-regions",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "personnel-region",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "personnel-region",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "用户ID不能为空"
+      },
+      {
+        "entityCode": "personnel-region",
+        "fieldCode": "region_code",
+        "required": true,
+        "max": 64,
+        "message": "区域编码不能为空且不超过64字"
+      }
+    ]
+  },
+  "changeNote": [
+    "personnel-regions 首版 VALIDATION Fragment，含用户ID和区域编码的必填与长度约束"
+  ]
+}

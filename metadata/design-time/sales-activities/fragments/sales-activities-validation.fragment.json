@@ -1,0 +1,173 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-activities",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "parent_id",
+        "required": true,
+        "message": "拜访客户不能为空"
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "customer_name",
+        "max": 200
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "visit_subject",
+        "max": 200,
+        "message": "拜访主题不超过200字符"
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "visit_time",
+        "required": true,
+        "message": "拜访时间不能为空"
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "visit_method",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {"value": "OFFLINE", "label": "线下拜访"},
+          {"value": "VIDEO", "label": "视频会议"},
+          {"value": "CALL", "label": "电话拜访"},
+          {"value": "OTHER", "label": "其他"}
+        ],
+        "message": "拜访方式必须为 OFFLINE/VIDEO/CALL/OTHER 之一"
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "activity_content",
+        "required": true,
+        "message": "活动信息不能为空"
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "activity_plain_text",
+        "max": 2000
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "contact_ids_snapshot",
+        "max": 1024
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "scene_ids_snapshot",
+        "max": 512
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "next_action",
+        "max": 2000
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "record_user_id",
+        "required": true,
+        "max": 64,
+        "message": "记录人不能为空"
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "record_user_name",
+        "max": 100
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "last_modified_user_id",
+        "max": 64
+      },
+      {
+        "entityCode": "visit-record",
+        "fieldCode": "last_modified_user_name",
+        "max": 100
+      },
+      {
+        "entityCode": "visit-follow-up",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "visit-follow-up",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "visit-follow-up",
+        "fieldCode": "current_action",
+        "required": true,
+        "message": "更新后下一步动作不能为空"
+      },
+      {
+        "entityCode": "visit-follow-up",
+        "fieldCode": "operator_user_id",
+        "required": true,
+        "max": 64,
+        "message": "跟进人不能为空"
+      },
+      {
+        "entityCode": "visit-follow-up",
+        "fieldCode": "operator_user_name",
+        "max": 100
+      },
+      {
+        "entityCode": "visit-team-member",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "visit-team-member",
+        "fieldCode": "visit_id",
+        "required": true
+      },
+      {
+        "entityCode": "visit-team-member",
+        "fieldCode": "customer_id",
+        "required": true,
+        "max": 64,
+        "message": "客户ID不能为空"
+      },
+      {
+        "entityCode": "visit-team-member",
+        "fieldCode": "user_id",
+        "required": true,
+        "max": 64,
+        "message": "成员ID不能为空"
+      },
+      {
+        "entityCode": "visit-team-member",
+        "fieldCode": "member_name",
+        "max": 128
+      },
+      {
+        "entityCode": "visit-team-member",
+        "fieldCode": "member_role",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {"value": "CREATOR", "label": "记录人"},
+          {"value": "MEMBER", "label": "团队成员"}
+        ],
+        "message": "团队角色必须为 CREATOR/MEMBER 之一"
+      }
+    ]
+  },
+  "changeNote": [
+    "sales-activities VALIDATION Fragment — visit-record(16条)/visit-follow-up(4条)/visit-team-member(7条) 共 27 条校验规则"
+  ]
+}

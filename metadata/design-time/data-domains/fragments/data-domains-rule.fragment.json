@@ -1,0 +1,91 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "data-domains",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "DOMAIN_CODE_GLOBAL_UNIQUE",
+        "name": "领域编码全局唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "领域编码已存在，请使用其他编码",
+        "description": "创建或修改时，domain_code 必须全局唯一（含已逻辑删除记录），与 DDL uk_authz-data-domain_code 约束对齐。"
+      },
+      {
+        "code": "LEVEL_TYPE_ENUM",
+        "name": "层级类型枚举校验",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "authz-data-domain",
+        "fieldCode": "level_type",
+        "trigger": "BEFORE_VALIDATE",
+        "expression": "level_type in ('SUBJECT_GROUP', 'SUBJECT', 'SUB_SUBJECT')",
+        "severity": "ERROR",
+        "message": "层级类型必须为 SUBJECT_GROUP、SUBJECT 或 SUB_SUBJECT 之一",
+        "description": "level_type 字段仅允许取值 SUBJECT_GROUP（主题域分组）、SUBJECT（主题域）、SUB_SUBJECT（主题子域）。",
+        "exprAst": {
+          "type": "inSet",
+          "field": {
+            "type": "field",
+            "path": "level_type"
+          },
+          "values": [
+            {
+              "type": "literal",
+              "value": "SUBJECT_GROUP"
+            },
+            {
+              "type": "literal",
+              "value": "SUBJECT"
+            },
+            {
+              "type": "literal",
+              "value": "SUB_SUBJECT"
+            }
+          ]
+        }
+      },
+      {
+        "code": "PARENT_LEVEL_CONSISTENCY",
+        "name": "父节点层级一致性",
+        "ruleType": "CONSISTENCY",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "父节点层级类型与当前节点不匹配",
+        "description": "子节点的 level_type 必须比父节点低一级：SUBJECT_GROUP→SUBJECT→SUB_SUBJECT。根节点（parent_id=NULL）必须为 SUBJECT_GROUP。"
+      },
+      {
+        "code": "NO_CIRCULAR_REFERENCE",
+        "name": "禁止循环引用",
+        "ruleType": "CONSISTENCY",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "不允许将节点移动到其自身或其子节点下，会形成循环引用",
+        "description": "MOVE 操作时，目标父节点不能是当前节点自身或其任意后代节点。"
+      },
+      {
+        "code": "DELETE_CHECK_CHILDREN",
+        "name": "存在子节点时禁止删除",
+        "ruleType": "CONSISTENCY",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "该节点下存在子节点，请先删除子节点",
+        "description": "DELETE 操作时，若存在 parent_id 指向当前节点的未删除记录，则拒绝删除。与 orphanPolicy=DENY_DELETE_WHEN_CHILD_EXISTS 对齐。"
+      }
+    ]
+  },
+  "changeNote": [
+    "data-domains 首版 RULE Fragment",
+    "含领域编码唯一性、层级类型枚举、父节点层级一致性、循环引用防护、子节点存在性检查 5 条规则"
+  ]
+}

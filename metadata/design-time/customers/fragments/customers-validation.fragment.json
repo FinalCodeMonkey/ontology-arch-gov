@@ -1,0 +1,197 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customers",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "customer",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "customer_no",
+        "required": true,
+        "max": 50,
+        "unique": true,
+        "message": "业务编号不能为空、不超过50字且不可重复"
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "customer_name",
+        "required": true,
+        "max": 200,
+        "unique": true,
+        "message": "客户全称不能为空、不超过200字且不可重复"
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "customer_short_name",
+        "max": 100
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "data_source",
+        "max": 50
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "business_type",
+        "enum": [
+          {
+            "value": "ALL",
+            "label": "全部"
+          },
+          {
+            "value": "PUBLIC_CLOUD",
+            "label": "公有云"
+          },
+          {
+            "value": "HYBRID_CLOUD",
+            "label": "混合云"
+          },
+          {
+            "value": "OFFICE_NETWORK",
+            "label": "办公网"
+          },
+          {
+            "value": "PENDING",
+            "label": "待定"
+          },
+          {
+            "value": "LOGISTICS",
+            "label": "物流"
+          },
+          {
+            "value": "SERVICE_PRODUCT",
+            "label": "服务产品"
+          },
+          {
+            "value": "OTHER",
+            "label": "其他"
+          }
+        ],
+        "max": 50,
+        "message": "业务分类必须为 全部/公有云/混合云/办公网/待定/物流/服务产品/其他 之一"
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "market_segment",
+        "enum": [
+          {
+            "value": "INTERNET_T1",
+            "label": "互联网-T1客户"
+          },
+          {
+            "value": "INTERNET_T2",
+            "label": "互联网-T2客户"
+          },
+          {
+            "value": "INTERNET_T3",
+            "label": "互联网-T3客户"
+          },
+          {
+            "value": "INTERNET_ESUN",
+            "label": "互联网-ESUN客户"
+          },
+          {
+            "value": "INTERNET_OVERSEAS",
+            "label": "互联网-海外客户"
+          }
+        ],
+        "max": 50,
+        "message": "细分市场必须为 互联网-T1客户/T2客户/T3客户/ESUN客户/海外客户 之一"
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "customer_category",
+        "required": true,
+        "enum": [
+          {
+            "value": "CONTRACT_ENTITY",
+            "label": "合同主体客户"
+          },
+          {
+            "value": "FOP_CUSTOMER",
+            "label": "业务主体客户"
+          },
+          {
+            "value": "CUSTOMER",
+            "label": "一级客户"
+          }
+        ],
+        "max": 50,
+        "message": "客户分类必须为 合同主体客户/业务主体客户/一级客户 之一"
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "country",
+        "max": 50
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "province",
+        "max": 50
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "city",
+        "max": 50
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "district",
+        "max": 50
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "address_detail",
+        "max": 500
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "neocrm_code",
+        "max": 50
+      },
+      {
+        "entityCode": "customer",
+        "fieldCode": "logo_url",
+        "max": 500
+      },
+      {
+        "entityCode": "customer-business-info",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-business-info",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "customer-business-info",
+        "fieldCode": "source",
+        "required": true,
+        "max": 30
+      },
+      {
+        "entityCode": "customer-business-info",
+        "fieldCode": "company_name",
+        "max": 200
+      },
+      {
+        "entityCode": "customer-business-info",
+        "fieldCode": "credit_code",
+        "max": 50
+      }
+    ]
+  },
+  "changeNote": [
+    "新增 crm_customer-business-info 子实体校验规则"
+  ]
+}

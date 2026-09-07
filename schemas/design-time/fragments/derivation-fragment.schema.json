@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/derivation-fragment.schema.json",
+  "title": "BO DERIVATION fragment — 派生实体与计算属性",
+  "description": "声明跨 BO 派生对象（派生视图、计算字段、聚合指标、风险评分、建议动作）。每个派生对象通过 root.boCode 锚定根对象，通过 dependencies[].viaLink 声明跨 BO 依赖路径，通过 fields[].expression 声明结构化计算契约。",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [DERIVATION Fragment] 章节。",
+  "type": "object",
+  "required": ["derivedObjects"],
+  "additionalProperties": false,
+  "properties": {
+    "derivedObjects": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；derivedObject.code 级唯一性由 check_consistency.py 保障",
+      "items": {
+        "type": "object",
+        "required": ["code", "name", "objectKind", "root", "dependencies", "fields"],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "派生对象唯一编码，kebab-case，如 customer-360、opportunity-intelligence"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "派生对象显示名，如 '客户360视图'"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "objectKind": {
+            "type": "string",
+            "enum": ["DERIVED_VIEW", "COMPUTED_FIELD", "AGGREGATE_METRIC", "RISK_SCORE", "RECOMMENDATION"],
+            "description": "派生类型"
+          },
+          "root": {
+            "type": "object",
+            "required": ["boCode", "entityCode", "idField"],
+            "additionalProperties": false,
+            "properties": {
+              "boCode": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$",
+                "description": "根对象所属 BO boCode"
+              },
+              "entityCode": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$",
+                "description": "根对象实体 code"
+              },
+              "idField": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$",
+                "description": "根对象 ID 字段，通常为 id"
+              }
+            }
+          },
+          "dependencies": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "required": ["boCode"],
+              "additionalProperties": false,
+              "properties": {
+                "boCode": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9-]*$",
+                  "description": "依赖的 BO boCode"
+                },
+                "viaLink": {
+                  "type": ["string", "null"],
+                  "pattern": "^[A-Z][A-Z0-9_]*$",
+                  "description": "通过哪条 LINK 到达该 BO，LINK code。null 表示不通过 LINK 而是字段匹配（需配合 joinType/joinCondition）"
+                },
+                "required": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "是否为必选依赖；false 表示可选（依赖 BO 不存在时跳过）"
+                },
+                "joinType": {
+                  "type": "string",
+                  "enum": ["LINK", "FIELD_MATCH"],
+                  "description": "依赖关联类型。LINK=通过 viaLink 关联（默认）；FIELD_MATCH=通过字段值匹配关联（viaLink 为 null）"
+                },
+                "joinCondition": {
+                  "type": "string",
+                  "maxLength": 500,
+                  "description": "joinType=FIELD_MATCH 时的字段匹配条件描述，如 'opportunities.currency = exchange-rates.base_currency'"
+                }
+              }
+            },
+            "minItems": 0,
+            "default": []
+          },
+          "fields": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["code", "name", "type"],
+              "additionalProperties": false,
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "description": "派生字段编码，snake_case"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "description": "派生字段显示名"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["STRING", "INTEGER", "LONG", "DECIMAL", "BOOLEAN", "DATE", "DATETIME"],
+                  "description": "派生字段类型"
+                },
+                "expression": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "maxProperties": 0,
+                      "description": "空对象表示表达式待补充"
+                    },
+                    {
+                      "$ref": "expression-ast.schema.json"
+                    }
+                  ],
+                  "description": "结构化表达式 AST。空对象 {} 表示表达式待补充；非空对象由 expression-ast.schema.json 校验。"
+                },
+                "cacheable": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "是否可缓存派生结果"
+                },
+                "requiredForScoring": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "是否为评分必需字段；缺失时评分降级处理"
+                },
+                "aggregationScope": {
+                  "type": "string",
+                  "enum": ["CUSTOMER", "OWNER"],
+                  "default": "OWNER",
+                  "description": "聚合口径：CUSTOMER=仅本客户+子客户（沿FOP递归），OWNER=同销售负责人所有客户。用于区分 customer-360（客户级）和 pipeline-coverage（所有者级）的同名字段。缺失时默认 OWNER。"
+                },
+                "description": {
+                  "type": "string",
+                  "maxLength": 300
+                }
+              }
+            }
+          },
+          "materialization": {
+            "type": "object",
+            "required": ["mode"],
+            "additionalProperties": false,
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": ["ON_READ", "ON_READ_CACHE", "SCHEDULED", "EVENT_DRIVEN", "MATERIALIZED_TABLE"],
+                "default": "ON_READ",
+                "description": "物化策略"
+              },
+              "ttlSeconds": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 86400,
+                "description": "缓存 TTL，仅 mode=ON_READ_CACHE 时有效。0 表示永不过期（手动刷新）"
+              },
+              "tableName": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$",
+                "description": "物化表名，仅 mode=MATERIALIZED_TABLE 时有效。snake_case 格式"
+              }
+            },
+            "default": { "mode": "ON_READ" }
+          },
+          "apiExposure": {
+            "type": "object",
+            "required": ["enabled"],
+            "additionalProperties": false,
+            "properties": {
+              "enabled": {
+                "type": "boolean",
+                "default": false,
+                "description": "是否暴露为 HTTP API。true 时发布服务生成 API Contract"
+              },
+              "resourcePath": {
+                "type": "string",
+                "pattern": "^/ontology/([a-z][a-z0-9-]*)$",
+                "description": "API 资源路径，如 /ontology/customer-360"
+              }
+            },
+            "default": { "enabled": false },
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "enabled": { "const": true } },
+                  "required": ["enabled"]
+                },
+                "then": { "required": ["resourcePath"] }
+              }
+            ]
+          }
+        }
+      },
+      "default": []
+    }
+  }
+}

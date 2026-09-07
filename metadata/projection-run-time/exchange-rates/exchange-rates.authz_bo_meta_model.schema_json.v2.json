@@ -1,0 +1,280 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='exchange-rates'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'exchange-rates'",
+    "generated_from": "exchange-rates.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.654291+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "exchange-rate",
+        "name": "汇率主实体",
+        "isPrimary": true,
+        "tableName": "crm_master_exchange_rate",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "status",
+          "base_currency",
+          "target_currency",
+          "rate_type"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "汇率ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "rate_no",
+            "name": "汇率编号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "rate_no",
+            "columnName": "rate_no",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "base_currency",
+            "name": "基准币种",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "base_currency",
+            "columnName": "base_currency",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "target_currency",
+            "name": "目标币种",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "target_currency",
+            "columnName": "target_currency",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "rate_type",
+            "name": "汇率类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "rate_type",
+            "columnName": "rate_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "rate",
+            "name": "汇率值",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "rate",
+            "columnName": "rate",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "effective_date",
+            "name": "生效日期",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "effective_date",
+            "columnName": "effective_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "expiry_date",
+            "name": "失效日期",
+            "type": "DATE",
+            "isPk": false,
+            "fieldName": "expiry_date",
+            "columnName": "expiry_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "status",
+            "name": "状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "status",
+            "columnName": "status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "source",
+            "name": "汇率来源",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "source",
+            "columnName": "source",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remark",
+            "columnName": "remark",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "is_deleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "created_time",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updated_time",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "created_by",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updated_by",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenant_code",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新增汇率",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "save",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除汇率",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "IMPORT",
+        "name": "导入",
+        "scope": "BO",
+        "act_aliases": "import",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "ACTIVATE",
+        "name": "启用",
+        "scope": "BO",
+        "act_aliases": "activate",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DEACTIVATE",
+        "name": "停用",
+        "scope": "BO",
+        "act_aliases": "deactivate",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "query-rate,read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'exchange-rates' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'exchange-rates' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + exchange-rates_bo_meta_id + CREATE",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + UPDATE",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + DELETE",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + IMPORT",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + EXPORT",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + ACTIVATE",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + DEACTIVATE",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + READ",
+      "RES_DATA_BO + exchange-rates_bo_meta_id + LIST"
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "change-records",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "change-record",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "biz_type",
+        "required": true,
+        "max": 32,
+        "message": "业务对象类型不能为空且不超过32字"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "biz_id",
+        "required": true,
+        "message": "业务对象ID不能为空"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "change_record_no",
+        "required": true,
+        "max": 64,
+        "unique": true,
+        "message": "变更记录编号不能为空、不超过64字且不可重复"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "action_type",
+        "required": true,
+        "max": 50,
+        "message": "动作类型不能为空且不超过50字"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "changes_json",
+        "required": true,
+        "message": "变更内容不能为空"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "status",
+        "required": true,
+        "enum": [
+          {
+            "value": "DRAFT",
+            "label": "草稿"
+          },
+          {
+            "value": "PENDING_APPROVAL",
+            "label": "待审批"
+          },
+          {
+            "value": "APPROVED",
+            "label": "已通过"
+          },
+          {
+            "value": "REJECTED",
+            "label": "已驳回"
+          },
+          {
+            "value": "APPLIED",
+            "label": "已应用"
+          },
+          {
+            "value": "CANCELLED",
+            "label": "已取消"
+          }
+        ],
+        "message": "变更状态必须为预定义值之一"
+      },
+      {
+        "entityCode": "change-record",
+        "fieldCode": "operator_name",
+        "max": 100
+      }
+    ]
+  },
+  "changeNote": [
+    "变更记录 BO 首版 VALIDATION Fragment，含业务对象必填、变更编号唯一、变更内容必填、状态枚举约束"
+  ]
+}

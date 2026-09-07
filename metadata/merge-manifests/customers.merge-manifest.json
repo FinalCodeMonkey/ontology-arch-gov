@@ -1,0 +1,94 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/projection-run-time/authz-projection/bo-merge-manifest.schema.json",
+  "mergeCode": "customers",
+  "mergeName": "客户（MDM+MCR 合并）",
+  "description": "将 customers（MDM）和 customer-relations（MCR）的投影合并为单一 PSP BO，适配现有 crm_customer 单表结构。MCR 根实体 customer-relation 的 MCR 属性合并到 MDM 根实体 customer 中；MCR 子实体透传并重新指向 customer 作为父实体。",
+  "targetBoCode": "customers",
+  "targetTableName": "crm_customer",
+  "sources": [
+    {
+      "boCode": "customers",
+      "role": "PRIMARY",
+      "entityMergeStrategy": {
+        "customer": {
+          "mergeType": "PASS_THROUGH"
+        },
+        "customer_business_info": {
+          "mergeType": "PASS_THROUGH"
+        }
+      }
+    },
+    {
+      "boCode": "customer-relations",
+      "role": "SECONDARY",
+      "entityMergeStrategy": {
+        "customer-relation": {
+          "mergeType": "SAME_ROW_COLUMN_SUBSET",
+          "mergeInto": "customer",
+          "sharedPk": true,
+          "excludeAttributes": [
+            "id",
+            "customer_id",
+            "customer_name",
+            "customer_biz_no",
+            "is_deleted",
+            "created_time",
+            "updated_time",
+            "created_by",
+            "updated_by",
+            "tenant_code"
+          ]
+        },
+        "customer-team-member": {
+          "mergeType": "PASS_THROUGH",
+          "reparentTo": "customer"
+        },
+        "customer-competition": {
+          "mergeType": "PASS_THROUGH",
+          "reparentTo": "customer"
+        },
+        "customer-competition-member": {
+          "mergeType": "PASS_THROUGH"
+        },
+        "customer-competition-sale": {
+          "mergeType": "PASS_THROUGH"
+        },
+        "customer-industry-strategy": {
+          "mergeType": "PASS_THROUGH",
+          "reparentTo": "customer"
+        },
+        "customer-industry-strategy-member": {
+          "mergeType": "PASS_THROUGH"
+        },
+        "customer-industry-biz": {
+          "mergeType": "PASS_THROUGH"
+        },
+        "customer-infra-architecture": {
+          "mergeType": "PASS_THROUGH",
+          "reparentTo": "customer"
+        }
+      },
+      "operationRename": {
+        "EDIT": "EDIT_MCR",
+        "EXPORT": "EXPORT_MCR"
+      },
+      "operationExclude": [
+        "ACTIVATE",
+        "DELETE"
+      ]
+    }
+  ],
+  "mergeRules": {
+    "rootEntity": {
+      "mergedCode": "customer",
+      "mergedTableName": "crm_customer",
+      "attributeSource": "MERGE_BY_COLUMN_NAME",
+      "conflictResolution": "PRIMARY_WINS",
+      "rowLevelRuleEntries": "MERGE_ALL"
+    },
+    "operations": {
+      "deduplicateByAuthzAction": true,
+      "conflictResolution": "PRIMARY_WINS"
+    }
+  }
+}

@@ -1,0 +1,915 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "approval-records",
+  "boName": "审批记录",
+  "description": "审批记录业务对象，通用设计，不限定特定业务域。记录任意业务对象的审批流程信息，通过 biz_type + biz_id 多态引用业务对象，关联 BPM 流程实例。提交人、发起人、当前处理人、撤回人均通过 CROSS_BO_REF 引用 users BO。PSP 中 bo_code 为 approval-records。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/approval-records",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "process_name",
+    "statusField": "status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "approval-record",
+      "name": "审批记录",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_customer_approval_record",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键（雪花ID）",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "biz_type",
+          "name": "业务对象类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "bizType",
+          "columnName": "biz_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "message": "业务对象类型不能为空且不超过32字"
+          },
+          "view": {
+            "displayName": "业务对象类型",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "placeholder": "请选择业务对象类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "approval_biz_type"
+          }
+        },
+        {
+          "code": "biz_id",
+          "name": "业务对象ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "bizId",
+          "columnName": "biz_id",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "message": "业务对象ID不能为空"
+          },
+          "view": {
+            "displayName": "业务对象ID",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入业务对象ID",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "process_instance_id",
+          "name": "BPM流程实例ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "processInstanceId",
+          "columnName": "process_instance_id",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 64
+          },
+          "view": {
+            "displayName": "BPM流程实例ID",
+            "sortable": false,
+            "columnWidth": 160,
+            "order": 50,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "process_name",
+          "name": "流程名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "processName",
+          "columnName": "process_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "流程名称",
+            "sortable": true,
+            "columnWidth": 200,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "action_type",
+          "name": "触发动作",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "actionType",
+          "columnName": "action_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "message": "触发动作不能为空且不超过50字"
+          },
+          "view": {
+            "displayName": "触发动作",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "status",
+          "name": "审批状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "status",
+          "columnName": "status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "enum": [
+              {
+                "value": "PENDING",
+                "label": "待审批"
+              },
+              {
+                "value": "APPROVED",
+                "label": "已通过"
+              },
+              {
+                "value": "REJECTED",
+                "label": "已驳回"
+              },
+              {
+                "value": "REVOKED",
+                "label": "已撤回"
+              },
+              {
+                "value": "TERMINATED",
+                "label": "已终止"
+              }
+            ],
+            "message": "审批状态必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "审批状态",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true,
+            "dictCode": "approval_status"
+          }
+        },
+        {
+          "code": "submitter_id",
+          "name": "提交人ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "submitterId",
+          "columnName": "submitter_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "submitter_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "提交人不能为空"
+          }
+        },
+        {
+          "code": "submitter_name",
+          "name": "提交人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "submitterName",
+          "columnName": "submitter_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "提交人",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "initiator_id",
+          "name": "流程发起人ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "initiatorId",
+          "columnName": "initiator_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "initiator_name",
+                "displayRole": "NAME"
+              }
+            ]
+          }
+        },
+        {
+          "code": "initiator_name",
+          "name": "流程发起人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "initiatorName",
+          "columnName": "initiator_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "发起人",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "external_initiator",
+          "name": "外部发起人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "externalInitiator",
+          "columnName": "external_initiator",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "外部发起人",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "current_handler_id",
+          "name": "当前处理人ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "currentHandlerId",
+          "columnName": "current_handler_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "current_handler_name",
+                "displayRole": "NAME"
+              }
+            ]
+          }
+        },
+        {
+          "code": "current_handler_name",
+          "name": "当前处理人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "currentHandlerName",
+          "columnName": "current_handler_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "当前处理人",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "reject_reason",
+          "name": "驳回原因",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "rejectReason",
+          "columnName": "reject_reason",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "驳回原因可能包含敏感业务判断，限制可见",
+          "view": {
+            "displayName": "驳回原因",
+            "sortable": false,
+            "columnWidth": 300,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "TEXTAREA",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "revoke_reason",
+          "name": "撤回原因",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "revokeReason",
+          "columnName": "revoke_reason",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "撤回原因可能包含敏感信息，限制可见",
+          "view": {
+            "displayName": "撤回原因",
+            "sortable": false,
+            "columnWidth": 300,
+            "order": 130,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "TEXTAREA",
+            "queryable": false,
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "revoker_id",
+          "name": "撤回人ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "revokerId",
+          "columnName": "revoker_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "revoker_name",
+                "displayRole": "NAME"
+              }
+            ]
+          }
+        },
+        {
+          "code": "revoker_name",
+          "name": "撤回人姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "revokerName",
+          "columnName": "revoker_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "撤回人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 140,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "completed_time",
+          "name": "审批完成时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "completedTime",
+          "columnName": "completed_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "审批完成时间",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 150,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "逻辑删除",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 150,
+            "format": "datetime",
+            "order": 160,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "biz_type",
+        "biz_id",
+        "status",
+        "submitter_id",
+        "initiator_id",
+        "current_handler_id",
+        "action_type",
+        "process_instance_id"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "创建审批记录",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "description": "创建审批记录，通常由业务对象提交审批时自动触发。API：POST /approval-records。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑审批记录",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "update",
+      "description": "编辑审批记录（如 BPM 回写状态/处理人）。API：POST /approval-records/{id}/update。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除审批记录",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "description": "逻辑删除审批记录。API：DELETE /approval-records/{id}。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "description": "导出审批记录。API：POST /approval-records/export。"
+    },
+    {
+      "code": "REVOKE",
+      "name": "撤回审批",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "REVOKE",
+      "httpMethod": "POST",
+      "actionPath": "revoke",
+      "description": "撤回审批申请。API：POST /approval-records/{id}/revoke。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "APPROVAL_REVOKE_ONLY_PENDING",
+      "name": "撤回仅限待审批记录",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "仅待审批状态的记录可以撤回",
+      "description": "REVOKE 操作时，status 必须为 PENDING。",
+      "expression": "status != 'PENDING'",
+      "exprAst": {
+        "type": "binary",
+        "op": "NEQ",
+        "left": {
+          "type": "field",
+          "path": "status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "PENDING"
+        }
+      }
+    },
+    {
+      "code": "APPROVAL_REVOKE_REASON_REQUIRED",
+      "name": "撤回必须填写原因",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "撤回审批时必须填写撤回原因",
+      "description": "REVOKE 操作时，revoke_reason 不能为空。",
+      "expression": "revoke_reason == null || revoke_reason == ''",
+      "exprAst": {
+        "type": "logical",
+        "op": "OR",
+        "items": [
+          {
+            "type": "isNull",
+            "expr": {
+              "type": "field",
+              "path": "revoke_reason"
+            }
+          },
+          {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "revoke_reason"
+            },
+            "right": {
+              "type": "literal",
+              "value": ""
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.654160+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

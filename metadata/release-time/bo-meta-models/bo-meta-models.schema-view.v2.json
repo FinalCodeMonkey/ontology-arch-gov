@@ -1,0 +1,767 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "bo-meta-models",
+  "boName": "权限引擎业务对象元模型",
+  "description": "管理 PSP 权限引擎 authz-bo-meta-model 表的 BO 元模型注册记录。每条记录对应一个已发布业务对象的运行态投影，schema_json 字段存储该 BO 的 authz-bo-meta-model-projection 投影 JSON，PSP BoSchemaJsonValidator 据此校验并派生权限项。单实体建模（SINGLE），主实体 authz-bo-meta-model 对应 unify_engine 库物理表。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/bo-meta-models",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "bo_code",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "bo_name",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "updated_at",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "authz-bo-meta-model",
+      "name": "BO元模型实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "authz_bo_meta_model",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键ID",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "主键ID",
+            "sortable": false,
+            "columnWidth": 80,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "tenant_id",
+          "name": "租户标识",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantId",
+          "columnName": "tenant_id",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "message": "租户标识不能为空且不超过50字"
+          },
+          "view": {
+            "displayName": "租户标识",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入租户标识",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "app_code",
+          "name": "应用代码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "appCode",
+          "columnName": "app_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "message": "应用代码不能为空且不超过50字"
+          },
+          "view": {
+            "displayName": "应用代码",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入应用代码",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "bo_code",
+          "name": "BO标识",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "boCode",
+          "columnName": "bo_code",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "unique": true,
+            "message": "BO标识不能为空、须为复数小写kebab-case格式且在租户+应用维度内唯一"
+          },
+          "view": {
+            "displayName": "BO标识",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入BO标识（复数小写kebab-case）",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "bo_name",
+          "name": "BO名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "boName",
+          "columnName": "bo_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 100,
+            "message": "BO名称不能为空且不超过100字"
+          },
+          "view": {
+            "displayName": "BO名称",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入BO名称",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "schema_json",
+          "name": "投影元数据JSON",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "schemaJson",
+          "columnName": "schema_json",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "投影元数据 JSON 包含完整 BO 权限模型结构，仅授权管理员可查看和修改",
+          "validation": {
+            "required": false,
+            "message": "投影元数据JSON为可选字段，发布时必填"
+          },
+          "view": {
+            "displayName": "投影元数据JSON",
+            "sortable": false,
+            "order": 60,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "RICH_TEXT",
+            "placeholder": "请输入 authz-bo-meta-model-projection 投影 JSON",
+            "queryable": false,
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "adapter_type",
+          "name": "适配器类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "adapterType",
+          "columnName": "adapter_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 20,
+            "message": "适配器类型不能为空且不超过20字"
+          },
+          "view": {
+            "displayName": "适配器类型",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "bo_adapter_type"
+          }
+        },
+        {
+          "code": "resolver",
+          "name": "解析器",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "resolver",
+          "columnName": "resolver",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "required": true,
+            "max": 255,
+            "message": "解析器不能为空且不超过255字"
+          },
+          "view": {
+            "displayName": "解析器",
+            "sortable": false,
+            "columnWidth": 140,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入解析器标识",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "data_domain_id",
+          "name": "所属数据领域ID",
+          "type": "LONG",
+          "isPk": false,
+          "fieldName": "dataDomainId",
+          "columnName": "data_domain_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "data-domains",
+            "refFieldCode": "id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "domain_name",
+                "localCode": "data_domain_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "view": {
+            "displayName": "所属数据领域",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择数据领域",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "data-domains",
+            "refField": "domain_name"
+          }
+        },
+        {
+          "code": "data_domain_name",
+          "name": "数据领域名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "dataDomainName",
+          "columnName": "data_domain_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "view": {
+            "displayName": "数据领域名称",
+            "sortable": true,
+            "columnWidth": 140,
+            "hidden": true,
+            "order": 95,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 100,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "created_at",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdAt",
+          "columnName": "created_at",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "更新人",
+            "sortable": false,
+            "columnWidth": 100,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "updated_at",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedAt",
+          "columnName": "updated_at",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "更新时间",
+            "sortable": true,
+            "columnWidth": 160,
+            "order": 130,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "逻辑删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "逻辑删除标记",
+            "sortable": false,
+            "hidden": true,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_id",
+        "app_code",
+        "bo_code",
+        "adapter_type",
+        "data_domain_id",
+        "is_deleted"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建BO元模型",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": true,
+      "singleResultType": "BoMetaModelDTO",
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建 BO 元模型注册记录，录入租户、应用、BO 编码、名称及投影 JSON。标准 API：POST /bo-meta-models，批量 API：POST /bo-meta-models/batch。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑BO元模型",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "update",
+      "supportsBatch": true,
+      "singleResultType": "BoMetaModelDTO",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑 BO 元模型注册记录的名称、投影 JSON、适配器类型、解析器及数据领域。标准 API：POST /bo-meta-models/{id}/update。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除BO元模型",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除 BO 元模型注册记录。标准 API：DELETE /bo-meta-models/{id}，批量 API：DELETE /bo-meta-models/batch。"
+    },
+    {
+      "code": "PUBLISH",
+      "name": "发布投影",
+      "scope": "BO",
+      "operationKind": "STATE_CHANGE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "PUBLISH",
+      "httpMethod": "POST",
+      "actionPath": "publish",
+      "supportsBatch": false,
+      "singleResultType": "BoMetaModelDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "将 schema_json 投影内容发布到 PSP 引擎，触发 BoSchemaJsonValidator 校验并派生权限项。API：POST /bo-meta-models/{id}/publish。"
+    },
+    {
+      "code": "RELOAD",
+      "name": "重载缓存",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "RELOAD",
+      "httpMethod": "POST",
+      "actionPath": "reload",
+      "supportsBatch": true,
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "通知 PSP 引擎重新加载指定 BO 元模型缓存，使投影变更即时生效。API：POST /bo-meta-models/{id}/reload。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "ExportTaskDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "导出 BO 元模型注册数据为文件，支持按租户、应用、BO 编码筛选。API：POST /bo-meta-models/export。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "BO_CODE_UNIQUE_PER_TENANT_APP",
+      "name": "BO编码租户应用维度唯一",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "同一租户+应用下 BO 编码已存在，请使用其他编码",
+      "description": "创建或修改时，tenant_id + app_code + bo_code 组合必须唯一（含已逻辑删除记录），与 DDL uk_authz-bo-meta-model 约束对齐。"
+    },
+    {
+      "code": "SCHEMA_JSON_REQUIRED_ON_PUBLISH",
+      "name": "发布时投影JSON必填",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "OPERATION",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "发布前必须填写投影元数据 JSON（schema_json）",
+      "description": "执行 PUBLISH 操作时，schema_json 不得为空，否则 PSP BoSchemaJsonValidator 无法校验。",
+      "operationCode": "PUBLISH"
+    },
+    {
+      "code": "SCHEMA_JSON_FORMAT_VALID",
+      "name": "投影JSON格式校验",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "FIELD",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "投影元数据 JSON 格式无效，须符合 authz-bo-meta-model-projection.schema.json 定义",
+      "description": "schema_json 字段内容必须为合法 JSON，且结构符合 authz-bo-meta-model-projection.schema.json（含 _gov_meta、schema_json、_sql 三部分）。",
+      "entityCode": "authz-bo-meta-model",
+      "fieldCode": "schema_json"
+    },
+    {
+      "code": "DATA_DOMAIN_EXISTS",
+      "name": "数据领域必须存在",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "所选数据领域不存在，请选择有效数据领域",
+      "description": "创建/更新时若填写了 data_domain_id，该 ID 必须在 data-domains BO 中存在。",
+      "crossBoRef": {
+        "refBoCode": "data-domains",
+        "refFieldCode": "id",
+        "localEntityCode": "authz-bo-meta-model",
+        "localFieldCode": "data_domain_id"
+      }
+    },
+    {
+      "code": "DELETED_BO_NOT_PUBLISHABLE",
+      "name": "已删除记录不可发布",
+      "ruleType": "STATE",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "已逻辑删除的 BO 元模型记录不可发布",
+      "description": "is_deleted=1 的记录禁止执行 PUBLISH 操作。",
+      "expression": "is_deleted == 0",
+      "exprAst": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "is_deleted"
+        },
+        "right": {
+          "type": "literal",
+          "value": 0
+        }
+      }
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:24.682041+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

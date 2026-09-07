@@ -1,0 +1,39 @@
+{
+  "_scenario": "3个竞争对手 — 强/中/弱竞争态势",
+  "_scenarioDescription": "华为(7001):强势竞对,品牌强价格高。新华三(7002):中等竞对,方案完整。凯捷自身不在竞对列表。客户1001面临华为1个竞对(竞争风险中),客户1002面临华为+新华三2个竞对(竞争风险高)。",
+  "records": [
+    {
+      "id": 7001,
+      "competitor_name": "华为技术有限公司",
+      "company_scale": 200000,
+      "competition_level": "STRONG",
+      "advantage": "品牌影响力强，方案完整度高，政府关系深厚",
+      "disadvantage": "价格偏高，交付周期长，定制化灵活性不足",
+      "strategy": "以性价比和定制化服务差异化竞争，突出教育行业深耕优势",
+      "remark": "教育行业主要竞争对手",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 7002,
+      "competitor_name": "新华三集团",
+      "company_scale": 15000,
+      "competition_level": "NORMAL",
+      "advantage": "产品线齐全，渠道体系成熟",
+      "disadvantage": "技术创新力一般，教育行业案例较少",
+      "strategy": "以技术创新和教育行业解决方案深度拉开差距",
+      "remark": "教育行业次要竞争对手",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 7003,
+      "competitor_name": "中兴通讯",
+      "company_scale": 80000,
+      "competition_level": "WEAK",
+      "advantage": "通信领域技术积累",
+      "disadvantage": "教育行业布局弱，渠道覆盖不足",
+      "strategy": "重点关注其通信领域动态，教育行业暂不构成直接威胁",
+      "remark": "间接竞争对手",
+      "status": "ACTIVE"
+    }
+  ]
+}

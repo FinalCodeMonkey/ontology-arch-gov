@@ -1,0 +1,147 @@
+{
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "releaseVersion": "1.0.0",
+  "releasedAt": "2026-09-07T13:15:16.827698+00:00",
+  "generatedBy": "bo-ontology-publish-gen.py",
+  "timelines": [
+    {
+      "code": "OPPORTUNITY_STAGE_TIMELINE",
+      "name": "商机阶段时间线",
+      "description": "商机销售阶段推进历史，记录每次阶段变化的时间点和快照数据，用于阶段流速和停滞分析。",
+      "boCode": "opportunities",
+      "entityCode": "opportunity",
+      "identityField": "id",
+      "timeField": "updated_time",
+      "stateField": "project_stage",
+      "statusField": "status",
+      "eventSources": [
+        {
+          "sourceType": "OPERATION",
+          "operationCode": "ADVANCE_STAGE",
+          "eventType": "STAGE_CHANGED"
+        },
+        {
+          "sourceType": "ENTITY",
+          "entityCode": "opportunity-stage-history",
+          "eventType": "STAGE_HISTORY_APPENDED"
+        }
+      ],
+      "snapshots": [
+        "project_stage",
+        "predict_category",
+        "expected_order_amount",
+        "status"
+      ],
+      "metrics": [
+        {
+          "code": "stage_age_days",
+          "name": "当前阶段停留天数",
+          "metricType": "DURATION_CURRENT_STATE",
+          "unit": "DAY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "dateDiff",
+            "field": "updated_time",
+            "source": "opportunities",
+            "viaLink": "OPPORTUNITY_STAGE_TIMELINE",
+            "window": "CURRENT_QUARTER",
+            "timeField": "updated_time",
+            "args": [
+              "now",
+              "DAY"
+            ]
+          }
+        },
+        {
+          "code": "stage_velocity_level",
+          "name": "阶段流速等级",
+          "metricType": "VELOCITY_LEVEL",
+          "unit": "RATIO",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "velocityLevel",
+            "source": "opportunities",
+            "viaLink": "OPPORTUNITY_STAGE_TIMELINE",
+            "window": "CURRENT_QUARTER",
+            "timeField": "updated_time",
+            "stateField": "project_stage"
+          }
+        }
+      ]
+    },
+    {
+      "code": "CUSTOMER_ACTIVITY_TIMELINE",
+      "name": "客户活动时间线",
+      "description": "客户销售活动记录时间线，用于客户活跃度、流失风险和时间窗口指标计算。",
+      "boCode": "sales-activities",
+      "entityCode": "visit-record",
+      "identityField": "id",
+      "timeField": "visit_time",
+      "eventSources": [
+        {
+          "sourceType": "ENTITY",
+          "entityCode": "visit-record",
+          "eventType": "ACTIVITY_COMPLETED"
+        }
+      ],
+      "snapshots": [
+        "visit_subject"
+      ],
+      "metrics": [
+        {
+          "code": "activity_count_30d",
+          "name": "近30天活动数",
+          "metricType": "COUNT_WINDOW",
+          "unit": "COUNT",
+          "window": "P30D",
+          "sourceLink": "CUSTOMER_HAS_ACTIVITY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "P30D",
+            "timeField": "visit_time"
+          }
+        },
+        {
+          "code": "activity_count_90d",
+          "name": "近90天活动数",
+          "metricType": "COUNT_WINDOW",
+          "unit": "COUNT",
+          "window": "P90D",
+          "sourceLink": "CUSTOMER_HAS_ACTIVITY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "P90D",
+            "timeField": "visit_time"
+          }
+        },
+        {
+          "code": "last_activity_days",
+          "name": "最近活动距今天数",
+          "metricType": "LAST_VALUE",
+          "unit": "DAY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "dateDiff",
+            "field": "visit_time",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "LAST_YEAR",
+            "timeField": "visit_time",
+            "args": [
+              "now",
+              "DAY"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "timelineCount": 2
+}

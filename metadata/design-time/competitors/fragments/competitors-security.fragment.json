@@ -1,0 +1,203 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "competitors",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "competitor": [
+          "tenant_code",
+          "status",
+          "competition_level"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "competitor",
+        "fieldCode": "contact_info",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "PII",
+        "reason": "竞争对手联系人信息涉个人隐私，需授权查看"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "strategy",
+        "fieldControl": "RESTRICTED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "应对策略为内部竞争情报，限制未授权访问"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "advantage",
+        "fieldControl": "OPEN",
+        "privacyClass": "SENSITIVE",
+        "reason": "竞争优势分析为敏感商业数据但需全员可见以支撑竞争决策"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "disadvantage",
+        "fieldControl": "OPEN",
+        "privacyClass": "SENSITIVE",
+        "reason": "竞争劣势分析为敏感商业数据但需全员可见以支撑竞争决策"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "sales_analysis",
+        "fieldControl": "MASKED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "销售情况分析涉及我方竞争策略，默认脱敏显示"
+      },
+      {
+        "entityCode": "competitor",
+        "fieldCode": "market_analysis",
+        "fieldControl": "MASKED",
+        "privacyClass": "CONFIDENTIAL",
+        "reason": "市场情况分析涉及竞争情报，默认脱敏显示"
+      }
+    ],
+    "authzProjection": {
+      "description": "竞争对手业务对象在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 competitors BO，投影编码由发布服务根据 boCode 自动派生。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。rowSecurity 声明 DATA 策略候选字段，fieldSecurity 声明 FIELD 策略候选字段，authzProjection 随 competitors 的 authz-bo-meta-model.schema_json 发布，声明 PIP 可返回的 res.* 属性契约。策略表达式中典型引用方式包括 res.tenant_code、res.status、res.competition_level 等。字段控制发布到 PSP 时需将 MASKED/HIDDEN 转换为 MASK/HIDE。",
+      "attributes": [
+        {
+          "code": "competitor_id",
+          "name": "竞争对手ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "competitor",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "竞争对手资源唯一标识，供 PIP 按 ID 拉取完整属性集合；不暴露给 ABAC 表达式做条件判断。",
+          "i18nKey": "auth.resource.res_competitor.attr.competitor_id",
+          "valueExamples": [
+            "1",
+            "100"
+          ]
+        },
+        {
+          "code": "competitor_name",
+          "name": "竞争对手名称",
+          "type": "STRING",
+          "source": {
+            "entityCode": "competitor",
+            "fieldCode": "competitor_name"
+          },
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 20,
+          "displayGroup": "基本标识",
+          "description": "竞争对手名称，主要用于展示和审计，不建议作为权限判断条件。",
+          "i18nKey": "auth.resource.res_competitor.attr.competitor_name",
+          "valueExamples": [
+            "新华三",
+            "思科"
+          ]
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "source": {
+            "entityCode": "competitor",
+            "fieldCode": "tenant_code"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 30,
+          "displayGroup": "数据范围",
+          "description": "竞争对手所属租户。典型表达式：sub.tenant_code == res.tenant_code。",
+          "i18nKey": "auth.resource.res_competitor.attr.tenant_code",
+          "valueExamples": [
+            "gov-default",
+            "ent-default"
+          ]
+        },
+        {
+          "code": "status",
+          "name": "状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "competitor",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "ACTIVE",
+              "label": "活跃"
+            },
+            {
+              "value": "INACTIVE",
+              "label": "停用"
+            }
+          ],
+          "displayOrder": 40,
+          "displayGroup": "资源属性",
+          "description": "竞争对手状态。典型表达式：res.status == 'ACTIVE'。",
+          "i18nKey": "auth.resource.res_competitor.attr.status",
+          "valueExamples": [
+            "ACTIVE",
+            "INACTIVE"
+          ]
+        },
+        {
+          "code": "competition_level",
+          "name": "竞争力",
+          "type": "STRING",
+          "source": {
+            "entityCode": "competitor",
+            "fieldCode": "competition_level"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "STRONG",
+              "label": "强竞争力"
+            },
+            {
+              "value": "POTENTIAL",
+              "label": "潜在竞争力"
+            },
+            {
+              "value": "NORMAL",
+              "label": "一般竞争力"
+            },
+            {
+              "value": "WEAK",
+              "label": "弱竞争力"
+            }
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "竞争对手竞争力等级。典型表达式：res.competition_level == 'STRONG'。competition_level 存储编码值如 STRONG/POTENTIAL。",
+          "i18nKey": "auth.resource.res_competitor.attr.competition_level",
+          "valueExamples": [
+            "STRONG",
+            "WEAK"
+          ]
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "competitors 首版 SECURITY 设计态 Fragment"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "sales-activities",
+  "metaType": "OPERATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "录入拜访",
+        "scope": "BO",
+        "operationKind": "CREATE",
+        "primaryDataAction": "CREATE",
+        "authzAction": "CREATE",
+        "httpMethod": "POST",
+        "supportsBatch": false,
+        "singleResultType": "ApiResponse<Map<String, Object>>",
+        "position": "TOOLBAR",
+        "triggerEvent": "OPEN_FORM",
+        "description": "新建客户拜访记录，填写拜访主题、时间、方式、活动内容、联系人、场景和下一步动作。API：POST /sales-activities。"
+      },
+      {
+        "code": "UPDATE",
+        "name": "编辑拜访",
+        "scope": "BO",
+        "operationKind": "UPDATE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "UPDATE",
+        "httpMethod": "POST",
+        "actionPath": "update",
+        "supportsBatch": false,
+        "singleResultType": "Void",
+        "position": "ROW",
+        "triggerEvent": "OPEN_FORM",
+        "description": "修改拜访记录的拜访主题、时间、方式、活动内容等信息。API：POST /sales-activities/{id}/update。"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除拜访",
+        "scope": "BO",
+        "operationKind": "DELETE",
+        "primaryDataAction": "DELETE",
+        "authzAction": "DELETE",
+        "httpMethod": "DELETE",
+        "supportsBatch": false,
+        "singleResultType": "Void",
+        "position": "ROW",
+        "triggerEvent": "CONFIRM_THEN_API",
+        "description": "逻辑删除拜访记录（is_deleted=1），级联删除跟进记录。API：DELETE /sales-activities/{id}。"
+      },
+      {
+        "code": "FOLLOW_UP",
+        "name": "动作跟进",
+        "scope": "BO",
+        "operationKind": "STATE_CHANGE",
+        "primaryDataAction": "UPDATE",
+        "authzAction": "FOLLOW_UP",
+        "httpMethod": "POST",
+        "actionPath": "follow-up",
+        "supportsBatch": false,
+        "singleResultType": "ApiResponse<Map<String, Object>>",
+        "position": "ROW",
+        "triggerEvent": "OPEN_FORM",
+        "description": "更新拜访记录的下一步动作，同时生成跟进记录（visit-follow-up），记录动作变更历史。API：POST /sales-activities/{id}/follow-up。"
+      }
+    ]
+  },
+  "changeNote": [
+    "sales-activities OPERATION Fragment — 4 个显式操作：CREATE/UPDATE/DELETE/FOLLOW_UP；QUERY/GET_DETAIL 由 apiConfig 自动推导"
+  ]
+}

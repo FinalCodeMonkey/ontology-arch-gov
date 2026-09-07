@@ -1,0 +1,143 @@
+{
+  "_scenario": "CBG互联网大厂时态事件流 — 商机阶段推进 + 客户活动时间线",
+  "_scenarioDescription": "商机2101:DC_01→DC_02→DC_03(2次推进,当前停留12天,流速正常)。商机2105:DC_01→DC_02(1次推进,停留45天,流速缓慢→触发停滞预警)。商机2106:DC_04→DC_05→CLOSED_WON(赢单,触发后置动作链)。客户1101(阿里):3次活动(90天内)。客户1107(百度):1次活动(120天前,超出90天窗口→activity_count_90d=0)。",
+  "stageEvents": [
+    {
+      "boCode": "opportunities",
+      "objectId": 2101,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_01",
+      "toState": "DC_02",
+      "eventTime": "2026-06-10T09:00:00",
+      "actorId": "20001",
+      "snapshot": {
+        "project_stage": "DC_02",
+        "predict_category": "C",
+        "expected_order_amount": 800000.00,
+        "status": "IN_PROGRESS"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2101,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_02",
+      "toState": "DC_03",
+      "eventTime": "2026-07-01T10:30:00",
+      "actorId": "20001",
+      "snapshot": {
+        "project_stage": "DC_03",
+        "predict_category": "B",
+        "expected_order_amount": 1000000.00,
+        "status": "IN_PROGRESS"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2105,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_01",
+      "toState": "DC_02",
+      "eventTime": "2026-05-28T16:00:00",
+      "actorId": "20002",
+      "snapshot": {
+        "project_stage": "DC_02",
+        "predict_category": "C",
+        "expected_order_amount": 1650000.00,
+        "status": "IN_PROGRESS"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2106,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_04",
+      "toState": "DC_05",
+      "eventTime": "2026-06-15T14:00:00",
+      "actorId": "20003",
+      "snapshot": {
+        "project_stage": "DC_05",
+        "predict_category": "A",
+        "expected_order_amount": 580000.00,
+        "status": "IN_PROGRESS"
+      }
+    },
+    {
+      "boCode": "opportunities",
+      "objectId": 2106,
+      "eventType": "STAGE_CHANGED",
+      "fromState": "DC_05",
+      "toState": "CLOSED_WON",
+      "eventTime": "2026-06-20T10:00:00",
+      "actorId": "20003",
+      "snapshot": {
+        "project_stage": "DC_05",
+        "predict_category": "A",
+        "expected_order_amount": 580000.00,
+        "status": "CLOSED_WON"
+      }
+    }
+  ],
+  "activityEvents": [
+    {
+      "boCode": "sales-activities",
+      "objectId": 1101,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-07-10T14:30:00",
+      "snapshot": {
+        "visit_subject": "阿里DCN4.0骨干升级方案沟通",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1101,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-06-20T10:00:00",
+      "snapshot": {
+        "visit_subject": "阿里通算网络集采框架技术交流",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1101,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-05-15T09:30:00",
+      "snapshot": {
+        "visit_subject": "阿里IDC智算中心需求调研",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1105,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-06-10T13:00:00",
+      "snapshot": {
+        "visit_subject": "腾讯智算网络方案汇报",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1105,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-05-20T10:00:00",
+      "snapshot": {
+        "visit_subject": "腾讯网络升级项目启动会",
+        "status": "COMPLETED"
+      }
+    },
+    {
+      "boCode": "sales-activities",
+      "objectId": 1107,
+      "eventType": "ACTIVITY_COMPLETED",
+      "eventTime": "2026-03-15T14:00:00",
+      "snapshot": {
+        "visit_subject": "百度集采框架初步接触",
+        "status": "COMPLETED"
+      }
+    }
+  ]
+}

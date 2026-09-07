@@ -1,0 +1,529 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "x-territory-regs",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "x-territory-regs",
+    "boName": "跨地盘项目报备",
+    "description": "跨地盘项目报备业务对象。用于记录跨销售区域协作的项目报备申请，含主表信息与团队成员明细，通过 Flowable 审批流驱动状态流转（DRAFT→PENDING→APPROVED/REJECTED）。",
+    "apiConfig": {
+      "resourcePath": "/x-territory-regs",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "filing_no",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "FULL_AGGREGATE",
+        "createScope": "FULL_AGGREGATE",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "CASCADE_AGGREGATE",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": [
+          "x-territory-reg-team-member"
+        ]
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "MASTER_DETAIL",
+      "nameField": "project_name",
+      "statusField": "status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "x-territory-reg",
+        "name": "跨地盘报备主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_cross_territory_filing",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "filing_no",
+            "fieldName": "filingNo",
+            "columnName": "filing_no",
+            "name": "报备单号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.filing_no"
+          },
+          {
+            "code": "project_name",
+            "fieldName": "projectName",
+            "columnName": "project_name",
+            "name": "项目名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.project_name"
+          },
+          {
+            "code": "customer_id",
+            "fieldName": "customerId",
+            "columnName": "customer_id",
+            "name": "客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "customers",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "customer_name",
+                  "localCode": "customer_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.customer_id"
+          },
+          {
+            "code": "customer_name",
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "name": "客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.customer_name"
+          },
+          {
+            "code": "customer_owner_id",
+            "fieldName": "customerOwnerId",
+            "columnName": "customer_owner_id",
+            "name": "客户所有人ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "customer_owner_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.customer_owner_id"
+          },
+          {
+            "code": "customer_owner_name",
+            "fieldName": "customerOwnerName",
+            "columnName": "customer_owner_name",
+            "name": "客户所有人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.customer_owner_name"
+          },
+          {
+            "code": "filing_owner_id",
+            "fieldName": "filingOwnerId",
+            "columnName": "filing_owner_id",
+            "name": "报备负责人ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "filing_owner_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.filing_owner_id"
+          },
+          {
+            "code": "filing_owner_name",
+            "fieldName": "filingOwnerName",
+            "columnName": "filing_owner_name",
+            "name": "报备负责人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.filing_owner_name"
+          },
+          {
+            "code": "reason",
+            "fieldName": "reason",
+            "columnName": "reason",
+            "name": "报备理由",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.x-territory-regs.field.reason"
+          },
+          {
+            "code": "ownership_note",
+            "fieldName": "ownershipNote",
+            "columnName": "ownership_note",
+            "name": "主导权及合作分量说明",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.x-territory-regs.field.ownership_note"
+          },
+          {
+            "code": "status",
+            "fieldName": "status",
+            "columnName": "status",
+            "name": "报备状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true,
+            "defaultValue": "DRAFT",
+            "i18nKey": "bo.x-territory-regs.field.status"
+          },
+          {
+            "code": "flow_instance_id",
+            "fieldName": "flowInstanceId",
+            "columnName": "flow_instance_id",
+            "name": "Flowable流程实例ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.flow_instance_id"
+          },
+          {
+            "code": "linked_opportunity_id",
+            "fieldName": "linkedOpportunityId",
+            "columnName": "linked_opportunity_id",
+            "name": "关联商机ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "opportunities",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "opportunity_code",
+                  "localCode": "linked_opportunity_code",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "ONE_TO_ONE",
+              "referenceNature": "BUSINESS_FLOW"
+            },
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.linked_opportunity_id"
+          },
+          {
+            "code": "linked_opportunity_code",
+            "fieldName": "linkedOpportunityCode",
+            "columnName": "linked_opportunity_code",
+            "name": "关联商机编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.linked_opportunity_code"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.x-territory-regs.field.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "x-territory-reg-team-member",
+        "name": "报备团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_cross_territory_filing_team_member",
+        "parentEntityCode": "x-territory-reg",
+        "parentRefField": "filing_id",
+        "routeSegment": "team-members",
+        "cascadeDelete": true,
+        "entityNature": "BUSINESS",
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "成员行ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "filing_id",
+            "fieldName": "filingId",
+            "columnName": "filing_id",
+            "name": "所属报备单ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "member_user_id",
+            "fieldName": "memberUserId",
+            "columnName": "member_user_id",
+            "name": "成员用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_user_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.member.member_user_id"
+          },
+          {
+            "code": "member_user_name",
+            "fieldName": "memberUserName",
+            "columnName": "member_user_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false,
+            "i18nKey": "bo.x-territory-regs.field.member.member_user_name"
+          },
+          {
+            "code": "member_role",
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "name": "成员角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.x-territory-regs.field.member.member_role"
+          },
+          {
+            "code": "permission_code",
+            "fieldName": "permissionCode",
+            "columnName": "permission_code",
+            "name": "权限码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "defaultValue": "READ",
+            "i18nKey": "bo.x-territory-regs.field.member.permission_code"
+          },
+          {
+            "code": "related_teams",
+            "fieldName": "relatedTeams",
+            "columnName": "related_teams",
+            "name": "关联团队模块",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.x-territory-regs.field.member.related_teams"
+          },
+          {
+            "code": "remark",
+            "fieldName": "remark",
+            "columnName": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.x-territory-regs.field.member.remark"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "跨地盘项目报备 BO 首版 MODEL Fragment",
+    "主实体：crm_cross_territory_filing；子实体：crm_cross_territory_filing_team_member",
+    "状态机：DRAFT→PENDING→APPROVED/REJECTED，由 Flowable 流程驱动"
+  ]
+}

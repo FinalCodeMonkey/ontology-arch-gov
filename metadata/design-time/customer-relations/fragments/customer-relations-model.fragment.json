@@ -1,0 +1,2109 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "customer-relations",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "customer-relations",
+    "boName": "客户",
+    "description": "客户关系治理业务对象（MCR），主从明细聚合建模（MASTER_DETAIL）。根实体 crm_customer-relation 通过 customer_id 1:1 关联 MDM 客户主数据（customers BO），持有客户所有人、审批状态、所属部门（一级部门）、二级部门/大区/BG、售前/服务销售归属等运营字段；子实体包括团队成员、竞争信息（含成员/销量）、业务战略（含成员/核心业务）、基础设施架构（含成员）。PSP 中 bo_code 为 customer-relations。",
+    "apiConfig": {
+      "resourcePath": "/customer-relations",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "customer_id",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "FULL_AGGREGATE",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "FULL_AGGREGATE_PATCH",
+        "deleteScope": "CASCADE_AGGREGATE",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": [
+          "customer-team-member",
+          "customer-competition",
+          "customer-industry-strategy",
+          "customer-infra-architecture"
+        ]
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "MASTER_DETAIL",
+      "nameField": "customer_name",
+      "statusField": "status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "customer-relation",
+        "name": "客户主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_customer_relation",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "customer_id",
+            "fieldName": "customerId",
+            "columnName": "customer_id",
+            "name": "关联客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "customers",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "customer_name",
+                  "localCode": "customer_name",
+                  "displayRole": "NAME"
+                },
+                {
+                  "refFieldCode": "customer_no",
+                  "localCode": "customer_no",
+                  "displayRole": "BUSINESS_KEY"
+                },
+                {
+                  "refFieldCode": "primary_customer_name",
+                  "localCode": "primary_customer_name",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "fop_customer_name",
+                  "localCode": "fop_customer_name",
+                  "displayRole": "EXTRA"
+                }
+              ],
+              "relationType": "ONE_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "customer_name",
+            "fieldName": "customerName",
+            "name": "客户全称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": true
+          },
+          {
+            "code": "customer_no",
+            "fieldName": "customerBizNo",
+            "name": "客户业务编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": true
+          },
+          {
+            "code": "primary_customer_name",
+            "fieldName": "primaryCustomerName",
+            "name": "一级客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "fop_customer_name",
+            "fieldName": "fopCustomerName",
+            "name": "业务主体客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "owner_user_id",
+            "fieldName": "ownerUserId",
+            "columnName": "owner_user_id",
+            "name": "客户所有人用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "owner_user_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "owner_user_name",
+            "fieldName": "ownerUserName",
+            "columnName": "owner_user_name",
+            "name": "客户所有人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "department_code",
+            "fieldName": "departmentCode",
+            "columnName": "department_code",
+            "name": "二级部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "orgs",
+              "refFieldCode": "department_code",
+              "displayFields": [
+                {
+                  "refFieldCode": "department_name",
+                  "localCode": "department_name",
+                  "displayRole": "NAME"
+                },
+                {
+                  "refFieldCode": "parent_department_name",
+                  "localCode": "primary_department_name",
+                  "displayRole": "EXTRA"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "department_name",
+            "fieldName": "departmentName",
+            "columnName": "department_name",
+            "name": "二级部门/大区/BG",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "primary_department_name",
+            "fieldName": "primaryDepartmentName",
+            "name": "所属部门",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": false,
+            "filterable": false
+          },
+          {
+            "code": "region",
+            "fieldName": "region",
+            "columnName": "region",
+            "name": "区域",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "status",
+            "fieldName": "status",
+            "columnName": "status",
+            "name": "审批状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "defaultValue": "DRAFT",
+            "filterable": true
+          },
+          {
+            "code": "latest_visitor_id",
+            "fieldName": "latestVisitorId",
+            "columnName": "latest_visitor_id",
+            "name": "最新跟进人ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "latest_visitor_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "latest_visitor_name",
+            "fieldName": "latestVisitorName",
+            "name": "最新跟进人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "latest_visit_time",
+            "fieldName": "latestVisitTime",
+            "columnName": "latest_visit_time",
+            "name": "最近拜访时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "responsible_pre_sales_id",
+            "fieldName": "responsiblePreSalesId",
+            "columnName": "responsible_pre_sales_id",
+            "name": "客户责任售前用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "responsible_pre_sales_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "responsible_pre_sales_name",
+            "fieldName": "responsiblePreSalesName",
+            "columnName": "responsible_pre_sales_name",
+            "name": "客户责任售前姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "service_sales_id",
+            "fieldName": "serviceSalesId",
+            "columnName": "service_sales_id",
+            "name": "服务销售用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "service_sales_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "service_sales_name",
+            "fieldName": "serviceSalesName",
+            "columnName": "service_sales_name",
+            "name": "服务销售姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "remarks",
+            "fieldName": "remarks",
+            "columnName": "remarks",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "billing_province",
+            "fieldName": "billingProvince",
+            "columnName": "billing_province",
+            "name": "开单省份",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "billing_city",
+            "fieldName": "billingCity",
+            "columnName": "billing_city",
+            "name": "开单城市",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-team-member",
+        "name": "客户团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_team_member",
+        "parentEntityCode": "customer-relation",
+        "parentRefField": "parent_id",
+        "routeSegment": "team-members",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "关联客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "name": "团队成员用户ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "fieldName": "permission",
+            "columnName": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "related_teams",
+            "fieldName": "pagePermission",
+            "columnName": "page_permission",
+            "name": "关联模块团队",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "fieldName": "remark",
+            "columnName": "remarks",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-competition",
+        "name": "客户竞争信息",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_competition",
+        "parentEntityCode": "customer-relation",
+        "parentRefField": "parent_id",
+        "routeSegment": "competitions",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "customer_id",
+            "name": "关联根实体ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "competitor_id",
+            "fieldName": "competitorId",
+            "columnName": "competitor_id",
+            "name": "竞争对手ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "competitors",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "competitor_name",
+                  "localCode": "competitor_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true
+          },
+          {
+            "code": "competitor_name",
+            "fieldName": "competitorName",
+            "name": "竞争对手名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": true
+          },
+          {
+            "code": "strategic_intent",
+            "fieldName": "strategicIntent",
+            "columnName": "strategic_intent",
+            "name": "战略意图",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "recent_action_product_tech",
+            "fieldName": "recentActionProductTech",
+            "columnName": "recent_action_product_tech",
+            "name": "近期动作-产品技术",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "recent_action_business_supply",
+            "fieldName": "recentActionBusinessSupply",
+            "columnName": "recent_action_business_supply",
+            "name": "近期动作-商务供应",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "recent_action_quality_service",
+            "fieldName": "recentActionQualityService",
+            "columnName": "recent_action_quality_service",
+            "name": "近期动作-质量服务",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-competition-member",
+        "name": "竞争信息团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_competition_member",
+        "parentEntityCode": "customer-competition",
+        "parentRefField": "parent_id",
+        "routeSegment": "competition-members",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "policyDerivedFields": [
+          {
+            "code": "parent_parent_customer_id",
+            "name": "所属客户ID",
+            "type": "LONG",
+            "labelPath": [
+              "客户竞争信息",
+              "所属客户ID"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromEntityCode": "customer-competition-member",
+                "fromRefCode": "parent_id",
+                "toEntityCode": "customer-competition"
+              },
+              {
+                "hopKind": "PARENT_REF",
+                "fromEntityCode": "customer-competition",
+                "fromRefCode": "parent_id",
+                "toEntityCode": "customer-relation"
+              }
+            ],
+            "target": {
+              "entityCode": "customer-relation",
+              "fieldCode": "customer_id"
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "关联竞争信息ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "fieldName": "permission",
+            "columnName": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "fieldName": "remark",
+            "columnName": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-competition-sale",
+        "name": "竞对产品销量",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_competition_sale",
+        "parentEntityCode": "customer-competition",
+        "parentRefField": "parent_id",
+        "routeSegment": "competition-sales",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "关联竞争信息ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "sort_no",
+            "fieldName": "sortNo",
+            "columnName": "sort_no",
+            "name": "排序号",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "1",
+            "filterable": false
+          },
+          {
+            "code": "sales_year",
+            "fieldName": "salesYear",
+            "columnName": "sales_year",
+            "name": "年份",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "product_category",
+            "fieldName": "productCategory",
+            "columnName": "product_category",
+            "name": "销售产品大类",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "product_name",
+            "fieldName": "productName",
+            "columnName": "product_name",
+            "name": "典型产品名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "annual_sales",
+            "fieldName": "annualSales",
+            "columnName": "annual_sales",
+            "name": "年度销量",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "next_year_target",
+            "fieldName": "nextYearTarget",
+            "columnName": "next_year_target",
+            "name": "下一年度目标",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-industry-strategy",
+        "name": "客户业务和战略",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_industry_strategy",
+        "parentEntityCode": "customer-relation",
+        "parentRefField": "parent_id",
+        "routeSegment": "industry-strategies",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "customer_id",
+            "name": "关联根实体ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "is_current",
+            "fieldName": "isCurrent",
+            "columnName": "is_current",
+            "name": "是否当前版本",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "1",
+            "filterable": true
+          },
+          {
+            "code": "main_product",
+            "fieldName": "mainProduct",
+            "columnName": "main_product",
+            "name": "主要产品",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "revenue_data",
+            "fieldName": "revenueData",
+            "columnName": "revenue_data",
+            "name": "营收数据",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "gross_margin_data",
+            "fieldName": "grossMarginData",
+            "columnName": "gross_margin_data",
+            "name": "毛利率数据",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "corp_strategy",
+            "fieldName": "corpStrategy",
+            "columnName": "corp_strategy",
+            "name": "公司战略",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "ai_strategy",
+            "fieldName": "aiStrategy",
+            "columnName": "ai_strategy",
+            "name": "AI战略",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "infra_plan",
+            "fieldName": "infraPlan",
+            "columnName": "infra_plan",
+            "name": "基础设施投资计划",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "version_no",
+            "fieldName": "versionNo",
+            "columnName": "version_no",
+            "name": "版本号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "version_remark",
+            "fieldName": "versionRemark",
+            "columnName": "version_remark",
+            "name": "版本说明",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-industry-strategy-member",
+        "name": "业务和战略团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_industry_strategy_member",
+        "parentEntityCode": "customer-industry-strategy",
+        "parentRefField": "parent_id",
+        "routeSegment": "strategy-members",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "policyDerivedFields": [
+          {
+            "code": "parent_parent_customer_id",
+            "name": "所属客户ID",
+            "type": "LONG",
+            "labelPath": [
+              "客户业务和战略",
+              "所属客户ID"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromEntityCode": "customer-industry-strategy-member",
+                "fromRefCode": "parent_id",
+                "toEntityCode": "customer-industry-strategy"
+              },
+              {
+                "hopKind": "PARENT_REF",
+                "fromEntityCode": "customer-industry-strategy",
+                "fromRefCode": "parent_id",
+                "toEntityCode": "customer-relation"
+              }
+            ],
+            "target": {
+              "entityCode": "customer-relation",
+              "fieldCode": "customer_id"
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "关联业务和战略ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "fieldName": "permission",
+            "columnName": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "fieldName": "remark",
+            "columnName": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-industry-biz",
+        "name": "核心业务明细",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_industry_biz",
+        "parentEntityCode": "customer-industry-strategy",
+        "parentRefField": "parent_id",
+        "routeSegment": "industry-biz",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "关联业务和战略ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "sort_no",
+            "fieldName": "sortNo",
+            "columnName": "sort_no",
+            "name": "排序号",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "1",
+            "filterable": false
+          },
+          {
+            "code": "biz_name",
+            "fieldName": "bizName",
+            "columnName": "biz_name",
+            "name": "核心业务名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "biz_result",
+            "fieldName": "bizResult",
+            "columnName": "biz_result",
+            "name": "经营成果",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-infra-architecture",
+        "name": "客户基础设施架构",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_infra_architecture",
+        "parentEntityCode": "customer-relation",
+        "parentRefField": "parent_id",
+        "routeSegment": "infra-architectures",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "customer_id",
+            "name": "关联根实体ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "arch_name",
+            "fieldName": "archName",
+            "columnName": "arch_name",
+            "name": "架构名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "arch_category",
+            "fieldName": "archCategory",
+            "columnName": "arch_category",
+            "name": "通算/智算架构",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "server_info",
+            "fieldName": "serverInfo",
+            "columnName": "server_info",
+            "name": "服务器",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "nic_info",
+            "fieldName": "nicInfo",
+            "columnName": "nic_info",
+            "name": "网卡",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "network_info",
+            "fieldName": "networkInfo",
+            "columnName": "network_info",
+            "name": "网络",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "module_info",
+            "fieldName": "moduleInfo",
+            "columnName": "module_info",
+            "name": "模块",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "diagram_file_id",
+            "fieldName": "diagramFileId",
+            "columnName": "diagram_file_id",
+            "name": "架构图文件ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "diagram_file_name",
+            "fieldName": "diagramFileName",
+            "columnName": "diagram_file_name",
+            "name": "架构图文件名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "pod_usage",
+            "fieldName": "podUsage",
+            "columnName": "pod_usage",
+            "name": "单POD用量",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "pod_count",
+            "fieldName": "podCount",
+            "columnName": "pod_count",
+            "name": "POD数量",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "shortlist_date",
+            "fieldName": "shortlistDate",
+            "columnName": "shortlist_date",
+            "name": "完成入围时间",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "gray_date",
+            "fieldName": "grayDate",
+            "columnName": "gray_date",
+            "name": "灰度时间",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "mass_production_date",
+            "fieldName": "massProductionDate",
+            "columnName": "mass_production_date",
+            "name": "量产时间",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "eol_date",
+            "fieldName": "eolDate",
+            "columnName": "eol_date",
+            "name": "EOL时间",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "customer-infra-architecture-member",
+        "name": "客户基础设施架构团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_customer_infra_architecture_member",
+        "parentEntityCode": "customer-infra-architecture",
+        "parentRefField": "parent_id",
+        "routeSegment": "infra-architecture-members",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        },
+        "policyDerivedFields": [
+          {
+            "code": "parent_parent_customer_id",
+            "name": "所属客户ID",
+            "type": "LONG",
+            "labelPath": [
+              "客户基础设施架构",
+              "所属客户ID"
+            ],
+            "path": [
+              {
+                "hopKind": "PARENT_REF",
+                "fromEntityCode": "customer-infra-architecture-member",
+                "fromRefCode": "parent_id",
+                "toEntityCode": "customer-infra-architecture"
+              },
+              {
+                "hopKind": "PARENT_REF",
+                "fromEntityCode": "customer-infra-architecture",
+                "fromRefCode": "parent_id",
+                "toEntityCode": "customer-relation"
+              }
+            ],
+            "target": {
+              "entityCode": "customer-relation",
+              "fieldCode": "customer_id"
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "name": "关联基础设施架构ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "fieldName": "userId",
+            "columnName": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "fieldName": "memberName",
+            "columnName": "user_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "fieldName": "memberRole",
+            "columnName": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "fieldName": "permission",
+            "columnName": "permission",
+            "name": "权限",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "fieldName": "remark",
+            "columnName": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "MCR BO 首版 MODEL Fragment",
+    "从 customers BO 拆分：根实体 crm_customer-relation（1:1 关联 crm_customer）持有运营/审批/归属字段",
+    "子实体 team_member/competition/competition_member/competition_sale/industry_strategy/strategy_member/industry_biz 从 customers BO 迁移，parentEntityCode 改为指向 crm_customer-relation",
+    "customer_id 作为 CROSS_BO_REF → customers.id，displayFields 包含 customer_name + customer_no",
+    "新增 primary_department_name（所属部门，作为 department_code 的第二个 displayField，取 orgs.parent_department_name）",
+    "根实体 customer_id crossBoRef displayFields 扩展：增加 primary_customer_name（一级客户名称，取 customers.primary_customer_name）和 fop_customer_name（业务主体客户名称，取 customers.fop_customer_name），支持客户层级关系展示，子实体不重复存储",
+    "根实体新增 primary_customer_name / fop_customer_name 两个 CROSS_BO_DISPLAY 属性，与界面原型「一级客户」「业务主体客户」对齐",
+    "customer-industry-strategy 保留版本管理字段（is_current/version_no/version_remark），补齐审计字段（is_deleted/created_time/updated_time/created_by/updated_by/tenant_code）",
+    "customer-industry-biz 补齐审计字段（is_deleted/created_time/updated_time/created_by/updated_by/tenant_code）",
+    "customer-competition-sale 补齐审计字段（is_deleted/created_time/updated_time/created_by/updated_by/tenant_code）",
+    "修正 customer-competition/customer-industry-strategy/customer-infra-architecture 的 parentRefField：从 customer_id 改为 parent_id（引用根实体 customer-relation.id），与 customer-team-member 及其他 BO 保持一致",
+    "删除所有子实体中冗余的 customer_id 字段：客户信息通过聚合根 customer-relation.customer_id（CROSS_BO_REF → customers）获取，子实体不需要独立持有跨 BO 引用，消除数据冗余"
+  ]
+}

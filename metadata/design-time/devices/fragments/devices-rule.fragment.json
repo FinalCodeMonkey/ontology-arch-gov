@@ -1,0 +1,114 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "devices",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "DEVICE_SERIAL_NO_UNIQUE",
+        "name": "设备序列号唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "设备序列号已存在，不允许重复创建",
+        "description": "创建设备本地状态记录时，device_serial_no 在同一租户下必须唯一（含已逻辑删除记录）。设备主档来自外部 DPR 系统，本地仅维护状态覆盖层。"
+      },
+      {
+        "code": "DEVICE_STATUS_TRANSITION",
+        "name": "设备状态流转规则",
+        "ruleType": "STATE",
+        "scope": "ENTITY",
+        "entityCode": "device",
+        "trigger": "BEFORE_OPERATION",
+        "operationCode": "UPDATE_STATUS",
+        "severity": "ERROR",
+        "expression": "device_status == 'RUNNING' && newStatus == 'DECOMMISSIONED'",
+        "message": "设备状态不可从'运行中'直接变更为'已裁撤'，需先流转至'待裁撤'状态",
+        "description": "设备状态流转约束：RUNNING → PENDING_DECOMMISSION → DECOMMISSIONED。不允许跳过中间状态直接裁撤。",
+        "exprAst": {
+          "type": "logical",
+          "op": "AND",
+          "items": [
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "device_status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "RUNNING"
+              }
+            },
+            {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "newStatus"
+              },
+              "right": {
+                "type": "literal",
+                "value": "DECOMMISSIONED"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "code": "DEVICE_STATUS_EDITABLE",
+        "name": "设备状态可编辑性",
+        "ruleType": "STATE",
+        "scope": "ENTITY",
+        "entityCode": "device",
+        "trigger": "BEFORE_OPERATION",
+        "operationCode": "UPDATE_STATUS",
+        "severity": "ERROR",
+        "expression": "device_status == 'DECOMMISSIONED'",
+        "message": "已裁撤的设备不可再修改状态",
+        "description": "设备一旦进入 DECOMMISSIONED（已裁撤）终态，不可再流转回其他状态。",
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "device_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DECOMMISSIONED"
+          }
+        }
+      },
+      {
+        "code": "DEVICE_PRICE_FIELD_CONTROL",
+        "name": "价格字段脱敏控制",
+        "ruleType": "PERMISSION",
+        "scope": "BO",
+        "trigger": "ON_READ",
+        "severity": "INFO",
+        "message": "价格类字段（服务目录价、硬件目录价、出货价等）默认脱敏，仅授权用户可查看精确值",
+        "description": "设备档案中所有价格字段在列表和详情展示时默认 MASKED 脱敏，需具备相应 FIELD 权限方可查看精确数值。对应 SECURITY fragment 中 fieldSecurity 的 MASKED 配置。"
+      },
+      {
+        "code": "EXTERNAL_DATA_READONLY",
+        "name": "外部数据只读约束",
+        "ruleType": "CONSISTENCY",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "外部汇聚数据为只读，仅本地维护字段（device_status、product_status）可修改",
+        "description": "设备档案大部分字段来自外部 DPR 系统聚合（data_source=EXTERNAL_AGGREGATED），仅 device_status、product_status 为本地覆盖层可维护字段。UPDATE_STATUS 操作仅允许修改这两个字段，不反向改写外部设备主档。"
+      }
+    ]
+  },
+  "changeNote": [
+    "devices 首版 RULE 设计态 Fragment，含序列号唯一性、状态流转规则、价格脱敏控制和外部数据只读约束"
+  ]
+}

@@ -1,0 +1,256 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "change-records",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "change-records",
+    "boName": "变更记录",
+    "description": "变更记录业务对象，通用设计，不限定特定业务域。记录任意业务对象的字段级变更轨迹，通过 biz_type + biz_id 多态引用业务对象，存储原始快照和变更差异 JSON。可选关联审批记录（approval_record_id）。操作人通过 CROSS_BO_REF 引用 users BO。与操作审计日志（operation-logs BO）通过 biz_type + biz_id + operator_id 组合查询实现关联。PSP 中 bo_code 为 change-records。",
+    "apiConfig": {
+      "resourcePath": "/change-records",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "change_record_no",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+      },
+      "searchEnabled": true,
+      "batchEnabled": false
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "change_record_no",
+      "statusField": "status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "change-record",
+        "name": "变更记录",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_change_record",
+        "attributes": [
+          {
+            "code": "id",
+            "fieldName": "id",
+            "columnName": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "biz_type",
+            "fieldName": "bizType",
+            "columnName": "biz_type",
+            "name": "业务对象类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "biz_id",
+            "fieldName": "bizId",
+            "columnName": "biz_id",
+            "name": "业务对象ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "approval_record_id",
+            "fieldName": "approvalRecordId",
+            "columnName": "approval_record_id",
+            "name": "关联审批记录ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "approval-records",
+              "refFieldCode": "id",
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "BUSINESS_FLOW"
+            },
+            "filterable": true
+          },
+          {
+            "code": "action_type",
+            "fieldName": "actionType",
+            "columnName": "action_type",
+            "name": "动作类型",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "SUBMIT_EDIT",
+            "filterable": true
+          },
+          {
+            "code": "change_record_no",
+            "fieldName": "changeRecordNo",
+            "columnName": "change_record_no",
+            "name": "变更记录编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true
+          },
+          {
+            "code": "original_snapshot_json",
+            "fieldName": "originalSnapshotJson",
+            "columnName": "original_snapshot_json",
+            "name": "原始字段快照JSON",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "changes_json",
+            "fieldName": "changesJson",
+            "columnName": "changes_json",
+            "name": "变更JSON",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "status",
+            "fieldName": "status",
+            "columnName": "status",
+            "name": "变更状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "defaultValue": "DRAFT",
+            "filterable": true
+          },
+          {
+            "code": "operator_id",
+            "fieldName": "operatorId",
+            "columnName": "operator_id",
+            "name": "操作人ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "operator_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE",
+              "referenceNature": "MASTER_DATA"
+            },
+            "filterable": true
+          },
+          {
+            "code": "operator_name",
+            "fieldName": "operatorName",
+            "columnName": "operator_name",
+            "name": "操作人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "redundant": true,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "defaultValue": "0",
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  },
+  "changeNote": [
+    "变更记录 BO 首版 MODEL Fragment",
+    "通用设计：biz_type+biz_id 多态引用（NORMAL）",
+    "approval_record_id 为 CROSS_BO_REF → approval-records.id（可选关联审批）",
+    "operator_id 为 CROSS_BO_REF → users.id，operator_name 为 CROSS_BO_DISPLAY redundant=true",
+    "change_record_no 为 BUSINESS_KEY",
+    "original_snapshot_json/changes_json 为 JSON 快照（STRING 类型）",
+    "与操作审计日志通过 biz_type+biz_id+operator_id 组合查询关联，无直接外键"
+  ]
+}

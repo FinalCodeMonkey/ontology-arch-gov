@@ -1,0 +1,254 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='bo-meta-models'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'bo-meta-models'",
+    "generated_from": "bo-meta-models.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.359000+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "authz-bo-meta-model",
+        "name": "BO元模型实体",
+        "isPrimary": true,
+        "tableName": "authz_bo_meta_model",
+        "rowLevelRuleEntries": [
+          "tenant_id",
+          "app_code",
+          "bo_code",
+          "adapter_type",
+          "data_domain_id",
+          "is_deleted"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键ID",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_id",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantId",
+            "columnName": "tenant_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "app_code",
+            "name": "应用代码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "appCode",
+            "columnName": "app_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "bo_code",
+            "name": "BO标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "boCode",
+            "columnName": "bo_code",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "bo_name",
+            "name": "BO名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "boName",
+            "columnName": "bo_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "schema_json",
+            "name": "投影元数据JSON",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "schemaJson",
+            "columnName": "schema_json",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "adapter_type",
+            "name": "适配器类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "adapterType",
+            "columnName": "adapter_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "resolver",
+            "name": "解析器",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "resolver",
+            "columnName": "resolver",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "data_domain_id",
+            "name": "所属数据领域ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "dataDomainId",
+            "columnName": "data_domain_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "data_domain_name",
+            "name": "数据领域名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "dataDomainName",
+            "columnName": "data_domain_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_at",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdAt",
+            "columnName": "created_at",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_at",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedAt",
+            "columnName": "updated_at",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": true
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "新建BO元模型",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "update",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除BO元模型",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "PUBLISH",
+        "name": "发布投影",
+        "scope": "BO",
+        "act_aliases": "publish",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "RELOAD",
+        "name": "重载缓存",
+        "scope": "BO",
+        "act_aliases": "reload",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'bo-meta-models' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'bo-meta-models' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + CREATE",
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + UPDATE",
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + DELETE",
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + PUBLISH",
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + RELOAD",
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + EXPORT",
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + LIST",
+      "RES_DATA_BO + bo-meta-models_bo_meta_id + READ"
+    ]
+  }
+}

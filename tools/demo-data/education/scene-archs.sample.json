@@ -1,0 +1,45 @@
+{
+  "_scenario": "教育行业场景架构明细",
+  "_scenarioDescription": "6001:凯捷教育园区网 Spine-Leaf架构。6002:华南理工校园网VXLAN架构。6003:深圳职院智慧校园 Spine-Leaf架构。",
+  "records": [
+    {
+      "id": 1,
+      "scene_id": 6001,
+      "customer_name": "深圳凯捷网络有限公司",
+      "scene_name_customer": "教育园区网DCN改造项目",
+      "scene_name_dept": "园区网",
+      "business_name": "PARK",
+      "primary_customer_name": "深圳凯捷网络有限公司",
+      "sales_owner_name": "张三",
+      "product_model": "RG-N18000-X",
+      "arch_role": "SPAINE",
+      "pod_count": 2
+    },
+    {
+      "id": 2,
+      "scene_id": 6002,
+      "customer_name": "广州华南理工大学",
+      "scene_name_customer": "华南理工校园网升级",
+      "scene_name_dept": "校园网",
+      "business_name": "PARK",
+      "primary_customer_name": "深圳凯捷网络有限公司",
+      "sales_owner_name": "李四",
+      "product_model": "RG-S8600E",
+      "arch_role": "SPAINE",
+      "pod_count": 2
+    },
+    {
+      "id": 3,
+      "scene_id": 6003,
+      "customer_name": "深圳职业技术学院",
+      "scene_name_customer": "深圳职院智慧校园",
+      "scene_name_dept": "智慧校园",
+      "business_name": "AI_COMPUTE",
+      "primary_customer_name": "深圳职业技术学院",
+      "sales_owner_name": "张三",
+      "product_model": "RG-S6930-2C",
+      "arch_role": "SPAINE",
+      "pod_count": 2
+    }
+  ]
+}

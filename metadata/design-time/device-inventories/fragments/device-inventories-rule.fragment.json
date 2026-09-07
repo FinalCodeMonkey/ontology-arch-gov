@@ -1,0 +1,109 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "device-inventories",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "INVENTORY_NO_UNIQUE",
+        "name": "盘点单号唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "盘点单号已存在，不允许重复创建",
+        "description": "创建盘点单时，inventory_no 在同一租户下必须唯一（含已逻辑删除记录）。盘点单号由 InventoryNoGenerator 自动生成。"
+      },
+      {
+        "code": "INVENTORY_DELETE_DRAFT_ONLY",
+        "name": "仅草稿状态可删除",
+        "ruleType": "STATE",
+        "scope": "ENTITY",
+        "entityCode": "device-inventory",
+        "trigger": "BEFORE_OPERATION",
+        "operationCode": "DELETE",
+        "severity": "ERROR",
+        "expression": "inventory_status != 'DRAFT'",
+        "message": "仅草稿状态的盘点单可以删除",
+        "description": "盘点单删除前置校验：只有 DRAFT 状态的盘点单允许执行删除操作，非草稿状态禁止删除。",
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "inventory_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "DRAFT"
+          }
+        }
+      },
+      {
+        "code": "INVENTORY_DETAIL_CASCADE_DELETE",
+        "name": "明细级联删除",
+        "ruleType": "CONSISTENCY",
+        "scope": "ENTITY",
+        "entityCode": "device-inventory-detail",
+        "trigger": "AFTER_OPERATION",
+        "operationCode": "DELETE",
+        "severity": "INFO",
+        "message": "删除盘点单时级联删除所有明细记录",
+        "description": "盘点单删除时，其关联的所有盘点明细记录（device-inventory-detail）通过 cascadeDelete=true 级联删除，不产生孤儿明细。"
+      },
+      {
+        "code": "DEVICE_SERIAL_NO_REF_INTEGRITY",
+        "name": "设备序列号引用完整性",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "WARN",
+        "message": "盘点明细中的设备序列号应在设备档案中存在",
+        "description": "盘点明细的 device_serial_no 引用设备档案 BO（devices）的 businessKeyField。保存明细时校验设备序列号在设备档案中存在，不存在则记录警告但不阻断（支持外部设备盘点场景）。",
+        "crossBoRef": {
+          "refBoCode": "devices",
+          "refFieldCode": "device_serial_no",
+          "localEntityCode": "device-inventory-detail",
+          "localFieldCode": "device_serial_no"
+        }
+      },
+      {
+        "code": "INVENTORY_DETAIL_PARENT_REF",
+        "name": "明细必须归属盘点单",
+        "ruleType": "CONSISTENCY",
+        "scope": "ENTITY",
+        "entityCode": "device-inventory-detail",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "expression": "parent_id == null",
+        "message": "盘点明细必须归属一个盘点单",
+        "description": "盘点明细的 parent_id 不能为空，必须指向一个有效的盘点单主记录。防止产生孤儿明细记录。",
+        "exprAst": {
+          "type": "isNull",
+          "expr": {
+            "type": "field",
+            "path": "parent_id"
+          }
+        }
+      },
+      {
+        "code": "INVENTORY_DEVICE_COUNT_CONSISTENCY",
+        "name": "设备数与明细一致",
+        "ruleType": "CONSISTENCY",
+        "scope": "BO",
+        "trigger": "AFTER_OPERATION",
+        "operationCode": "SAVE",
+        "severity": "WARN",
+        "message": "盘点单设备数应与明细行数一致",
+        "description": "保存盘点单后，校验 device_count 字段值与实际明细行数（未删除）一致，不一致时记录警告。"
+      }
+    ]
+  },
+  "changeNote": [
+    "device-inventories 首版 RULE 设计态 Fragment，含单号唯一性、删除状态约束、级联删除、设备引用完整性、明细归属校验和数量一致性规则"
+  ]
+}

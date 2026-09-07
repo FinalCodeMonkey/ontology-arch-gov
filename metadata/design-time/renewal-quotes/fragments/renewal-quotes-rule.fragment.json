@@ -1,0 +1,55 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "renewal-quotes",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "QUOTE_INVENTORY_EXISTS",
+        "name": "报价记录关联盘点单必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "关联的设备盘点单不存在，请选择有效盘点单",
+        "description": "创建/更新报价提交记录时，inventory_id 引用的盘点单必须在 device-inventories BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "device-inventories",
+          "refFieldCode": "id",
+          "localEntityCode": "renewal-quote",
+          "localFieldCode": "inventory_id"
+        }
+      },
+      {
+        "code": "QUOTE_RETRY_ONLY_FAILED",
+        "name": "重新提交仅限失败记录",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "expression": "submit_status != 2",
+        "severity": "ERROR",
+        "message": "仅提交失败的记录可以重新提交",
+        "description": "RETRY_SUBMIT 操作时，submit_status 必须为 2（提交失败）。",
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "submit_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": 2
+          }
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "续保报价提交记录 BO 首版 RULE Fragment，含跨 BO 盘点单存在性校验和重新提交状态约束"
+  ]
+}

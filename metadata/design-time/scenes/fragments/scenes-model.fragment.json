@@ -1,0 +1,1339 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scenes",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "scenes",
+    "boName": "场景",
+    "description": "场景管理业务对象，采用主从明细聚合建模。",
+    "apiConfig": {
+      "resourcePath": "/scenes",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "scene_no",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "FULL_AGGREGATE",
+        "createScope": "FULL_AGGREGATE",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "CASCADE_AGGREGATE",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": [
+          "scene-product",
+          "scene-product-accessory",
+          "scene-annual-estimate",
+          "scene-rival-summary",
+          "scene-rival-detail",
+          "scene-team-member",
+          "scene-product-team-member"
+        ],
+        "aggregateReplaceActionPath": "replace-aggregate",
+        "alternateAggregateApis": [
+          {
+            "code": "GET_SCENE_ROOT",
+            "name": "查询场景主实体",
+            "method": "GET",
+            "path": "/scenes/{id}/root",
+            "requestScope": "NONE",
+            "responseScope": "ROOT_ENTITY_ONLY",
+            "resultType": "ApiResponse<SceneRootDTO>",
+            "description": "只返回 scene_main 主实体字段，不内嵌产品清单、竞对和团队成员。"
+          },
+          {
+            "code": "CREATE_SCENE_ROOT",
+            "name": "创建场景主实体",
+            "method": "POST",
+            "path": "/scenes/root",
+            "requestScope": "ROOT_ENTITY_ONLY",
+            "responseScope": "ROOT_ENTITY_ONLY",
+            "resultType": "ApiResponse<SceneRootDTO>",
+            "description": "只创建 scene_main 主实体，产品清单、竞对和团队成员后续通过子实体接口维护。"
+          },
+          {
+            "code": "PATCH_SCENE_AGGREGATE",
+            "name": "增量更新完整场景聚合",
+            "method": "PATCH",
+            "path": "/scenes/{id}/aggregate",
+            "requestScope": "FULL_AGGREGATE_PATCH",
+            "responseScope": "FULL_AGGREGATE",
+            "resultType": "ApiResponse<SceneDTO>",
+            "description": "显式增量更新完整聚合，允许同时提交主实体和子实体变更。"
+          },
+          {
+            "code": "REPLACE_SCENE_AGGREGATE",
+            "name": "替换完整场景聚合",
+            "method": "POST",
+            "path": "/scenes/{id}/replace-aggregate",
+            "requestScope": "FULL_AGGREGATE_REPLACE",
+            "responseScope": "FULL_AGGREGATE",
+            "resultType": "ApiResponse<SceneDTO>",
+            "description": "显式替换完整聚合，整体替换主实体与子实体。"
+          }
+        ]
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "MASTER_DETAIL",
+      "nameField": "scene_name_customer",
+      "statusField": "status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "APPLICATION",
+      "defaultSort": {
+        "field": "created_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "scene",
+        "name": "场景主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_scene",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "scene_no",
+            "name": "场景编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.scene_no"
+          },
+          {
+            "code": "customers_id",
+            "name": "客户ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "customers",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "customer_name",
+                  "localCode": "customer_name",
+                  "displayRole": "NAME"
+                },
+                {
+                  "refFieldCode": "primary_customer_name",
+                  "localCode": "primary_customer_name",
+                  "displayRole": "EXTRA"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true,
+            "i18nKey": "bo.scenes.field.customers_id"
+          },
+          {
+            "code": "customer_name",
+            "name": "业务主体客户",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.customer_name"
+          },
+          {
+            "code": "primary_customer_name",
+            "name": "一级客户",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.primary_customer_name"
+          },
+          {
+            "code": "scene_name_dept",
+            "name": "场景名称-部门标准",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.scene_name_dept"
+          },
+          {
+            "code": "scene_name_customer",
+            "name": "场景名称-客户标准",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NAME",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.scene_name_customer"
+          },
+          {
+            "code": "business_name",
+            "name": "业务名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.scenes.field.business_name"
+          },
+          {
+            "code": "scene_category",
+            "name": "场景分类",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.scenes.field.scene_category"
+          },
+          {
+            "code": "sales_owner_id",
+            "name": "销售负责人ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "sales_owner_name",
+                  "displayRole": "NAME"
+                },
+                {
+                  "refFieldCode": "department_code",
+                  "localCode": "sales_owner_department_code",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "department_name",
+                  "localCode": "sales_owner_department_name",
+                  "displayRole": "EXTRA"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": true,
+            "i18nKey": "bo.scenes.field.sales_owner_id"
+          },
+          {
+            "code": "sales_owner_name",
+            "name": "销售负责人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.sales_owner_name"
+          },
+          {
+            "code": "sales_owner_department_code",
+            "name": "销售负责人部门编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.sales_owner_department_code"
+          },
+          {
+            "code": "sales_owner_department_name",
+            "name": "销售负责人部门名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false,
+            "i18nKey": "bo.scenes.field.sales_owner_department_name"
+          },
+          {
+            "code": "status",
+            "name": "场景状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true,
+            "defaultValue": "ACTIVE",
+            "i18nKey": "bo.scenes.field.status"
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "scene-product",
+        "name": "场景产品清单",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_scene_product",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "products_id",
+            "name": "产品ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "products",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "product_model",
+                  "localCode": "product_model",
+                  "displayRole": "NAME"
+                },
+                {
+                  "refFieldCode": "product_category",
+                  "localCode": "product_category",
+                  "displayRole": "EXTRA"
+                },
+                {
+                  "refFieldCode": "product_series",
+                  "localCode": "product_series",
+                  "displayRole": "EXTRA"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "product_model",
+            "name": "产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "product_category",
+            "name": "产品类别",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "product_series",
+            "name": "产品系列",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "our_stage",
+            "name": "我司阶段",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "lifecycle_start_date",
+            "name": "生命周期开始时间(预计)",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "lifecycle_end_date",
+            "name": "生命周期结束时间(预计)",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "lifecycle_remaining_years",
+            "name": "生命周期剩余时间(预计)",
+            "type": "DECIMAL",
+            "precision": 5,
+            "scale": 3,
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "next_bid_date",
+            "name": "下次招标时间",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "current_progress",
+            "name": "进展说明",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "parentEntityCode": "scene",
+        "parentRefField": "scene_id",
+        "routeSegment": "products",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_AGGREGATE",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "CASCADE_CHILDREN",
+          "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+          "detailEmbedEntities": [
+            "scene-product-accessory",
+            "scene-annual-estimate",
+            "scene-product-team-member"
+          ],
+          "entityReplaceActionPath": "replace-aggregate",
+          "alternateEntityApis": [
+            {
+              "code": "GET_PRODUCT_AGGREGATE",
+              "name": "查询产品清单局部聚合",
+              "method": "GET",
+              "path": "/scenes/{id}/products/{subId}/aggregate",
+              "requestScope": "NONE",
+              "responseScope": "ENTITY_AGGREGATE",
+              "resultType": "ApiResponse<SceneProductAggregateDTO>",
+              "description": "返回产品行本体及其典配、年度测算。"
+            },
+            {
+              "code": "PATCH_PRODUCT_AGGREGATE",
+              "name": "增量更新产品清单局部聚合",
+              "method": "PATCH",
+              "path": "/scenes/{id}/products/{subId}/aggregate",
+              "requestScope": "ENTITY_AGGREGATE_PATCH",
+              "responseScope": "ENTITY_AGGREGATE",
+              "resultType": "ApiResponse<SceneProductAggregateDTO>",
+              "description": "显式增量更新产品行本体及其典配、年度测算。"
+            }
+          ]
+        }
+      },
+      {
+        "code": "scene-product-accessory",
+        "name": "场景产品典配",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_scene_product_accessory",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "典配ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "line_id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "products_id",
+            "name": "配件产品ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "products",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "product_model",
+                  "localCode": "accessory_model",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "accessory_model",
+            "name": "配件型号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "ratio",
+            "name": "配比",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "parentEntityCode": "scene-product",
+        "parentRefField": "line_id",
+        "routeSegment": "product-accessory",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      },
+      {
+        "code": "scene-product-team-member",
+        "name": "场景产品团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_scene_product_team_member",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "成员关联ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "line_id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限设置",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "related_teams",
+            "name": "关联模块团队",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "parentEntityCode": "scene-product",
+        "parentRefField": "line_id",
+        "routeSegment": "team-members",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      },
+      {
+        "code": "scene-annual-estimate",
+        "name": "场景年度测算",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_scene_annual_estimate",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "测算ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "line_id",
+            "name": "产品行ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "year",
+            "name": "年份",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "customer_procurement_amount",
+            "name": "客户采购规模（万元）",
+            "type": "DECIMAL",
+            "precision": 10,
+            "scale": 4,
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "estimated_share",
+            "name": "预计我司份额（%）",
+            "type": "DECIMAL",
+            "precision": 10,
+            "scale": 4,
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "estimated_sales_amount",
+            "name": "预计我司销量（万元）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "parentEntityCode": "scene-product",
+        "parentRefField": "line_id",
+        "routeSegment": "annual-estimate",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      },
+      {
+        "code": "scene-rival-summary",
+        "name": "场景竞对汇总",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_scene_rival_summary",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "竞对汇总ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "year",
+            "name": "年份",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "yearly_procurement_scale",
+            "name": "当年客户总采购金额",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "kaijie_estimated_sales",
+            "name": "凯捷预计销量",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "kaijie_estimated_share",
+            "name": "凯捷预计份额",
+            "type": "DECIMAL",
+            "precision": 10,
+            "scale": 4,
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "parentEntityCode": "scene",
+        "parentRefField": "scene_id",
+        "routeSegment": "rival-summary",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      },
+      {
+        "code": "scene-rival-detail",
+        "name": "场景竞对明细",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_scene_rival_detail",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "竞对ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "summary_id",
+            "name": "竞对汇总ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "competitor_id",
+            "name": "竞争对手ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "competitors",
+              "refFieldCode": "id",
+              "displayFields": [
+                {
+                  "refFieldCode": "competitor_name",
+                  "localCode": "rival_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "rival_name",
+            "name": "竞争对手",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "rival_share",
+            "name": "竞对份额（%）",
+            "type": "DECIMAL",
+            "precision": 10,
+            "scale": 4,
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "rival_sales_amount",
+            "name": "竞对销量（万元）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "rival_tag",
+            "name": "竞对标签",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "rival_description",
+            "name": "竞对说明",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "parentEntityCode": "scene-rival-summary",
+        "parentRefField": "summary_id",
+        "routeSegment": "rival-details",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      },
+      {
+        "code": "scene-team-member",
+        "name": "场景团队成员",
+        "isPrimary": false,
+        "aggregateRole": "SUB_ENTITY",
+        "tableName": "crm_scene_team_member",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "成员关联ID",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "scene_id",
+            "name": "场景ID",
+            "type": "LONG",
+            "isPk": false,
+            "semanticRole": "PARENT_REF",
+            "filterable": false
+          },
+          {
+            "code": "user_id",
+            "name": "成员ID",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_REF",
+            "crossBoRef": {
+              "refBoCode": "users",
+              "refFieldCode": "user_id",
+              "displayFields": [
+                {
+                  "refFieldCode": "staff_name",
+                  "localCode": "member_name",
+                  "displayRole": "NAME"
+                }
+              ],
+              "relationType": "MANY_TO_ONE"
+            },
+            "filterable": false
+          },
+          {
+            "code": "member_name",
+            "name": "成员姓名",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "CROSS_BO_DISPLAY",
+            "filterable": false
+          },
+          {
+            "code": "member_role",
+            "name": "角色",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "permission",
+            "name": "权限设置",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "remark",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "related_teams",
+            "name": "关联模块团队",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ],
+        "parentEntityCode": "scene",
+        "parentRefField": "scene_id",
+        "routeSegment": "team-members",
+        "cascadeDelete": true,
+        "entityApiPolicy": {
+          "listProjectionScope": "ENTITY_ONLY",
+          "readScope": "ENTITY_ONLY",
+          "createScope": "ENTITY_ONLY",
+          "updateScope": "ENTITY_ONLY",
+          "deleteScope": "ENTITY_ONLY"
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "scenes 首版 MODEL 设计态 Fragment"
+  ]
+}

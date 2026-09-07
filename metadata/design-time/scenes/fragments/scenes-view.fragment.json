@@ -1,0 +1,2111 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scenes",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "fieldViews": [
+      {
+        "entityCode": "scene",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_no",
+        "sortable": true,
+        "columnWidth": 130,
+        "hidden": true,
+        "order": 15,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "customers_id",
+        "displayName": "客户名称",
+        "sortable": false,
+        "columnWidth": 220,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "customers",
+        "refField": "customer_name",
+        "placeholder": "请选择客户",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "customer_name",
+        "sortable": true,
+        "columnWidth": 220,
+        "order": 25,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "primary_customer_name",
+        "sortable": true,
+        "columnWidth": 220,
+        "order": 27,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_name_dept",
+        "sortable": true,
+        "columnWidth": 210,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入场景名称",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_name_customer",
+        "sortable": true,
+        "columnWidth": 190,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入场景名称-客户标准",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "business_name",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "scene_business_name",
+        "placeholder": "请选择业务名称",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "scene_category",
+        "sortable": true,
+        "columnWidth": 90,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "scene_category",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "sales_owner_id",
+        "displayName": "销售负责人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择销售负责人",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "sales_owner_name",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 75,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": false,
+        "dataType": "string",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "status",
+        "sortable": false,
+        "columnWidth": 90,
+        "hidden": true,
+        "order": 170,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "scene_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "created_time",
+        "sortable": true,
+        "columnWidth": 140,
+        "format": "datetime",
+        "hidden": true,
+        "order": 180,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "scene",
+        "fieldCode": "updated_time",
+        "sortable": true,
+        "columnWidth": 140,
+        "format": "datetime",
+        "hidden": true,
+        "order": 190,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "id",
+        "displayName": "序号",
+        "order": 10,
+        "columnWidth": 70,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "scene_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "products_id",
+        "displayName": "产品型号",
+        "order": 30,
+        "columnWidth": 150,
+        "formType": "OBJECT_SELECT",
+        "refObject": "products",
+        "refField": "product_model",
+        "placeholder": "请选择产品型号",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "product_model",
+        "sortable": true,
+        "order": 40,
+        "columnWidth": 150,
+        "editableInForm": false,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string",
+        "formType": "INPUT",
+        "showInList": true,
+        "showInDetail": true
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "product_category",
+        "order": 50,
+        "columnWidth": 110,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "product_series",
+        "order": 60,
+        "columnWidth": 160,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "our_stage",
+        "sortable": true,
+        "order": 70,
+        "columnWidth": 130,
+        "formType": "SELECT",
+        "dictCode": "scene_our_stage",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_start_date",
+        "sortable": true,
+        "order": 80,
+        "columnWidth": 160,
+        "format": "date",
+        "formType": "DATE",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_end_date",
+        "sortable": true,
+        "order": 90,
+        "columnWidth": 160,
+        "format": "date",
+        "formType": "DATE",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_remaining_years",
+        "order": 100,
+        "columnWidth": 120,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "next_bid_date",
+        "sortable": true,
+        "order": 110,
+        "columnWidth": 130,
+        "format": "date",
+        "formType": "DATE",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "future_procurement_amount",
+        "computedField": {
+          "kind": "SUM",
+          "sources": [
+            {
+              "entityCode": "scene-annual-estimate",
+              "fieldCode": "customer_procurement_amount"
+            }
+          ],
+          "description": "汇总年度测算中的客户采购规模。"
+        },
+        "sortable": true,
+        "order": 120,
+        "columnWidth": 150,
+        "format": "currency",
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_estimated_sales",
+        "computedField": {
+          "kind": "SUM",
+          "sources": [
+            {
+              "entityCode": "scene-annual-estimate",
+              "fieldCode": "estimated_sales_amount"
+            }
+          ],
+          "description": "汇总年度测算中的预计销量。"
+        },
+        "sortable": true,
+        "order": 145,
+        "columnWidth": 160,
+        "format": "currency",
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "lifecycle_estimated_share",
+        "computedField": {
+          "kind": "RATIO",
+          "sources": [
+            {
+              "entityCode": "scene-annual-estimate",
+              "fieldCode": "estimated_sales_amount",
+              "role": "NUMERATOR"
+            },
+            {
+              "entityCode": "scene-annual-estimate",
+              "fieldCode": "customer_procurement_amount",
+              "role": "DENOMINATOR"
+            }
+          ],
+          "expression": "sum(estimated_sales_amount) / sum(customer_procurement_amount)",
+          "description": "生命周期预计份额，由生命周期预计销量除以未来客户采购规模得到。"
+        },
+        "sortable": true,
+        "order": 146,
+        "columnWidth": 160,
+        "format": "percent",
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "scene-product",
+        "fieldCode": "current_progress",
+        "order": 150,
+        "columnWidth": 160,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "line_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "products_id",
+        "displayName": "配件型号",
+        "order": 30,
+        "columnWidth": 150,
+        "formType": "OBJECT_SELECT",
+        "refObject": "products",
+        "refField": "product_model",
+        "placeholder": "请选择配件产品型号",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "accessory_model",
+        "order": 40,
+        "columnWidth": 150,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product-accessory",
+        "fieldCode": "ratio",
+        "order": 50,
+        "columnWidth": 90,
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "line_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "year",
+        "sortable": true,
+        "order": 30,
+        "columnWidth": 90,
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "customer_procurement_amount",
+        "sortable": true,
+        "order": 40,
+        "columnWidth": 160,
+        "format": "currency",
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "estimated_share",
+        "sortable": true,
+        "order": 50,
+        "columnWidth": 140,
+        "format": "percent",
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "estimated_sales_amount",
+        "sortable": true,
+        "order": 60,
+        "columnWidth": 150,
+        "format": "currency",
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "scene_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "year",
+        "sortable": true,
+        "order": 30,
+        "columnWidth": 90,
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "yearly_procurement_scale",
+        "sortable": true,
+        "order": 40,
+        "columnWidth": 140,
+        "format": "currency",
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "kaijie_estimated_sales",
+        "sortable": true,
+        "order": 50,
+        "columnWidth": 140,
+        "format": "currency",
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "kaijie_estimated_share",
+        "sortable": true,
+        "order": 60,
+        "columnWidth": 120,
+        "format": "percent",
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "id",
+        "order": 5,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "competitor_id",
+        "order": 10,
+        "editableInForm": true,
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "competitors",
+        "refField": "competitor_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "summary_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "rival_name",
+        "order": 30,
+        "columnWidth": 130,
+        "editableInForm": false,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string",
+        "formType": "INPUT",
+        "showInList": true,
+        "showInDetail": true
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "rival_share",
+        "sortable": true,
+        "order": 60,
+        "columnWidth": 120,
+        "format": "percent",
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "rival_sales_amount",
+        "sortable": true,
+        "order": 70,
+        "columnWidth": 140,
+        "format": "currency",
+        "formType": "NUMBER",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "GT",
+            "label": "大于"
+          },
+          {
+            "value": "GTE",
+            "label": "大于等于"
+          },
+          {
+            "value": "LT",
+            "label": "小于"
+          },
+          {
+            "value": "LTE",
+            "label": "小于等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "rival_tag",
+        "order": 80,
+        "columnWidth": 120,
+        "formType": "INPUT",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-rival-detail",
+        "fieldCode": "rival_description",
+        "order": 90,
+        "columnWidth": 200,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "scene_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "user_id",
+        "displayName": "成员",
+        "order": 30,
+        "columnWidth": 120,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择成员",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "member_name",
+        "order": 40,
+        "columnWidth": 120,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "member_role",
+        "order": 50,
+        "columnWidth": 120,
+        "formType": "SELECT",
+        "exportable": true,
+        "dictCode": "scene_member_role",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "permission",
+        "order": 60,
+        "columnWidth": 90,
+        "formType": "SELECT",
+        "dictCode": "scene_team_permission",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "remark",
+        "order": 70,
+        "columnWidth": 220,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-team-member",
+        "fieldCode": "related_teams",
+        "order": 80,
+        "columnWidth": 220,
+        "formType": "MULTI_SELECT",
+        "dictCode": "scene_related_team",
+        "exportable": true,
+        "importable": true,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "id",
+        "order": 10,
+        "editableInForm": false,
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "line_id",
+        "order": 20,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "user_id",
+        "displayName": "成员",
+        "order": 30,
+        "columnWidth": 120,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择成员",
+        "exportable": true,
+        "importable": true,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "member_name",
+        "order": 40,
+        "columnWidth": 120,
+        "editableInForm": false,
+        "exportable": true,
+        "importable": false,
+        "formType": "INPUT",
+        "dataType": "string",
+        "showInList": true,
+        "showInDetail": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "STARTS_WITH",
+            "label": "开头是"
+          },
+          {
+            "value": "ENDS_WITH",
+            "label": "结尾是"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ]
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "member_role",
+        "order": 50,
+        "columnWidth": 120,
+        "formType": "SELECT",
+        "exportable": true,
+        "dictCode": "scene_member_role",
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "permission",
+        "order": 60,
+        "columnWidth": 90,
+        "formType": "SELECT",
+        "dictCode": "scene_team_permission",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "remark",
+        "order": 70,
+        "columnWidth": 220,
+        "formType": "TEXTAREA",
+        "exportable": true,
+        "importable": true,
+        "queryable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          },
+          {
+            "value": "IS_NULL",
+            "label": "为空"
+          },
+          {
+            "value": "IS_NOT_NULL",
+            "label": "不为空"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "scene-product-team-member",
+        "fieldCode": "related_teams",
+        "order": 80,
+        "columnWidth": 220,
+        "formType": "MULTI_SELECT",
+        "dictCode": "scene_related_team",
+        "exportable": true,
+        "importable": true,
+        "dataType": "string"
+      }
+    ]
+  },
+  "changeNote": [
+    "scenes 首版 VIEW 设计态 Fragment"
+  ]
+}

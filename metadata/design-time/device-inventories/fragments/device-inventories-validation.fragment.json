@@ -1,0 +1,137 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "device-inventories",
+  "metaType": "VALIDATION",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_no",
+        "required": true,
+        "max": 32,
+        "unique": true,
+        "message": "盘点单号不能为空且不超过32字符，且需唯一"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_type",
+        "required": true,
+        "max": 32,
+        "enum": [
+          {"value": "MANUAL", "label": "手工盘点"},
+          {"value": "IMPORT", "label": "导入盘点"}
+        ],
+        "message": "盘点类型必须为 MANUAL 或 IMPORT"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "device_count",
+        "required": true,
+        "min": 0,
+        "message": "设备数不能为空且为非负整数"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_status",
+        "required": true,
+        "max": 10,
+        "enum": [
+          {"value": "DRAFT", "label": "草稿"}
+        ],
+        "message": "盘点状态必须为 DRAFT"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "quote_no",
+        "max": 128
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "opportunity_codes",
+        "max": 300
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "inventory_time",
+        "required": true,
+        "message": "盘点时间不能为空"
+      },
+      {
+        "entityCode": "device-inventory",
+        "fieldCode": "remarks",
+        "max": 500
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "id",
+        "required": true
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "parent_id",
+        "required": true
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "device_serial_no",
+        "required": true,
+        "max": 64,
+        "message": "设备序列号不能为空且不超过64字符"
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "abnormal_desc",
+        "max": 500
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "product_model",
+        "max": 128
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "product_line",
+        "max": 64
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "customer_name",
+        "max": 200
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "fop_customer_name",
+        "max": 200
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "maintenance_service",
+        "max": 128
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "renewal_days",
+        "min": 0
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "service_list_price",
+        "min": 0
+      },
+      {
+        "entityCode": "device-inventory-detail",
+        "fieldCode": "contract_no",
+        "max": 64
+      }
+    ]
+  }
+}

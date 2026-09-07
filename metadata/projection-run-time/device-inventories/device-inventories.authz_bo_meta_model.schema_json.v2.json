@@ -1,0 +1,519 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='device-inventories'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'device-inventories'",
+    "generated_from": "device-inventories.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.574953+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "device-inventory",
+        "name": "盘点单主实体",
+        "isPrimary": true,
+        "tableName": "crm_device_inventory",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "inventory_status",
+          "inventory_type",
+          "created_by"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "inventory_no",
+            "name": "盘点单号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "inventoryNo",
+            "columnName": "inventory_no",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "inventory_type",
+            "name": "盘点类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "inventoryType",
+            "columnName": "inventory_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "device_count",
+            "name": "设备数",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "deviceCount",
+            "columnName": "device_count",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "inventory_status",
+            "name": "盘点状态",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "inventoryStatus",
+            "columnName": "inventory_status",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "quote_no",
+            "name": "报价单号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "quoteNo",
+            "columnName": "quote_no",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "opportunity_codes",
+            "name": "商机编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "opportunityCodes",
+            "columnName": "opportunity_codes",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "inventory_time",
+            "name": "盘点时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "inventoryTime",
+            "columnName": "inventory_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "remarks",
+            "name": "备注",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "remarks",
+            "columnName": "remarks",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ]
+      },
+      {
+        "code": "device-inventory-detail",
+        "name": "盘点明细",
+        "isPrimary": false,
+        "tableName": "crm_device_inventory_detail",
+        "rowLevelRuleEntries": [
+          "tenant_code",
+          "customer_name",
+          "fop_customer_name",
+          "contract_no"
+        ],
+        "cascadeDelete": true,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "明细主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "parent_id",
+            "name": "所属盘点单ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "parentId",
+            "columnName": "parent_id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "device_serial_no",
+            "name": "设备序列号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "deviceSerialNo",
+            "columnName": "device_serial_no",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "abnormal_desc",
+            "name": "异常说明",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "abnormalDesc",
+            "columnName": "abnormal_desc",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_model",
+            "name": "产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "productModel",
+            "columnName": "product_model",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "product_line",
+            "name": "产品线",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "productLine",
+            "columnName": "product_line",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "customer_name",
+            "name": "下级客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "customerName",
+            "columnName": "customer_name",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "fop_customer_name",
+            "name": "FOP客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "fopCustomerName",
+            "columnName": "fop_customer_name",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "warranty_start_date",
+            "name": "保修开始日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "warrantyStartDate",
+            "columnName": "warranty_start_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "warranty_end_date",
+            "name": "保修结束日期",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "warrantyEndDate",
+            "columnName": "warranty_end_date",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "maintenance_service",
+            "name": "维保服务",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "maintenanceService",
+            "columnName": "maintenance_service",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "renewal_days",
+            "name": "续保天数",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "renewalDays",
+            "columnName": "renewal_days",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "service_list_price",
+            "name": "服务 List 价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "fieldName": "serviceListPrice",
+            "columnName": "service_list_price",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "MASK"
+          },
+          {
+            "code": "contract_no",
+            "name": "合同号",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "contractNo",
+            "columnName": "contract_no",
+            "fieldControl": true,
+            "filterable": true,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "ecp_product_permission",
+            "name": "ECP产品权限",
+            "type": "BOOLEAN",
+            "isPk": false,
+            "fieldName": "ecpProductPermission",
+            "columnName": "ecp_product_permission",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ],
+        "routeSegment": "details",
+        "parentEntityCode": "device-inventory"
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "创建",
+        "scope": "BO",
+        "act_aliases": "save,copy",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除盘点单",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出盘点设备",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "QUOTE",
+        "name": "一键报价",
+        "scope": "BO",
+        "act_aliases": "quote",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "batch-delete-details,batch-set-maintenance,batch-set-warranty,manual-sessions-dirty,manual-sessions-commit,import-sessions-dirty,import-sessions-commit",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "INVENTORY",
+        "name": "手工盘点会话",
+        "scope": "BO",
+        "act_aliases": "manual-sessions",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "manual-sessions-items,import-sessions-page-query,sessions-product-models,import-sessions-progress,read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "IMPORT",
+        "name": "下载导入模板",
+        "scope": "BO",
+        "act_aliases": "import-template,import-parse-header",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST_DEVICE_INVENTORY_DETAIL",
+        "name": "查询盘点明细列表",
+        "scope": "ENTITY",
+        "act_aliases": "list-device-inventory-detail",
+        "primaryDataAction": "READ",
+        "entityCode": "device-inventory-detail"
+      },
+      {
+        "code": "READ_DEVICE_INVENTORY_DETAIL",
+        "name": "查看盘点明细详情",
+        "scope": "ENTITY",
+        "act_aliases": "read-device-inventory-detail",
+        "primaryDataAction": "READ",
+        "entityCode": "device-inventory-detail"
+      },
+      {
+        "code": "CREATE_DEVICE_INVENTORY_DETAIL",
+        "name": "新建盘点明细",
+        "scope": "ENTITY",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE",
+        "entityCode": "device-inventory-detail"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'device-inventories' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'device-inventories' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + device-inventories_bo_meta_id + CREATE",
+      "RES_DATA_BO + device-inventories_bo_meta_id + DELETE",
+      "RES_DATA_BO + device-inventories_bo_meta_id + EXPORT",
+      "RES_DATA_BO + device-inventories_bo_meta_id + QUOTE",
+      "RES_DATA_BO + device-inventories_bo_meta_id + UPDATE",
+      "RES_DATA_BO + device-inventories_bo_meta_id + INVENTORY",
+      "RES_DATA_BO + device-inventories_bo_meta_id + READ",
+      "RES_DATA_BO + device-inventories_bo_meta_id + IMPORT",
+      "RES_DATA_BO + device-inventories_bo_meta_id + LIST",
+      "RES_DATA_BO + device-inventories_bo_meta_id + LIST_DEVICE_INVENTORY_DETAIL",
+      "RES_DATA_BO + device-inventories_bo_meta_id + READ_DEVICE_INVENTORY_DETAIL",
+      "RES_DATA_BO + device-inventories_bo_meta_id + CREATE_DEVICE_INVENTORY_DETAIL"
+    ]
+  }
+}

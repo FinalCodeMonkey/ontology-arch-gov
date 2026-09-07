@@ -1,0 +1,3223 @@
+{
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "releaseVersion": "1.0.0",
+  "releasedAt": "2026-09-07T13:15:16.831916+00:00",
+  "generatedBy": "bo-ontology-publish-gen.py",
+  "links": [
+    {
+      "code": "CUSTOMER_HAS_OPPORTUNITY",
+      "name": "客户拥有商机",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "business_customer_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "商机归属客户",
+      "cardinality": "ONE_TO_MANY",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "客户到商机的主业务链路，用于客户 360、管道分析和流失风险推理。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity",
+      "targetFieldCode": "business_customer_id"
+    },
+    {
+      "code": "CUSTOMER_HAS_ACTIVITY",
+      "name": "客户有销售活动",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "sales-activities",
+        "entityCode": "visit-record",
+        "fieldCode": "parent_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "销售活动归属客户",
+      "cardinality": "ONE_TO_MANY",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "客户到销售活动的链路，用于客户活跃度、流失风险推理。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "sales-activities",
+      "targetEntityCode": "visit-record",
+      "targetFieldCode": "parent_id"
+    },
+    {
+      "code": "CUSTOMER_HAS_SCENE",
+      "name": "客户有场景",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "scenes",
+        "entityCode": "scene",
+        "fieldCode": "customers_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "场景归属客户",
+      "cardinality": "ONE_TO_MANY",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "客户到场景的链路，用于场景到商机转化分析。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "scenes",
+      "targetEntityCode": "scene",
+      "targetFieldCode": "customers_id"
+    },
+    {
+      "code": "CUSTOMER_HAS_RELATION_PROFILE",
+      "name": "客户有客户关系治理记录",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "customer-relations",
+        "entityCode": "customer-relation",
+        "fieldCode": "customer_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "关系治理记录关联客户",
+      "cardinality": "ONE_TO_ONE",
+      "linkKind": "OWNERSHIP",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "客户到客户关系治理记录的 1:1 链路，用于客户运营画像。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "customer-relations",
+      "targetEntityCode": "customer-relation",
+      "targetFieldCode": "customer_id"
+    },
+    {
+      "code": "OPPORTUNITY_HAS_TEAM_MEMBER",
+      "name": "商机有团队成员",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "users",
+        "entityCode": "dap-sys-user",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "用户参与商机",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "TEAM_MEMBERSHIP",
+      "materialization": "ASSOCIATION_ENTITY",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "商机团队成员关联链路。materialization=ASSOCIATION_ENTITY 表示通过 opportunity-team-member 子实体实现。",
+      "sourceBoCode": "opportunities",
+      "sourceEntityCode": "opportunity",
+      "sourceFieldCode": "id",
+      "targetBoCode": "users",
+      "targetEntityCode": "dap-sys-user",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "OPPORTUNITY_COMPETES_WITH",
+      "name": "商机面临竞争对手",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "competitors",
+        "entityCode": "competitor",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "竞争对手参与商机",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "COMPETITION",
+      "materialization": "ASSOCIATION_ENTITY",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "商机与竞争对手的竞争关系链路，用于竞争态势分析。",
+      "sourceBoCode": "opportunities",
+      "sourceEntityCode": "opportunity",
+      "sourceFieldCode": "id",
+      "targetBoCode": "competitors",
+      "targetEntityCode": "competitor",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "SCENE_GENERATES_OPPORTUNITY",
+      "name": "场景孵化商机",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "商机来自场景",
+      "cardinality": "ONE_TO_MANY",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "ASSOCIATION_ENTITY",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "场景到商机的孵化链路。通过 opportunity-scene 子实体记录关联。",
+      "sourceBoCode": "scenes",
+      "sourceEntityCode": "scene",
+      "sourceFieldCode": "id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "CUSTOMER_HAS_TEAM_MEMBER",
+      "name": "客户有关联团队成员",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "users",
+        "entityCode": "dap-sys-user",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "用户服务客户",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "TEAM_MEMBERSHIP",
+      "materialization": "ASSOCIATION_ENTITY",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "客户团队成员的关联链路。通过 customer-relations 的子实体 customer-team-member 实现。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "users",
+      "targetEntityCode": "dap-sys-user",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "OPPORTUNITY_HAS_PRODUCT",
+      "name": "商机包含产品",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "products",
+        "entityCode": "product",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "产品出现于商机",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "ASSOCIATION",
+      "materialization": "ASSOCIATION_ENTITY",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "商机产品清单关联链路。通过 opportunity-product 子实体实现。",
+      "sourceBoCode": "opportunities",
+      "sourceEntityCode": "opportunity",
+      "sourceFieldCode": "id",
+      "targetBoCode": "products",
+      "targetEntityCode": "product",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "CUSTOMER_HAS_CONTACT",
+      "name": "客户拥有联系人",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "contacts",
+        "entityCode": "customer-contact",
+        "fieldCode": "customer_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "联系人归属客户",
+      "cardinality": "ONE_TO_MANY",
+      "linkKind": "OWNERSHIP",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "客户到联系人的目录链路，用于客户 360 视图中的联系人信息聚合。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "contacts",
+      "targetEntityCode": "customer-contact",
+      "targetFieldCode": "customer_id"
+    },
+    {
+      "code": "OPPORTUNITY_HAS_PARENT",
+      "name": "商机关联父商机",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "fieldCode": "parent_opportunity_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "父商机拥有子商机",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "HIERARCHY",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "OC 主子项目层级链路，用于框架协议商机拆分和管道金额汇总。",
+      "sourceBoCode": "opportunities",
+      "sourceEntityCode": "opportunity",
+      "sourceFieldCode": "id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity",
+      "targetFieldCode": "parent_opportunity_id"
+    },
+    {
+      "code": "FOP_BELONGS_TO_CUSTOMER",
+      "name": "业务主体客户归属一级客户",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "customers",
+        "entityCode": "customer",
+        "fieldCode": "parent_customer_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "一级客户拥有业务主体客户",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "HIERARCHY",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "二级业务主体客户(FOP_CUSTOMER)归属一级客户(CUSTOMER)的层级链路，用于集团客户管理和客户树形结构遍历。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "customers",
+      "targetEntityCode": "customer",
+      "targetFieldCode": "parent_customer_id"
+    },
+    {
+      "code": "CUSTOMER_BELONGS_TO_FOP",
+      "name": "合同主体归属业务主体",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "customers",
+        "entityCode": "customer",
+        "fieldCode": "fop_customer_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "业务主体拥有合同主体",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "HIERARCHY",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "合同主体客户(三级)与业务主体客户(二级)的归属链路，用于客户层级管理和关系穿透。",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "customer",
+      "sourceFieldCode": "id",
+      "targetBoCode": "customers",
+      "targetEntityCode": "customer",
+      "targetFieldCode": "fop_customer_id"
+    },
+    {
+      "code": "SCENE_HAS_ARCH",
+      "name": "场景关联场景架构",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "scene-archs",
+        "entityCode": "scene-arch",
+        "fieldCode": "scene_id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "场景架构归属场景",
+      "cardinality": "ONE_TO_MANY",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "场景到场景架构的链路，用于场景技术方案和架构设计管理。",
+      "sourceBoCode": "scenes",
+      "sourceEntityCode": "scene",
+      "sourceFieldCode": "id",
+      "targetBoCode": "scene-archs",
+      "targetEntityCode": "scene-arch",
+      "targetFieldCode": "scene_id"
+    },
+    {
+      "code": "CHANGE_HAS_APPROVAL",
+      "name": "变更关联审批记录",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "approval-records",
+        "entityCode": "approval-record",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "审批记录关联变更",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "BUSINESS_FLOW",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "变更记录到审批记录的业务流链路，用于变更审批流程追溯。",
+      "sourceBoCode": "change-records",
+      "sourceEntityCode": "change-record",
+      "sourceFieldCode": "approval_record_id",
+      "targetBoCode": "approval-records",
+      "targetEntityCode": "approval-record",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "SCENE_HAS_COMPETITOR",
+      "name": "场景面临竞争对手",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "competitors",
+        "entityCode": "competitor",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "竞争对手参与场景",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "COMPETITION",
+      "materialization": "ASSOCIATION_ENTITY",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "场景与竞争对手的竞争关系链路。通过 scene-rival-detail 子实体实现，用于场景竞争态势分析。",
+      "sourceBoCode": "scenes",
+      "sourceEntityCode": "scene",
+      "sourceFieldCode": "id",
+      "targetBoCode": "competitors",
+      "targetEntityCode": "competitor",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "ACTIVITY_HAS_CONTACT",
+      "name": "销售活动关联联系人",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "contacts",
+        "entityCode": "customer-contact",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "联系人参与销售活动",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "ASSOCIATION",
+      "materialization": "DERIVED",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "销售活动到联系人的关联链路。通过 contact_ids_snapshot 快照字段记录（逗号分隔ID列表），运行时解析为多对多关系，用于活动参与人分析。",
+      "sourceBoCode": "sales-activities",
+      "sourceEntityCode": "visit-record",
+      "sourceFieldCode": "contact_ids_snapshot",
+      "targetBoCode": "contacts",
+      "targetEntityCode": "customer-contact",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "ACTIVITY_HAS_SCENE",
+      "name": "销售活动关联场景",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "scenes",
+        "entityCode": "scene",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "场景关联销售活动",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "ASSOCIATION",
+      "materialization": "DERIVED",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "销售活动到场景的关联链路。通过 scene_ids_snapshot 快照字段记录（逗号分隔ID列表），运行时解析为多对多关系，用于场景活动追踪。",
+      "sourceBoCode": "sales-activities",
+      "sourceEntityCode": "visit-record",
+      "sourceFieldCode": "scene_ids_snapshot",
+      "targetBoCode": "scenes",
+      "targetEntityCode": "scene",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "SCENE_HAS_PRODUCT",
+      "name": "场景配置产品",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "products",
+        "entityCode": "product",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "产品配置于场景",
+      "cardinality": "MANY_TO_MANY",
+      "linkKind": "ASSOCIATION",
+      "materialization": "ASSOCIATION_ENTITY",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "场景到产品的配置链路。通过 scene-product 子实体实现，用于场景产品清单管理。",
+      "sourceBoCode": "scenes",
+      "sourceEntityCode": "scene",
+      "sourceFieldCode": "id",
+      "targetBoCode": "products",
+      "targetEntityCode": "product",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "TARGET_OWNS_CUSTOMER",
+      "name": "销售目标归属客户",
+      "source": "EXPLICIT",
+      "target": {
+        "boCode": "customers",
+        "entityCode": "customer",
+        "fieldCode": "id"
+      },
+      "direction": "SOURCE_TO_TARGET",
+      "inverseName": "客户关联销售目标",
+      "cardinality": "MANY_TO_ONE",
+      "linkKind": "OWNERSHIP",
+      "materialization": "FIELD_REF",
+      "queryable": true,
+      "traversable": true,
+      "authzMode": "BOTH_ENDPOINTS",
+      "description": "销售目标到客户的归属链路。当 owner_type 为客户类型时，通过 target_id 字段关联客户 BO，用于管道覆盖视图从目标聚合客户商机管道数据。",
+      "sourceBoCode": "sales-targets",
+      "sourceEntityCode": "target",
+      "sourceFieldCode": "owner_id",
+      "targetBoCode": "customers",
+      "targetEntityCode": "customer",
+      "targetFieldCode": "id"
+    },
+    {
+      "code": "INFERRED_APPROVAL_RECORDS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "approval-records",
+      "targetEntityCode": "approval-record",
+      "targetFieldCode": "submitter_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 approval-records.approval-record.submitter_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_BO_META_MODELS_HAS_DATA_DOMAINS",
+      "sourceBoCode": "data-domains",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "bo-meta-models",
+      "targetEntityCode": "authz-bo-meta-model",
+      "targetFieldCode": "data_domain_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 bo-meta-models.authz-bo-meta-model.data_domain_id CROSS_BO_REF → data-domains.id"
+    },
+    {
+      "code": "INFERRED_CHANGE_RECORDS_HAS_APPROVAL_RECORDS",
+      "sourceBoCode": "approval-records",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "change-records",
+      "targetEntityCode": "change-record",
+      "targetFieldCode": "approval_record_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "BUSINESS_FLOW",
+      "source": "INFERRED",
+      "description": "自动派生自 change-records.change-record.approval_record_id CROSS_BO_REF → approval-records.id"
+    },
+    {
+      "code": "INFERRED_CHANGE_RECORDS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "change-records",
+      "targetEntityCode": "change-record",
+      "targetFieldCode": "operator_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 change-records.change-record.operator_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_CONTACTS_HAS_CUSTOMERS",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "contacts",
+      "targetEntityCode": "customer-contact",
+      "targetFieldCode": "customer_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 contacts.customer-contact.customer_id CROSS_BO_REF → customers.id"
+    },
+    {
+      "code": "INFERRED_CONTACTS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "contacts",
+      "targetEntityCode": "customer-contact",
+      "targetFieldCode": "interaction_frequency_owner_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 contacts.customer-contact.interaction_frequency_owner_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_CUSTOMER_RELATIONS_HAS_CUSTOMERS",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "customer-relations",
+      "targetEntityCode": "customer-relation",
+      "targetFieldCode": "customer_id",
+      "cardinality": "ONE_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 customer-relations.customer-relation.customer_id CROSS_BO_REF → customers.id"
+    },
+    {
+      "code": "INFERRED_CUSTOMER_RELATIONS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "customer-relations",
+      "targetEntityCode": "customer-relation",
+      "targetFieldCode": "owner_user_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 customer-relations.customer-relation.owner_user_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_CUSTOMER_RELATIONS_HAS_ORGS",
+      "sourceBoCode": "orgs",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "department_code",
+      "targetBoCode": "customer-relations",
+      "targetEntityCode": "customer-relation",
+      "targetFieldCode": "department_code",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 customer-relations.customer-relation.department_code CROSS_BO_REF → orgs.department_code"
+    },
+    {
+      "code": "INFERRED_CUSTOMER_RELATIONS_HAS_COMPETITORS",
+      "sourceBoCode": "competitors",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "customer-relations",
+      "targetEntityCode": "customer-competition",
+      "targetFieldCode": "competitor_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 customer-relations.customer-competition.competitor_id CROSS_BO_REF → competitors.id"
+    },
+    {
+      "code": "INFERRED_CUSTOMERS_HAS_CUSTOMERS",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "customers",
+      "targetEntityCode": "customer",
+      "targetFieldCode": "parent_customer_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 customers.customer.parent_customer_id CROSS_BO_REF → customers.id"
+    },
+    {
+      "code": "INFERRED_DEVICE_INVENTORIES_HAS_DEVICES",
+      "sourceBoCode": "devices",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "device_serial_no",
+      "targetBoCode": "device-inventories",
+      "targetEntityCode": "device-inventory-detail",
+      "targetFieldCode": "device_serial_no",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "BUSINESS_FLOW",
+      "source": "INFERRED",
+      "description": "自动派生自 device-inventories.device-inventory-detail.device_serial_no CROSS_BO_REF → devices.device_serial_no"
+    },
+    {
+      "code": "INFERRED_OPERATION_LOGS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "operation-logs",
+      "targetEntityCode": "operation-log",
+      "targetFieldCode": "operator_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 operation-logs.operation-log.operator_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_OPPORTUNITIES_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity",
+      "targetFieldCode": "opportunity_owner",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 opportunities.opportunity.opportunity_owner CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_OPPORTUNITIES_HAS_CUSTOMERS",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity",
+      "targetFieldCode": "customers_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 opportunities.opportunity.customers_id CROSS_BO_REF → customers.id"
+    },
+    {
+      "code": "INFERRED_OPPORTUNITIES_HAS_OPPORTUNITIES",
+      "sourceBoCode": "opportunities",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity",
+      "targetFieldCode": "parent_opportunity_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 opportunities.opportunity.parent_opportunity_id CROSS_BO_REF → opportunities.id"
+    },
+    {
+      "code": "INFERRED_OPPORTUNITIES_HAS_SCENES",
+      "sourceBoCode": "scenes",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity-product",
+      "targetFieldCode": "scene_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 opportunities.opportunity-product.scene_id CROSS_BO_REF → scenes.id"
+    },
+    {
+      "code": "INFERRED_OPPORTUNITIES_HAS_PRODUCTS",
+      "sourceBoCode": "products",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "opportunities",
+      "targetEntityCode": "opportunity-product",
+      "targetFieldCode": "product_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 opportunities.opportunity-product.product_id CROSS_BO_REF → products.id"
+    },
+    {
+      "code": "INFERRED_ORGS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "orgs",
+      "targetEntityCode": "dap-sys-org",
+      "targetFieldCode": "manage_user_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 orgs.dap-sys-org.manage_user_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_PERSONNEL_REGIONS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "personnel-regions",
+      "targetEntityCode": "personnel-region",
+      "targetFieldCode": "user_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 personnel-regions.personnel-region.user_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_PRODUCTS_HAS_ORGS",
+      "sourceBoCode": "orgs",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "department_code",
+      "targetBoCode": "products",
+      "targetEntityCode": "product",
+      "targetFieldCode": "product_department",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 products.product.product_department CROSS_BO_REF → orgs.department_code"
+    },
+    {
+      "code": "INFERRED_RENEWAL_QUOTES_HAS_DEVICE_INVENTORIES",
+      "sourceBoCode": "device-inventories",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "renewal-quotes",
+      "targetEntityCode": "renewal-quote",
+      "targetFieldCode": "inventory_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "BUSINESS_FLOW",
+      "source": "INFERRED",
+      "description": "自动派生自 renewal-quotes.renewal-quote.inventory_id CROSS_BO_REF → device-inventories.id"
+    },
+    {
+      "code": "INFERRED_SALES_ACTIVITIES_HAS_CUSTOMERS",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "sales-activities",
+      "targetEntityCode": "visit-record",
+      "targetFieldCode": "parent_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "BUSINESS_FLOW",
+      "source": "INFERRED",
+      "description": "自动派生自 sales-activities.visit-record.parent_id CROSS_BO_REF → customers.id"
+    },
+    {
+      "code": "INFERRED_SALES_ACTIVITIES_HAS_CONTACTS",
+      "sourceBoCode": "contacts",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "sales-activities",
+      "targetEntityCode": "visit-record",
+      "targetFieldCode": "contact_ids_snapshot",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "BUSINESS_FLOW",
+      "source": "INFERRED",
+      "description": "自动派生自 sales-activities.visit-record.contact_ids_snapshot CROSS_BO_REF → contacts.id"
+    },
+    {
+      "code": "INFERRED_SALES_ACTIVITIES_HAS_SCENES",
+      "sourceBoCode": "scenes",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "sales-activities",
+      "targetEntityCode": "visit-record",
+      "targetFieldCode": "scene_ids_snapshot",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "BUSINESS_FLOW",
+      "source": "INFERRED",
+      "description": "自动派生自 sales-activities.visit-record.scene_ids_snapshot CROSS_BO_REF → scenes.id"
+    },
+    {
+      "code": "INFERRED_SALES_ACTIVITIES_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "sales-activities",
+      "targetEntityCode": "visit-record",
+      "targetFieldCode": "record_user_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 sales-activities.visit-record.record_user_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_SALES_TARGETS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "sales-targets",
+      "targetEntityCode": "target",
+      "targetFieldCode": "owner_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 sales-targets.target.owner_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_SCENE_ARCHS_HAS_SCENES",
+      "sourceBoCode": "scenes",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "scene-archs",
+      "targetEntityCode": "scene-arch",
+      "targetFieldCode": "scene_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 scene-archs.scene-arch.scene_id CROSS_BO_REF → scenes.id"
+    },
+    {
+      "code": "INFERRED_SCENE_ARCHS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "scene-archs",
+      "targetEntityCode": "scene-arch-team-member",
+      "targetFieldCode": "user_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 scene-archs.scene-arch-team-member.user_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_SCENES_HAS_CUSTOMERS",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "scenes",
+      "targetEntityCode": "scene",
+      "targetFieldCode": "customers_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 scenes.scene.customers_id CROSS_BO_REF → customers.id"
+    },
+    {
+      "code": "INFERRED_SCENES_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "scenes",
+      "targetEntityCode": "scene",
+      "targetFieldCode": "sales_owner_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 scenes.scene.sales_owner_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_SCENES_HAS_PRODUCTS",
+      "sourceBoCode": "products",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "scenes",
+      "targetEntityCode": "scene-product",
+      "targetFieldCode": "products_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 scenes.scene-product.products_id CROSS_BO_REF → products.id"
+    },
+    {
+      "code": "INFERRED_SCENES_HAS_COMPETITORS",
+      "sourceBoCode": "competitors",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "scenes",
+      "targetEntityCode": "scene-rival-detail",
+      "targetFieldCode": "competitor_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 scenes.scene-rival-detail.competitor_id CROSS_BO_REF → competitors.id"
+    },
+    {
+      "code": "INFERRED_USERS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "users",
+      "targetEntityCode": "dap-sys-user",
+      "targetFieldCode": "manage_user_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 users.dap-sys-user.manage_user_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_USERS_HAS_ORGS",
+      "sourceBoCode": "orgs",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "department_code",
+      "targetBoCode": "users",
+      "targetEntityCode": "dap-sys-user",
+      "targetFieldCode": "department_code",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 users.dap-sys-user.department_code CROSS_BO_REF → orgs.department_code"
+    },
+    {
+      "code": "INFERRED_X_TERRITORY_REGS_HAS_CUSTOMERS",
+      "sourceBoCode": "customers",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "x-territory-regs",
+      "targetEntityCode": "x-territory-reg",
+      "targetFieldCode": "customer_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 x-territory-regs.x-territory-reg.customer_id CROSS_BO_REF → customers.id"
+    },
+    {
+      "code": "INFERRED_X_TERRITORY_REGS_HAS_USERS",
+      "sourceBoCode": "users",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "user_id",
+      "targetBoCode": "x-territory-regs",
+      "targetEntityCode": "x-territory-reg",
+      "targetFieldCode": "customer_owner_id",
+      "cardinality": "MANY_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "MASTER_DATA",
+      "source": "INFERRED",
+      "description": "自动派生自 x-territory-regs.x-territory-reg.customer_owner_id CROSS_BO_REF → users.user_id"
+    },
+    {
+      "code": "INFERRED_X_TERRITORY_REGS_HAS_OPPORTUNITIES",
+      "sourceBoCode": "opportunities",
+      "sourceEntityCode": "",
+      "sourceFieldCode": "id",
+      "targetBoCode": "x-territory-regs",
+      "targetEntityCode": "x-territory-reg",
+      "targetFieldCode": "linked_opportunity_id",
+      "cardinality": "ONE_TO_ONE",
+      "direction": "TARGET_TO_SOURCE",
+      "materialization": "FIELD_REF",
+      "authzMode": "BOTH_ENDPOINTS",
+      "linkKind": "BUSINESS_FLOW",
+      "source": "INFERRED",
+      "description": "自动派生自 x-territory-regs.x-territory-reg.linked_opportunity_id CROSS_BO_REF → opportunities.id"
+    }
+  ],
+  "derivedObjects": [
+    {
+      "code": "customer-360",
+      "name": "客户360视图",
+      "objectKind": "DERIVED_VIEW",
+      "description": "以客户为中心的360度经营视图，聚合客户基础信息、关系治理、商机管道、销售活动、场景和竞争态势，输出客户健康度、流失风险和下一步最佳行动建议。",
+      "root": {
+        "boCode": "customers",
+        "entityCode": "customer",
+        "idField": "id"
+      },
+      "dependencies": [
+        {
+          "boCode": "customer-relations",
+          "viaLink": "CUSTOMER_HAS_RELATION_PROFILE",
+          "required": true
+        },
+        {
+          "boCode": "opportunities",
+          "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+          "required": false
+        },
+        {
+          "boCode": "sales-activities",
+          "viaLink": "CUSTOMER_HAS_ACTIVITY",
+          "required": false
+        },
+        {
+          "boCode": "scenes",
+          "viaLink": "CUSTOMER_HAS_SCENE",
+          "required": false
+        },
+        {
+          "boCode": "competitors",
+          "viaLink": "OPPORTUNITY_COMPETES_WITH",
+          "required": false
+        }
+      ],
+      "fields": [
+        {
+          "code": "active_opportunity_count",
+          "name": "活跃商机数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_QUARTER",
+            "timeField": "created_time",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "ACTIVE"
+              }
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "active_pipeline_amount",
+          "name": "活跃管道金额",
+          "type": "DECIMAL",
+          "aggregationScope": "CUSTOMER",
+          "description": "客户级聚合：仅沿 FOP 递归子客户，不含同销售负责人的其他客户。",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "sum",
+            "field": "expected_order_amount",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_YEAR",
+            "timeField": "updated_time",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "ACTIVE"
+              }
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "last_activity_time",
+          "name": "最近活动时间",
+          "type": "DATETIME",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "max",
+            "field": "visit_time",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "LAST_YEAR",
+            "timeField": "visit_time"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "activity_count_90d",
+          "name": "近90天活动数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "metric",
+            "code": "activity_count_90d"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "competitor_count",
+          "name": "关联竞争对手数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "competitors",
+            "viaLink": "OPPORTUNITY_COMPETES_WITH",
+            "window": "CURRENT_YEAR",
+            "timeField": "created_time"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "won_opportunity_count",
+          "name": "已赢单商机数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_YEAR",
+            "timeField": "updated_time",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "CLOSED_WON"
+              }
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "customer_health_score",
+          "name": "客户健康度",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "GT",
+                  "left": {
+                    "type": "metric",
+                    "code": "won_opportunity_count"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 0
+                  }
+                },
+                "result": {
+                  "type": "weightedScore",
+                  "itemsForWeight": [
+                    {
+                      "weight": 0.65,
+                      "scoreRef": "won_opportunity_score"
+                    },
+                    {
+                      "weight": 0.15,
+                      "scoreRef": "sales_activity_score"
+                    },
+                    {
+                      "weight": 0.08,
+                      "scoreRef": "relation_governance_score"
+                    },
+                    {
+                      "weight": 0.07,
+                      "scoreRef": "competitor_risk_reverse_score"
+                    },
+                    {
+                      "weight": 0.05,
+                      "scoreRef": "customer_level_score"
+                    }
+                  ]
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "activity_count_90d"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 0
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "LTE",
+                      "left": {
+                        "type": "metric",
+                        "code": "active_opportunity_count"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 1
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "weightedScore",
+                  "itemsForWeight": [
+                    {
+                      "weight": 0.3,
+                      "scoreRef": "sales_activity_score"
+                    },
+                    {
+                      "weight": 0.25,
+                      "scoreRef": "opportunity_activity_score"
+                    },
+                    {
+                      "weight": 0.2,
+                      "scoreRef": "relation_governance_score"
+                    },
+                    {
+                      "weight": 0.15,
+                      "scoreRef": "customer_level_score"
+                    },
+                    {
+                      "weight": 0.1,
+                      "scoreRef": "competitor_risk_reverse_score"
+                    }
+                  ]
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "weightedScore",
+              "itemsForWeight": [
+                {
+                  "weight": 0.3,
+                  "scoreRef": "opportunity_activity_score"
+                },
+                {
+                  "weight": 0.25,
+                  "scoreRef": "sales_activity_score"
+                },
+                {
+                  "weight": 0.2,
+                  "scoreRef": "relation_governance_score"
+                },
+                {
+                  "weight": 0.15,
+                  "scoreRef": "competitor_risk_reverse_score"
+                },
+                {
+                  "weight": 0.1,
+                  "scoreRef": "customer_level_score"
+                }
+              ]
+            }
+          },
+          "cacheable": true,
+          "requiredForScoring": true,
+          "hasExpression": true
+        },
+        {
+          "code": "churn_risk_level",
+          "name": "流失风险等级",
+          "type": "STRING",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "GT",
+                  "left": {
+                    "type": "metric",
+                    "code": "won_opportunity_count"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 0
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "LOW"
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "GTE",
+                      "left": {
+                        "type": "metric",
+                        "code": "customer_health_score"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 70
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "GTE",
+                      "left": {
+                        "type": "metric",
+                        "code": "activity_count_90d"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 2
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "LOW"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "GTE",
+                  "left": {
+                    "type": "metric",
+                    "code": "customer_health_score"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 50
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "MEDIUM"
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "literal",
+              "value": "HIGH"
+            }
+          },
+          "cacheable": false,
+          "hasExpression": true
+        },
+        {
+          "code": "next_best_action",
+          "name": "下一步最佳行动",
+          "type": "STRING",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "GT",
+                  "left": {
+                    "type": "metric",
+                    "code": "won_opportunity_count"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 0
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "推进续保报价与交叉销售，深耕存量客户扩容机会"
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "churn_risk_level"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "LOW"
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "GT",
+                      "left": {
+                        "type": "metric",
+                        "code": "active_opportunity_count"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 1
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "推进多个商机阶段，重点关注集采框架和DCN升级等核心项目，准备POC测试和投标方案"
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "churn_risk_level"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "LOW"
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "GT",
+                      "left": {
+                        "type": "metric",
+                        "code": "active_opportunity_count"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 0
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "推进商机阶段，准备投标方案"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "metric",
+                    "code": "churn_risk_level"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "MEDIUM"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "安排客户拜访，加强关系维护，关注停滞商机风险"
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "literal",
+              "value": "紧急介入，制定客户挽留计划，复盘停滞商机"
+            }
+          },
+          "cacheable": false,
+          "hasExpression": true
+        }
+      ],
+      "materialization": {
+        "mode": "ON_READ_CACHE",
+        "ttlSeconds": 3600
+      },
+      "apiExposure": {
+        "enabled": true,
+        "resourcePath": "/ontology/customer-360"
+      },
+      "apiExposed": true
+    },
+    {
+      "code": "opportunity-intelligence",
+      "name": "商机智能视图",
+      "objectKind": "DERIVED_VIEW",
+      "description": "商机经营洞察视图，综合阶段进度、客户活跃度、竞争态势和产品匹配度，输出赢单概率、阶段流速、竞争风险和推荐动作。",
+      "root": {
+        "boCode": "opportunities",
+        "entityCode": "opportunity",
+        "idField": "id"
+      },
+      "dependencies": [
+        {
+          "boCode": "customers",
+          "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+          "required": false
+        },
+        {
+          "boCode": "sales-activities",
+          "viaLink": "CUSTOMER_HAS_ACTIVITY",
+          "required": false
+        },
+        {
+          "boCode": "competitors",
+          "viaLink": "OPPORTUNITY_COMPETES_WITH",
+          "required": false
+        }
+      ],
+      "fields": [
+        {
+          "code": "opportunity_status",
+          "name": "商机状态",
+          "type": "STRING",
+          "expression": {
+            "type": "metric",
+            "code": "opportunity_status"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "win_probability",
+          "name": "赢单概率",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "metric",
+                    "code": "opportunity_status"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "CLOSED_WON"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 1.0
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_01"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 0.25
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_02"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 0.55
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_03"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 0.75
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_04"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 0.8
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_05"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 0.9
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "literal",
+              "value": 0.3
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "stage_age_days",
+          "name": "当前阶段停留天数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "metric",
+            "code": "stage_age_days"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "stage_velocity_level",
+          "name": "阶段流速",
+          "type": "STRING",
+          "expression": {
+            "type": "metric",
+            "code": "stage_velocity_level"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "activity_support_score",
+          "name": "活动支撑评分",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "metric",
+            "code": "sales_activity_score"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "competitor_count",
+          "name": "关联竞争对手数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "competitors",
+            "viaLink": "OPPORTUNITY_COMPETES_WITH",
+            "window": "CURRENT_YEAR",
+            "timeField": "created_time"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "competitor_risk_level",
+          "name": "竞争风险等级",
+          "type": "STRING",
+          "expression": {
+            "type": "metric",
+            "code": "competitor_risk_level"
+          },
+          "cacheable": false,
+          "hasExpression": true
+        },
+        {
+          "code": "product_fit_score",
+          "name": "产品匹配度",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "literal",
+            "value": 0.75
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "forecast_amount_weighted",
+          "name": "加权预测金额",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "scalarOp",
+            "op": "MUL",
+            "left": {
+              "type": "field",
+              "path": "expected_order_amount"
+            },
+            "right": {
+              "type": "metric",
+              "code": "win_probability"
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "recommended_action",
+          "name": "推荐推进动作",
+          "type": "STRING",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "metric",
+                    "code": "opportunity_status"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "CLOSED_WON"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "推进售后交付，挖掘交叉销售与扩容机会"
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "field",
+                        "path": "project_stage"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "DC_01"
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "stage_velocity_level"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "STAGNANT"
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "商机长期停滞在初始阶段，建议评估是否继续跟进或关闭商机"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_01"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "加强客户拜访和技术交流，推动商机进入需求确认阶段"
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "field",
+                        "path": "project_stage"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "DC_02"
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "stage_velocity_level"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "STAGNANT"
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "商机在需求确认阶段停滞，建议安排技术交流会，及时推进评审"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_02"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "深化需求确认，组织技术方案交流会，推动客户进入方案评审阶段"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_03"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "加速投标准备，完善技术方案，预计2周内提交投标文件"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_04"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "跟进商务谈判，推进合同评审，关注竞对动态"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "project_stage"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DC_05"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "确认合同细节，推动签约落地，做好交付衔接准备"
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "literal",
+              "value": "评估商机当前状态，制定推进计划"
+            }
+          },
+          "cacheable": false,
+          "hasExpression": true
+        }
+      ],
+      "materialization": {
+        "mode": "ON_READ_CACHE",
+        "ttlSeconds": 3600
+      },
+      "apiExposure": {
+        "enabled": true,
+        "resourcePath": "/ontology/opportunity-intelligence"
+      },
+      "apiExposed": true
+    },
+    {
+      "code": "pipeline-coverage",
+      "name": "销售管道覆盖视图",
+      "objectKind": "AGGREGATE_METRIC",
+      "description": "销售目标与管道覆盖对比视图，按目标维度计算加权管道金额、覆盖率和缺口，输出覆盖风险等级。",
+      "root": {
+        "boCode": "sales-targets",
+        "entityCode": "target",
+        "idField": "id"
+      },
+      "dependencies": [
+        {
+          "boCode": "customers",
+          "viaLink": "TARGET_OWNS_CUSTOMER",
+          "required": true
+        },
+        {
+          "boCode": "opportunities",
+          "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+          "required": false
+        },
+        {
+          "boCode": "exchange-rates",
+          "viaLink": null,
+          "required": false,
+          "joinType": "FIELD_MATCH",
+          "joinCondition": "opportunities.currency = exchange-rates.base_currency AND exchange-rates.target_currency = 'CNY' AND exchange-rates.status = 'ACTIVE'"
+        }
+      ],
+      "fields": [
+        {
+          "code": "target_amount",
+          "name": "目标金额",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "field",
+            "path": "goal_value"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "active_pipeline_amount",
+          "name": "活跃管道金额",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "metric",
+            "code": "active_pipeline_amount"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "weighted_pipeline_amount",
+          "name": "加权管道金额",
+          "type": "DECIMAL",
+          "description": "逐商机按阶段概率独立加权后汇总。",
+          "expression": {
+            "type": "pipelineAggregate",
+            "source": "opportunities",
+            "amountField": "expected_order_amount",
+            "stageField": "project_stage",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "where": {
+              "type": "binary",
+              "op": "NEQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "CLOSED_WON"
+              }
+            },
+            "stageProbabilityMap": {
+              "DC_01": 0.25,
+              "DC_02": 0.5,
+              "DC_03": 0.75,
+              "DC_04": 0.85,
+              "DC_05": 0.95,
+              "CLOSED_WON": 1.0,
+              "CLOSED_LOST": 0.0
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "coverage_ratio",
+          "name": "覆盖率",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "scalarOp",
+            "op": "DIV",
+            "left": {
+              "type": "metric",
+              "code": "active_pipeline_amount"
+            },
+            "right": {
+              "type": "metric",
+              "code": "target_amount"
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "gap_amount",
+          "name": "缺口金额",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "scalarOp",
+            "op": "SUB",
+            "left": {
+              "type": "metric",
+              "code": "target_amount"
+            },
+            "right": {
+              "type": "metric",
+              "code": "active_pipeline_amount"
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "risk_level",
+          "name": "覆盖风险等级",
+          "type": "STRING",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "GTE",
+                  "left": {
+                    "type": "metric",
+                    "code": "coverage_ratio"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 1.0
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "LOW"
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "GTE",
+                  "left": {
+                    "type": "metric",
+                    "code": "coverage_ratio"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": 0.7
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "MEDIUM"
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "literal",
+              "value": "HIGH"
+            }
+          },
+          "cacheable": false,
+          "hasExpression": true
+        }
+      ],
+      "materialization": {
+        "mode": "SCHEDULED"
+      },
+      "apiExposure": {
+        "enabled": true,
+        "resourcePath": "/ontology/pipeline-coverage"
+      },
+      "apiExposed": true
+    },
+    {
+      "code": "entity-scoring",
+      "name": "实体基础评分",
+      "objectKind": "COMPUTED_FIELD",
+      "description": "实体级别的基础评分计算，作为 DERIVED_VIEW 中 weightedScore 的输入。含商机活跃、销售活动、关系治理、竞争风险反向、客户等级五项评分。",
+      "root": {
+        "boCode": "customers",
+        "entityCode": "customer",
+        "idField": "id"
+      },
+      "dependencies": [
+        {
+          "boCode": "opportunities",
+          "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+          "required": false
+        },
+        {
+          "boCode": "sales-activities",
+          "viaLink": "CUSTOMER_HAS_ACTIVITY",
+          "required": false
+        },
+        {
+          "boCode": "competitors",
+          "viaLink": "OPPORTUNITY_COMPETES_WITH",
+          "required": false
+        }
+      ],
+      "fields": [
+        {
+          "code": "active_opportunity_count",
+          "name": "活跃商机数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_QUARTER",
+            "timeField": "created_time",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "ACTIVE"
+              }
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "won_opportunity_count",
+          "name": "已赢单商机数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "opportunities",
+            "viaLink": "CUSTOMER_HAS_OPPORTUNITY",
+            "window": "CURRENT_YEAR",
+            "timeField": "updated_time",
+            "where": {
+              "type": "binary",
+              "op": "EQ",
+              "left": {
+                "type": "field",
+                "path": "status"
+              },
+              "right": {
+                "type": "literal",
+                "value": "CLOSED_WON"
+              }
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "activity_count_90d",
+          "name": "近90天活动数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "metric",
+            "code": "activity_count_90d"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "competitor_count",
+          "name": "关联竞争对手数",
+          "type": "INTEGER",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "competitors",
+            "viaLink": "OPPORTUNITY_COMPETES_WITH",
+            "window": "CURRENT_YEAR",
+            "timeField": "created_time"
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "opportunity_activity_score",
+          "name": "商机活跃评分",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "activity_count_90d"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 0
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "LTE",
+                      "left": {
+                        "type": "metric",
+                        "code": "active_opportunity_count"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 1
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "scalarFunc",
+                  "fn": "min",
+                  "expr": {
+                    "type": "scalarOp",
+                    "op": "MUL",
+                    "left": {
+                      "type": "metric",
+                      "code": "active_opportunity_count"
+                    },
+                    "right": {
+                      "type": "literal",
+                      "value": 20
+                    }
+                  },
+                  "args": [
+                    100
+                  ]
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "scalarFunc",
+              "fn": "min",
+              "expr": {
+                "type": "scalarOp",
+                "op": "MUL",
+                "left": {
+                  "type": "metric",
+                  "code": "active_opportunity_count"
+                },
+                "right": {
+                  "type": "literal",
+                  "value": 40
+                }
+              },
+              "args": [
+                100
+              ]
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "won_opportunity_score",
+          "name": "赢单商机评分",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "scalarFunc",
+            "fn": "min",
+            "expr": {
+              "type": "scalarOp",
+              "op": "MUL",
+              "left": {
+                "type": "metric",
+                "code": "won_opportunity_count"
+              },
+              "right": {
+                "type": "literal",
+                "value": 150
+              }
+            },
+            "args": [
+              100
+            ]
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "sales_activity_score",
+          "name": "销售活动支撑评分",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "scalarFunc",
+            "fn": "min",
+            "expr": {
+              "type": "scalarOp",
+              "op": "MUL",
+              "left": {
+                "type": "metric",
+                "code": "activity_count_90d"
+              },
+              "right": {
+                "type": "literal",
+                "value": 25
+              }
+            },
+            "args": [
+              100
+            ]
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "relation_governance_score",
+          "name": "关系治理评分",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "customer-relations.status"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "APPROVED"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 95
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "customer-relations.status"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "PENDING_APPROVAL"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 50
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "customer-relations.status"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "DRAFT"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 35
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "customer-relations.status"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "CHANGED"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 30
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "literal",
+              "value": 50
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "competitor_risk_reverse_score",
+          "name": "竞争风险反向评分",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "scalarFunc",
+            "fn": "max",
+            "expr": {
+              "type": "scalarOp",
+              "op": "SUB",
+              "left": {
+                "type": "literal",
+                "value": 90
+              },
+              "right": {
+                "type": "scalarOp",
+                "op": "MUL",
+                "left": {
+                  "type": "metric",
+                  "code": "competitor_count"
+                },
+                "right": {
+                  "type": "literal",
+                  "value": 15
+                }
+              }
+            },
+            "args": [
+              20
+            ]
+          },
+          "cacheable": true,
+          "hasExpression": true
+        },
+        {
+          "code": "competitor_risk_level",
+          "name": "竞争风险等级",
+          "type": "STRING",
+          "description": "基于竞对最高级别+数量因子的竞争风险等级。1 STRONG→MEDIUM，2+ STRONG→HIGH，其余取 competitor_max_risk_level。",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "competitor_max_risk_level"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "HIGH"
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "GT",
+                      "left": {
+                        "type": "metric",
+                        "code": "_strong_competitor_count"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 1
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "HIGH"
+                }
+              },
+              {
+                "condition": {
+                  "type": "logical",
+                  "op": "AND",
+                  "items": [
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "competitor_max_risk_level"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": "HIGH"
+                      }
+                    },
+                    {
+                      "type": "binary",
+                      "op": "EQ",
+                      "left": {
+                        "type": "metric",
+                        "code": "_strong_competitor_count"
+                      },
+                      "right": {
+                        "type": "literal",
+                        "value": 1
+                      }
+                    }
+                  ]
+                },
+                "result": {
+                  "type": "literal",
+                  "value": "MEDIUM"
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "metric",
+              "code": "competitor_max_risk_level"
+            }
+          },
+          "cacheable": false,
+          "hasExpression": true
+        },
+        {
+          "code": "customer_level_score",
+          "name": "客户等级评分",
+          "type": "DECIMAL",
+          "expression": {
+            "type": "caseWhen",
+            "cases": [
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "market_segment"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "INTERNET_T1"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 95
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "market_segment"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "EDUCATION_T1"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 95
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "market_segment"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "INTERNET_T2"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 75
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "market_segment"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "EDUCATION_T2"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 75
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "market_segment"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "INTERNET_T3"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 55
+                }
+              },
+              {
+                "condition": {
+                  "type": "binary",
+                  "op": "EQ",
+                  "left": {
+                    "type": "field",
+                    "path": "market_segment"
+                  },
+                  "right": {
+                    "type": "literal",
+                    "value": "EDUCATION_T3"
+                  }
+                },
+                "result": {
+                  "type": "literal",
+                  "value": 55
+                }
+              }
+            ],
+            "defaultResult": {
+              "type": "literal",
+              "value": 70
+            }
+          },
+          "cacheable": true,
+          "hasExpression": true
+        }
+      ],
+      "materialization": {
+        "mode": "ON_READ_CACHE",
+        "ttlSeconds": 3600
+      },
+      "apiExposure": {
+        "enabled": false
+      },
+      "apiExposed": false
+    }
+  ],
+  "timelines": [
+    {
+      "code": "OPPORTUNITY_STAGE_TIMELINE",
+      "name": "商机阶段时间线",
+      "description": "商机销售阶段推进历史，记录每次阶段变化的时间点和快照数据，用于阶段流速和停滞分析。",
+      "boCode": "opportunities",
+      "entityCode": "opportunity",
+      "identityField": "id",
+      "timeField": "updated_time",
+      "stateField": "project_stage",
+      "statusField": "status",
+      "eventSources": [
+        {
+          "sourceType": "OPERATION",
+          "operationCode": "ADVANCE_STAGE",
+          "eventType": "STAGE_CHANGED"
+        },
+        {
+          "sourceType": "ENTITY",
+          "entityCode": "opportunity-stage-history",
+          "eventType": "STAGE_HISTORY_APPENDED"
+        }
+      ],
+      "snapshots": [
+        "project_stage",
+        "predict_category",
+        "expected_order_amount",
+        "status"
+      ],
+      "metrics": [
+        {
+          "code": "stage_age_days",
+          "name": "当前阶段停留天数",
+          "metricType": "DURATION_CURRENT_STATE",
+          "unit": "DAY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "dateDiff",
+            "field": "updated_time",
+            "source": "opportunities",
+            "viaLink": "OPPORTUNITY_STAGE_TIMELINE",
+            "window": "CURRENT_QUARTER",
+            "timeField": "updated_time",
+            "args": [
+              "now",
+              "DAY"
+            ]
+          }
+        },
+        {
+          "code": "stage_velocity_level",
+          "name": "阶段流速等级",
+          "metricType": "VELOCITY_LEVEL",
+          "unit": "RATIO",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "velocityLevel",
+            "source": "opportunities",
+            "viaLink": "OPPORTUNITY_STAGE_TIMELINE",
+            "window": "CURRENT_QUARTER",
+            "timeField": "updated_time",
+            "stateField": "project_stage"
+          }
+        }
+      ]
+    },
+    {
+      "code": "CUSTOMER_ACTIVITY_TIMELINE",
+      "name": "客户活动时间线",
+      "description": "客户销售活动记录时间线，用于客户活跃度、流失风险和时间窗口指标计算。",
+      "boCode": "sales-activities",
+      "entityCode": "visit-record",
+      "identityField": "id",
+      "timeField": "visit_time",
+      "eventSources": [
+        {
+          "sourceType": "ENTITY",
+          "entityCode": "visit-record",
+          "eventType": "ACTIVITY_COMPLETED"
+        }
+      ],
+      "snapshots": [
+        "visit_subject"
+      ],
+      "metrics": [
+        {
+          "code": "activity_count_30d",
+          "name": "近30天活动数",
+          "metricType": "COUNT_WINDOW",
+          "unit": "COUNT",
+          "window": "P30D",
+          "sourceLink": "CUSTOMER_HAS_ACTIVITY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "P30D",
+            "timeField": "visit_time"
+          }
+        },
+        {
+          "code": "activity_count_90d",
+          "name": "近90天活动数",
+          "metricType": "COUNT_WINDOW",
+          "unit": "COUNT",
+          "window": "P90D",
+          "sourceLink": "CUSTOMER_HAS_ACTIVITY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "count",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "P90D",
+            "timeField": "visit_time"
+          }
+        },
+        {
+          "code": "last_activity_days",
+          "name": "最近活动距今天数",
+          "metricType": "LAST_VALUE",
+          "unit": "DAY",
+          "expression": {
+            "type": "temporalAggregate",
+            "fn": "dateDiff",
+            "field": "visit_time",
+            "source": "sales-activities",
+            "viaLink": "CUSTOMER_HAS_ACTIVITY",
+            "window": "LAST_YEAR",
+            "timeField": "visit_time",
+            "args": [
+              "now",
+              "DAY"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "chains": [
+    {
+      "code": "OPPORTUNITY_WIN_POST_ACTIONS",
+      "name": "商机赢单后置动作链",
+      "description": "商机 WIN 后触发：刷新客户 360 和管道覆盖率，通知商机负责人。",
+      "trigger": {
+        "type": "OPERATION_COMPLETED",
+        "boCode": "opportunities",
+        "operationCode": "WIN"
+      },
+      "condition": {
+        "type": "binary",
+        "op": "EQ",
+        "left": {
+          "type": "field",
+          "path": "opportunities.opportunity.status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "CLOSED_WON"
+        }
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${boCode}:${objectId}:${operationCode}:${eventTime}",
+      "maxRetries": 3,
+      "steps": [
+        {
+          "code": "REFRESH_CUSTOMER_360",
+          "name": "刷新客户360",
+          "stepType": "DERIVATION_REFRESH",
+          "target": {
+            "derivedCode": "customer-360"
+          },
+          "inputMapping": {
+            "customerId": "business_customer_id"
+          },
+          "dependsOn": [],
+          "failurePolicy": "RETRY"
+        },
+        {
+          "code": "REFRESH_PIPELINE_COVERAGE",
+          "name": "刷新销售管道覆盖率",
+          "stepType": "DERIVATION_REFRESH",
+          "target": {
+            "derivedCode": "pipeline-coverage"
+          },
+          "inputMapping": {
+            "ownerId": "opportunity_owner"
+          },
+          "dependsOn": [],
+          "failurePolicy": "RETRY"
+        },
+        {
+          "code": "NOTIFY_OWNER",
+          "name": "通知商机负责人",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "opportunity_owner",
+            "messageTemplate": "商机 {opportunity_name} 已赢单，客户评分和目标达成已更新。"
+          },
+          "dependsOn": [
+            "REFRESH_CUSTOMER_360",
+            "REFRESH_PIPELINE_COVERAGE"
+          ],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 3,
+      "triggerType": "OPERATION_COMPLETED",
+      "stepCount": 3
+    },
+    {
+      "code": "OPPORTUNITY_STAGE_STALLED_ALERT",
+      "name": "商机阶段停滞预警",
+      "description": "定时扫描阶段停留超过阈值的商机，生成预警并通知销售负责人。",
+      "trigger": {
+        "type": "SCHEDULED",
+        "cronExpression": "0 8 * * MON",
+        "maxCycleLimit": 1000
+      },
+      "condition": {
+        "type": "binary",
+        "op": "GT",
+        "left": {
+          "type": "metric",
+          "code": "stage_age_days"
+        },
+        "right": {
+          "type": "literal",
+          "value": 30
+        }
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${chainCode}:${boCode}:${objectId}:${scanDate}",
+      "maxRetries": 2,
+      "steps": [
+        {
+          "code": "NOTIFY_OWNER_STALLED",
+          "name": "通知销售负责人阶段停滞",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "opportunity_owner",
+            "messageTemplate": "商机 {opportunity_name} 在当前阶段已停留超过 {stage_age_days} 天，请关注推进。"
+          },
+          "dependsOn": [],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 0,
+      "triggerType": "SCHEDULED",
+      "stepCount": 1
+    },
+    {
+      "code": "CUSTOMER_CHURN_RISK_RAISED",
+      "name": "客户高流失风险动作链",
+      "description": "检测到客户高流失风险后，创建拜访建议通知客户负责人。",
+      "trigger": {
+        "type": "EVENT_RECEIVED",
+        "eventCode": "CUSTOMER_CHURN_RISK_HIGH"
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${chainCode}:${boCode}:${objectId}:${eventTime}",
+      "maxRetries": 3,
+      "steps": [
+        {
+          "code": "CREATE_VISIT_SUGGESTION",
+          "name": "创建拜访建议待办",
+          "stepType": "BO_OPERATION",
+          "target": {
+            "boCode": "sales-activities"
+          },
+          "inputMapping": {
+            "parentId": "customers_id",
+            "actorId": "owner_user_id"
+          },
+          "dependsOn": [],
+          "failurePolicy": "RETRY"
+        },
+        {
+          "code": "NOTIFY_CUSTOMER_OWNER",
+          "name": "通知客户负责人",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "owner_user_id",
+            "messageTemplate": "客户 {customer_name} 近90天无活动且无活跃商机，存在高流失风险，建议尽快安排拜访。"
+          },
+          "dependsOn": [
+            "CREATE_VISIT_SUGGESTION"
+          ],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 2,
+      "triggerType": "EVENT_RECEIVED",
+      "stepCount": 2
+    },
+    {
+      "code": "TARGET_COVERAGE_LOW_ALERT",
+      "name": "目标覆盖不足预警",
+      "description": "定时扫描销售管道覆盖率低于阈值的销售目标，通知销售经理。",
+      "trigger": {
+        "type": "SCHEDULED",
+        "cronExpression": "0 9 * * MON",
+        "maxCycleLimit": 200
+      },
+      "condition": {
+        "type": "binary",
+        "op": "LT",
+        "left": {
+          "type": "metric",
+          "code": "coverage_ratio"
+        },
+        "right": {
+          "type": "literal",
+          "value": 0.8
+        }
+      },
+      "executionMode": "ASYNC",
+      "idempotencyKey": "${chainCode}:${boCode}:${objectId}:${scanDate}",
+      "maxRetries": 2,
+      "steps": [
+        {
+          "code": "NOTIFY_SALES_MANAGER",
+          "name": "通知销售经理管道覆盖不足",
+          "stepType": "NOTIFICATION",
+          "target": {
+            "channel": "TODO_CENTER"
+          },
+          "inputMapping": {
+            "receiverId": "owner_id",
+            "messageTemplate": "销售目标 {owner_name} 的管道覆盖率仅 {coverage_ratio}，缺口 {gap_amount}，建议补充商机。"
+          },
+          "dependsOn": [],
+          "failurePolicy": "IGNORE"
+        }
+      ],
+      "maxTriggerDepth": 0,
+      "triggerType": "SCHEDULED",
+      "stepCount": 1
+    }
+  ]
+}

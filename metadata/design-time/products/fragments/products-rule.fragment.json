@@ -1,0 +1,81 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "products",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "PRODUCT_MODEL_UNIQUE",
+        "name": "产品型号唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "产品型号已存在，请使用其他型号",
+        "description": "创建或修改产品时，product_model 在同一租户下必须唯一（含已逻辑删除记录）。"
+      },
+      {
+        "code": "PRODUCT_INACTIVE_CHECK_SCENE_REF",
+        "name": "停用前检查场景引用",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "WARN",
+        "expression": "status == 'INACTIVE'",
+        "message": "该产品在部分场景中被产品清单引用，停用将影响场景分析，确认继续？",
+        "description": "将产品从 ACTIVE 切换为 INACTIVE 前，检查是否被场景产品清单引用，提示操作影响。",
+        "crossBoRef": {
+          "refBoCode": "scenes",
+          "refFieldCode": "product_id",
+          "localEntityCode": "product",
+          "localFieldCode": "id"
+        },
+        "exprAst": {
+          "type": "binary",
+          "op": "EQ",
+          "left": {
+            "type": "field",
+            "path": "status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "INACTIVE"
+          }
+        }
+      },
+      {
+        "code": "PRODUCT_DELETE_CHECK_SCENE_REF",
+        "name": "删除前检查场景引用",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "该产品已被场景产品清单引用，请先解除关联后再删除",
+        "description": "删除产品前检查是否被场景产品清单引用，若有关联则禁止删除。",
+        "crossBoRef": {
+          "refBoCode": "scenes",
+          "refFieldCode": "product_id",
+          "localEntityCode": "product",
+          "localFieldCode": "id"
+        }
+      },
+      {
+        "code": "PRODUCT_STATUS_EDITABLE",
+        "name": "产品可编辑性",
+        "ruleType": "STATE",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "产品数据编辑不受状态限制，但删除需通过引用检查",
+        "description": "产品不同于场景，编辑不受状态限制（INACTIVE 产品仍可编辑）。仅 DELETE 操作需要额外的跨 BO 引用检查。"
+      }
+    ]
+  },
+  "changeNote": [
+    "products 首版 RULE 设计态 Fragment，含型号唯一性、场景引用检查与编辑规则"
+  ]
+}

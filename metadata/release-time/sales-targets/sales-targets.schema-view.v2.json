@@ -1,0 +1,841 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "sales-targets",
+  "boName": "销售目标",
+  "description": "销售目标管理业务对象，单表建模，管理按目标方（员工/客户）、目标类型、适配规则（年度/月度）维度的销售目标值。无单一业务编号字段，唯一性由复合键 (target_owner_type, target_id, target_type, apply_rule, target_year, target_month) 保证。注意：当前后端 API 路径为 /api/targets，元数据 resourcePath 为 /sales-targets，后续将重构后端路由对齐。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/sales-targets",
+    "idField": "id",
+    "idType": "LONG",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+      "detailEmbedEntities": []
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "owner_name",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "idStrategy": "SNOWFLAKE",
+    "auditStrategy": "DATABASE",
+    "defaultSort": {
+      "field": "created_time",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "VERTICAL",
+    "formColumns": 1,
+    "formLabelWidth": 120,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "target",
+      "name": "销售目标主实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "crm_target",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "主键 Snowflake",
+          "type": "LONG",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "主键",
+            "sortable": false,
+            "hidden": true,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "owner_type",
+          "name": "目标方类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "ownerType",
+          "columnName": "target_owner_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "EMPLOYEE",
+                "label": "员工"
+              },
+              {
+                "value": "CUSTOMER",
+                "label": "客户"
+              }
+            ],
+            "message": "目标方类型必须为 EMPLOYEE 或 CUSTOMER"
+          },
+          "view": {
+            "displayName": "目标方类型",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "SELECT",
+            "placeholder": "请选择目标方类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "target_owner_type"
+          }
+        },
+        {
+          "code": "owner_id",
+          "name": "目标对象ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "ownerId",
+          "columnName": "target_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "owner_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "max": 64,
+            "message": "目标对象ID不能为空且不超过64字符"
+          },
+          "view": {
+            "displayName": "目标对象",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择目标对象",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "owner_name",
+          "name": "目标对象名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "ownerName",
+          "columnName": "target_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": true,
+          "redundant": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "目标对象名称",
+            "sortable": true,
+            "columnWidth": 180,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "goal_type",
+          "name": "目标类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "goalType",
+          "columnName": "target_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 64,
+            "enum": [
+              {
+                "value": "ORDER_AMOUNT",
+                "label": "订单"
+              },
+              {
+                "value": "INVOICE_AMOUNT",
+                "label": "开票"
+              },
+              {
+                "value": "GROSS_MARGIN_RATE",
+                "label": "毛利率"
+              },
+              {
+                "value": "VISIT_COUNT",
+                "label": "拜访次数"
+              },
+              {
+                "value": "SIGNED_CUSTOMER_COUNT",
+                "label": "签约个数"
+              },
+              {
+                "value": "LAST_YEAR_RENEWAL_FORECAST_AMOUNT",
+                "label": "上一年续保预测金额"
+              },
+              {
+                "value": "LAST_YEAR_RENEWAL_FORECAST_COUNT",
+                "label": "上一年续保预测数量"
+              },
+              {
+                "value": "CURRENT_YEAR_NEW_EXPIRING_FORECAST_AMOUNT",
+                "label": "当年新增出保预测金额"
+              },
+              {
+                "value": "CURRENT_YEAR_NEW_EXPIRING_FORECAST_COUNT",
+                "label": "当年新增出保预测数量"
+              }
+            ],
+            "message": "目标类型必须为预定义值之一"
+          },
+          "view": {
+            "displayName": "目标类型",
+            "sortable": true,
+            "columnWidth": 140,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "SELECT",
+            "placeholder": "请选择目标类型",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "target_type"
+          }
+        },
+        {
+          "code": "apply_rule",
+          "name": "适配规则",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "applyRule",
+          "columnName": "apply_rule",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 32,
+            "enum": [
+              {
+                "value": "YEARLY",
+                "label": "年度"
+              },
+              {
+                "value": "MONTHLY",
+                "label": "月度"
+              }
+            ],
+            "message": "适配规则必须为 YEARLY 或 MONTHLY"
+          },
+          "view": {
+            "displayName": "适配规则",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "SELECT",
+            "placeholder": "请选择适配规则",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "target_apply_rule"
+          }
+        },
+        {
+          "code": "target_year",
+          "name": "目标年份",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "targetYear",
+          "columnName": "target_year",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "min": 2000,
+            "max": 2100,
+            "message": "目标年份不能为空且在合理范围内"
+          },
+          "view": {
+            "displayName": "目标年份",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "NUMBER",
+            "placeholder": "如 2026",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "target_month",
+          "name": "目标月份",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "targetMonth",
+          "columnName": "target_month",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "min": 1,
+            "max": 12,
+            "message": "目标月份应在1-12之间，年度规则时留空"
+          },
+          "view": {
+            "displayName": "目标月份",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "NUMBER",
+            "placeholder": "1-12，年度规则留空",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "integer",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "goal_value",
+          "name": "目标值",
+          "type": "DECIMAL",
+          "isPk": false,
+          "fieldName": "goalValue",
+          "columnName": "target_value",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "目标值为敏感商业数据，需按行级数据策略控制可见范围",
+          "validation": {
+            "required": true,
+            "min": 0,
+            "message": "目标值不能为空且须为非负数"
+          },
+          "view": {
+            "displayName": "目标值",
+            "sortable": true,
+            "columnWidth": 120,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入目标值",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              },
+              {
+                "value": "GTE",
+                "label": "大于等于"
+              },
+              {
+                "value": "LTE",
+                "label": "小于等于"
+              }
+            ],
+            "dataType": "decimal",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "remarks",
+          "name": "备注",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "remarks",
+          "columnName": "remarks",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 500
+          },
+          "view": {
+            "displayName": "备注",
+            "sortable": false,
+            "columnWidth": 160,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "placeholder": "请输入备注",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "is_deleted",
+          "name": "删除标记",
+          "type": "INTEGER",
+          "isPk": false,
+          "fieldName": "isDeleted",
+          "columnName": "is_deleted",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "删除标记",
+            "sortable": false,
+            "hidden": true,
+            "order": 160,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_time",
+          "name": "创建时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "createdTime",
+          "columnName": "created_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "创建时间",
+            "sortable": true,
+            "columnWidth": 168,
+            "format": "datetime",
+            "hidden": true,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_time",
+          "name": "更新时间",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "updatedTime",
+          "columnName": "updated_time",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "更新时间",
+            "sortable": true,
+            "columnWidth": 168,
+            "format": "datetime",
+            "order": 110,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "DATETIME",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "created_by",
+          "name": "创建人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "createdBy",
+          "columnName": "created_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "创建人",
+            "sortable": false,
+            "hidden": true,
+            "order": 130,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "updated_by",
+          "name": "更新人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "updatedBy",
+          "columnName": "updated_by",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "更新人",
+            "sortable": false,
+            "hidden": true,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false
+          }
+        },
+        {
+          "code": "tenant_code",
+          "name": "租户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "tenantCode",
+          "columnName": "tenant_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "租户编码",
+            "sortable": false,
+            "hidden": true,
+            "order": 150,
+            "showInList": false,
+            "showInDetail": false,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "tenant_code",
+        "owner_type",
+        "owner_id",
+        "goal_type",
+        "apply_rule",
+        "target_year"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建目标",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<TargetVO>",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建销售目标记录，选择目标方类型、目标对象、目标类型、适配规则、年份/月份和目标值。API：POST /sales-targets。"
+    },
+    {
+      "code": "UPDATE",
+      "name": "编辑目标",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "POST",
+      "actionPath": "update",
+      "supportsBatch": false,
+      "singleResultType": "ApiResponse<TargetVO>",
+      "position": "ROW",
+      "triggerEvent": "OPEN_FORM",
+      "description": "修改目标记录的目标方、目标类型、适配规则、年份/月份和目标值。API：POST /sales-targets/{id}/update。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除目标",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": false,
+      "singleResultType": "Void",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除目标记录（is_deleted=1）。删除前校验复合唯一键约束。API：DELETE /sales-targets/{id}。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "TARGET_COMPOSITE_UNIQUE",
+      "name": "目标复合唯一键",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "同一目标方、目标对象、目标类型、适配规则、年份/月份的目标记录已存在",
+      "description": "创建或修改目标记录时，复合键 (owner_type, owner_id, goal_type, apply_rule, target_year, target_month) 在同一租户下必须唯一（含已逻辑删除记录）。对应数据库唯一索引 uk_target_unique。"
+    },
+    {
+      "code": "MONTHLY_RULE_REQUIRES_MONTH",
+      "name": "月度规则必须填写月份",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "ENTITY",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "适配规则为月度时，目标月份不能为空",
+      "description": "当 apply_rule=MONTHLY 时，target_month 必须填写（1-12）；当 apply_rule=YEARLY 时，target_month 应留空。",
+      "entityCode": "target",
+      "expression": "apply_rule == 'MONTHLY' && target_month == null",
+      "exprAst": {
+        "type": "logical",
+        "op": "AND",
+        "items": [
+          {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "apply_rule"
+            },
+            "right": {
+              "type": "literal",
+              "value": "MONTHLY"
+            }
+          },
+          {
+            "type": "isNull",
+            "expr": {
+              "type": "field",
+              "path": "target_month"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "code": "YEARLY_RULE_NO_MONTH",
+      "name": "年度规则不应填写月份",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "ENTITY",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "WARN",
+      "message": "适配规则为年度时，目标月份应留空",
+      "description": "当 apply_rule=YEARLY 时，target_month 应留空。若填写了月份，给出警告提示但不阻断保存。",
+      "entityCode": "target",
+      "expression": "apply_rule == 'YEARLY' && target_month != null",
+      "exprAst": {
+        "type": "logical",
+        "op": "AND",
+        "items": [
+          {
+            "type": "binary",
+            "op": "EQ",
+            "left": {
+              "type": "field",
+              "path": "apply_rule"
+            },
+            "right": {
+              "type": "literal",
+              "value": "YEARLY"
+            }
+          },
+          {
+            "type": "isNotNull",
+            "expr": {
+              "type": "field",
+              "path": "target_month"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "code": "TARGET_OWNER_TYPE_REF_INTEGRITY",
+      "name": "目标对象引用完整性",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "目标对象ID在对应的目标方类型（员工/客户）中不存在",
+      "description": "owner_id 根据 owner_type 引用不同的 BO：EMPLOYEE 时引用 users BO 的 id，CUSTOMER 时引用 customers BO 的 id。保存时校验目标对象在对应 BO 中存在。",
+      "crossBoRef": {
+        "refBoCode": "users",
+        "refFieldCode": "user_id",
+        "localEntityCode": "target",
+        "localFieldCode": "owner_id"
+      }
+    },
+    {
+      "code": "TARGET_VALUE_FORMAT",
+      "name": "目标值格式校验",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "FIELD",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "WARN",
+      "message": "目标值格式建议为数值或百分比，请确认输入正确",
+      "description": "goal_value 类型为 DECIMAL，根据 goal_type 不同语义不同：金额类（ORDER_AMOUNT/INVOICE_AMOUNT）为数值，比率类（GROSS_MARGIN_RATE）为百分比，次数类（VISIT_COUNT）为整数。保存时对格式做软校验提示。",
+      "entityCode": "target",
+      "fieldCode": "goal_value"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:25.165646+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

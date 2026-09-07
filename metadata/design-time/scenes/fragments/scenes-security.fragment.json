@@ -1,0 +1,367 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "scenes",
+  "metaType": "SECURITY",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rowSecurity": {
+      "fallbackScope": "NONE",
+      "entriesByEntity": {
+        "scene": [
+          "customers_id",
+          "business_name",
+          "scene_category",
+          "sales_owner_id",
+          "status"
+        ]
+      }
+    },
+    "fieldSecurity": [
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "customer_procurement_amount",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "年度测算客户采购规模为敏感商业数据，默认脱敏"
+      },
+      {
+        "entityCode": "scene-annual-estimate",
+        "fieldCode": "estimated_sales_amount",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "年度测算预计销售额涉及竞争情报，默认脱敏"
+      },
+      {
+        "entityCode": "scene-rival-summary",
+        "fieldCode": "kaijie_estimated_sales",
+        "fieldControl": "MASKED",
+        "privacyClass": "SENSITIVE",
+        "reason": "凯捷预计销售额为竞对分析敏感数据，默认脱敏"
+      }
+    ],
+    "authzProjection": {
+      "description": "场景业务对象在 PSP 中的资源属性投影。运行时权限项通过 RES_DATA_BO + authz-bo-meta-model.id + act_code 定位 scenes BO，投影编码由发布服务根据 boCode 自动派生。",
+      "usageNote": "用于数据权限、列表行级过滤和敏感字段访问控制。rowSecurity 声明 DATA 策略候选字段，fieldSecurity 声明 FIELD 策略候选字段，authzProjection 随 scenes 的 authz-bo-meta-model.schema_json 发布，声明 PIP 可返回的 res.* 属性契约。协议定引用方式包括 res.customers_id、res.business_name、res.scene_category、res.sales_owner_id、res.status、res.our_stage 等。字段控制发布到 PSP 时需将 MASKED/HIDDEN 转换为 MASK/HIDE。",
+      "attributes": [
+        {
+          "code": "scene_id",
+          "name": "场景ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "scene",
+            "fieldCode": "id"
+          },
+          "isPk": true,
+          "filterable": false,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "displayOrder": 10,
+          "displayGroup": "基本标识",
+          "description": "场景资源唯一标识，供 PIP 按 ID 拉取完整属性集合；不暴露给 ABAC 表达式做条件判断。",
+          "i18nKey": "auth.resource.res_scene.attr.scene_id",
+          "valueExamples": [
+            "10001",
+            "10002"
+          ]
+        },
+        {
+          "code": "customers_id",
+          "name": "客户ID",
+          "type": "LONG",
+          "source": {
+            "entityCode": "scene",
+            "fieldCode": "customers_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "customers.id",
+          "referenceModel": "customers",
+          "displayOrder": 40,
+          "displayGroup": "数据范围",
+          "description": "场景归属的客户。典型表达式：contains(sub.customer_scope_ids, res.customers_id)。",
+          "i18nKey": "auth.resource.res_scene.attr.fop_customer_id",
+          "valueExamples": [
+            "2068959871393136600",
+            "2068959871393136601"
+          ]
+        },
+        {
+          "code": "business_name",
+          "name": "业务名称",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene",
+            "fieldCode": "business_name"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "JDM",
+              "label": "JDM业务"
+            },
+            {
+              "value": "DCN",
+              "label": "DCN网络"
+            },
+            {
+              "value": "AI_COMPUTE",
+              "label": "智算网络"
+            },
+            {
+              "value": "ESUN",
+              "label": "ESUN业务"
+            },
+            {
+              "value": "OPTICAL",
+              "label": "光"
+            },
+            {
+              "value": "PARK",
+              "label": "园区网络"
+            }
+          ],
+          "displayOrder": 50,
+          "displayGroup": "资源属性",
+          "description": "场景所属业务线。典型表达式：contains(sub.business_scope, res.business_name)。business_name 存储编码值如 JDM/DCN/PARK。",
+          "i18nKey": "auth.resource.res_scene.attr.business_name",
+          "valueExamples": [
+            "PARK",
+            "JDM"
+          ]
+        },
+        {
+          "code": "scene_category",
+          "name": "场景分类",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene",
+            "fieldCode": "scene_category"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "H1",
+              "label": "H1"
+            },
+            {
+              "value": "H2",
+              "label": "H2"
+            },
+            {
+              "value": "H3",
+              "label": "H3"
+            }
+          ],
+          "displayOrder": 60,
+          "displayGroup": "资源属性",
+          "description": "场景分层分类。典型表达式：res.scene_category == 'H1'。",
+          "i18nKey": "auth.resource.res_scene.attr.scene_category",
+          "valueExamples": [
+            "H1",
+            "H2"
+          ]
+        },
+        {
+          "code": "sales_owner_id",
+          "name": "销售负责人ID",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene",
+            "fieldCode": "sales_owner_id"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "valueRef": "SUB_USER.id",
+          "referenceModel": "SUB_USER",
+          "displayOrder": 70,
+          "displayGroup": "数据范围",
+          "description": "场景销售负责人。典型表达式：sub.user_id == res.sales_owner_id。",
+          "i18nKey": "auth.resource.res_scene.attr.sales_owner_id",
+          "valueExamples": [
+            "U10001"
+          ]
+        },
+        {
+          "code": "our_stage",
+          "name": "我司阶段",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene-product",
+            "fieldCode": "our_stage",
+            "computed": true,
+            "derivationHint": "从场景产品清单聚合汇总当前我司阶段，写回 scene_main.our_stage 或由 PIP 查询时计算。"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "allowedValues": [
+            {
+              "value": "0",
+              "label": "未开始"
+            },
+            {
+              "value": "1",
+              "label": "建立连接"
+            },
+            {
+              "value": "2",
+              "label": "技术交流"
+            },
+            {
+              "value": "3",
+              "label": "产品开发"
+            },
+            {
+              "value": "4",
+              "label": "入围测试"
+            },
+            {
+              "value": "5",
+              "label": "完成入围"
+            },
+            {
+              "value": "6",
+              "label": "灰度"
+            },
+            {
+              "value": "7",
+              "label": "上量"
+            },
+            {
+              "value": "8",
+              "label": "末期"
+            },
+            {
+              "value": "9",
+              "label": "EOL"
+            },
+            {
+              "value": "10",
+              "label": "暂停上量/待重新入围"
+            }
+          ],
+          "displayOrder": 90,
+          "displayGroup": "资源属性",
+          "description": "场景产品清单汇总后的当前我司阶段，可用于限制特定阶段的数据操作。",
+          "i18nKey": "auth.resource.res_scene.attr.our_stage",
+          "valueExamples": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "code": "lifecycle_end_date",
+          "name": "预计生命周期结束时间",
+          "type": "DATE",
+          "source": {
+            "entityCode": "scene-product",
+            "fieldCode": "lifecycle_end_date",
+            "computed": true,
+            "derivationHint": "从产品清单生命周期结束时间汇总出场景级生命周期结束时间。"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 100,
+          "displayGroup": "时间约束",
+          "description": "场景产品生命周期结束时间，可用于过期场景只读或归档策略。",
+          "i18nKey": "auth.resource.res_scene.attr.lifecycle_end_date",
+          "valueExamples": [
+            "2030-12-31"
+          ]
+        },
+        {
+          "code": "next_bid_date",
+          "name": "下次招标时间",
+          "type": "DATE",
+          "source": {
+            "entityCode": "scene-product",
+            "fieldCode": "next_bid_date",
+            "computed": true,
+            "derivationHint": "从产品清单下次招标时间汇总出场景级下次招标时间。"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 110,
+          "displayGroup": "时间约束",
+          "description": "场景下次招标时间，可用于临近招标窗口的数据保护或提醒策略。",
+          "i18nKey": "auth.resource.res_scene.attr.next_bid_date",
+          "valueExamples": [
+            "2026-04-10"
+          ]
+        },
+        {
+          "code": "current_year_estimated_sales",
+          "name": "本年度预计销量",
+          "type": "DECIMAL",
+          "source": {
+            "entityCode": "scene-annual-estimate",
+            "fieldCode": "estimated_sales_amount",
+            "computed": true,
+            "derivationHint": "从年度测算汇总当前年份的estimated_sales_amount，聚合为场景级本年度预计销量。"
+          },
+          "filterable": true,
+          "nullable": true,
+          "onMissingValue": "ALLOW",
+          "displayOrder": 120,
+          "displayGroup": "敏感经营数据",
+          "description": "本年度预计销量，属于敏感经营数据，可用于较高金额场景的审批或脱敏策略。",
+          "i18nKey": "auth.resource.res_scene.attr.current_year_estimated_sales",
+          "valueExamples": [
+            "11761200.00"
+          ]
+        },
+        {
+          "code": "status",
+          "name": "场景状态",
+          "type": "STRING",
+          "source": {
+            "entityCode": "scene",
+            "fieldCode": "status"
+          },
+          "filterable": true,
+          "nullable": false,
+          "onMissingValue": "DENY",
+          "allowedValues": [
+            {
+              "value": "DRAFT",
+              "label": "草稿"
+            },
+            {
+              "value": "ACTIVE",
+              "label": "活跃"
+            },
+            {
+              "value": "INACTIVE",
+              "label": "停用"
+            },
+            {
+              "value": "ARCHIVED",
+              "label": "已归档"
+            }
+          ],
+          "displayOrder": 130,
+          "displayGroup": "资源属性",
+          "description": "场景状态。典型表达式：res.status == 'ACTIVE'。",
+          "i18nKey": "auth.resource.res_scene.attr.status",
+          "valueExamples": [
+            "ACTIVE"
+          ]
+        }
+      ]
+    }
+  },
+  "changeNote": [
+    "scenes 首版 SECURITY 设计态 Fragment"
+  ]
+}

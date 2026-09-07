@@ -1,0 +1,217 @@
+{
+  "_gov_meta": {
+    "description": "PSP authz_bo_meta_model 表 schema_json 字段(v2.0)，bo_code='operation-logs'",
+    "target_table": "authz_bo_meta_model",
+    "target_condition": "bo_code = 'operation-logs'",
+    "generated_from": "operation-logs.schema-view.v2.json",
+    "schema_version": "2.0",
+    "generated_at": "2026-09-07T13:14:57.666678+00:00"
+  },
+  "schema_json": {
+    "entities": [
+      {
+        "code": "operation-log",
+        "name": "操作审计日志",
+        "isPrimary": true,
+        "tableName": "crm_operation_log",
+        "rowLevelRuleEntries": [
+          "biz_type",
+          "biz_id",
+          "operation_type",
+          "operator_id",
+          "created_time"
+        ],
+        "cascadeDelete": false,
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键（雪花ID）",
+            "type": "LONG",
+            "isPk": true,
+            "fieldName": "id",
+            "columnName": "id",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "biz_type",
+            "name": "业务对象类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "bizType",
+            "columnName": "biz_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "biz_id",
+            "name": "业务对象ID",
+            "type": "LONG",
+            "isPk": false,
+            "fieldName": "bizId",
+            "columnName": "biz_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "operation_type",
+            "name": "操作类型",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "operationType",
+            "columnName": "operation_type",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "operator_id",
+            "name": "操作人ID",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "operatorId",
+            "columnName": "operator_id",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "operator_name",
+            "name": "操作人姓名",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "operatorName",
+            "columnName": "operator_name",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "description",
+            "name": "操作描述",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "description",
+            "columnName": "description",
+            "fieldControl": true,
+            "filterable": false,
+            "fieldControlStrategy": "RESTRICTED"
+          },
+          {
+            "code": "is_deleted",
+            "name": "逻辑删除",
+            "type": "INTEGER",
+            "isPk": false,
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "fieldControl": false,
+            "filterable": true
+          },
+          {
+            "code": "updated_time",
+            "name": "修改时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "updated_by",
+            "name": "修改人",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "fieldControl": false,
+            "filterable": false
+          },
+          {
+            "code": "tenant_code",
+            "name": "租户标识",
+            "type": "STRING",
+            "isPk": false,
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "fieldControl": false,
+            "filterable": false
+          }
+        ]
+      }
+    ],
+    "operations": [
+      {
+        "code": "CREATE",
+        "name": "记录操作日志",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "CREATE"
+      },
+      {
+        "code": "EXPORT",
+        "name": "导出",
+        "scope": "BO",
+        "act_aliases": "export",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "LIST",
+        "name": "列表查询",
+        "scope": "BO",
+        "act_aliases": "list,search",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "READ",
+        "name": "查看详情",
+        "scope": "BO",
+        "act_aliases": "read",
+        "primaryDataAction": "READ"
+      },
+      {
+        "code": "UPDATE",
+        "name": "更新",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "UPDATE"
+      },
+      {
+        "code": "DELETE",
+        "name": "删除",
+        "scope": "BO",
+        "act_aliases": "",
+        "primaryDataAction": "DELETE"
+      }
+    ]
+  },
+  "_sql": {
+    "update_statement": "UPDATE authz_bo_meta_model SET schema_json = '<JSON>', updated_by = 'governance', updated_at = NOW() WHERE bo_code = 'operation-logs' AND tenant_id = 'default' AND is_deleted = 0;",
+    "verify_statement": "SELECT id, bo_code, bo_name, adapter_type, resolver, data_domain_id, updated_at FROM authz_bo_meta_model WHERE bo_code = 'operation-logs' AND tenant_id = 'default' AND is_deleted = 0;",
+    "expected_permission_items_after_publish": [
+      "RES_DATA_BO + operation-logs_bo_meta_id + CREATE",
+      "RES_DATA_BO + operation-logs_bo_meta_id + EXPORT",
+      "RES_DATA_BO + operation-logs_bo_meta_id + LIST",
+      "RES_DATA_BO + operation-logs_bo_meta_id + READ",
+      "RES_DATA_BO + operation-logs_bo_meta_id + UPDATE",
+      "RES_DATA_BO + operation-logs_bo_meta_id + DELETE"
+    ]
+  }
+}

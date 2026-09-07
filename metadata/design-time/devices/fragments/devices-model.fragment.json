@@ -1,0 +1,412 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "devices",
+  "metaType": "MODEL",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "boCode": "devices",
+    "boName": "设备档案",
+    "description": "设备档案业务对象，管理已销售给客户的产品设备，以设备序列号（device_serial_no）作为业务主键。采用'外部聚合+本地覆盖'混合数据架构：设备主档信息（订单、客户、产品、保修、价格等）来自外部 DPR 系统只读聚合，本地 crm_device_local_state 表仅承载需服务销售侧维护覆盖的状态字段（device_status、product_status）。",
+    "apiConfig": {
+      "resourcePath": "/devices",
+      "idField": "id",
+      "idType": "LONG",
+      "businessKeyField": "device_serial_no",
+      "aggregateApiPolicy": {
+        "listProjectionScope": "ROOT_SUMMARY",
+        "readScope": "ROOT_ENTITY_ONLY",
+        "createScope": "ROOT_ENTITY_ONLY",
+        "updateScope": "ROOT_ENTITY_ONLY",
+        "deleteScope": "ROOT_ENTITY_ONLY",
+        "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS",
+        "detailEmbedEntities": []
+      },
+      "searchEnabled": true,
+      "batchEnabled": true
+    },
+    "boConfig": {
+      "objectType": "SINGLE",
+      "nameField": "device_serial_no",
+      "statusField": "device_status",
+      "logicDeleteFlag": true,
+      "versionFlag": false,
+      "idStrategy": "SNOWFLAKE",
+      "auditStrategy": "DATABASE",
+      "defaultSort": {
+        "field": "updated_time",
+        "direction": "desc"
+      }
+    },
+    "entities": [
+      {
+        "code": "device",
+        "name": "设备档案主实体",
+        "isPrimary": true,
+        "aggregateRole": "ROOT",
+        "tableName": "crm_device_local_state",
+        "attributes": [
+          {
+            "code": "id",
+            "name": "主键 Snowflake",
+            "type": "LONG",
+            "isPk": true,
+            "semanticRole": "TECHNICAL_ID",
+            "filterable": false
+          },
+          {
+            "code": "device_serial_no",
+            "fieldName": "deviceSerialNo",
+            "columnName": "device_serial_no",
+            "name": "设备序列号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "BUSINESS_KEY",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.device_serial_no"
+          },
+          {
+            "code": "order_id",
+            "fieldName": "orderId",
+            "name": "销售订单编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.order_id"
+          },
+          {
+            "code": "customer_name",
+            "fieldName": "customerName",
+            "name": "合同主体客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.customer_name"
+          },
+          {
+            "code": "parent_customer_name",
+            "fieldName": "parentCustomerName",
+            "name": "一级客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.parent_customer_name"
+          },
+          {
+            "code": "fop_customer_name",
+            "fieldName": "fopCustomerName",
+            "name": "业务主体客户名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.fop_customer_name"
+          },
+          {
+            "code": "product_name",
+            "fieldName": "productName",
+            "name": "产品名称",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.product_name"
+          },
+          {
+            "code": "spec",
+            "fieldName": "spec",
+            "name": "品名规格",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.spec"
+          },
+          {
+            "code": "product_model",
+            "fieldName": "productModel",
+            "name": "产品型号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.product_model"
+          },
+          {
+            "code": "product_line",
+            "fieldName": "productLine",
+            "name": "产品线",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.product_line"
+          },
+          {
+            "code": "ship_time",
+            "fieldName": "shipTime",
+            "name": "发货时间",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.ship_time"
+          },
+          {
+            "code": "material_code",
+            "fieldName": "materialCode",
+            "name": "物料编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.material_code"
+          },
+          {
+            "code": "contract_no",
+            "fieldName": "contractNo",
+            "name": "合同编号",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.contract_no"
+          },
+          {
+            "code": "maintenance_service",
+            "fieldName": "maintenanceService",
+            "name": "维保服务",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.maintenance_service"
+          },
+          {
+            "code": "renewal_days",
+            "fieldName": "renewalDays",
+            "name": "续保天数",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.renewal_days"
+          },
+          {
+            "code": "renewal_times",
+            "fieldName": "renewalTimes",
+            "name": "续保次数",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.renewal_times"
+          },
+          {
+            "code": "service_list_price",
+            "fieldName": "serviceListPrice",
+            "name": "服务目录价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.service_list_price"
+          },
+          {
+            "code": "hardware_list_price",
+            "fieldName": "hardwareListPrice",
+            "name": "硬件目录价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.hardware_list_price"
+          },
+          {
+            "code": "domestic_hardware_ship_price",
+            "fieldName": "domesticHardwareShipPrice",
+            "name": "国内硬件出货价",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.domestic_hardware_ship_price"
+          },
+          {
+            "code": "overseas_hardware_list_price_usd",
+            "fieldName": "overseasHardwareListPriceUsd",
+            "name": "海外硬件目录价（美金）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.overseas_hardware_list_price_usd"
+          },
+          {
+            "code": "overseas_hardware_ship_price_usd",
+            "fieldName": "overseasHardwareShipPriceUsd",
+            "name": "海外硬件出货价（美金）",
+            "type": "DECIMAL",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.overseas_hardware_ship_price_usd"
+          },
+          {
+            "code": "service_subject",
+            "fieldName": "serviceSubject",
+            "name": "服务主体",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.service_subject"
+          },
+          {
+            "code": "region",
+            "fieldName": "region",
+            "name": "区域",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.region"
+          },
+          {
+            "code": "warranty_start_date",
+            "fieldName": "warrantyStartDate",
+            "name": "保修开始日期",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.warranty_start_date"
+          },
+          {
+            "code": "warranty_end_date",
+            "fieldName": "warrantyEndDate",
+            "name": "保修结束日期",
+            "type": "DATE",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.warranty_end_date"
+          },
+          {
+            "code": "data_source",
+            "fieldName": "dataSource",
+            "name": "数据来源",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.data_source"
+          },
+          {
+            "code": "device_status",
+            "fieldName": "deviceStatus",
+            "columnName": "device_status",
+            "name": "设备状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "STATUS",
+            "filterable": true,
+            "defaultValue": "RUNNING",
+            "i18nKey": "bo.devices.field.device_status"
+          },
+          {
+            "code": "product_status",
+            "fieldName": "productStatus",
+            "columnName": "product_status",
+            "name": "产品状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.product_status"
+          },
+          {
+            "code": "equip_maint_status",
+            "fieldName": "equipMaintStatus",
+            "name": "设备维保状态",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.equip_maint_status"
+          },
+          {
+            "code": "is_deleted",
+            "fieldName": "isDeleted",
+            "columnName": "is_deleted",
+            "name": "删除标记",
+            "type": "INTEGER",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "defaultValue": "0"
+          },
+          {
+            "code": "created_time",
+            "fieldName": "createdTime",
+            "columnName": "created_time",
+            "name": "创建时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.devices.field.created_time"
+          },
+          {
+            "code": "updated_time",
+            "fieldName": "updatedTime",
+            "columnName": "updated_time",
+            "name": "更新时间",
+            "type": "DATETIME",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": true,
+            "i18nKey": "bo.devices.field.updated_time"
+          },
+          {
+            "code": "created_by",
+            "fieldName": "createdBy",
+            "columnName": "created_by",
+            "name": "创建人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.devices.field.created_by"
+          },
+          {
+            "code": "updated_by",
+            "fieldName": "updatedBy",
+            "columnName": "updated_by",
+            "name": "更新人",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false,
+            "i18nKey": "bo.devices.field.updated_by"
+          },
+          {
+            "code": "tenant_code",
+            "fieldName": "tenantCode",
+            "columnName": "tenant_code",
+            "name": "租户编码",
+            "type": "STRING",
+            "isPk": false,
+            "semanticRole": "NORMAL",
+            "filterable": false
+          }
+        ]
+      }
+    ]
+  }
+}

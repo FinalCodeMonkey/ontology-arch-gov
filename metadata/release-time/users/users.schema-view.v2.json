@@ -1,0 +1,1543 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-schema-view.v2.schema.json",
+  "boCode": "users",
+  "boName": "用户",
+  "description": "用户管理业务对象，单实体建模（SINGLE），主实体 dap-sys-user 对应 PSP 用户数据表，覆盖员工基本信息、联系方式、组织归属、岗位及管理关系。PSP 中 bo_code 为 users。",
+  "schemaVersion": "2.0",
+  "apiConfig": {
+    "resourcePath": "/users",
+    "idField": "id",
+    "idType": "STRING",
+    "responseWrapper": "ApiResponse",
+    "batchResultType": "BatchResultDTO",
+    "businessKeyField": "user_id",
+    "aggregateApiPolicy": {
+      "listProjectionScope": "ROOT_SUMMARY",
+      "readScope": "ROOT_ENTITY_ONLY",
+      "createScope": "ROOT_ENTITY_ONLY",
+      "updateScope": "ROOT_ENTITY_ONLY",
+      "deleteScope": "ROOT_ENTITY_ONLY",
+      "orphanPolicy": "DENY_DELETE_WHEN_CHILD_EXISTS"
+    },
+    "searchEnabled": true,
+    "batchEnabled": true
+  },
+  "boConfig": {
+    "objectType": "SINGLE",
+    "nameField": "staff_name",
+    "statusField": "staff_status",
+    "logicDeleteFlag": true,
+    "versionFlag": false,
+    "defaultSort": {
+      "field": "join_date",
+      "direction": "desc"
+    }
+  },
+  "listViewConfig": {
+    "defaultPageSize": 20,
+    "formLayout": "GRID",
+    "formColumns": 2,
+    "formLabelWidth": 140,
+    "searchCollapsible": true
+  },
+  "entities": [
+    {
+      "code": "dap-sys-user",
+      "name": "用户实体",
+      "isPrimary": true,
+      "aggregateRole": "ROOT",
+      "tableName": "dap_sys_user",
+      "attributes": [
+        {
+          "code": "id",
+          "name": "用户ID",
+          "type": "STRING",
+          "isPk": true,
+          "fieldName": "id",
+          "columnName": "id",
+          "semanticRole": "TECHNICAL_ID",
+          "filterable": false,
+          "validation": {
+            "required": true
+          },
+          "view": {
+            "displayName": "编号",
+            "sortable": false,
+            "columnWidth": 70,
+            "order": 10,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "HIDDEN",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "code",
+          "name": "用户编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "code",
+          "columnName": "code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "用户编码",
+            "sortable": false,
+            "columnWidth": 100,
+            "hidden": true,
+            "order": 38,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "name",
+          "name": "用户名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "name",
+          "columnName": "name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "用户名",
+            "sortable": false,
+            "columnWidth": 100,
+            "hidden": true,
+            "order": 37,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "staff_no",
+          "name": "工号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffNo",
+          "columnName": "staff_no",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "unique": true,
+            "message": "工号不能为空、不超过50字且不可重复"
+          },
+          "view": {
+            "displayName": "工号",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 20,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入工号",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "user_id",
+          "name": "用户账号ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "userId",
+          "columnName": "user_id",
+          "semanticRole": "BUSINESS_KEY",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 50,
+            "message": "用户账号ID不能为空"
+          },
+          "view": {
+            "displayName": "用户账号ID",
+            "sortable": false,
+            "columnWidth": 130,
+            "order": 25,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入用户账号ID",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "staff_company_name",
+          "name": "所属公司",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffCompanyName",
+          "columnName": "staff_company_name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 200
+          },
+          "view": {
+            "displayName": "所属公司",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 40,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "user_company_name"
+          }
+        },
+        {
+          "code": "staff_name",
+          "name": "员工姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffName",
+          "columnName": "staff_name",
+          "semanticRole": "NAME",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 100,
+            "message": "员工姓名不能为空且不超过100字"
+          },
+          "view": {
+            "displayName": "员工姓名",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 30,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "instantValidate": true,
+            "formType": "INPUT",
+            "placeholder": "请输入员工姓名",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "staff_en_name",
+          "name": "英文名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffEnName",
+          "columnName": "staff_en_name",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "英文名",
+            "sortable": false,
+            "columnWidth": 110,
+            "order": 35,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入英文名",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "staff_status",
+          "name": "员工状态",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffStatus",
+          "columnName": "staff_status",
+          "semanticRole": "STATUS",
+          "filterable": true,
+          "validation": {
+            "required": true,
+            "max": 20,
+            "message": "员工状态不能为空"
+          },
+          "view": {
+            "displayName": "员工状态",
+            "sortable": true,
+            "columnWidth": 100,
+            "order": 70,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "user_staff_status"
+          }
+        },
+        {
+          "code": "staff_status_code",
+          "name": "员工状态编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffStatusCode",
+          "columnName": "staff_status_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 20
+          },
+          "view": {
+            "displayName": "状态编码",
+            "sortable": false,
+            "columnWidth": 80,
+            "hidden": true,
+            "order": 73,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "staff_email",
+          "name": "公司邮箱",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffEmail",
+          "columnName": "staff_email",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "SENSITIVE",
+          "reason": "公司邮箱为内部敏感信息，需授权查看",
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "公司邮箱",
+            "sortable": false,
+            "columnWidth": 180,
+            "order": 90,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入公司邮箱",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "staff_type_code",
+          "name": "员工类型编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffTypeCode",
+          "columnName": "staff_type_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "类型编码",
+            "sortable": false,
+            "columnWidth": 80,
+            "hidden": true,
+            "order": 83,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "staff_type",
+          "name": "员工类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffType",
+          "columnName": "staff_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "员工类型",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 80,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "user_staff_type"
+          }
+        },
+        {
+          "code": "staff_photo",
+          "name": "员工照片",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffPhoto",
+          "columnName": "staff_photo",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "员工照片",
+            "sortable": false,
+            "columnWidth": 120,
+            "hidden": true,
+            "order": 170,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "FILE_UPLOAD",
+            "exportable": false,
+            "importable": false
+          }
+        },
+        {
+          "code": "personal_email",
+          "name": "个人邮箱",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "personalEmail",
+          "columnName": "personal_email",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "PII",
+          "reason": "个人邮箱涉及个人隐私，需授权查看",
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "个人邮箱",
+            "sortable": false,
+            "columnWidth": 180,
+            "hidden": true,
+            "order": 93,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入个人邮箱",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "personal_mobile",
+          "name": "个人手机",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "personalMobile",
+          "columnName": "personal_mobile",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "MASKED",
+          "privacyClass": "PII",
+          "reason": "个人手机号涉及个人隐私，默认脱敏显示",
+          "validation": {
+            "max": 20
+          },
+          "view": {
+            "displayName": "个人手机",
+            "sortable": false,
+            "columnWidth": 130,
+            "hidden": true,
+            "order": 95,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "INPUT",
+            "placeholder": "请输入个人手机",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "join_date",
+          "name": "入职日期",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "joinDate",
+          "columnName": "join_date",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "入职日期",
+            "sortable": true,
+            "columnWidth": 120,
+            "format": "date",
+            "order": 130,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "BETWEEN",
+                "label": "区间"
+              }
+            ],
+            "dataType": "datetime",
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "join_job_date",
+          "name": "参加工作日期",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "joinJobDate",
+          "columnName": "join_job_date",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "view": {
+            "displayName": "参加工作日",
+            "sortable": false,
+            "columnWidth": 120,
+            "format": "date",
+            "hidden": true,
+            "order": 133,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "nation_code",
+          "name": "民族编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "nationCode",
+          "columnName": "nation_code",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 20
+          },
+          "view": {
+            "displayName": "民族编码",
+            "sortable": false,
+            "columnWidth": 60,
+            "hidden": true,
+            "order": 138,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "nation",
+          "name": "民族",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "nation",
+          "columnName": "nation",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "validation": {
+            "max": 20
+          },
+          "view": {
+            "displayName": "民族",
+            "sortable": false,
+            "columnWidth": 80,
+            "hidden": true,
+            "order": 137,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": false,
+            "exportable": true,
+            "importable": true,
+            "dictCode": "nation"
+          }
+        },
+        {
+          "code": "country_and_area_code",
+          "name": "国家地区编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "countryAndAreaCode",
+          "columnName": "country_and_area_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "国家地区编码",
+            "sortable": false,
+            "columnWidth": 90,
+            "hidden": true,
+            "order": 143,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "country_and_area",
+          "name": "国家地区",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "countryAndArea",
+          "columnName": "country_and_area",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "国家地区",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 140,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "country_and_area"
+          }
+        },
+        {
+          "code": "work_place_code",
+          "name": "工作地编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "workPlaceCode",
+          "columnName": "work_place_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "工作地编码",
+            "sortable": false,
+            "columnWidth": 80,
+            "hidden": true,
+            "order": 153,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "work_place",
+          "name": "工作地",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "workPlace",
+          "columnName": "work_place",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "工作地",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 150,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "work_place"
+          }
+        },
+        {
+          "code": "office_place_code",
+          "name": "办公地点编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "officePlaceCode",
+          "columnName": "office_place_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "办公地编码",
+            "sortable": false,
+            "columnWidth": 80,
+            "hidden": true,
+            "order": 163,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "office_place",
+          "name": "办公地点",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "officePlace",
+          "columnName": "office_place",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "办公地点",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 160,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "office_place"
+          }
+        },
+        {
+          "code": "birthday",
+          "name": "出生日期",
+          "type": "DATETIME",
+          "isPk": false,
+          "fieldName": "birthday",
+          "columnName": "birthday",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "PII",
+          "reason": "出生日期涉及个人隐私，需授权查看",
+          "view": {
+            "displayName": "出生日期",
+            "sortable": false,
+            "columnWidth": 120,
+            "format": "date",
+            "hidden": true,
+            "order": 135,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "DATE",
+            "queryable": false,
+            "exportable": false,
+            "importable": true
+          }
+        },
+        {
+          "code": "gender_code",
+          "name": "性别编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "genderCode",
+          "columnName": "gender_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 10
+          },
+          "view": {
+            "displayName": "性别编码",
+            "sortable": false,
+            "columnWidth": 60,
+            "hidden": true,
+            "order": 123,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "gender",
+          "name": "性别",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "gender",
+          "columnName": "gender",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 10
+          },
+          "view": {
+            "displayName": "性别",
+            "sortable": false,
+            "columnWidth": 60,
+            "order": 120,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "gender"
+          }
+        },
+        {
+          "code": "manage_user_id",
+          "name": "直属上级用户ID",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "manageUserId",
+          "columnName": "manage_user_id",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "users",
+            "refFieldCode": "user_id",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "staff_no",
+                "localCode": "manage_staff_no",
+                "displayRole": "BUSINESS_KEY"
+              },
+              {
+                "refFieldCode": "staff_name",
+                "localCode": "manage_staff_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "message": "直属上级ID引用须有效"
+          },
+          "view": {
+            "displayName": "直属上级",
+            "sortable": false,
+            "columnWidth": 120,
+            "order": 100,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "USER_SELECT",
+            "placeholder": "请选择直属上级",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "users",
+            "refField": "staff_name"
+          }
+        },
+        {
+          "code": "manage_staff_no",
+          "name": "直属上级工号",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "manageStaffNo",
+          "columnName": "manage_staff_no",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "view": {
+            "displayName": "上级工号",
+            "sortable": false,
+            "columnWidth": 100,
+            "hidden": true,
+            "order": 105,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "manage_staff_name",
+          "name": "直属上级姓名",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "manageStaffName",
+          "columnName": "manage_staff_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "上级姓名",
+            "sortable": false,
+            "columnWidth": 110,
+            "hidden": true,
+            "order": 103,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "department_code",
+          "name": "所属部门编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentCode",
+          "columnName": "department_code",
+          "semanticRole": "CROSS_BO_REF",
+          "filterable": true,
+          "crossBoRef": {
+            "refBoCode": "orgs",
+            "refFieldCode": "department_code",
+            "relationType": "MANY_TO_ONE",
+            "displayFields": [
+              {
+                "refFieldCode": "department_name",
+                "localCode": "department_name",
+                "displayRole": "NAME"
+              }
+            ]
+          },
+          "validation": {
+            "required": true,
+            "message": "必须归属某个部门"
+          },
+          "view": {
+            "displayName": "所属部门",
+            "sortable": false,
+            "columnWidth": 160,
+            "order": 50,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "OBJECT_SELECT",
+            "placeholder": "请选择所属部门",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "refObject": "orgs",
+            "refField": "department_name"
+          }
+        },
+        {
+          "code": "department_name",
+          "name": "所属部门名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "departmentName",
+          "columnName": "department_name",
+          "semanticRole": "CROSS_BO_DISPLAY",
+          "filterable": false,
+          "redundant": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "部门名称",
+            "sortable": true,
+            "columnWidth": 160,
+            "hidden": true,
+            "order": 55,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "LIKE",
+                "label": "包含"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "is_dept_portion_manage",
+          "name": "是否部门分管负责人",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "isDeptPortionManage",
+          "columnName": "is_dept_portion_manage",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "view": {
+            "displayName": "是否部门负责人",
+            "sortable": false,
+            "columnWidth": 140,
+            "order": 180,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "SWITCH",
+            "exportable": true,
+            "importable": false,
+            "disabled": true,
+            "dictCode": "boolean_yes_no"
+          }
+        },
+        {
+          "code": "staff_management_jurisdiction",
+          "name": "人员管理权限",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "staffManagementJurisdiction",
+          "columnName": "staff_management_jurisdiction",
+          "semanticRole": "NORMAL",
+          "filterable": false,
+          "fieldControl": "RESTRICTED",
+          "privacyClass": "CONFIDENTIAL",
+          "reason": "人员管理权限为内部管控信息，需授权查看",
+          "view": {
+            "displayName": "人员管理权限",
+            "sortable": false,
+            "columnWidth": 200,
+            "hidden": true,
+            "order": 190,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "TEXTAREA",
+            "queryable": false,
+            "exportable": true,
+            "importable": true
+          }
+        },
+        {
+          "code": "post_code",
+          "name": "岗位编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "postCode",
+          "columnName": "post_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "岗位编码",
+            "sortable": false,
+            "columnWidth": 100,
+            "hidden": true,
+            "order": 63,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "post_name",
+          "name": "岗位名称",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "postName",
+          "columnName": "post_name",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 100
+          },
+          "view": {
+            "displayName": "岗位名称",
+            "sortable": true,
+            "columnWidth": 130,
+            "order": 60,
+            "showInList": true,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "user_post_name"
+          }
+        },
+        {
+          "code": "organization_type_code",
+          "name": "组织类型编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "organizationTypeCode",
+          "columnName": "organization_type_code",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "组织类型编码",
+            "sortable": false,
+            "columnWidth": 100,
+            "hidden": true,
+            "order": 113,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": false,
+            "formType": "INPUT",
+            "exportable": true,
+            "importable": false,
+            "disabled": true
+          }
+        },
+        {
+          "code": "organization_type",
+          "name": "组织类型",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "organizationType",
+          "columnName": "organization_type",
+          "semanticRole": "NORMAL",
+          "filterable": true,
+          "validation": {
+            "max": 50
+          },
+          "view": {
+            "displayName": "组织类型",
+            "sortable": true,
+            "columnWidth": 110,
+            "order": 110,
+            "showInList": false,
+            "showInDetail": true,
+            "editableInForm": true,
+            "formType": "SELECT",
+            "queryable": true,
+            "queryOperatorOptions": [
+              {
+                "value": "EQ",
+                "label": "等于"
+              }
+            ],
+            "dataType": "string",
+            "exportable": true,
+            "importable": true,
+            "dictCode": "user_organization_type"
+          }
+        },
+        {
+          "code": "country_code",
+          "name": "国籍编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "countryCode",
+          "columnName": "country_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "permanent_country_and_area_code",
+          "name": "常驻国家地区编码",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "permanentCountryAndAreaCode",
+          "columnName": "permanent_country_and_area_code",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        },
+        {
+          "code": "permanent_country_and_area",
+          "name": "常驻国家地区",
+          "type": "STRING",
+          "isPk": false,
+          "fieldName": "permanentCountryAndArea",
+          "columnName": "permanent_country_and_area",
+          "semanticRole": "NORMAL",
+          "filterable": false
+        }
+      ],
+      "rowLevelRuleEntries": [
+        "department_code",
+        "staff_status",
+        "staff_status_code",
+        "staff_type_code",
+        "staff_company_name",
+        "organization_type_code",
+        "manage_user_id",
+        "country_and_area_code",
+        "work_place_code",
+        "office_place_code"
+      ],
+      "rowFallbackScope": "NONE"
+    }
+  ],
+  "operations": [
+    {
+      "code": "CREATE",
+      "name": "新建用户",
+      "scope": "BO",
+      "operationKind": "CREATE",
+      "primaryDataAction": "CREATE",
+      "authzAction": "CREATE",
+      "httpMethod": "POST",
+      "supportsBatch": true,
+      "singleResultType": "UserDTO",
+      "batchResultType": "BatchResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "新建用户记录，录入员工基本信息、联系方式、组织归属及岗位信息。标准 API：POST /users，批量 API：POST /users/batch。"
+    },
+    {
+      "code": "EDIT",
+      "name": "编辑用户",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "httpMethod": "PATCH",
+      "supportsBatch": true,
+      "singleResultType": "UserDTO",
+      "batchResultType": "BatchResultDTO",
+      "position": "DETAIL",
+      "triggerEvent": "OPEN_FORM",
+      "description": "编辑用户基本信息、联系方式、组织归属、岗位及管理关系。标准 API：PATCH /users/{id}，批量 API：PATCH /users/batch。"
+    },
+    {
+      "code": "DELETE",
+      "name": "删除用户",
+      "scope": "BO",
+      "operationKind": "DELETE",
+      "primaryDataAction": "DELETE",
+      "authzAction": "DELETE",
+      "httpMethod": "DELETE",
+      "supportsBatch": true,
+      "batchResultType": "BatchResultDTO",
+      "position": "ROW",
+      "triggerEvent": "CONFIRM_THEN_API",
+      "description": "逻辑删除用户记录。标准 API：DELETE /users/{id}，批量 API：DELETE /users/batch。"
+    },
+    {
+      "code": "EXPORT",
+      "name": "导出",
+      "scope": "BO",
+      "operationKind": "EXPORT",
+      "primaryDataAction": "READ",
+      "authzAction": "EXPORT",
+      "httpMethod": "POST",
+      "actionPath": "export",
+      "async": true,
+      "singleResultType": "ExportTaskDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "API_CALL",
+      "description": "导出用户数据为文件，支持按部门、员工状态、员工类型等条件筛选。API：POST /users/export。"
+    },
+    {
+      "code": "IMPORT",
+      "name": "导入",
+      "scope": "BO",
+      "operationKind": "IMPORT",
+      "primaryDataAction": "CREATE",
+      "authzAction": "IMPORT",
+      "httpMethod": "POST",
+      "actionPath": "import",
+      "async": false,
+      "singleResultType": "UserImportResultDTO",
+      "position": "TOOLBAR",
+      "triggerEvent": "OPEN_FORM",
+      "description": "批量导入用户数据，执行必填、枚举及工号唯一性校验。API：POST /users/import。"
+    },
+    {
+      "code": "LIST",
+      "name": "列表查询",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "SEARCH",
+      "name": "高级搜索",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "LIST",
+      "derived": true,
+      "derivedFrom": "apiConfig.searchEnabled"
+    },
+    {
+      "code": "READ",
+      "name": "查看详情",
+      "scope": "BO",
+      "operationKind": "CUSTOM",
+      "primaryDataAction": "READ",
+      "authzAction": "READ",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.readScope"
+    },
+    {
+      "code": "UPDATE",
+      "name": "更新",
+      "scope": "BO",
+      "operationKind": "UPDATE",
+      "primaryDataAction": "UPDATE",
+      "authzAction": "UPDATE",
+      "derived": true,
+      "derivedFrom": "apiConfig.aggregateApiPolicy.updateScope"
+    }
+  ],
+  "rules": [
+    {
+      "code": "USER_STAFF_NO_UNIQUE",
+      "name": "工号唯一",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "BO",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "工号已存在，请使用其他工号",
+      "description": "创建或修改用户时，staff_no 必须唯一（含已逻辑删除记录）。"
+    },
+    {
+      "code": "USER_DEPARTMENT_EXISTS",
+      "name": "用户所属部门必须存在",
+      "ruleType": "CONSISTENCY",
+      "scope": "CROSS_BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "用户所属部门不存在，请选择有效部门",
+      "description": "创建/更新用户时，department_code 引用的部门必须在 orgs BO 中存在。",
+      "crossBoRef": {
+        "refBoCode": "orgs",
+        "refFieldCode": "department_code",
+        "localEntityCode": "dap-sys-user",
+        "localFieldCode": "department_code"
+      }
+    },
+    {
+      "code": "USER_EMAIL_FORMAT",
+      "name": "邮箱格式校验",
+      "ruleType": "COMPLEX_VALIDATION",
+      "scope": "FIELD",
+      "trigger": "BEFORE_VALIDATE",
+      "severity": "ERROR",
+      "message": "公司邮箱格式无效",
+      "description": "公司邮箱必须符合标准邮箱格式。",
+      "entityCode": "dap-sys-user",
+      "fieldCode": "staff_email"
+    },
+    {
+      "code": "USER_STATUS_EDITABLE",
+      "name": "离职用户不可编辑",
+      "ruleType": "STATE",
+      "scope": "BO",
+      "trigger": "BEFORE_OPERATION",
+      "severity": "ERROR",
+      "message": "离职用户不可编辑，如需恢复请先变更员工状态",
+      "description": "员工状态为离职时，禁止修改业务字段（状态字段本身除外）。",
+      "expression": "staff_status != '离职'",
+      "exprAst": {
+        "type": "binary",
+        "op": "NEQ",
+        "left": {
+          "type": "field",
+          "path": "staff_status"
+        },
+        "right": {
+          "type": "literal",
+          "value": "离职"
+        }
+      },
+      "polarity": "safety"
+    }
+  ],
+  "governance": {
+    "sourceFragmentVersion": "1.0",
+    "releaseVersion": 1,
+    "generatedAt": "2026-09-07T13:14:25.233027+00:00",
+    "generatedBy": "bo-publish-gen.py"
+  }
+}

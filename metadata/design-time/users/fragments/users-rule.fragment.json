@@ -1,0 +1,78 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "users",
+  "metaType": "RULE",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "rules": [
+      {
+        "code": "USER_STAFF_NO_UNIQUE",
+        "name": "工号唯一",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "BO",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "工号已存在，请使用其他工号",
+        "description": "创建或修改用户时，staff_no 必须唯一（含已逻辑删除记录）。"
+      },
+      {
+        "code": "USER_DEPARTMENT_EXISTS",
+        "name": "用户所属部门必须存在",
+        "ruleType": "CONSISTENCY",
+        "scope": "CROSS_BO",
+        "trigger": "BEFORE_OPERATION",
+        "severity": "ERROR",
+        "message": "用户所属部门不存在，请选择有效部门",
+        "description": "创建/更新用户时，department_code 引用的部门必须在 orgs BO 中存在。",
+        "crossBoRef": {
+          "refBoCode": "orgs",
+          "refFieldCode": "department_code",
+          "localEntityCode": "dap-sys-user",
+          "localFieldCode": "department_code"
+        }
+      },
+      {
+        "code": "USER_EMAIL_FORMAT",
+        "name": "邮箱格式校验",
+        "ruleType": "COMPLEX_VALIDATION",
+        "scope": "FIELD",
+        "entityCode": "dap-sys-user",
+        "fieldCode": "staff_email",
+        "trigger": "BEFORE_VALIDATE",
+        "severity": "ERROR",
+        "message": "公司邮箱格式无效",
+        "description": "公司邮箱必须符合标准邮箱格式。"
+      },
+      {
+        "code": "USER_STATUS_EDITABLE",
+        "name": "离职用户不可编辑",
+        "ruleType": "STATE",
+        "scope": "BO",
+        "trigger": "BEFORE_OPERATION",
+        "polarity": "safety",
+        "expression": "staff_status != '离职'",
+        "severity": "ERROR",
+        "message": "离职用户不可编辑，如需恢复请先变更员工状态",
+        "description": "员工状态为离职时，禁止修改业务字段（状态字段本身除外）。",
+        "exprAst": {
+          "type": "binary",
+          "op": "NEQ",
+          "left": {
+            "type": "field",
+            "path": "staff_status"
+          },
+          "right": {
+            "type": "literal",
+            "value": "离职"
+          }
+        }
+      }
+    ]
+  },
+  "changeNote": [
+    "users 首版 RULE Fragment，含工号唯一性、跨 BO 部门存在性校验、邮箱格式校验与离职状态保护规则"
+  ]
+}

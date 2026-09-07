@@ -172,6 +172,111 @@
             ],
             "recommendation": "默认 ENTITY_ONLY；局部聚合更新使用 alternateEntityApis 显式端点。",
             "impact": "影响下级子实体是否可能被误覆盖。"
+          },
+          {
+            "path": "apiDefaults.entityApiPolicy.listProjectionScope",
+            "label": "子实体列表返回范围",
+            "currentValue": "ENTITY_SUMMARY",
+            "description": "子实体列表查询返回哪些字段。",
+            "options": [
+              { "value": "ENTITY_SUMMARY", "label": "实体摘要 + 汇总字段", "description": "返回实体字段和必要汇总字段，不内嵌下级子实体。", "recommended": true },
+              { "value": "ENTITY_ONLY", "label": "仅实体本体", "description": "只返回实体字段，不返回汇总字段。" },
+              { "value": "ENTITY_AGGREGATE", "label": "局部聚合", "description": "内嵌下级子实体，数据量大，不建议默认使用。" }
+            ],
+            "recommendation": "推荐 ENTITY_SUMMARY，兼顾性能和业务展示。",
+            "impact": "影响子实体列表性能和列表 DTO 结构。"
+          },
+          {
+            "path": "apiDefaults.entityApiPolicy.createScope",
+            "label": "子实体创建范围",
+            "currentValue": "ENTITY_ONLY",
+            "description": "POST 子实体是否允许一次提交子实体和下级子实体。",
+            "options": [
+              { "value": "ENTITY_ONLY", "label": "仅实体本体", "description": "只创建目标子实体。", "recommended": true },
+              { "value": "ENTITY_AGGREGATE", "label": "局部聚合创建", "description": "一次提交子实体和下级子实体，同事务保存。" }
+            ],
+            "recommendation": "推荐 ENTITY_ONLY；多级子实体创建通过 BO Fragment 覆盖。",
+            "impact": "影响创建 DTO、事务边界和校验顺序。"
+          },
+          {
+            "path": "apiDefaults.entityApiPolicy.deleteScope",
+            "label": "子实体删除范围",
+            "currentValue": "ENTITY_ONLY",
+            "description": "DELETE 子实体时如何处理下级子实体。",
+            "options": [
+              { "value": "ENTITY_ONLY", "label": "仅实体本体", "description": "只删除目标子实体。", "recommended": true },
+              { "value": "CASCADE_CHILDREN", "label": "级联删除下级", "description": "删除目标子实体时同步处理下级子实体。" }
+            ],
+            "recommendation": "推荐 ENTITY_ONLY；级联删除需结合 orphanPolicy 显式治理。",
+            "impact": "影响删除一致性和下级子实体数据安全。"
+          },
+          {
+            "path": "apiDefaults.entityApiPolicy.orphanPolicy",
+            "label": "子实体孤儿策略",
+            "currentValue": "DENY_DELETE_WHEN_CHILD_EXISTS",
+            "description": "当只删除子实体时，如何处理已有下级子实体。",
+            "options": [
+              { "value": "DENY_DELETE_WHEN_CHILD_EXISTS", "label": "存在下级则禁止删除", "description": "最安全，避免孤儿数据。", "recommended": true },
+              { "value": "KEEP_CHILDREN_AS_HISTORY", "label": "保留为历史", "description": "保留下级子实体用于审计或历史追溯。" },
+              { "value": "DETACH_CHILDREN", "label": "解除关联", "description": "将外键置空，不推荐用于强聚合。" },
+              { "value": "MANUAL_CLEANUP_REQUIRED", "label": "人工清理", "description": "允许删除但标记需要后续人工处理。" }
+            ],
+            "recommendation": "默认使用 DENY_DELETE_WHEN_CHILD_EXISTS。",
+            "impact": "影响数据完整性和审计风险。"
+          }
+        ]
+      },
+      {
+        "group": "alternateApiPolicy",
+        "title": "备用 API 策略",
+        "description": "控制聚合根和子实体的高频备选 API 端点（如 /root、/aggregate、/replace-aggregate）的默认策略。",
+        "items": [
+          {
+            "path": "apiDefaults.alternateApiPolicy.allowRootOnlyAlternateApis",
+            "label": "允许仅主实体备用端点",
+            "currentValue": true,
+            "description": "是否自动生成 /resources/{id}/root 等仅主实体备选端点。",
+            "options": [
+              { "value": true, "label": "启用", "description": "生成 root 风格备选端点，便于前端精确获取主实体。", "recommended": true },
+              { "value": false, "label": "关闭", "description": "不生成，减少 API 表面积。" }
+            ],
+            "recommendation": "推荐启用，方便前端在无需子实体时降低传输量。",
+            "impact": "影响 API 端点数量和前端数据获取灵活性。"
+          },
+          {
+            "path": "apiDefaults.alternateApiPolicy.allowFullAggregateAlternateApis",
+            "label": "允许完整聚合备用端点",
+            "currentValue": true,
+            "description": "是否自动生成 /resources/{id}/aggregate 等完整聚合备选端点。",
+            "options": [
+              { "value": true, "label": "启用", "description": "生成 aggregate 风格备选端点，便于前端一次性获取完整聚合。", "recommended": true },
+              { "value": false, "label": "关闭", "description": "不生成，前端通过多次调用组装数据。" }
+            ],
+            "recommendation": "推荐启用；如某 BO 性能敏感，通过 Fragment 关闭。",
+            "impact": "影响 API 端点数量、单次请求数据量和后端聚合查询复杂度。"
+          },
+          {
+            "path": "apiDefaults.alternateApiPolicy.requireExplicitPathSuffix",
+            "label": "要求显式路径后缀",
+            "currentValue": true,
+            "description": "备用端点是否必须使用保留后缀才能生效。",
+            "options": [
+              { "value": true, "label": "要求显式后缀", "description": "只有 reservedSuffixes 中的后缀才会生成备选端点。", "recommended": true },
+              { "value": false, "label": "不限制", "description": "任意路径后缀都可生成备选端点，风险较大。" }
+            ],
+            "recommendation": "推荐 true，避免任意后缀造成的 API 膨胀。",
+            "impact": "影响 API 路径治理和命名冲突风险。"
+          },
+          {
+            "path": "apiDefaults.alternateApiPolicy.reservedSuffixes",
+            "label": "保留后缀列表",
+            "currentValue": ["root", "aggregate", "replace-aggregate"],
+            "description": "允许生成备用端点的保留路径后缀白名单。",
+            "options": [
+              { "value": "可追加后缀", "label": "追加保留后缀", "description": "例如 summary、export、import 等。" }
+            ],
+            "recommendation": "默认后缀已覆盖核心场景；新增需评审。",
+            "impact": "影响备选 API 端点命名规范和治理范围。"
           }
         ]
       },
@@ -204,6 +309,43 @@
             ],
             "recommendation": "推荐 {bo_snake}_no，兼顾标准化和业务语义。",
             "impact": "影响唯一性校验、导入匹配和对外展示编号。"
+          },
+          {
+            "path": "metadataDefaults.technicalIdField",
+            "label": "技术主键字段名",
+            "currentValue": "id",
+            "description": "平台生成数据库表时的默认技术主键字段名称。",
+            "options": [
+              { "value": "id", "label": "id", "description": "标准命名，与主流 ORM 默认行为一致。", "recommended": true }
+            ],
+            "recommendation": "统一使用 id，不建议按 BO 覆盖。",
+            "impact": "影响所有自动生成的表结构和 Mapper 映射。"
+          },
+          {
+            "path": "metadataDefaults.defaultObjectType",
+            "label": "默认 BO 对象类型",
+            "currentValue": "MASTER_DETAIL",
+            "description": "新建 BO 的默认结构化类型。",
+            "options": [
+              { "value": "MASTER_DETAIL", "label": "主从结构", "description": "聚合根 + 子实体，适合大多数业务对象。", "recommended": true },
+              { "value": "SINGLE", "label": "单表", "description": "仅一个实体，适合简单配置对象。" },
+              { "value": "TREE", "label": "树形结构", "description": "自引用父子关系，适合组织/分类对象。" }
+            ],
+            "recommendation": "CRM 业务对象推荐 MASTER_DETAIL。",
+            "impact": "影响实体关系建模、API 生成和发布校验规则。"
+          },
+          {
+            "path": "metadataDefaults.routeSegmentDefault",
+            "label": "子实体路由段默认值",
+            "currentValue": "plural-entity-name",
+            "description": "子实体在嵌套 URL 中的路径段命名策略。",
+            "options": [
+              { "value": "plural-entity-name", "label": "复数实体名", "description": "例如 /scenes/{id}/lines，与 REST 规范一致。", "recommended": true },
+              { "value": "entity-code-kebab", "label": "实体编码 kebab-case", "description": "使用实体 code 的 kebab 形式作为路由段。" },
+              { "value": "custom", "label": "自定义", "description": "每个实体单独声明 routeSegment。" }
+            ],
+            "recommendation": "推荐 plural-entity-name，保持 API 语义一致性。",
+            "impact": "影响子实体 API 路径生成和前端路由配置。"
           },
           {
             "path": "metadataDefaults.parentRefFieldDefault",
@@ -248,25 +390,53 @@
             ],
             "recommendation": "推荐 true。",
             "impact": "影响权限引擎资源属性可用性。"
+          },
+          {
+            "path": "securityDefaults.fieldControl",
+            "label": "字段级权限默认策略",
+            "currentValue": "OPEN",
+            "description": "无显式字段策略时，默认对字段的访问控制级别。",
+            "options": [
+              { "value": "OPEN", "label": "开放", "description": "所有字段默认可见可编辑，适合低敏业务。", "recommended": false },
+              { "value": "RESTRICTED", "label": "受限", "description": "部分字段需授权才能访问。", "recommended": true },
+              { "value": "MASKED", "label": "脱敏", "description": "敏感字段默认脱敏展示。" },
+              { "value": "HIDDEN", "label": "隐藏", "description": "敏感字段默认不返回。" }
+            ],
+            "recommendation": "政企 CRM 推荐 RESTRICTED，确保字段级安全治理。",
+            "impact": "影响数据接口字段可见性和前端展示策略。"
+          },
+          {
+            "path": "securityDefaults.privacyClass",
+            "label": "默认隐私分级",
+            "currentValue": "PUBLIC",
+            "description": "无显式隐私声明时，BO 的默认隐私分类等级。",
+            "options": [
+              { "value": "PUBLIC", "label": "公开", "description": "无特殊隐私要求，适合字典/配置类对象。", "recommended": false },
+              { "value": "SENSITIVE", "label": "敏感", "description": "包含业务敏感信息，需审计访问。", "recommended": true },
+              { "value": "PII", "label": "个人隐私", "description": "包含个人身份信息，需合规处理。" },
+              { "value": "CONFIDENTIAL", "label": "机密", "description": "高度机密，严格访问控制。" }
+            ],
+            "recommendation": "政企 CRM 推荐 SENSITIVE，确保最小权限原则。",
+            "impact": "影响数据分类、审计日志和合规检查。"
           }
         ]
       },
       {
         "group": "operationExtractionDefaults",
-        "title": "原型操作抽取默认值",
-        "description": "控制是否从界面原型按钮抽取 Operation，以及哪些按钮应视为纯 UI 交互。",
+        "title": "操作识别默认值",
+        "description": "控制是否允许从界面原型按钮生成 Operation 候选项，以及哪些按钮应视为纯 UI 交互。原型仅可作为离线分析输入，不得持久化到 BO 元数据。",
         "items": [
           {
             "path": "operationExtractionDefaults.extractFromPrototypeButtons",
             "label": "从原型按钮抽取操作",
-            "currentValue": true,
-            "description": "是否允许根据 HTML 原型按钮生成 Operation 候选项。",
+            "currentValue": false,
+            "description": "是否允许根据 HTML 原型按钮生成 Operation 候选项。即使启用，也只能用于离线候选生成，不得写入 prototypeRefs。",
             "options": [
-              { "value": true, "label": "启用", "description": "提高原型到元数据的一致性。", "recommended": true },
-              { "value": false, "label": "关闭", "description": "Operation 完全手工维护。" }
+              { "value": true, "label": "启用", "description": "仅生成待治理候选项，不持久化原型引用。" },
+              { "value": false, "label": "关闭", "description": "Operation 完全按业务/API 治理维护。", "recommended": true }
             ],
-            "recommendation": "推荐启用，但必须经过业务治理筛选。",
-            "impact": "影响 Operation 初稿生成效率和 prototypeRefs 追溯。"
+            "recommendation": "推荐关闭；如临时启用，输出只作为人工治理输入，不进入 Fragment。",
+            "impact": "影响 Operation 初稿生成效率，不影响元数据 schema。"
           },
           {
             "path": "operationExtractionDefaults.ignoreUiUtilityActions",
@@ -278,6 +448,53 @@
             ],
             "recommendation": "根据项目 UI 组件库持续补充。",
             "impact": "影响 Operation 抽取噪声。"
+          }
+        ]
+      },
+      {
+        "group": "entityNatureDefaults",
+        "title": "子实体性质 → 设计意图",
+        "description": "model-fragment.schema.json 中 entity.entityNature 声明该子实体的设计意图。具体技术栈实现方式由项目编码宪章（coding-constitution）定义，不在本 Profile 中规定。",
+        "items": [
+          {
+            "path": "entityNatureDefaults.BUSINESS.designIntent",
+            "label": "BUSINESS 子实体 — 设计意图",
+            "currentValue": "独立生命周期 + 独立持久化 + 独立 API 端点",
+            "description": "entityNature=BUSINESS（默认）的子实体承载独立业务数据，应拥有独立的持久化接口、领域服务和 REST 子路由。",
+            "recommendation": "独立持久化=true, 独立API端点=true, DB唯一约束=false",
+            "impact": "影响分层架构中各层的文件数量和 API 表面积。"
+          },
+          {
+            "path": "entityNatureDefaults.ASSOCIATION.designIntent",
+            "label": "ASSOCIATION 子实体 — 设计意图",
+            "currentValue": "聚合根内部集合 + 无独立持久化接口 + 无独立 API 端点",
+            "description": "entityNature=ASSOCIATION 的子实体为纯联结关系，生命周期完全跟随父聚合根。不暴露独立的持久化接口和 REST 端点，增删改查均通过父聚合根操作。DB 层应生成复合唯一约束防止重复关联。",
+            "recommendation": "独立持久化=false, 独立API端点=false, DB唯一约束=true, 由父聚合根统一管理",
+            "impact": "影响聚合根 DTO 结构（ID 列表 vs 嵌套对象列表）和持久化层接口数量。"
+          },
+          {
+            "path": "entityNatureDefaults.ASSOCIATION.dbUniqueConstraint",
+            "label": "ASSOCIATION 子实体 — DB 复合唯一键",
+            "currentValue": true,
+            "description": "entityNature=ASSOCIATION 的子实体是否在 DDL 中生成 UNIQUE(parentRefField, 首个CROSS_BO_REF字段) 约束，数据库层兜底防止重复关联。",
+            "options": [
+              { "value": true, "label": "生成唯一约束", "description": "自动生成 UNIQUE(opportunity_id, scene_id)，确保不重复关联。", "recommended": true },
+              { "value": false, "label": "不生成", "description": "允许重复，业务层自行去重。" }
+            ],
+            "recommendation": "推荐 true，数据库层兜底防重。",
+            "impact": "影响 DDL 生成和插入时的唯一性校验行为。"
+          },
+          {
+            "path": "entityNatureDefaults.ASSOCIATION.apiPattern",
+            "label": "ASSOCIATION 子实体 — API 交互模式",
+            "currentValue": "通过父聚合根 DTO 的 ID 列表字段提交",
+            "description": "ASSOCIATION 子实体无独立 REST 端点。前端通过父聚合根的创建/更新接口提交关联 ID 列表，后端在聚合根领域服务中全量替换关联子实体集合。",
+            "options": [
+              { "value": "id-list-in-parent-dto", "label": "父 DTO 内嵌 ID 列表", "description": "{ sceneIds: [101, 102] } — 最简洁，适合纯 ID 关联。", "recommended": true },
+              { "value": "nested-objects-in-parent-dto", "label": "父 DTO 内嵌完整关联对象列表", "description": "{ scenes: [{ sceneId: 101, sceneName: '...' }] } — 适合需要冗余存储展示字段的场景。" }
+            ],
+            "recommendation": "默认 ID 列表模式；若含 redundant=true 的 CROSS_BO_DISPLAY 字段，切换为嵌套对象模式。",
+            "impact": "影响聚合根 DTO 结构和前后端数据契约。"
           }
         ]
       }
@@ -326,8 +543,35 @@
     "authzProjectionRequiredForResourceBo": true
   },
   "operationExtractionDefaults": {
-    "extractFromPrototypeButtons": true,
-    "requirePrototypeRefs": true,
+    "extractFromPrototypeButtons": false,
     "ignoreUiUtilityActions": ["刷新", "列设置", "全屏", "分页", "Tab切换", "关闭", "取消", "收起配件", "年份切换"]
+  },
+  "entityNatureDefaults": {
+    "BUSINESS": {
+      "独立持久化接口": true,
+      "独立API端点": true,
+      "DB唯一约束": false,
+      "由父聚合根统一管理": false,
+      "设计意图": {
+        "持久化": "拥有独立的持久化接口，增删改通过独立接口操作",
+        "API": "生成嵌套 REST 端点（/parent/{id}/routeSegment）",
+        "DTO": "生成完整 DTO，包含所有业务字段",
+        "DB列": "PK + PARENT_REF + 所有 NORMAL + 所有 CROSS_BO_REF + redundant=true 的 CROSS_BO_DISPLAY"
+      }
+    },
+    "ASSOCIATION": {
+      "独立持久化接口": false,
+      "独立API端点": false,
+      "DB唯一约束": true,
+      "由父聚合根统一管理": true,
+      "设计意图": {
+        "持久化": "不暴露独立持久化接口。由父聚合根的领域服务统一管理生命周期，全量替换策略",
+        "API": "无独立 REST 端点 — 通过父聚合根 POST/PATCH 的 DTO 提交",
+        "DTO": "父 DTO 中生成 ID 列表字段（sceneIds: List<Long>）；若含 redundant=true 的 CROSS_BO_DISPLAY 则生成嵌套对象列表",
+        "DB列": "仅 PK + PARENT_REF + CROSS_BO_REF + (redundant=true ? CROSS_BO_DISPLAY : 无)",
+        "唯一键": "UNIQUE(parentRefField, 首个CROSS_BO_REF字段)",
+        "替换策略": "全量替换：先 DELETE WHERE parent_id=?，再批量 INSERT"
+      }
+    }
   }
 }

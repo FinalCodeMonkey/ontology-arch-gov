@@ -1,0 +1,2147 @@
+{
+  "$schema": "https://authz.xbac/schemas/gov/bo-meta-fragment.schema.json",
+  "tenantId": "cbg",
+  "appCode": "crm",
+  "boCode": "opportunities",
+  "metaType": "VIEW",
+  "draftVersion": "1.0",
+  "schemaVersion": "2.0",
+  "content": {
+    "_dataTypeConvention": {
+      "description": "Snowflake 雪花 ID（Long 型，如 2068959871393136600）超出 JavaScript Number.MAX_SAFE_INTEGER（2^53-1），经 JSON 序列化后前端 Number() 转换会静默丢失精度。因此所有 Long ID 字段在 fieldView 中 dataType 标记为 \"string\"，前端 MUST 保持字符串原始类型，禁止 Number() / parseInt() / + 等数值转换。此约定不改变后端 DB 列的实际类型。",
+      "appliesTo": [
+        "id",
+        "customers_id",
+        "parent_opportunity_id",
+        "opportunity-product.scene_id",
+        "opportunity-scene.scene_id",
+        "opportunity-quotation-product.scene_id"
+      ]
+    },
+    "listViewConfig": {
+      "defaultPageSize": 20,
+      "formLayout": "GRID",
+      "formColumns": 2,
+      "formLabelWidth": 140,
+      "searchCollapsible": true
+    },
+    "detailTabs": [
+      {
+        "code": "info",
+        "name": "商机信息",
+        "order": 10
+      },
+      {
+        "code": "product",
+        "name": "产品清单",
+        "order": 20,
+        "sections": [
+          {
+            "code": "quotation-list",
+            "name": "报价单",
+            "entityCode": "opportunity-quotation",
+            "visibleWhen": {
+              "field": "_has_quotation",
+              "equals": true
+            }
+          },
+          {
+            "code": "quotation-product",
+            "name": "产品清单",
+            "entityCode": "opportunity-quotation-product",
+            "visibleWhen": {
+              "field": "_has_quotation",
+              "equals": true
+            },
+            "readOnly": true,
+            "groupByQuotation": true
+          },
+          {
+            "code": "opportunity-product",
+            "name": "产品清单",
+            "entityCode": "opportunity-product",
+            "visibleWhen": {
+              "field": "_has_quotation",
+              "equals": false
+            }
+          }
+        ]
+      },
+      {
+        "code": "price",
+        "name": "价格对比",
+        "order": 30,
+        "_note": "外部集成页面，非 MODEL 实体。价格对比数据从 ECP 系统拉取，与本 BO 产品清单中的单价进行对比展示。"
+      },
+      {
+        "code": "order",
+        "name": "订单管理",
+        "order": 40,
+        "_note": "外部集成页面，非 MODEL 实体。订单数据从 OMS/ECP 系统拉取，展示关联订单的履约状态。"
+      },
+      {
+        "code": "change-record",
+        "name": "修改记录",
+        "order": 50,
+        "_note": "外部集成页面，非 MODEL 实体。修改记录数据从 change-records BO 或审计日志表拉取。"
+      },
+      {
+        "code": "team",
+        "name": "团队成员",
+        "order": 60
+      },
+      {
+        "code": "oc-sub",
+        "name": "OC子项目",
+        "order": 25,
+        "visibleWhen": {
+          "field": "project_type",
+          "equals": "OC_MAIN"
+        },
+        "dataSource": {
+          "type": "BO_QUERY",
+          "boCode": "opportunities",
+          "filterBy": "parent_opportunity_id = {id} AND project_type = 'OC_SUB' AND is_deleted = 0",
+          "sortBy": "created_time DESC"
+        },
+        "columns": [
+          {
+            "fieldCode": "opportunity_name",
+            "displayName": "业务机会名称",
+            "columnWidth": 220,
+            "sortable": true,
+            "linkable": true
+          },
+          {
+            "fieldCode": "project_type",
+            "displayName": "项目类型",
+            "columnWidth": 90
+          },
+          {
+            "fieldCode": "opportunity_owner",
+            "displayName": "机会所有人",
+            "columnWidth": 110
+          },
+          {
+            "fieldCode": "business_customer_name",
+            "displayName": "业务主体客户",
+            "columnWidth": 120
+          },
+          {
+            "fieldCode": "expected_order_amount",
+            "displayName": "预计下单金额",
+            "columnWidth": 135,
+            "format": "currency"
+          },
+          {
+            "fieldCode": "expected_bid_date",
+            "displayName": "预计开标日期",
+            "columnWidth": 120,
+            "format": "date"
+          },
+          {
+            "fieldCode": "expected_order_date",
+            "displayName": "预计下单日期",
+            "columnWidth": 150,
+            "format": "date"
+          },
+          {
+            "fieldCode": "project_stage",
+            "displayName": "客户采购阶段",
+            "columnWidth": 190
+          }
+        ]
+      }
+    ],
+    "fieldViews": [
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "id",
+        "displayName": "编号",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_code",
+        "displayName": "业务机会编码",
+        "sortable": true,
+        "columnWidth": 160,
+        "order": 5,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_name",
+        "displayName": "业务机会名称",
+        "sortable": true,
+        "columnWidth": 200,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "instantValidate": true,
+        "formType": "INPUT",
+        "placeholder": "请输入业务机会名称",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "project_type",
+        "displayName": "项目类型",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_project_type",
+        "placeholder": "请选择项目类型",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_owner",
+        "displayName": "机会所有人",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择机会所有人",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "opportunity_owner_name",
+        "displayName": "机会所有人姓名",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 41,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "customers_id",
+        "displayName": "业务主体客户",
+        "sortable": false,
+        "columnWidth": 180,
+        "order": 54,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "customers",
+        "refField": "customer_name",
+        "placeholder": "请选择业务主体客户",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "business_customer_name",
+        "displayName": "业务主体客户名称",
+        "sortable": false,
+        "columnWidth": 180,
+        "hidden": false,
+        "order": 55,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "primary_customer_name",
+        "displayName": "一级客户名称",
+        "sortable": false,
+        "columnWidth": 180,
+        "order": 56,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "market_segment",
+        "displayName": "细分市场",
+        "sortable": true,
+        "columnWidth": 130,
+        "order": 57,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "opportunity_market_segment",
+        "placeholder": "请选择细分市场",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_amount",
+        "displayName": "预计下单金额",
+        "sortable": true,
+        "columnWidth": 130,
+        "format": "currency",
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "请输入预计下单金额",
+        "displayRules": {
+          "OC_MAIN": {
+            "displayName": "集采框架总金额"
+          }
+        },
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "currency",
+        "displayName": "币种",
+        "sortable": false,
+        "columnWidth": 90,
+        "order": 61,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "opportunity_currency",
+        "placeholder": "请选择币种",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_bid_date",
+        "displayName": "预计开标日期",
+        "sortable": true,
+        "columnWidth": 130,
+        "format": "date",
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "placeholder": "请选择预计开标日期",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_date",
+        "displayName": "预计下单日期",
+        "sortable": true,
+        "columnWidth": 130,
+        "format": "date",
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "placeholder": "请选择预计下单日期",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "visibleWhen": {
+          "field": "project_type",
+          "equalsNot": "OC_MAIN"
+        },
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "date"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_start_date",
+        "displayName": "预计下单开始日期",
+        "sortable": true,
+        "columnWidth": 150,
+        "format": "date",
+        "order": 82,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "placeholder": "请选择预计下单开始日期",
+        "visibleWhen": {
+          "field": "project_type",
+          "equals": "OC_MAIN"
+        },
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "expected_order_end_date",
+        "displayName": "预计下单截止日期",
+        "sortable": true,
+        "columnWidth": 150,
+        "format": "date",
+        "order": 84,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "DATE",
+        "placeholder": "请选择预计下单截止日期",
+        "visibleWhen": {
+          "field": "project_type",
+          "equals": "OC_MAIN"
+        },
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "project_stage",
+        "displayName": "客户采购阶段",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_project_stage",
+        "conditionalDictCode": {
+          "dependsOn": "project_type",
+          "dictCodeMap": {
+            "DC": "opportunity_project_stage_dc",
+            "OC_MAIN": "opportunity_project_stage_oc_main",
+            "OC_SUB": "opportunity_project_stage_oc_sub",
+            "BC": "opportunity_project_stage_bc",
+            "EC": "opportunity_project_stage_ec"
+          }
+        },
+        "placeholder": "根据项目类型自动生成",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "predict_category",
+        "displayName": "预测类别",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 100,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "opportunity_predict_category",
+        "placeholder": "请选择预测类别",
+        "displayGroup": "sales_forecast",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "biz_attribution",
+        "displayName": "业务名称",
+        "sortable": true,
+        "columnWidth": 110,
+        "order": 110,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "opportunity_biz_attribution",
+        "placeholder": "请选择业务名称",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "domestic_overseas",
+        "displayName": "国内/海外",
+        "sortable": true,
+        "columnWidth": 100,
+        "order": 140,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "domestic_overseas",
+        "placeholder": "请选择",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "presales_engineer",
+        "displayName": "售前工程师",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 150,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "refObject": "users",
+        "placeholder": "请选择售前工程师",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "presales_engineer_name",
+        "displayName": "售前工程师姓名",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 151,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "customer_owner",
+        "displayName": "客户所有人",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 160,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "disabled": true,
+        "placeholder": "按客户自动带出，不可手动编辑",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string",
+        "refObject": "users",
+        "refField": "staff_name"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "customer_owner_name",
+        "displayName": "客户所有人姓名",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 161,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "parent_opportunity_id",
+        "displayName": "关联框架主项目",
+        "sortable": false,
+        "columnWidth": 250,
+        "order": 164,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "opportunities",
+        "refField": "opportunity_name",
+        "placeholder": "请选择关联框架主项目",
+        "visibleWhen": {
+          "field": "project_type",
+          "equals": "OC_SUB"
+        },
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "parent_opportunity_name",
+        "displayName": "关联框架主项目名称",
+        "sortable": false,
+        "columnWidth": 250,
+        "order": 165,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "visibleWhen": {
+          "field": "project_type",
+          "equals": "OC_SUB"
+        },
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "is_in_funnel",
+        "displayName": "是否进入漏斗",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 169,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "inlineEditable": true,
+        "formType": "SWITCH",
+        "displayGroup": "sales_forecast",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "boolean"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "is_committed",
+        "displayName": "是否承诺",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 171,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "inlineEditable": true,
+        "formType": "SWITCH",
+        "displayGroup": "sales_forecast",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "boolean"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 170,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "status",
+        "displayName": "状态",
+        "sortable": true,
+        "columnWidth": 90,
+        "hidden": true,
+        "order": 200,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "created_by",
+        "displayName": "创建人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 210,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "updated_time",
+        "displayName": "最后修改时间",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 220,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "opportunity",
+        "fieldCode": "updated_by",
+        "displayName": "最后修改人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 230,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "id",
+        "displayName": "产品清单行ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "opportunity_id",
+        "displayName": "所属商机ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 11,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "product_id",
+        "displayName": "产品型号",
+        "sortable": false,
+        "columnWidth": 220,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "products",
+        "refField": "product_model",
+        "placeholder": "请选择产品型号",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "product_model",
+        "displayName": "产品型号",
+        "sortable": true,
+        "columnWidth": 220,
+        "order": 21,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "unit_price",
+        "displayName": "出货单价",
+        "sortable": true,
+        "columnWidth": 90,
+        "format": "currency",
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "请输入出货单价",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "quantity",
+        "displayName": "数量",
+        "sortable": true,
+        "columnWidth": 70,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "请输入数量",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "displayRules": {
+          "OC_MAIN": {
+            "displayName": "集采/框架总数量"
+          }
+        },
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "parent_product_id",
+        "displayName": "所属主产品行ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 49,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "ratio",
+        "displayName": "典配配比",
+        "sortable": false,
+        "columnWidth": 80,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "NUMBER",
+        "placeholder": "请输入场景典配配比",
+        "visibleWhen": {
+          "allOf": [
+            {
+              "field": "parent_product_id",
+              "notNull": true
+            },
+            {
+              "field": "scene_id",
+              "notNull": true
+            }
+          ]
+        },
+        "exportable": true,
+        "importable": true
+      },
+      {
+        "entityCode": "opportunity-product",
+        "fieldCode": "scene_id",
+        "displayName": "场景",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "refObject": "scenes",
+        "refField": "scene_name_customer",
+        "placeholder": "请选择场景",
+        "queryable": true,
+        "exportable": true,
+        "importable": true,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "id",
+        "displayName": "阶段历史ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "promoter",
+        "displayName": "推进人ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 11,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "exportable": false,
+        "importable": true,
+        "refObject": "users",
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "sequence_no",
+        "displayName": "序号",
+        "sortable": true,
+        "columnWidth": 70,
+        "order": 15,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "from_stage_code",
+        "displayName": "来源阶段编码",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 18,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_project_stage",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "from_stage_name",
+        "displayName": "来源阶段",
+        "sortable": false,
+        "columnWidth": 160,
+        "order": 19,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "stage_code",
+        "displayName": "阶段编码",
+        "sortable": true,
+        "columnWidth": 120,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_project_stage",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "stage_name",
+        "displayName": "阶段名称",
+        "sortable": false,
+        "columnWidth": 160,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "stage_status",
+        "displayName": "阶段状态",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_stage_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "operation_type",
+        "displayName": "操作类型",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_stage_operation_type",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "promoter_name",
+        "displayName": "推进人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "promoted_time",
+        "displayName": "推进时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "description",
+        "displayName": "推进说明",
+        "sortable": false,
+        "columnWidth": 300,
+        "order": 80,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入推进说明",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "attachment_count",
+        "displayName": "附件数量",
+        "sortable": false,
+        "columnWidth": 90,
+        "order": 90,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "updated_time",
+        "displayName": "最后更新时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 95,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "opportunity-stage-history",
+        "fieldCode": "updated_by",
+        "displayName": "最后更新人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 96,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "id",
+        "displayName": "附件ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "file_name",
+        "displayName": "文件名称",
+        "sortable": false,
+        "columnWidth": 220,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "file_size",
+        "displayName": "文件大小",
+        "sortable": false,
+        "columnWidth": 100,
+        "format": "fileSize",
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "file_type",
+        "displayName": "文件类型",
+        "sortable": false,
+        "columnWidth": 80,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "uploaded_by",
+        "displayName": "上传人",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "exportable": false,
+        "importable": true,
+        "refObject": "users",
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "uploaded_by_name",
+        "displayName": "上传人",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 51,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false,
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity-stage-attachment",
+        "fieldCode": "uploaded_time",
+        "displayName": "上传时间",
+        "sortable": true,
+        "columnWidth": 160,
+        "format": "datetime",
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "id",
+        "displayName": "报价单行ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "quotation_no",
+        "displayName": "报价单号",
+        "sortable": true,
+        "columnWidth": 140,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "ecp_edit_url",
+        "displayName": "点击跳转ECP编辑",
+        "sortable": false,
+        "columnWidth": 150,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "LINK",
+        "linkText": "点击跳转",
+        "linkUrlField": "ecp_edit_url",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "total_amount",
+        "displayName": "出货价合计",
+        "sortable": true,
+        "columnWidth": 120,
+        "format": "currency",
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "quotation_type",
+        "displayName": "报价单类型",
+        "sortable": false,
+        "columnWidth": 280,
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "quotation_status",
+        "displayName": "报价单状态",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SELECT",
+        "dictCode": "opportunity_quotation_status",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-quotation",
+        "fieldCode": "created_time",
+        "displayName": "创建时间",
+        "sortable": true,
+        "columnWidth": 150,
+        "format": "datetime",
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "datetime"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "id",
+        "displayName": "报价单产品行ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "scene_id",
+        "displayName": "场景ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 11,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "exportable": false,
+        "importable": true,
+        "refObject": "scenes",
+        "refField": "scene_name_customer",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "product_id",
+        "displayName": "产品ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 19,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "exportable": false,
+        "importable": true,
+        "refObject": "products",
+        "refField": "product_model",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "product_model",
+        "displayName": "产品型号",
+        "sortable": true,
+        "columnWidth": 220,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "product_category",
+        "displayName": "产品类别",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "product_series",
+        "displayName": "产品系列",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "list_price",
+        "displayName": "列表价",
+        "sortable": true,
+        "columnWidth": 90,
+        "format": "currency",
+        "order": 50,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "unit_price",
+        "displayName": "出货单价",
+        "sortable": true,
+        "columnWidth": 90,
+        "format": "currency",
+        "order": 60,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "decimal"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "quantity",
+        "displayName": "数量",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 70,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "BETWEEN",
+            "label": "区间"
+          }
+        ],
+        "dataType": "integer"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "scene_name",
+        "displayName": "场景名称",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 80,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "is_accessory",
+        "displayName": "是否配件",
+        "sortable": false,
+        "columnWidth": 80,
+        "order": 90,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "SWITCH",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-quotation-product",
+        "fieldCode": "parent_product_model",
+        "displayName": "主产品型号",
+        "sortable": false,
+        "columnWidth": 180,
+        "order": 100,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-scene",
+        "fieldCode": "id",
+        "displayName": "关联行ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-scene",
+        "fieldCode": "scene_id",
+        "displayName": "场景ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 11,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "OBJECT_SELECT",
+        "exportable": false,
+        "importable": true,
+        "refObject": "scenes",
+        "refField": "scene_name_customer",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity-scene",
+        "fieldCode": "scene_category",
+        "displayName": "场景分类",
+        "sortable": false,
+        "columnWidth": 100,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-scene",
+        "fieldCode": "scene_name",
+        "displayName": "场景名称",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "id",
+        "displayName": "团队成员行ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 10,
+        "showInList": false,
+        "showInDetail": false,
+        "editableInForm": false,
+        "formType": "HIDDEN",
+        "exportable": false,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "user_id",
+        "displayName": "成员用户ID",
+        "sortable": false,
+        "columnWidth": 70,
+        "order": 11,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "USER_SELECT",
+        "exportable": false,
+        "importable": true,
+        "refObject": "users",
+        "refField": "staff_name",
+        "queryable": true,
+        "dataType": "string",
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ]
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "member_name",
+        "displayName": "成员姓名",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 20,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": false,
+        "formType": "INPUT",
+        "disabled": true,
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "LIKE",
+            "label": "包含"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "member_role",
+        "displayName": "角色",
+        "sortable": false,
+        "columnWidth": 120,
+        "order": 30,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "opportunity_team_member_role",
+        "placeholder": "请选择角色",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "permission",
+        "displayName": "权限设置",
+        "sortable": false,
+        "columnWidth": 110,
+        "order": 40,
+        "showInList": true,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "SELECT",
+        "dictCode": "opportunity_team_member_permission",
+        "placeholder": "请选择权限",
+        "queryable": true,
+        "exportable": true,
+        "importable": false,
+        "queryOperatorOptions": [
+          {
+            "value": "EQ",
+            "label": "等于"
+          }
+        ],
+        "dataType": "string"
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "remark",
+        "displayName": "备注",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 50,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入备注",
+        "exportable": true,
+        "importable": false
+      },
+      {
+        "entityCode": "opportunity-team-member",
+        "fieldCode": "related_teams",
+        "displayName": "关联模块团队",
+        "sortable": false,
+        "columnWidth": 200,
+        "order": 60,
+        "showInList": false,
+        "showInDetail": true,
+        "editableInForm": true,
+        "formType": "TEXTAREA",
+        "placeholder": "请输入关联模块团队",
+        "exportable": true,
+        "importable": false
+      }
+    ]
+  }
+}

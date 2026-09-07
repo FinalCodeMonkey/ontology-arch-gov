@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://authz.xbac/schemas/gov/fragments/rule-fragment.schema.json",
+  "title": "BO RULE fragment",
+  "description": "本体规则层。COMPLEX_VALIDATION 与 SECURITY 是 RULE 的专用子集，RULE 承载状态、派生、权限、一致性和自动化等更完整的业务规则。ruleType=COMPLEX_VALIDATION 承载带 trigger/expression/action 的复杂校验流程规则，区别于 VALIDATION fragment 的声明式字段约束。",
+  "$comment": "约束清单详见父目录下的 CONSTRAINTS.md 中 [RULE Fragment] 章节。",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "rules": {
+      "type": "array",
+      "uniqueItems": true,
+      "$comment": "uniqueItems 做浅层去重；rule.code 级唯一性由 check_consistency.py 保障",
+      "items": { "$ref": "#/$defs/Rule" },
+      "default": []
+    }
+  },
+  "$defs": {
+    "Rule": {
+      "type": "object",
+      "required": ["code", "name", "ruleType"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "ruleType": {
+          "type": "string",
+          "enum": ["COMPLEX_VALIDATION", "STATE", "DERIVATION", "PERMISSION", "AUTOMATION", "CONSISTENCY"]
+        },
+        "scope": { "type": "string", "enum": ["BO", "ENTITY", "FIELD", "OPERATION", "CROSS_BO"], "default": "BO", "description": "作用范围：BO=级联实体、ENTITY=单实体、FIELD=字段级、OPERATION=操作级、CROSS_BO=跨BO" },
+        "entityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "fieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "operationCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+        "crossBoRef": {
+          "type": "object",
+          "description": "scope=CROSS_BO 时必填（适用所有 ruleType）。声明本 BO 字段对目标 BO 的跨聚合约束。",
+          "required": ["refBoCode", "refFieldCode", "localEntityCode", "localFieldCode"],
+          "additionalProperties": false,
+          "properties": {
+            "refBoCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "被引用的目标 BO boCode。" },
+            "refEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "目标 BO 中的实体 code，省略时默认为该 BO 的 ROOT 实体。" },
+            "refFieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "目标 BO 实体中被引用的字段，通常为 id 或 businessKey。" },
+            "localEntityCode": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "本 BO 中持有引用字段的实体 code。" },
+            "localFieldCode": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "本 BO 实体中的本地字段 code。通常 semanticRole 为 CROSS_BO_REF；自引用场景（refBoCode 指向同一 BO）或内部结构约束（如防循环引用、防孤儿删除）时可使用 TECHNICAL_ID、PARENT_REF 等角色。" }
+          }
+        },
+        "trigger": {
+          "type": "string",
+          "enum": ["BEFORE_VALIDATE", "BEFORE_OPERATION", "AFTER_OPERATION", "ON_STATE_CHANGE", "ON_PUBLISH", "ON_READ"],
+          "default": "BEFORE_OPERATION"
+        },
+        "expression": { "type": "string", "maxLength": 2000 },
+        "polarity": {
+          "type": "string",
+          "enum": ["violation", "safety"],
+          "default": "violation",
+          "description": "expression/exprAst 的语义极性。violation（默认）：表达式为 True 表示违规；safety：表达式为 True 表示安全/合规（推理引擎需反转判定）。典型场景：防环路规则 CUSTOMER_PARENT_NO_CIRCULAR 中表达式描述安全条件，应设为 safety。"
+        },
+        "action": { "type": "string", "maxLength": 500 },
+        "severity": { "type": "string", "enum": ["INFO", "WARN", "ERROR"], "default": "ERROR" },
+        "message": { "type": "string", "maxLength": 300 },
+        "description": { "type": "string", "maxLength": 500 },
+        "exprAst": {
+          "type": "object",
+          "description": "结构化表达式 AST。替代 expression 自由文本，用于发布校验和运行时执行。由 expression-ast.schema.json 独立校验结构。"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "scope": { "const": "CROSS_BO" } },
+            "required": ["scope"]
+          },
+          "then": { "required": ["crossBoRef"] }
+        },
+        {
+          "if": {
+            "properties": { "scope": { "const": "ENTITY" } },
+            "required": ["scope"]
+          },
+          "then": { "required": ["entityCode"] }
+        },
+        {
+          "if": {
+            "properties": { "scope": { "const": "FIELD" } },
+            "required": ["scope"]
+          },
+          "then": { "required": ["entityCode", "fieldCode"] }
+        },
+        {
+          "if": {
+            "properties": { "scope": { "const": "OPERATION" } },
+            "required": ["scope"]
+          },
+          "then": { "required": ["operationCode"] }
+        }
+      ]
+    }
+  }
+}
